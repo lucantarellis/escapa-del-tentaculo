@@ -3,17 +3,40 @@
 [ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/ui/DebugOverlay.tscn" id="2_overlay"]
 [ext_resource type="PackedScene" path="res://scenes/camera/ScrollCamera.tscn" id="3_camera"]
+[ext_resource type="PackedScene" path="res://scenes/tentacle/Tentacle.tscn" id="4_tentacle"]
+[ext_resource type="Script" path="res://scripts/levels/sandbox_controller.gd" id="5_controller"]
 
 [node name="Sandbox" type="Node2D"]
+script = ExtResource("5_controller")
 
 [node name="ScrollCamera" parent="." instance=ExtResource("3_camera")]
 position = Vector2(180, 320)
 
 [node name="Player" parent="." instance=ExtResource("1_player")]
-position = Vector2(180, 600)
+position = Vector2(180, 548)
+
+[node name="Tentacle" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("4_tentacle")]
+camera = NodePath("../ScrollCamera")
 
 [node name="DebugOverlay" parent="." node_paths=PackedStringArray("player") instance=ExtResource("2_overlay")]
 player = NodePath("../Player")
+
+[node name="CaughtLayer" type="CanvasLayer" parent="."]
+layer = 90
+
+[node name="CaughtLabel" type="Label" parent="CaughtLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0.0196, 0.0235, 0.0353, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 18
+text = "CAPTURADO — pulsá R para reiniciar"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
 
 [node name="Floor" type="StaticBody2D" parent="."]
 collision_layer = 1
@@ -36,6 +59,17 @@ polygon = PackedVector2Array(0, -1780, 360, -1780, 360, -1760, 0, -1760)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Ceiling"]
 polygon = PackedVector2Array(0, -1780, 360, -1780, 360, -1760, 0, -1760)
+
+[node name="StartPlatform" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="StartPlatform"]
+color = Color(0.2275, 0.6078, 0.749, 1)
+polygon = PackedVector2Array(100, 560, 260, 560, 260, 572, 100, 572)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StartPlatform"]
+polygon = PackedVector2Array(100, 560, 260, 560, 260, 572, 100, 572)
 
 [node name="Platform1" type="StaticBody2D" parent="."]
 collision_layer = 1

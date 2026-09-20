@@ -1,7 +1,7 @@
 # Roadmap — Escapa del Tentáculo
 
 **Última actualización:** 2026-09-20
-**Estado global:** v0 publicada (estructura). Mecánicas base preparadas en el brief 01 (pasos 0 a 3), sin ejecutar todavía.
+**Estado global:** v0 publicada. Mecánicas base (pasos 0 a 3) implementadas en la rama `feature/mecanicas-base` (brief 01), pendientes de merge a `main`.
 **Cómo usar este documento:** es la fuente de verdad del plan. Cada brief para Cowork se genera desde `docs/briefs/BRIEF_TEMPLATE.md` y, al cerrarse, actualiza la tabla de estado (sección 4) y el registro de decisiones (sección 2).
 
 ---
@@ -30,6 +30,11 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | Documentación | Obligatoria: cualquier persona debe poder entender el código leyendo `docs/` y los comentarios | LT |
 | Teclas | WASD y flechas para propulsar, Espacio para saltar, R reinicia, F3 debug | Propuesta de Claude |
 | Idioma | Identificadores de código en inglés; comentarios y documentos en español | Propuesta de Claude |
+| Caminar | Apoyado en una superficie, el eje horizontal se camina sin gastar combustible (con o sin él). El jetpack solo se usa para subir. Parámetros `walk_acceleration` y `walk_max_speed` | LT (brief 01, paso 1) |
+| Salto con combustible | `jump_requires_empty_fuel` es configurable; LT lo dejó en `false` en sus pruebas para poder saltar y propulsar a la vez. El default del script sigue en `true`: decidir el valor final al balancear | LT (a decidir) |
+| Coordenada de `stop_at_y` | Es la Y (mundo) del centro de la cámara, no del borde | Propuesta de Claude (brief 01, paso 2) |
+| Tentáculo: caída | La zona letal se extiende 96 px bajo la pantalla, por lo que la muerte por caída (`&"fell"`) es una red de seguridad: normalmente el contacto ocurre antes | Propuesta de Claude (brief 01, paso 3) |
+| Valores de prueba | Los `.tres` de configuración son valores de prueba de LT, no finales (ver `docs/TUNING_LOG.md`) | LT |
 
 ## 3. Principios de ingeniería
 
@@ -46,10 +51,10 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | # | Paso | Estado | Brief |
 |---|---|---|---|
 | — | v0: estructura y repo | Hecho | brief v0 |
-| 0 | Preparación: input, capas, viewport, convenciones, docs | En brief | brief-01 |
-| 1 | Jugador con jetpack y combustible | En brief | brief-01 |
-| 2 | Scroll y cámara | En brief | brief-01 |
-| 3 | Tentáculo y condición de derrota | En brief | brief-01 |
+| 0 | Preparación: input, capas, viewport, convenciones, docs | Hecho | brief-01 |
+| 1 | Jugador con jetpack y combustible | Hecho | brief-01 |
+| 2 | Scroll y cámara | Hecho | brief-01 |
+| 3 | Tentáculo y condición de derrota | Hecho | brief-01 |
 | 4 | Obstáculos | Pendiente | — |
 | 4b | Tanques de combustible | Pendiente | — |
 | 5 | Puerta y victoria | Pendiente | — |
@@ -104,6 +109,7 @@ Integración de los tres sprite sheets (astronauta, tileset, tentáculo; el del 
 - **Espiral de muerte sin combustible.** Si el jugador se queda sin combustible lejos de una superficie, cae hacia el tentáculo. Hay que decidir en el diseño de niveles cuántos tanques hay y qué tan a mano quedan.
 - **Niveles fijos o por segmentos.** Abierto. Si es por segmentos, los obstáculos y tanques deben ser escenas reutilizables desde el paso 4.
 - **Controles táctiles.** Propulsión en 4 direcciones mantenida por dedo sugiere joystick virtual. Conviene prototiparlo antes de la etapa final, no después.
+- **Muerte por caída sin probar por LT.** El checklist del paso 3 (caer bajo el borde) se verificó por simulación, pero LT no lo probó jugando.
 - **Comportamiento del tentáculo.** Por ahora solo sube con la cámara. Ataques o variaciones quedan para más adelante.
 - **Escalado pixel-perfect.** Durante el prototipo se usa escalado fraccional. La decisión de escalado entero se toma con el arte final.
 - **Curva de dificultad.** La velocidad de scroll y el consumo de combustible son las dos variables que más la definen.
