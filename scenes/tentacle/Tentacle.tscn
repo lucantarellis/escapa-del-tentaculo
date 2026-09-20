@@ -1,0 +1,17 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/tentacle/tentacle.gd" id="1_tentacle"]
+[ext_resource type="Resource" path="res://resources/configs/tentacle_config.tres" id="2_config"]
+
+[node name="Tentacle" type="Node2D"]
+script = ExtResource("1_tentacle")
+config = ExtResource("2_config")
+
+[node name="BodyPolygon" type="Polygon2D" parent="."]
+color = Color(0.8471, 0.1961, 0.1961, 1)
+
+[node name="KillZone" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KillZone"]
