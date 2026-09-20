@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="PlayerConfig" format=3 uid="uid://bxktljxc855gc"]
+
+[ext_resource type="Script" uid="uid://dkp65oe3rndx0" path="res://scripts/player/player_config.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+gravity_with_fuel = 150.0
+jump_requires_empty_fuel = false
+wall_bounce = 0.15

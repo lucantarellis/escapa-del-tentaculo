@@ -1,0 +1,25 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/player/player.gd" id="1_player"]
+[ext_resource type="Resource" path="res://resources/configs/player_config.tres" id="2_config"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(16, 24)
+
+[node name="Player" type="CharacterBody2D" groups=["player"]]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_player")
+config = ExtResource("2_config")
+
+[node name="Body" type="Polygon2D" parent="."]
+color = Color(1, 0.4196, 0.1961, 1)
+polygon = PackedVector2Array(-8, -12, 8, -12, 8, 12, -8, 12)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_body")
+
+[node name="ThrustIndicator" type="Polygon2D" parent="."]
+visible = false
+color = Color(0.7843, 0.9059, 0.9176, 1)
+polygon = PackedVector2Array(-3, -3, 3, -3, 3, 3, -3, 3)

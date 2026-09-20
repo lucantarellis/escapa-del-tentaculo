@@ -1,13 +1,16 @@
 # Arquitectura — Escapa del Tentáculo
 
-Documento vivo: se completa en cada paso del roadmap. Estado: **esqueleto (paso 0)**.
+Documento vivo: se completa en cada paso del roadmap. Estado: **paso 1 completado**.
 
 ## Árbol de escenas
 
-_Se completa a partir del paso 1._
-
 ```
-(vacío)
+Sandbox (Node2D)                      scenes/levels/sandbox.tscn (escena de prueba)
+├── Player (CharacterBody2D)          scenes/player/Player.tscn
+│   ├── Body, CollisionShape2D, ThrustIndicator
+├── DebugOverlay (CanvasLayer)        scenes/ui/DebugOverlay.tscn
+│   └── Label
+└── Floor / Ceiling / WallLeft / WallRight / Platform1..3 (StaticBody2D, capa 1)
 ```
 
 ## Señales
@@ -16,7 +19,11 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 
 | Emisor | Señal | Receptor | Efecto |
 |---|---|---|---|
-| _(se completa en los pasos 1 a 3)_ | | | |
+| Player | `fuel_changed(current, maximum)` | _(nadie todavía; lo usará la UI)_ | Combustible cambió |
+| Player | `fuel_depleted()` / `fuel_refilled()` | _(nadie todavía)_ | Combustible vacío / recuperado |
+| Player | `thrust_started()` / `thrust_stopped()` | _(nadie todavía)_ | Feedback de propulsión |
+| Player | `jumped()` | _(nadie todavía)_ | Saltó |
+| Player | `died(cause)` | _(nadie todavía)_ | Murió |
 
 ## Autoloads
 
