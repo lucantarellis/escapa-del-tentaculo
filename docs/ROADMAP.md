@@ -1,7 +1,7 @@
 # Roadmap — Escapa del Tentáculo
 
 **Última actualización:** 2026-09-20
-**Estado global:** v0 publicada. Mecánicas base (pasos 0 a 3) implementadas en la rama `feature/mecanicas-base` (brief 01), pendientes de merge a `main`.
+**Estado global:** v0 publicada. Mecánicas base (pasos 0 a 3) mergeadas a `main` (brief 01, PR #1). Obstáculos y tanques (pasos 4 y 4b) en curso en la rama `feature/obstaculos-tanques` (brief 02).
 **Cómo usar este documento:** es la fuente de verdad del plan. Cada brief para Cowork se genera desde `docs/briefs/BRIEF_TEMPLATE.md` y, al cerrarse, actualiza la tabla de estado (sección 4) y el registro de decisiones (sección 2).
 
 ---
@@ -34,6 +34,8 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | Salto con combustible | `jump_requires_empty_fuel` es configurable; LT lo dejó en `false` en sus pruebas para poder saltar y propulsar a la vez. El default del script sigue en `true`: decidir el valor final al balancear | LT (a decidir) |
 | Coordenada de `stop_at_y` | Es la Y (mundo) del centro de la cámara, no del borde | Propuesta de Claude (brief 01, paso 2) |
 | Tentáculo: caída | La zona letal se extiende 96 px bajo la pantalla, por lo que la muerte por caída (`&"fell"`) es una red de seguridad: normalmente el contacto ocurre antes | Propuesta de Claude (brief 01, paso 3) |
+| Colores de placeholder | Rojo `#D83232` = letal (tentáculo, obstáculos, trampa activa). Cian `#63D6C5` = recogible / bueno (tanques) | LT (brief 02) |
+| Obstáculos y tanques | Son escenas reutilizables, configurables por instancia (tamaño, recorrido, config `.tres`), para que el diseño de niveles (fijo o por segmentos) siga abierto | LT (brief 02) |
 | Valores de prueba | Los `.tres` de configuración son valores de prueba de LT, no finales (ver `docs/TUNING_LOG.md`) | LT |
 
 ## 3. Principios de ingeniería
@@ -55,8 +57,8 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | 1 | Jugador con jetpack y combustible | Hecho | brief-01 |
 | 2 | Scroll y cámara | Hecho | brief-01 |
 | 3 | Tentáculo y condición de derrota | Hecho | brief-01 |
-| 4 | Obstáculos | Pendiente | — |
-| 4b | Tanques de combustible | Pendiente | — |
+| 4 | Obstáculos | En brief | brief-02 |
+| 4b | Tanques de combustible | En brief | brief-02 |
 | 5 | Puerta y victoria | Pendiente | — |
 | 6 | Game manager y ciclo de partida | Pendiente | — |
 | 7 | Nivel de prueba jugable | Pendiente | — |

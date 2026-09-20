@@ -42,6 +42,24 @@ Reglas del proyecto. Si algo no está acá, seguir el estilo del código existen
 
 El jugador: layer 2, mask 1. Las `Area2D` de peligro o recogible detectan con mask 2. Los nombres están cargados en Project Settings → Layer Names → 2D Physics.
 
+## 3b. Colores de placeholder
+
+Mientras no haya arte final, el color de un `Polygon2D` comunica su función. Paleta completa en `assets/palette.md`.
+
+| Color | Significado | Ejemplos |
+|---|---|---|
+| Rojo `#D83232` | **Letal**: tocarlo mata | Tentáculo, obstáculos, trampa activa |
+| Cian `#63D6C5` | **Recogible / bueno** | Tanque de combustible |
+
+## 3c. Escenas de nivel reutilizables con `@tool`
+
+Obstáculos y tanques se colocan a mano en los niveles. Para poder verlos y ajustarlos en el editor:
+
+- Las propiedades de diseño de nivel (por ejemplo `size`, `travel`) son `@export` con **setter** que actualiza el visual y la colisión, y el script lleva `@tool`.
+- Todo código de juego (`_physics_process`, señales) debe salir temprano con `if Engine.is_editor_hint(): return`. El dibujo de ayudas (trayectorias) solo corre en el editor.
+- Cada instancia crea sus propias formas de colisión (no compartir el sub-recurso `Shape2D` entre instancias, o cambiar una cambia todas).
+- Lo que es tuning (velocidades, tiempos) va en un `Resource` de configuración; lo que es diseño de nivel (tamaño, recorrido) va en la instancia.
+
 ## 4. Acciones del Input Map
 
 El código usa siempre **acciones**, nunca teclas, para poder agregar controles táctiles sin tocar la lógica.
