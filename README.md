@@ -24,6 +24,26 @@ v0 — estructura inicial del proyecto. Sin lógica de gameplay implementada tod
 - De fondo, se ve la escena del nivel 1 (`scenes/levels/lvl1.tscn`).
 - Al presionar Play, la pantalla de título se disuelve y arranca el gameplay.
 
+## Controles
+
+| Acción | Teclas |
+|---|---|
+| Propulsar (izquierda / derecha / arriba / abajo) | A D W S o flechas |
+| Saltar (solo sin combustible y apoyado en una superficie) | Espacio |
+| Reiniciar (temporal) | R |
+| Mostrar u ocultar el overlay de debug | F3 |
+
+## Documentación
+
+Toda la documentación vive en [`docs/`](docs/):
+
+- [`ROADMAP.md`](docs/ROADMAP.md): plan, decisiones de diseño y estado por paso.
+- [`CONVENCIONES.md`](docs/CONVENCIONES.md): nombres, tipado, capas, input, configuración y git.
+- [`ARQUITECTURA.md`](docs/ARQUITECTURA.md): árbol de escenas, señales y flujo de partida.
+- [`TUNING_LOG.md`](docs/TUNING_LOG.md): registro de ajustes de valores.
+- [`mecanicas/`](docs/mecanicas/): un documento por mecánica.
+- [`briefs/`](docs/briefs/): briefs de trabajo y su plantilla.
+
 ## Estructura de carpetas
 
 ```
@@ -41,6 +61,7 @@ escapa-del-tentaculo/
 │   ├── fonts/
 │   └── palette.md          # paleta de colores compartida
 ├── scenes/
+│   ├── camera/
 │   ├── main/                # escena principal (Main.tscn)
 │   ├── player/
 │   ├── obstacles/
@@ -48,14 +69,19 @@ escapa-del-tentaculo/
 │   ├── ui/
 │   └── levels/               # niveles jugables (incluye lvl1.tscn)
 ├── scripts/
+│   ├── camera/
 │   ├── player/
 │   ├── obstacles/
 │   ├── tentacle/
 │   ├── managers/
 │   └── ui/
 ├── resources/
+│   ├── configs/            # Resource de configuración (.tres) con los valores de gameplay
 │   ├── tilesets/
 │   └── themes/
 ├── autoload/
+├── docs/                   # roadmap, convenciones, arquitectura, mecánicas y briefs
+│   ├── mecanicas/
+│   └── briefs/
 └── addons/
 ```
