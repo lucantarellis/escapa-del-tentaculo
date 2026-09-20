@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ScrollConfig" format=3]
+
+[ext_resource type="Script" path="res://scripts/camera/scroll_config.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+scroll_speed = 40.0
+scroll_acceleration = 0.0
+max_scroll_speed = 120.0
+start_delay = 2.0
+stop_at_enabled = false
+stop_at_y = -2400.0
+side_walls_enabled = true
+top_wall_enabled = true
+top_wall_margin = 0.0

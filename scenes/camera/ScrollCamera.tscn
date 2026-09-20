@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/camera/scroll_camera.gd" id="1_camera"]
+[ext_resource type="Resource" path="res://resources/configs/scroll_config.tres" id="2_config"]
+
+[node name="ScrollCamera" type="Camera2D"]
+process_callback = 0
+script = ExtResource("1_camera")
+config = ExtResource("2_config")
+
+[node name="ScreenBounds" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="LeftShape" type="CollisionShape2D" parent="ScreenBounds"]
+
+[node name="RightShape" type="CollisionShape2D" parent="ScreenBounds"]
+
+[node name="TopShape" type="CollisionShape2D" parent="ScreenBounds"]

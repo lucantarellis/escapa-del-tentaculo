@@ -1,16 +1,19 @@
 # Arquitectura — Escapa del Tentáculo
 
-Documento vivo: se completa en cada paso del roadmap. Estado: **paso 1 completado**.
+Documento vivo: se completa en cada paso del roadmap. Estado: **paso 2 completado**.
 
 ## Árbol de escenas
 
 ```
-Sandbox (Node2D)                      scenes/levels/sandbox.tscn (escena de prueba)
+Sandbox (Node2D)                      scenes/levels/sandbox.tscn (escena de prueba: columna alta)
+├── ScrollCamera (Camera2D)           scenes/camera/ScrollCamera.tscn
+│   └── ScreenBounds (StaticBody2D)   límites laterales y superior, se mueven con la cámara
+│       └── LeftShape, RightShape, TopShape
 ├── Player (CharacterBody2D)          scenes/player/Player.tscn
-│   ├── Body, CollisionShape2D, ThrustIndicator
+│   └── Body, CollisionShape2D, ThrustIndicator
 ├── DebugOverlay (CanvasLayer)        scenes/ui/DebugOverlay.tscn
 │   └── Label
-└── Floor / Ceiling / WallLeft / WallRight / Platform1..3 (StaticBody2D, capa 1)
+└── Floor / Ceiling / Platform1..N (StaticBody2D, capa 1)
 ```
 
 ## Señales
@@ -24,6 +27,8 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 | Player | `thrust_started()` / `thrust_stopped()` | _(nadie todavía)_ | Feedback de propulsión |
 | Player | `jumped()` | _(nadie todavía)_ | Saltó |
 | Player | `died(cause)` | _(nadie todavía)_ | Murió |
+| ScrollCamera | `scroll_started()` | _(nadie todavía)_ | La cámara empezó a subir |
+| ScrollCamera | `scroll_stopped()` | _(nadie todavía)_ | La cámara dejó de subir |
 
 ## Autoloads
 
