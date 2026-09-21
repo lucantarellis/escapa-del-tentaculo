@@ -1,7 +1,7 @@
 # Roadmap — Escapa del Tentáculo
 
 **Última actualización:** 2026-09-21
-**Estado global:** v0 publicada. Mecánicas base (pasos 0 a 3) mergeadas a `main` (brief 01, PR #1). Obstáculos y tanques (pasos 4 y 4b) mergeados a `main` (brief 02, PR #2). Puerta, game manager y niveles por segmentos (pasos 5, 6 y 7) mergeados a `main` (brief 03, PR #3). Pantalla de título (paso 8) y HUD mínimo (paso 8b) hechos, probados por LT y mergeados a `main` (brief 04, PR #4). Brief 05 en curso (rama `feature/intro-escotilla`): intro de la escotilla, pasos 8d y 8e. Los controles táctiles (paso 8c) quedan para el final, después del arte y el balance.
+**Estado global:** v0 publicada. Mecánicas base (pasos 0 a 3) mergeadas a `main` (brief 01, PR #1). Obstáculos y tanques (pasos 4 y 4b) mergeados a `main` (brief 02, PR #2). Puerta, game manager y niveles por segmentos (pasos 5, 6 y 7) mergeados a `main` (brief 03, PR #3). Pantalla de título (paso 8) y HUD mínimo (paso 8b) hechos, probados por LT y mergeados a `main` (brief 04, PR #4). Intro de la escotilla (pasos 8d y 8e, brief 05, rama `feature/intro-escotilla`) hecha y probada por LT, pendiente de PR y merge. Siguiente: balance del MVP, arte y audio (paso 9). Los controles táctiles (paso 8c) quedan para el final, después del arte y el balance.
 **Cómo usar este documento:** es la fuente de verdad del plan. Cada brief para Cowork se genera desde `docs/briefs/BRIEF_TEMPLATE.md` y, al cerrarse, actualiza la tabla de estado (sección 4) y el registro de decisiones (sección 2).
 
 ---
@@ -83,8 +83,8 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | 7 | Niveles por segmentos | Hecho | brief-03 |
 | 8 | Pantalla de título y transición al juego | Hecho | brief-04 |
 | 8b | HUD mínimo (combustible y progreso) | Hecho | brief-04 |
-| 8d | Intro de la escotilla: escotilla, tres golpes de cámara y gas | En brief | brief-05 |
-| 8e | Intro de la escotilla: ruptura, lanzamiento del jugador y entrada del tentáculo | En brief | brief-05 |
+| 8d | Intro de la escotilla: escotilla, tres golpes de cámara y gas | Hecho | brief-05 |
+| 8e | Intro de la escotilla: ruptura, lanzamiento del jugador y entrada del tentáculo | Hecho | brief-05 |
 | 8c | Controles táctiles | Pendiente (al final, tras arte y balance) | — |
 | 9 | Arte final, audio y pulido | Pendiente | — |
 
