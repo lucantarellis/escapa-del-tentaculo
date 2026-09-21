@@ -53,7 +53,7 @@ Tentacle (Node2D)          origen = borde superior (sin ondular), esquina izquie
 
 ## Manejo temporal de derrota (`sandbox_controller.gd`)
 
-Script en la raíz de `sandbox.tscn`, marcado TEMPORAL. Al recibir `player_caught` muestra "CAPTURADO — pulsá R para reiniciar" y detiene el scroll (`ScrollCamera.set_scrolling(false)`). Con la acción `restart` (R) recarga la escena en cualquier momento, lo que deja combustible, cámara y tentáculo en su estado inicial.
+Script en la raíz de `sandbox.tscn`, marcado TEMPORAL. Escucha `Player.died(cause)` (no `player_caught`): para `&"tentacle"` y `&"fell"` muestra "CAPTURADO — pulsá R para reiniciar" y detiene el scroll (`ScrollCamera.set_scrolling(false)`). El mapa causa → texto es la constante `DEATH_TEXTS`. Con la acción `restart` (R) recarga la escena en cualquier momento, lo que deja combustible, cámara y tentáculo en su estado inicial.
 
 ## Cómo probarlo
 

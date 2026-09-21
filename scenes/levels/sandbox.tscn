@@ -5,6 +5,20 @@
 [ext_resource type="PackedScene" path="res://scenes/camera/ScrollCamera.tscn" id="3_camera"]
 [ext_resource type="PackedScene" path="res://scenes/tentacle/Tentacle.tscn" id="4_tentacle"]
 [ext_resource type="Script" path="res://scripts/levels/sandbox_controller.gd" id="5_controller"]
+[ext_resource type="PackedScene" path="res://scenes/obstacles/Obstacle.tscn" id="6_obstacle"]
+[ext_resource type="PackedScene" path="res://scenes/obstacles/MovingObstacle.tscn" id="7_moving"]
+[ext_resource type="PackedScene" path="res://scenes/obstacles/PulseTrap.tscn" id="8_trap"]
+[ext_resource type="Script" path="res://scripts/obstacles/moving_obstacle_config.gd" id="9_moving_cfg"]
+[ext_resource type="Script" path="res://scripts/obstacles/pulse_trap_config.gd" id="10_trap_cfg"]
+
+[sub_resource type="Resource" id="MovingConfig_vertical"]
+script = ExtResource("9_moving_cfg")
+speed = 45.0
+start_delay = 1.0
+
+[sub_resource type="Resource" id="TrapConfig_offset"]
+script = ExtResource("10_trap_cfg")
+initial_offset = 1.5
 
 [node name="Sandbox" type="Node2D"]
 script = ExtResource("5_controller")
@@ -224,3 +238,31 @@ polygon = PackedVector2Array(210, -1600, 310, -1600, 310, -1588, 210, -1588)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform14"]
 polygon = PackedVector2Array(210, -1600, 310, -1600, 310, -1588, 210, -1588)
+
+[node name="Obstacle1" parent="." instance=ExtResource("6_obstacle")]
+position = Vector2(130, 400)
+size = Vector2(260, 24)
+
+[node name="Obstacle2" parent="." instance=ExtResource("6_obstacle")]
+position = Vector2(80, 250)
+size = Vector2(100, 80)
+
+[node name="MovingObstacle1" parent="." instance=ExtResource("7_moving")]
+position = Vector2(60, 90)
+size = Vector2(40, 20)
+travel = Vector2(240, 0)
+
+[node name="MovingObstacle2" parent="." instance=ExtResource("7_moving")]
+position = Vector2(170, -40)
+size = Vector2(24, 60)
+travel = Vector2(0, -90)
+config = SubResource("MovingConfig_vertical")
+
+[node name="PulseTrap1" parent="." instance=ExtResource("8_trap")]
+position = Vector2(100, -235)
+size = Vector2(200, 20)
+
+[node name="PulseTrap2" parent="." instance=ExtResource("8_trap")]
+position = Vector2(150, -300)
+size = Vector2(24, 60)
+config = SubResource("TrapConfig_offset")

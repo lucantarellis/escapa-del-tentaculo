@@ -1,6 +1,6 @@
 # Arquitectura — Escapa del Tentáculo
 
-Documento vivo: se completa en cada paso del roadmap. Estado: **paso 3 completado**.
+Documento vivo: se completa en cada paso del roadmap. Estado: **paso 4 completado** (obstáculos).
 
 ## Árbol de escenas
 
@@ -19,6 +19,9 @@ Sandbox (Node2D)                      scenes/levels/sandbox.tscn (escena de prue
 │   └── Label
 ├── CaughtLayer (CanvasLayer)         mensaje de derrota (temporal)
 │   └── CaughtLabel (Label)
+├── Obstacle1, Obstacle2 (Area2D, capa 3, máscara 2)               scenes/obstacles/Obstacle.tscn
+├── MovingObstacle1, MovingObstacle2 (Area2D, capa 3, máscara 2)   scenes/obstacles/MovingObstacle.tscn
+├── PulseTrap1, PulseTrap2 (Area2D, capa 3, máscara 2)             scenes/obstacles/PulseTrap.tscn
 └── Floor / Ceiling / StartPlatform / Platform1..N (StaticBody2D, capa 1)
 ```
 
@@ -35,6 +38,8 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 | Player | `died(cause)` | `sandbox_controller.gd` (temporal; luego el game manager) | Muestra el mensaje de derrota según la causa y detiene el scroll. Causas: `&"tentacle"`, `&"fell"`, `&"obstacle"`, `&"trap"` |
 | ScrollCamera | `scroll_started()` | _(nadie todavía)_ | La cámara empezó a subir |
 | ScrollCamera | `scroll_stopped()` | _(nadie todavía)_ | La cámara dejó de subir |
+| Obstacle (y derivados) | `player_hit(cause)` | _(nadie todavía)_ | Un jugador vivo tocó el obstáculo. Además el obstáculo llama a `Player.die(cause)`, que emite `died` |
+| PulseTrap | `activated()` / `deactivated()` | _(nadie todavía)_ | La trampa pasó a activa / dejó de estarlo |
 | Tentacle | `player_caught(cause)` | _(nadie todavía)_ | El tentáculo atrapó al jugador. Además llama a `Player.die(cause)`, que emite `died` |
 
 ## Autoloads
