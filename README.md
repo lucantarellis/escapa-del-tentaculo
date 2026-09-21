@@ -21,7 +21,7 @@ v0 — estructura inicial del proyecto. Sin lógica de gameplay implementada tod
 `scenes/main/Main.tscn` es la escena principal (`run/main_scene`), por ahora vacía. Diseño planeado para una iteración futura:
 
 - Pantalla de título con el nombre del juego y un botón **Play**.
-- De fondo, se ve la escena del nivel 1 (`scenes/levels/lvl1.tscn`).
+- De fondo, se ve la escena de juego (`scenes/levels/Level.tscn`).
 - Al presionar Play, la pantalla de título se disuelve y arranca el gameplay.
 
 ## Controles

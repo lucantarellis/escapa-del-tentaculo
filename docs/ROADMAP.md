@@ -1,7 +1,7 @@
 # Roadmap — Escapa del Tentáculo
 
 **Última actualización:** 2026-09-21
-**Estado global:** v0 publicada. Mecánicas base (pasos 0 a 3) mergeadas a `main` (brief 01, PR #1). Obstáculos y tanques (pasos 4 y 4b) mergeados a `main` (brief 02, PR #2). Puerta, game manager y niveles por segmentos (pasos 5, 6 y 7) en brief (brief-03), rama `feature/puerta-game-manager-niveles`.
+**Estado global:** v0 publicada. Mecánicas base (pasos 0 a 3) mergeadas a `main` (brief 01, PR #1). Obstáculos y tanques (pasos 4 y 4b) mergeados a `main` (brief 02, PR #2). Puerta, game manager y niveles por segmentos (pasos 5, 6 y 7) hechos y probados por LT (brief-03, rama `feature/puerta-game-manager-niveles`, pendiente de PR y merge a `main`). Siguiente: brief 04 (título, UI mínima y controles táctiles).
 **Cómo usar este documento:** es la fuente de verdad del plan. Cada brief para Cowork se genera desde `docs/briefs/BRIEF_TEMPLATE.md` y, al cerrarse, actualiza la tabla de estado (sección 4) y el registro de decisiones (sección 2).
 
 ---
@@ -44,6 +44,9 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | `GameManager` | Autoload que lleva el estado de la partida (`READY`, `PLAYING`, `WON`, `LOST`) y avisa con señales; no conoce nodos de la escena | Propuesta de Claude, validada por LT (brief 03) |
 | Naranja = meta | Naranja `#FF6B32` = objetivo/meta (la puerta) | LT (brief 03) |
 | UI del MVP | Solo el mensaje de fin de partida (victoria o derrota) y el overlay F3 existente; el resto de la UI queda para el paso 8 | Propuesta de Claude (brief 03) |
+| Escena principal | `run/main_scene` seguirá siendo `Main.tscn`, que será la pantalla de título: título del juego y un botón grande de "jugar". Al pulsarlo el menú se disuelve hasta quedar transparente e inicia el juego sobre la escena de juego correspondiente (`Level.tscn`). `Level.tscn` no es la escena principal | LT (brief 03, cierre); se implementa en el paso 8 |
+| Tentáculo al final del nivel | Cuando la cámara se detiene en el final del nivel, el tentáculo sigue subiendo (`end_rise_speed`) hasta cubrir la pantalla: no hay refugio esperando. Se congela al ganar o perder | LT (QA del paso 7) |
+| Tanques por segmento | Los segmentos tienen dos tanques cada uno (más uno en inicio y final): con uno solo un nivel de 8 segmentos no se puede completar con los valores de prueba. Se rebalancea con el MVP | Propuesta de Claude (brief 03, paso 7) |
 | Tanques | `fuel_amount` 40 u (con `max_fuel` 100), un solo uso por defecto (`respawn_time` 0). El sobrante sobre `max_fuel` se pierde. Un tanque medido en simulación rinde ~489 px de subida vertical y un salto sin combustible ~61 px (referencias para el diseño de niveles, ver `docs/mecanicas/tanques.md`) | Propuesta de Claude (brief 02, paso 4b), probado por LT |
 
 ## 3. Principios de ingeniería
@@ -69,7 +72,7 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | 4b | Tanques de combustible | Hecho | brief-02 |
 | 5 | Puerta y victoria | Hecho | brief-03 |
 | 6 | Game manager y ciclo de partida | Hecho | brief-03 |
-| 7 | Niveles por segmentos | En brief | brief-03 |
+| 7 | Niveles por segmentos | Hecho | brief-03 |
 | 8 | Pantalla de título, UI mínima, controles táctiles | Pendiente | — |
 | 9 | Arte final, audio y pulido | Pendiente | — |
 
@@ -111,7 +114,7 @@ Autoload con estados (jugando, ganó, perdió) y reinicio. Reemplaza el reinicio
 Cada partida arma un nivel distinto ensamblando segmentos (escenas escritas a mano) elegidos al azar con una seed reproducible; el nivel termina en una puerta. El balance se hace después, con el MVP completo.
 
 ### Paso 8 — Título, UI y táctil
-Pantalla de título (ya descrita en el README), UI de combustible y distancia, y controles táctiles para la versión móvil (joystick o zonas táctiles que emitan las mismas acciones del Input Map).
+Pantalla de título en `Main.tscn` (escena principal): título del juego y un botón grande de jugar; al pulsarlo el menú se disuelve hasta quedar transparente e inicia el juego sobre `Level.tscn` (ya descrita en el README), UI de combustible y distancia, y controles táctiles para la versión móvil (joystick o zonas táctiles que emitan las mismas acciones del Input Map).
 
 ### Paso 9 — Arte y audio
 Integración de los tres sprite sheets (astronauta, tileset, tentáculo; el del tentáculo sigue pendiente de aprobación), audio y pulido.
