@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" path="res://scenes/obstacles/PulseTrap.tscn" id="8_trap"]
 [ext_resource type="Resource" path="res://resources/configs/moving_obstacle_vertical_config.tres" id="9_moving_cfg"]
 [ext_resource type="Resource" path="res://resources/configs/pulse_trap_offset_config.tres" id="10_trap_cfg"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="11_tank"]
 
 [node name="Sandbox" type="Node2D"]
 script = ExtResource("5_controller")
@@ -257,3 +258,26 @@ size = Vector2(200, 20)
 position = Vector2(150, -300)
 size = Vector2(24, 60)
 config = ExtResource("10_trap_cfg")
+
+[node name="FuelLedge" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="FuelLedge"]
+color = Color(0.2275, 0.6078, 0.749, 1)
+polygon = PackedVector2Array(318, 275, 352, 275, 352, 287, 318, 287)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="FuelLedge"]
+polygon = PackedVector2Array(318, 275, 352, 275, 352, 287, 318, 287)
+
+[node name="FuelTank1" parent="." instance=ExtResource("11_tank")]
+position = Vector2(150, 438)
+
+[node name="FuelTank2" parent="." instance=ExtResource("11_tank")]
+position = Vector2(335, 265)
+
+[node name="FuelTank3" parent="." instance=ExtResource("11_tank")]
+position = Vector2(176, -290)
+
+[node name="FuelTank4" parent="." instance=ExtResource("11_tank")]
+position = Vector2(110, -700)

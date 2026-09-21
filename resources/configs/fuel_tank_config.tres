@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="FuelTankConfig" format=3]
+
+[ext_resource type="Script" path="res://scripts/pickups/fuel_tank_config.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+fuel_amount = 40.0
+only_if_not_full = false
+respawn_time = 0.0
+bob_amplitude = 3.0
+bob_frequency = 1.0

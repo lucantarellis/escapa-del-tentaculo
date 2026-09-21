@@ -80,7 +80,7 @@ Las teclas están definidas con `physical_keycode` (posición física, independi
 
 Ningún número que afecte el gameplay va escrito en un script. Vive en un `Resource` de configuración editable desde el inspector y guardado como `.tres` en `resources/configs/`.
 
-Existentes (a medida que se implementen los pasos): `PlayerConfig`, `ScrollConfig`, `TentacleConfig`.
+Existentes (a medida que se implementen los pasos): `PlayerConfig`, `ScrollConfig`, `TentacleConfig`, `MovingObstacleConfig`, `PulseTrapConfig`, `FuelTankConfig`.
 
 ### Cómo agregar un parámetro nuevo
 
