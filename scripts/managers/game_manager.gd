@@ -29,6 +29,9 @@ signal run_won
 signal run_lost(cause: StringName)
 ## El estado cambió de [param old_state] a [param new_state].
 signal state_changed(new_state: State, old_state: State)
+## Se pidió reiniciar. Si alguien está conectado a esta señal (por ejemplo [Main]), se hace
+## cargo de reconstruir el nivel y el manager NO recarga la escena.
+signal restart_requested
 
 var _state: State = State.READY
 var _current_seed: int = 0
@@ -36,7 +39,8 @@ var _last_death_cause: StringName = &""
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("restart"):
+	# En READY (título o escena recargándose) no hay nada que reiniciar.
+	if event.is_action_pressed("restart") and _state != State.READY:
 		restart()
 
 
@@ -69,11 +73,14 @@ func notify_goal_reached() -> void:
 	run_won.emit()
 
 
-## Recarga la escena actual (vuelve a [constant State.READY]). El nivel empieza otra
-## partida al cargarse.
+## Pasa a [constant State.READY] y emite [signal restart_requested]. Solo si nadie está
+## conectado a esa señal recarga la escena actual (así `Level.tscn` y el sandbox funcionan
+## solos). En ambos casos el nivel empieza otra partida al cargarse.
 func restart() -> void:
 	_set_state(State.READY)
-	get_tree().reload_current_scene()
+	restart_requested.emit()
+	if restart_requested.get_connections().is_empty():
+		get_tree().reload_current_scene()
 
 
 ## Devuelve el estado actual de la partida.

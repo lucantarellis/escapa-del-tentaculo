@@ -94,7 +94,7 @@ Level (Node2D)          script: level_controller.gd
 └── CaughtLayer         mensaje de fin de partida
 ```
 
-Al iniciar, `LevelController` hace: `LevelBuilder.build()` → `Player.reset(get_player_spawn())` → `ScrollCamera.set_stop_y(get_camera_stop_y())` → conecta la puerta del final → `GameManager.start_run(seed)`.
+Al iniciar, `LevelController` hace: `LevelBuilder.build()` → `Player.reset(get_player_spawn())` → `ScrollCamera.set_stop_y(get_camera_stop_y())` → conecta la puerta del final → `begin()` (que llama a `GameManager.start_run(seed)`). Con `LevelController.autostart = false` el nivel queda armado pero en pausa (`process_mode = DISABLED`) hasta que alguien llame a `begin()`; así `Main` lo muestra detrás del título. `begin()` es idempotente.
 
 ## Guía paso a paso: crear un segmento nuevo
 

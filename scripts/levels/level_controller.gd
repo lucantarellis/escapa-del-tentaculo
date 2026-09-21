@@ -22,11 +22,20 @@ const DEFAULT_DEATH_TEXT: String = "PERDISTE — pulsá R para reiniciar"
 ## Texto de victoria. Solo visual.
 const WIN_TEXT: String = "ESCAPASTE — pulsá R para reiniciar"
 
+## Si es `true` (por defecto) la partida empieza sola al armarse el nivel. Si es `false` el nivel se
+## arma pero queda en pausa hasta que alguien llame a [method begin] (lo usa [Main] para mostrar
+## el título con el nivel de fondo). Debe asignarse antes de agregar el nodo al árbol.
+@export var autostart: bool = true
+
 @onready var _camera: ScrollCamera = $ScrollCamera
 @onready var _player: Player = $Player
 @onready var _tentacle: Tentacle = $Tentacle
 @onready var _builder: LevelBuilder = get_node_or_null("LevelBuilder") as LevelBuilder
 @onready var _message_label: Label = $CaughtLayer/CaughtLabel
+@onready var _debug_overlay: Node = get_node_or_null("DebugOverlay")
+
+var _run_seed: int = 0
+var _started: bool = false
 
 
 func _ready() -> void:
@@ -44,7 +53,26 @@ func _ready() -> void:
 		door.player_reached.connect(GameManager.notify_goal_reached)
 	_player.died.connect(GameManager.notify_player_died)
 	GameManager.state_changed.connect(_on_state_changed)
-	GameManager.start_run(run_seed)
+	_run_seed = run_seed
+	if autostart:
+		begin()
+	else:
+		# Nivel quieto: sin `_process`, física, timers ni tweens. El overlay F3 sigue activo.
+		process_mode = Node.PROCESS_MODE_DISABLED
+		if _debug_overlay != null:
+			_debug_overlay.process_mode = Node.PROCESS_MODE_ALWAYS
+
+
+## Empieza la partida: reanuda el nivel si estaba en pausa (ver [member autostart]) y avisa al
+## game manager. Llamarlo más de una vez no hace nada.
+func begin() -> void:
+	if _started:
+		return
+	_started = true
+	process_mode = Node.PROCESS_MODE_INHERIT
+	if _debug_overlay != null:
+		_debug_overlay.process_mode = Node.PROCESS_MODE_INHERIT
+	GameManager.start_run(_run_seed)
 
 
 func _exit_tree() -> void:
