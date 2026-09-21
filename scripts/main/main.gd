@@ -4,7 +4,8 @@ extends Node
 ##
 ## Al abrir instancia el nivel (con [member LevelController.autostart] en `false`, o sea armado
 ## pero quieto) y encima el [TitleMenu]. Cuando el menú termina de disolverse, lo elimina y
-## llama a [method LevelController.begin]. Con R ([signal GameManager.restart_requested])
+## llama a [method LevelController.play_intro] (intro de la escotilla; al terminar el nivel empieza
+## solo). Con R ([signal GameManager.restart_requested])
 ## reconstruye solo el nivel, sin volver al título. Ver `docs/mecanicas/pantalla-titulo.md`.
 
 ## Escena del nivel jugable. Estructural.
@@ -40,7 +41,7 @@ func _spawn_level(autostart: bool) -> LevelController:
 
 func _on_title_faded_out() -> void:
 	_title_menu.queue_free()
-	_level.begin()
+	_level.play_intro()
 
 
 func _on_restart_requested() -> void:

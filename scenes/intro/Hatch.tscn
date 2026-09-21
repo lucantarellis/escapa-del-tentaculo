@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/intro/hatch.gd" id="1_hatch"]
+
+[node name="Hatch" type="Node2D"]
+process_mode = 3
+script = ExtResource("1_hatch")
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="Frame" type="Polygon2D" parent="Visual"]
+
+[node name="Hole" type="Polygon2D" parent="Visual"]
+visible = false
+
+[node name="Glow" type="Polygon2D" parent="Visual"]
+
+[node name="LeafLeft" type="Polygon2D" parent="Visual"]
+
+[node name="LeafRight" type="Polygon2D" parent="Visual"]
+
+[node name="GasParticles" type="CPUParticles2D" parent="."]
+emitting = false
+one_shot = true

@@ -32,6 +32,8 @@ var _speed: float = 0.0
 ## Tope de scroll propio de esta instancia (lo fija [method set_stop_y]); pisa al de la config.
 var _stop_override_enabled: bool = false
 var _stop_override_y: float = 0.0
+## Vibración en curso (null si no hay). Ver [method shake].
+var _shake_tween: Tween
 
 
 func _ready() -> void:
@@ -95,14 +97,51 @@ func get_visible_rect() -> Rect2:
 	return Rect2(global_position - size * 0.5, size)
 
 
-## Vuelve a la posición inicial y reinicia velocidad, espera y estado de fin.
+## Vibra la cámara: desplaza `Camera2D.offset` en direcciones al azar con una magnitud que arranca
+## en [param amplitude] (px) y decae linealmente hasta 0 durante [param duration] (s); al terminar
+## deja el `offset` exactamente en `Vector2.ZERO`. Una llamada nueva pisa a la anterior. NO toca
+## `global_position`, así que no afecta al scroll, a las paredes ni a [method get_visible_rect] /
+## [method get_bottom_y]. El `Tween` cuelga del `SceneTree` (no del nodo): sigue corriendo aunque
+## el nivel esté en pausa (por ejemplo durante la intro).
+func shake(amplitude: float, duration: float) -> void:
+	_cancel_shake()
+	if amplitude <= 0.0 or duration <= 0.0:
+		return
+	_shake_tween = get_tree().create_tween()
+	_shake_tween.tween_method(_apply_shake.bind(amplitude), 0.0, 1.0, duration)
+	_shake_tween.tween_callback(_cancel_shake)
+
+
+## Vuelve a la posición inicial y reinicia velocidad, espera y estado de fin. También cancela
+## la vibración.
 func reset() -> void:
+	_cancel_shake()
 	global_position = _start_position
 	_enabled = true
 	_reached_end = false
 	_delay_left = config.start_delay
 	_speed = config.scroll_speed
 	_set_moving(false)
+
+
+func _exit_tree() -> void:
+	# El tween cuelga del SceneTree: hay que cortarlo si la cámara sale del árbol.
+	if _shake_tween != null:
+		_shake_tween.kill()
+		_shake_tween = null
+
+
+# [param progress] va de 0 a 1. La magnitud decae linealmente; la dirección es al azar.
+func _apply_shake(progress: float, amplitude: float) -> void:
+	offset = Vector2.from_angle(randf() * TAU) * amplitude * (1.0 - progress)
+
+
+# Corta la vibración y deja el offset en cero.
+func _cancel_shake() -> void:
+	if _shake_tween != null:
+		_shake_tween.kill()
+		_shake_tween = null
+	offset = Vector2.ZERO
 
 
 func _get_visible_size() -> Vector2:

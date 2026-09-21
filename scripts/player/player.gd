@@ -36,6 +36,7 @@ const THRUST_INDICATOR_DISTANCE: float = 16.0
 
 @onready var _body: Polygon2D = $Body
 @onready var _thrust_indicator: Polygon2D = $ThrustIndicator
+@onready var _collision: CollisionShape2D = $CollisionShape2D
 
 var _fuel: float = 0.0
 ## 0 = gravedad con combustible, 1 = gravedad sin combustible.
@@ -46,6 +47,8 @@ var _is_thrusting: bool = false
 var _is_alive: bool = true
 var _has_won: bool = false
 var _was_empty: bool = false
+## true mientras el jugador está congelado (ver [method set_frozen]).
+var _frozen: bool = false
 
 
 func _ready() -> void:
@@ -162,9 +165,30 @@ func win() -> void:
 	won.emit()
 
 
+## Congela o descongela al jugador. Con [param frozen] `true` oculta el cuerpo y el indicador de
+## propulsión, detiene su `_physics_process` y desactiva la colisión (no se ve, no se mueve ni
+## choca con nada). Con `false` lo revierte. Lo usa la intro mientras el jugador está "detrás de
+## la escotilla". [method reset] lo descongela.
+func set_frozen(frozen: bool) -> void:
+	_frozen = frozen
+	set_physics_process(not frozen)
+	_body.visible = not frozen
+	_collision.set_deferred("disabled", frozen)
+	if frozen:
+		_thrust_indicator.visible = false
+	else:
+		_update_visuals(Vector2.ZERO)
+
+
+## Devuelve true si el jugador está congelado (ver [method set_frozen]).
+func is_frozen() -> bool:
+	return _frozen
+
+
 ## Deja al jugador vivo en [param spawn_position] (coordenadas globales), quieto y con
 ## el combustible inicial.
 func reset(spawn_position: Vector2) -> void:
+	set_frozen(false)
 	global_position = spawn_position
 	velocity = Vector2.ZERO
 	_is_alive = true

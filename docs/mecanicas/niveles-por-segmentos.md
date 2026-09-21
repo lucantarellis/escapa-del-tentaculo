@@ -76,6 +76,7 @@ Nodo `Node2D` (debe estar en el origen (0, 0)) con `@export var config: LevelCon
 | `build(seed_override: int = 0) -> int` | Arma el nivel y devuelve la seed usada (limpia el anterior). Prioridad: `seed_override` ≠ 0, luego `config.seed` ≠ 0, luego una seed sorteada |
 | `clear() -> void` | Elimina los segmentos |
 | `get_player_spawn() -> Vector2` | Posición global del `PlayerSpawn` |
+| `get_hatch_position() -> Vector2` | Posición global del `HatchAnchor` del segmento de inicio (centro del borde superior del piso); ahí se ubica la `Hatch` de la intro |
 | `get_camera_stop_y() -> float` | Y global del centro de la cámara para que el segmento final quede completo a la vista (se pasa a `ScrollCamera.set_stop_y`) |
 | `get_segment_count() -> int` | Segmentos intermedios armados |
 | `get_seed() -> int`, `get_sequence() -> PackedInt32Array`, `get_segments() -> Array[LevelSegment]`, `get_goal_door() -> Door` | Consultas (índices del pool elegidos, segmentos de abajo hacia arriba, puerta del final) |
@@ -88,6 +89,7 @@ Level (Node2D)          script: level_controller.gd
 ├── LevelBuilder        script: level_builder.gd, config = level_config.tres
 │   └── (segmentos, agregados al iniciar)
 ├── ScrollCamera
+├── Hatch               scenes/intro/Hatch.tscn (escotilla de la intro; se ubica en el HatchAnchor)
 ├── Player
 ├── Tentacle            (export camera)
 ├── DebugOverlay        (F3: incluye la seed)

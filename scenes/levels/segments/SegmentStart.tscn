@@ -65,5 +65,8 @@ polygon = PackedVector2Array(80, -560, 220, -560, 220, -548, 80, -548)
 [node name="PlayerSpawn" type="Marker2D" parent="."]
 position = Vector2(180, -92)
 
+[node name="HatchAnchor" type="Marker2D" parent="."]
+position = Vector2(180, -20)
+
 [node name="FuelTank1" parent="." instance=ExtResource("tank")]
 position = Vector2(130, -258)

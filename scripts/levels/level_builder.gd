@@ -15,6 +15,8 @@ signal level_built(level_seed: int)
 const START_BOTTOM_Y: float = 640.0
 ## Nombre del marcador de aparición del jugador dentro del segmento de inicio. Estructural.
 const SPAWN_MARKER_NAME: String = "PlayerSpawn"
+## Nombre del marcador de la escotilla dentro del segmento de inicio. Estructural.
+const HATCH_MARKER_NAME: String = "HatchAnchor"
 ## Seed máxima al sortear una aleatoria. Estructural.
 const MAX_RANDOM_SEED: int = 2147483647
 
@@ -27,6 +29,7 @@ var _segments: Array[LevelSegment] = []
 var _sequence: PackedInt32Array = PackedInt32Array()
 var _seed: int = 0
 var _spawn_local: Vector2 = Vector2.ZERO
+var _hatch_local: Vector2 = Vector2.ZERO
 var _camera_stop_local_y: float = 0.0
 var _door: Door
 
@@ -49,6 +52,11 @@ func build(seed_override: int = 0) -> int:
 			_spawn_local = start.position + marker.position
 		else:
 			push_error("LevelBuilder: el segmento de inicio no tiene un Marker2D '%s'." % SPAWN_MARKER_NAME)
+		var hatch_marker: Marker2D = start.get_node_or_null(HATCH_MARKER_NAME) as Marker2D
+		if hatch_marker != null:
+			_hatch_local = start.position + hatch_marker.position
+		else:
+			push_error("LevelBuilder: el segmento de inicio no tiene un Marker2D '%s'." % HATCH_MARKER_NAME)
 		bottom_y -= start.height
 
 	if config.segment_pool.is_empty():
@@ -82,6 +90,7 @@ func clear() -> void:
 	_sequence.clear()
 	_door = null
 	_spawn_local = Vector2.ZERO
+	_hatch_local = Vector2.ZERO
 	_camera_stop_local_y = 0.0
 
 
@@ -89,6 +98,12 @@ func clear() -> void:
 ## inicio).
 func get_player_spawn() -> Vector2:
 	return to_global(_spawn_local)
+
+
+## Devuelve la posición global donde va la escotilla (marcador `HatchAnchor` del segmento de
+## inicio: centro del borde superior del piso).
+func get_hatch_position() -> Vector2:
+	return to_global(_hatch_local)
 
 
 ## Devuelve la Y global del centro de la cámara para que el segmento final quede completo a

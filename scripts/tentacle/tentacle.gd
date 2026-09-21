@@ -33,6 +33,8 @@ var _extra_rise: float = 0.0
 var _rising: bool = true
 var _time: float = 0.0
 var _player: Player
+## false mientras el tentáculo está oculto e inofensivo (ver [method set_active]).
+var _active: bool = true
 
 
 func _ready() -> void:
@@ -71,6 +73,29 @@ func _process(delta: float) -> void:
 ## terminar la partida (victoria o derrota). El tentáculo sigue anclado a la cámara.
 func set_rising(enabled: bool) -> void:
 	_rising = enabled
+
+
+## Activa o desactiva el tentáculo. Con [param active] `false` lo oculta, apaga la zona letal
+## (`KillZone.monitoring`), el chequeo de caída y su animación, y deja de seguir a la cámara.
+## Con `true` lo restaura y lo reubica. Estado inicial: activo. La intro lo usa para que no
+## se vea antes de la ruptura.
+func set_active(active: bool) -> void:
+	if camera == null:
+		return
+	_active = active
+	visible = active
+	_kill_zone.set_deferred("monitoring", active)
+	set_physics_process(active)
+	set_process(active)
+	if active:
+		_follow_camera()
+		_update_kill_zone()
+		_update_body_polygon()
+
+
+## Devuelve true si el tentáculo está activo (ver [method set_active]).
+func is_active() -> bool:
+	return _active
 
 
 ## Vuelve a la posición inicial (anulando el ascenso extra acumulado) y reanuda el ascenso.

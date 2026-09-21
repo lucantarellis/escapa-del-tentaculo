@@ -8,9 +8,12 @@
 [ext_resource type="Resource" path="res://resources/configs/level_config.tres" id="7_levelcfg"]
 [ext_resource type="Script" path="res://scripts/levels/level_controller.gd" id="5_controller"]
 [ext_resource type="PackedScene" path="res://scenes/ui/Hud.tscn" id="20_hud"]
+[ext_resource type="PackedScene" path="res://scenes/intro/Hatch.tscn" id="21_hatch"]
+[ext_resource type="Resource" path="res://resources/configs/intro_config.tres" id="22_introcfg"]
 
 [node name="Level" type="Node2D"]
 script = ExtResource("5_controller")
+intro_config = ExtResource("22_introcfg")
 
 [node name="LevelBuilder" type="Node2D" parent="."]
 script = ExtResource("6_builder")
@@ -18,6 +21,8 @@ config = ExtResource("7_levelcfg")
 
 [node name="ScrollCamera" parent="." instance=ExtResource("3_camera")]
 position = Vector2(180, 320)
+
+[node name="Hatch" parent="." instance=ExtResource("21_hatch")]
 
 [node name="Player" parent="." instance=ExtResource("1_player")]
 position = Vector2(180, 548)

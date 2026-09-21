@@ -1,6 +1,6 @@
 # Arquitectura — Escapa del Tentáculo
 
-Documento vivo: se completa en cada paso del roadmap. Estado: **paso 8b completado** (pantalla de título y HUD mínimo).
+Documento vivo: se completa en cada paso del roadmap. Estado: **paso 8d completado** (intro de la escotilla: golpes y gas; falta la ruptura, paso 8e).
 
 ## Árbol de escenas
 
@@ -19,7 +19,11 @@ Hay dos niveles jugables. `scenes/levels/Level.tscn` (nivel por segmentos, el pr
 Level (Node2D)                        script: level_controller.gd
 ├── LevelBuilder (Node2D)             script: level_builder.gd, config = level_config.tres
 │   └── SegmentStart, Segment.., SegmentEnd (LevelSegment)   escenas de scenes/levels/segments/, agregadas al iniciar
-├── ScrollCamera, Player, Tentacle, DebugOverlay (muestra la seed)
+├── ScrollCamera
+├── Hatch (Node2D, ALWAYS)             scenes/intro/Hatch.tscn; escotilla de la intro, en el HatchAnchor del segmento de inicio
+│   └── Visual (Frame, Hole, Glow, LeafLeft, LeafRight), GasParticles
+├── Player, Tentacle, DebugOverlay (muestra la seed)
+├── IntroDirector (Node, ALWAYS)       creado por LevelController en play_intro(); vive mientras dura la intro
 ├── Hud (CanvasLayer, capa 80)         scenes/ui/Hud.tscn; barra de combustible y progreso (export: player)
 ├── CaughtLayer (capa 90)
 ```
@@ -69,7 +73,9 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 | Door | `player_reached()` | `LevelController` | Un jugador vivo llegó a la puerta. El controlador llama a `GameManager.notify_goal_reached()`. La puerta no llama a `Player` |
 | GameManager | `state_changed(new, old)` | `LevelController` | En `WON`: `Player.win()`, detiene el scroll y muestra "ESCAPASTE". En `LOST`: detiene el scroll y muestra el mensaje según la causa |
 | GameManager | `restart_requested()` | `Main` | Reconstruye el `Level` (sin título). Si nadie está conectado (`Level.tscn` o sandbox solos), el manager recarga la escena |
-| TitleMenu | `play_pressed()` / `faded_out()` | `Main` | `faded_out`: elimina el menú y llama a `LevelController.begin()` |
+| TitleMenu | `play_pressed()` / `faded_out()` | `Main` | `faded_out`: elimina el menú y llama a `LevelController.play_intro()` |
+| IntroDirector | `hit(index)` | _(nadie todavía; lo usará el audio)_ | Un golpe de la intro (`index` desde 0) |
+| IntroDirector | `finished()` | `LevelController` | Termina la intro: llama a `begin()` |
 | GameManager | `run_started(seed)` / `run_won()` / `run_lost(cause)` | _(nadie todavía; lo usarán UI y audio)_ | Hitos de la partida |
 | ScrollCamera | `scroll_started()` | _(nadie todavía)_ | La cámara empezó a subir |
 | ScrollCamera | `scroll_stopped()` | _(nadie todavía)_ | La cámara dejó de subir |
@@ -87,7 +93,8 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 
 ## Flujo de una partida
 
-0. **Título (solo con `Main`):** `Main` instancia `Level.tscn` con `autostart = false` (armado y en pausa, `GameManager` en `READY`) y encima el `TitleMenu`. Al pulsar JUGAR el menú se disuelve y `Main` llama a `LevelController.begin()`, que reanuda el nivel y llama a `start_run()`. Ver `docs/mecanicas/pantalla-titulo.md`.
+0. **Título (solo con `Main`):** `Main` instancia `Level.tscn` con `autostart = false` (armado y en pausa, `GameManager` en `READY`; escotilla cerrada, tentáculo inactivo y jugador congelado) y encima el `TitleMenu`. Al pulsar JUGAR el menú se disuelve y `Main` llama a `LevelController.play_intro()`. Ver `docs/mecanicas/pantalla-titulo.md`.
+0a. **Intro (solo con `Main`):** `LevelController.play_intro()` crea un `IntroDirector` que, con el nivel aún en pausa, llama tres veces a `ScrollCamera.shake()` y `Hatch.hit()` (vibración de cámara y gas). Al terminar emite `finished` y el nivel llama a `begin()`, que activa el tentáculo, descongela al jugador, reanuda el nivel y llama a `start_run()`. R no hace nada mientras dura (estado `READY`). Sin `Main` (F6, sandbox) o tras R no hay intro: `autostart = true`, escotilla ya rota. Ver `docs/mecanicas/intro-escotilla.md`.
 0b. **HUD:** el `Hud` (capa 80) queda oculto mientras el nivel está en pausa y `begin()` lo muestra. `LevelController` le fija el rango de progreso (Y del spawn y de la puerta). Ver `docs/mecanicas/hud.md`.
 1. Arranca el nivel (`Level.tscn`; con `autostart = true`, el valor por defecto, `begin()` se llama solo): `LevelController` arma el nivel con `LevelBuilder.build()` (segmentos por seed), ubica al jugador en el `PlayerSpawn`, fija el tope de la cámara con `ScrollCamera.set_stop_y()`, conecta `Player.died` y `Door.player_reached` (la del segmento final) con el `GameManager` y llama a `GameManager.start_run(seed)` (estado `PLAYING`). En `sandbox.tscn` no hay `LevelBuilder`: usa su nodo `GoalDoor` y seed 0. La cámara espera `start_delay` y empieza a subir; el tentáculo sube pegado al borde inferior.
 2. El jugador propulsa, camina o salta para subir y esquivar.

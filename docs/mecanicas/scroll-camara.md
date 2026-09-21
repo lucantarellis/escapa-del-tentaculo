@@ -45,7 +45,8 @@ La pantalla sube a velocidad configurable y empuja al jugador hacia arriba: quie
 | `set_scrolling(enabled: bool) -> void` | Pausa o reanuda el scroll (al reanudar no repite `start_delay`) |
 | `get_bottom_y() -> float` | Y (mundo) del borde inferior de la pantalla. La usa el tentáculo |
 | `get_visible_rect() -> Rect2` | Rectángulo del mundo que se ve ahora |
-| `reset() -> void` | Vuelve a la posición inicial (la de la escena) y reinicia velocidad, espera y estado de fin |
+| `shake(amplitude: float, duration: float) -> void` | Vibra `Camera2D.offset` (magnitud `amplitude` px que decae a 0 en `duration` s; termina en `Vector2.ZERO`). No toca `global_position`. Usa un `Tween` del `SceneTree`, así que sigue corriendo con el nivel en pausa. Una llamada nueva pisa la anterior. La usa la intro (`docs/mecanicas/intro-escotilla.md`) |
+| `reset() -> void` | Vuelve a la posición inicial (la de la escena) y reinicia velocidad, espera y estado de fin. Cancela la vibración |
 
 ## Estructura de nodos
 
