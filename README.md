@@ -18,11 +18,9 @@ Abrir la carpeta del proyecto desde Godot (Project Manager → Import → selecc
 
 v0 — estructura inicial del proyecto. Sin lógica de gameplay implementada todavía (eso queda para iteraciones posteriores). Ya existe una escena de prueba (`scenes/levels/lvl1.tscn`) creada durante el setup inicial en el editor.
 
-`scenes/main/Main.tscn` es la escena principal (`run/main_scene`), por ahora vacía. Diseño planeado para una iteración futura:
+`scenes/main/Main.tscn` es la escena principal (`run/main_scene`): muestra la pantalla de título (nombre del juego y un botón **JUGAR**) sobre el nivel ya armado y quieto (`scenes/levels/Level.tscn`). Al pulsar JUGAR el título se disuelve y arranca el gameplay; R reinicia directo al juego. Ver `docs/mecanicas/pantalla-titulo.md`.
 
-- Pantalla de título con el nombre del juego y un botón **Play**.
-- De fondo, se ve la escena de juego (`scenes/levels/Level.tscn`).
-- Al presionar Play, la pantalla de título se disuelve y arranca el gameplay.
+Durante la partida hay un HUD mínimo (barra de combustible a la izquierda y progreso del nivel a la derecha). Ver `docs/mecanicas/hud.md`.
 
 ## Controles
 
@@ -30,7 +28,7 @@ v0 — estructura inicial del proyecto. Sin lógica de gameplay implementada tod
 |---|---|
 | Propulsar (izquierda / derecha / arriba / abajo) | A D W S o flechas |
 | Saltar (solo sin combustible y apoyado en una superficie) | Espacio |
-| Reiniciar (temporal) | R |
+| Reiniciar (directo al juego, sin volver al título) | R |
 | Mostrar u ocultar el overlay de debug | F3 |
 
 ## Documentación
@@ -68,7 +66,7 @@ escapa-del-tentaculo/
 │   ├── goal/                # puerta de meta
 │   ├── pickups/
 │   ├── tentacle/
-│   ├── ui/
+│   ├── ui/                  # DebugOverlay, TitleMenu, Hud
 │   └── levels/               # niveles jugables: Level.tscn (por segmentos), sandbox.tscn, lvl1.tscn
 │       └── segments/         # segmentos (piezas de nivel reutilizables)
 ├── scripts/
@@ -78,9 +76,10 @@ escapa-del-tentaculo/
 │   ├── goal/
 │   ├── pickups/
 │   ├── tentacle/
+│   ├── main/                # main.gd (escena principal: título + nivel)
 │   ├── managers/            # game_manager.gd (autoload GameManager)
 │   ├── levels/              # level_controller.gd, level_builder.gd, level_segment.gd, level_config.gd
-│   └── ui/
+│   └── ui/                  # debug_overlay.gd, title_menu.gd, title_config.gd, hud.gd
 ├── resources/
 │   ├── configs/            # Resource de configuración (.tres) con los valores de gameplay
 │   ├── tilesets/

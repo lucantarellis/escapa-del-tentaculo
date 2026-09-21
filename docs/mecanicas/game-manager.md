@@ -22,7 +22,8 @@ Estados: `READY`, `PLAYING`, `WON`, `LOST`.
 | cualquiera | `start_run(seed)` | `PLAYING` | `state_changed`, `run_started(seed)` |
 | `PLAYING` | `notify_player_died(cause)` | `LOST` | `state_changed`, `run_lost(cause)` |
 | `PLAYING` | `notify_goal_reached()` | `WON` | `state_changed`, `run_won()` |
-| cualquiera | `restart()` | `READY` (y recarga la escena) | `state_changed` |
+| cualquiera | `restart()` | `READY` (recarga la escena solo si nadie escucha `restart_requested`) | `state_changed`, `restart_requested` |
+| `READY` | tecla R (`_unhandled_input`) | _(se ignora: en el título no hay nada que reiniciar)_ | — |
 | `READY`, `WON`, `LOST` | `notify_player_died` / `notify_goal_reached` | _(se ignora)_ | — |
 
 Consecuencia: morir después de ganar (o ganar después de morir) no cambia el resultado. `state_changed` no se emite si el estado no cambia.
@@ -35,6 +36,7 @@ Consecuencia: morir después de ganar (o ganar después de morir) no cambia el r
 | `run_won()` | El jugador ganó |
 | `run_lost(cause: StringName)` | El jugador perdió, con la causa (`&"tentacle"`, `&"fell"`, `&"obstacle"`, `&"trap"`) |
 | `state_changed(new_state, old_state)` | Cambió el estado |
+| `restart_requested()` | Se pidió reiniciar. Si hay conexiones (por ejemplo `Main`), ellas reconstruyen el nivel y el manager **no** recarga la escena |
 
 ## API pública
 
@@ -43,7 +45,7 @@ Consecuencia: morir después de ganar (o ganar después de morir) no cambia el r
 | `start_run(run_seed: int = 0) -> void` | Pasa a `PLAYING` y guarda la seed. Lo llama el nivel al iniciar |
 | `notify_player_died(cause: StringName) -> void` | Solo vale en `PLAYING` |
 | `notify_goal_reached() -> void` | Solo vale en `PLAYING` |
-| `restart() -> void` | Recarga la escena actual. También se dispara con la acción `restart` (R) desde `_unhandled_input` |
+| `restart() -> void` | Pasa a `READY` y emite `restart_requested`; solo si no hay ninguna conexión a esa señal recarga la escena actual. Se dispara con la acción `restart` (R) desde `_unhandled_input`, salvo en `READY` |
 | `get_state() -> State` | Estado actual |
 | `get_current_seed() -> int` | Seed de la partida actual (0 si el nivel no usa) |
 | `get_last_death_cause() -> StringName` | Causa de la última derrota (`&""` si no hubo) |
@@ -53,7 +55,7 @@ Consecuencia: morir después de ganar (o ganar después de morir) no cambia el r
 Al iniciar (`_ready`):
 1. Conecta `Player.died` → `GameManager.notify_player_died` y `Door.player_reached` → `GameManager.notify_goal_reached`.
 2. Escucha `GameManager.state_changed`.
-3. Llama `GameManager.start_run()`.
+3. Llama `begin()`, que llama a `GameManager.start_run()`. Si `autostart` es `false` (lo usa `Main` para el título), el nivel queda en pausa y `begin()` se llama después. Ver `docs/mecanicas/pantalla-titulo.md`.
 
 Al cambiar el estado:
 - `WON`: `Player.win()`, detiene el scroll y muestra "ESCAPASTE — pulsá R para reiniciar".
