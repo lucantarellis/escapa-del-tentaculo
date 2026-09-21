@@ -69,6 +69,8 @@ Un astronauta que se mueve con un jetpack de combustible limitado. Es la mecáni
 | `win() -> void` | Desactiva el control, deja al jugador quieto y emite `won`. Se ignora si ya murió o ya ganó. Desde ahí `is_alive()` es `false`, así que ningún peligro lo afecta |
 | `has_won() -> bool` | true si ganó |
 | `reset(spawn_position: Vector2) -> void` | Vuelve a vivo, quieto y con combustible inicial. También lo descongela |
+| `launch(launch_velocity: Vector2, control_lock: float) -> void` | Descongela, asigna `velocity` y bloquea el Input (propulsión, caminata y salto) `control_lock` s; la inercia, la gravedad y las colisiones siguen. `reset()` anula el bloqueo. La usa la intro al romperse la escotilla |
+| `is_control_locked() -> bool` | true mientras dura el bloqueo del Input |
 | `set_frozen(frozen: bool) -> void` | `true`: oculta el cuerpo y el indicador de propulsión, detiene `_physics_process` y desactiva la colisión. `false`: lo revierte. La intro lo usa mientras el jugador está "detrás de la escotilla" |
 | `is_frozen() -> bool` | true si está congelado |
 | `get_fuel() -> float`, `is_thrusting() -> bool`, `can_jump() -> bool`, `get_current_gravity() -> float`, `is_alive() -> bool` | Consultas de estado (agregadas; las usa el overlay de debug). Ojo: `is_alive()` es "la partida sigue en curso para el jugador": devuelve `false` tras morir **y** tras ganar |

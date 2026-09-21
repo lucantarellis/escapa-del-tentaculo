@@ -38,10 +38,24 @@ const BROKEN_LEAF_ANGLE: float = 1.3
 const HIT_SHAKE_PX: float = 3.0
 ## Duración de la sacudida de la escotilla. Solo visual. Unidad: s.
 const HIT_SHAKE_TIME: float = 0.3
+## Gravedad de los fragmentos de la ruptura. Solo visual. Unidad: px/s².
+const DEBRIS_GRAVITY: float = 900.0
+## Rango de velocidad de los fragmentos al salir. Solo visual. Unidad: px/s.
+const DEBRIS_SPEED_MIN: float = 120.0
+const DEBRIS_SPEED_MAX: float = 300.0
+## Vida de un fragmento (cae fuera de pantalla). Solo visual. Unidad: s.
+const DEBRIS_LIFETIME: float = 1.4
+## Tamaño de un fragmento. Solo visual. Unidad: px.
+const DEBRIS_SIZE: float = 9.0
+## Giro máximo de un fragmento. Solo visual. Unidad: rad/s.
+const DEBRIS_SPIN: float = 8.0
 ## Apertura del cono del gas. Solo visual. Unidad: grados.
 const GAS_SPREAD_DEG: float = 35.0
 ## Tamaño de las partículas de gas (sin textura). Solo visual. Unidad: px.
 const GAS_PARTICLE_SIZE: float = 5.0
+
+## Se emite cuando termina la animación de apertura de [method break_open].
+signal break_finished
 
 ## Parámetros de la intro (gas). Lo asigna [LevelController]; si queda vacío se usan los valores
 ## por defecto de [IntroConfig].
@@ -58,6 +72,7 @@ const GAS_PARTICLE_SIZE: float = 5.0
 var _hits: int = 0
 var _broken: bool = false
 var _shake_tween: Tween
+var _break_tween: Tween
 
 
 func _ready() -> void:
@@ -76,7 +91,37 @@ func hit(strength: float) -> void:
 	_hits += 1
 	_refresh()
 	_shake_visual(strength)
-	_burst_gas(strength)
+	_burst_gas(roundi(_get_config().gas_amount * strength))
+
+
+## Rompe la escotilla con animación: ráfaga grande de gas (`break_gas_amount`), fragmentos que
+## salen despedidos (`break_debris_count`) y las hojas que se abren en `break_duration` s hasta
+## dejar el marco y el hueco oscuro. Desde que se llama, [method is_broken] es `true`. Al terminar
+## la apertura emite [signal break_finished]. Ignorado si ya está rota.
+func break_open() -> void:
+	if _broken:
+		return
+	var cfg: IntroConfig = _get_config()
+	_broken = true
+	if _shake_tween != null:
+		_shake_tween.kill()
+	_visual.position = Vector2.ZERO
+	_hole.visible = true
+	_glow.visible = false
+	# Aplana el abombamiento de los golpes: las hojas se abren desde su posición cerrada.
+	_leaf_left.polygon = _leaf_polygon(0.0, 1.0)
+	_leaf_right.polygon = _leaf_polygon(0.0, -1.0)
+	_burst_gas(cfg.break_gas_amount)
+	_spawn_debris(cfg.break_debris_count)
+	if _break_tween != null:
+		_break_tween.kill()
+	_break_tween = create_tween().set_parallel(true)
+	var duration: float = maxf(cfg.break_duration, 0.01)
+	_break_tween.tween_property(_leaf_left, "rotation", -BROKEN_LEAF_ANGLE, duration) \
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_break_tween.tween_property(_leaf_right, "rotation", BROKEN_LEAF_ANGLE, duration) \
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_break_tween.chain().tween_callback(break_finished.emit)
 
 
 ## Fija el estado final sin animación: [param broken] `true` = rota (hojas abiertas, hueco
@@ -86,6 +131,8 @@ func set_broken(broken: bool) -> void:
 	_hits = 0
 	if _shake_tween != null:
 		_shake_tween.kill()
+	if _break_tween != null:
+		_break_tween.kill()
 	_visual.position = Vector2.ZERO
 	_refresh()
 
@@ -183,9 +230,10 @@ func _setup_gas() -> void:
 	_gas.color_ramp = ramp
 
 
-func _burst_gas(strength: float) -> void:
+# Suelta una ráfaga de [param amount] partículas.
+func _burst_gas(amount: int) -> void:
 	var cfg: IntroConfig = _get_config()
-	_gas.amount = maxi(1, roundi(cfg.gas_amount * strength))
+	_gas.amount = maxi(1, amount)
 	_gas.lifetime = cfg.gas_lifetime
 	_gas.initial_velocity_min = cfg.gas_speed * 0.6
 	_gas.initial_velocity_max = cfg.gas_speed
@@ -200,3 +248,29 @@ func _shake_visual(strength: float) -> void:
 	_shake_tween = create_tween()
 	_shake_tween.tween_property(_visual, "position", Vector2.ZERO, HIT_SHAKE_TIME) \
 		.set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+
+
+# Fragmentos de las hojas que salen despedidos hacia arriba y caen fuera de pantalla.
+func _spawn_debris(count: int) -> void:
+	for i: int in maxi(count, 0):
+		var piece := Polygon2D.new()
+		piece.color = COLOR_LEAF
+		piece.polygon = PackedVector2Array([
+			Vector2(-DEBRIS_SIZE * 0.5, -DEBRIS_SIZE * 0.5),
+			Vector2(DEBRIS_SIZE * randf_range(0.4, 0.9), -DEBRIS_SIZE * 0.2),
+			Vector2(0.0, DEBRIS_SIZE * randf_range(0.4, 0.8)),
+		])
+		var origin: Vector2 = Vector2(randf_range(-_leaf_half_width(), _leaf_half_width()), FRAME_TOP)
+		piece.position = origin
+		add_child(piece)
+		var velocity: Vector2 = Vector2.from_angle(randf_range(-PI * 0.85, -PI * 0.15)) * randf_range(DEBRIS_SPEED_MIN, DEBRIS_SPEED_MAX)
+		var spin: float = randf_range(-DEBRIS_SPIN, DEBRIS_SPIN)
+		var tween: Tween = create_tween()
+		tween.tween_method(_move_debris.bind(piece, origin, velocity, spin), 0.0, DEBRIS_LIFETIME, DEBRIS_LIFETIME)
+		tween.tween_callback(piece.queue_free)
+
+
+# Movimiento parabólico de un fragmento en el instante [param t] (s).
+func _move_debris(t: float, piece: Polygon2D, origin: Vector2, velocity: Vector2, spin: float) -> void:
+	piece.position = origin + velocity * t + Vector2(0.0, 0.5 * DEBRIS_GRAVITY * t * t)
+	piece.rotation = spin * t

@@ -44,6 +44,8 @@ Es la amenaza: una masa roja anclada al borde inferior de la pantalla que sube c
 | `set_rising(enabled: bool) -> void` | Activa o congela el ascenso (`extra_rise_speed` y `end_rise_speed`). `LevelController` lo congela al ganar o perder |
 | `set_active(active: bool) -> void` | `false`: lo oculta, apaga `KillZone.monitoring`, el chequeo de caída (`_check_fell`) y la animación, y deja de seguir a la cámara. `true`: lo restaura y lo reubica. Estado inicial: activo (el sandbox no cambia). La intro lo apaga hasta empezar la partida |
 | `is_active() -> bool` | true si está activo |
+| `set_fall_watch(watch: bool) -> void` | Con el tentáculo inactivo, sigue vigilando la caída: el jugador bajo el borde inferior de la pantalla muere con `&"fell"`. La intro lo enciende en la ruptura |
+| `enter(duration: float) -> void` | Lo activa y lo hace subir desde debajo de la pantalla hasta su posición normal en `duration` s (desfase interno `_entry_offset` animado con un `Tween`, siempre anclado a la cámara). Mientras sube ya es letal donde esté su borde superior. `reset()` lo cancela. La intro lo llama tras `tentacle_entry_delay` |
 | `reset() -> void` | Anula el ascenso extra acumulado, reanuda el ascenso y vuelve al borde de la cámara |
 
 Exportadas: `config: TentacleConfig` y `camera: ScrollCamera` (obligatoria; sin ella el tentáculo se desactiva y avisa con un error).

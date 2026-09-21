@@ -11,7 +11,7 @@ Que al abrir el juego (F5) se vea el título con un botón grande de jugar **sob
 
 1. **Abrir el juego.** `Main` (escena principal, `run/main_scene`) instancia `Level.tscn` con `autostart = false`: el nivel se arma (segmentos, jugador en el spawn, tope de cámara) pero queda **en pausa** (`process_mode = DISABLED` en su nodo raíz: no corren `_process`, física, timers ni tweens, así que no se mueven ni la cámara, ni el tentáculo, ni obstáculos y trampas). El `GameManager` sigue en `READY`. Encima se dibuja el `TitleMenu`. El overlay F3 sigue funcionando (se marca `PROCESS_MODE_ALWAYS` mientras el nivel está en pausa).
 2. **Pulsar JUGAR** (clic, Enter o Espacio; el botón tiene el foco al abrir). El botón se deshabilita (no se puede pulsar dos veces), pasa `fade_delay`, y el menú baja su opacidad a 0 en `fade_duration`. Al terminar emite `faded_out`.
-3. **Arranque.** `Main` elimina el menú y llama a `LevelController.play_intro()`: se reproduce la intro de la escotilla (tres golpes de cámara con gas; el nivel sigue en pausa y el `GameManager` en `READY`). Al terminar la intro el propio nivel llama a `LevelController.begin()`: se reanuda (`PROCESS_MODE_INHERIT`) y se llama a `GameManager.start_run(seed)` (`PLAYING`). La cuenta de `start_delay` de la cámara empieza recién ahí. Ver `docs/mecanicas/intro-escotilla.md`.
+3. **Arranque.** `Main` elimina el menú y llama a `LevelController.play_intro()`: se reproduce la intro de la escotilla (tres golpes de cámara con gas; el nivel sigue en pausa y el `GameManager` en `READY`). En la ruptura de la escotilla el propio nivel empieza la partida (el equivalente a `LevelController.begin()`, sin activar todavía el tentáculo, que entra unos segundos después): se reanuda (`PROCESS_MODE_INHERIT`) y se llama a `GameManager.start_run(seed)` (`PLAYING`). La cuenta de `start_delay` de la cámara empieza recién ahí. Ver `docs/mecanicas/intro-escotilla.md`.
 4. **Reinicio (R).** `GameManager.restart()` pasa a `READY` y emite `restart_requested`. `Main` está conectado: saca el nivel actual del árbol, lo libera e instancia uno nuevo con `autostart = true` (seed nueva si `level_config.seed` = 0). Sin menú ni fundido. R **no hace nada** mientras el estado es `READY` (título).
 5. **Sin `Main`.** `Level.tscn` (F6) y `sandbox.tscn` no tienen a nadie conectado a `restart_requested`: `restart()` recarga la escena como antes y arrancan solos (`autostart = true` por defecto).
 
@@ -45,7 +45,7 @@ Los textos no son gameplay; se dejan editables desde el inspector. Colores, tama
 | `TitleMenu.faded_out` | Terminó el fundido. El menú no se elimina solo: lo hace `Main` |
 | `LevelController.autostart` (`@export`) | `false` = armar el nivel pero dejarlo en pausa. Asignar **antes** de `add_child` |
 | `LevelController.play_intro()` | Reproduce la intro de la escotilla y al terminar llama a `begin()`. Lo usa `Main` tras el fundido |
-| `LevelController.begin()` | Reanuda el nivel y llama a `GameManager.start_run()`. Idempotente. Deja el tentáculo activo y al jugador descongelado |
+| `LevelController.begin()` | Reanuda el nivel y llama a `GameManager.start_run()`. Idempotente. Deja el tentáculo activo y al jugador descongelado (empezar sin intro) |
 | `GameManager.restart_requested` | Se pidió reiniciar; si hay alguien conectado, el manager no recarga la escena |
 
 ## Cómo probarlo

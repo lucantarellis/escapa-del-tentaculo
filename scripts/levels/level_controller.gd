@@ -91,14 +91,21 @@ func _ready() -> void:
 			_hud.visible = false
 
 
-## Empieza la partida: reanuda el nivel si estaba en pausa (ver [member autostart]) y avisa al
-## game manager. Llamarlo más de una vez no hace nada.
+## Empieza la partida ya, sin intro: reanuda el nivel si estaba en pausa (ver [member autostart]),
+## deja al tentáculo activo y al jugador libre, y avisa al game manager. Llamarlo más de una vez no
+## hace nada.
 func begin() -> void:
+	_begin(true)
+
+
+# Empieza la partida. [param activate_tentacle] `false` deja al tentáculo inactivo: lo usa la intro,
+# donde el director lo hace entrar más tarde.
+func _begin(activate_tentacle: bool) -> void:
 	if _started:
 		return
 	_started = true
-	# Siempre deja al tentáculo activo y al jugador libre (la intro los tenía apagados).
-	_tentacle.set_active(true)
+	if activate_tentacle:
+		_tentacle.set_active(true)
 	_player.set_frozen(false)
 	process_mode = Node.PROCESS_MODE_INHERIT
 	if _debug_overlay != null:
@@ -109,7 +116,8 @@ func begin() -> void:
 
 
 ## Reproduce la intro de la escotilla: el nivel sigue en pausa y solo se mueven la escotilla, el gas
-## y la vibración de cámara; al terminar la secuencia llama a [method begin]. Sin escotilla o sin
+## y la vibración de cámara. Tras los golpes la escotilla se rompe, el jugador sale disparado y en
+## ese instante empieza la partida; el tentáculo entra un rato después. Sin escotilla o sin
 ## [member intro_config] empieza directo. Ignorado si la partida o la intro ya empezaron. El
 ## `GameManager` sigue en `READY` hasta [method begin], así que R no hace nada mientras dura.
 func play_intro() -> void:
@@ -122,12 +130,19 @@ func play_intro() -> void:
 	_intro_director = IntroDirector.new()
 	_intro_director.config = intro_config
 	add_child(_intro_director)
+	_intro_director.broken.connect(_on_intro_broken)
 	_intro_director.finished.connect(_on_intro_finished)
 	_intro_director.play(_hatch, _camera, _player, _tentacle)
 
 
+# La ruptura empieza la partida. El tentáculo sigue inactivo: lo hace entrar el director.
+func _on_intro_broken() -> void:
+	_begin(false)
+
+
 func _on_intro_finished() -> void:
-	begin()
+	_intro_director.queue_free()
+	_intro_director = null
 
 
 func _exit_tree() -> void:

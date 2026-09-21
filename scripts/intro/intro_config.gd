@@ -1,6 +1,7 @@
 class_name IntroConfig
 extends Resource
-## Parámetros de la intro de la escotilla: golpes, vibración de cámara y gas.
+## Parámetros de la intro de la escotilla: golpes, vibración de cámara, gas, ruptura, lanzamiento
+## del jugador y entrada del tentáculo.
 ##
 ## Se editan desde el inspector sobre `resources/configs/intro_config.tres`. Todos los tiempos y
 ## magnitudes de la secuencia viven acá; los scripts de la intro no llevan números propios de
@@ -31,3 +32,28 @@ extends Resource
 @export var gas_lifetime: float = 0.9
 ## Velocidad de salida del gas. Unidad: px/s.
 @export var gas_speed: float = 90.0
+
+@export_group("Ruptura")
+## Amplitud de la vibración de cámara de la ruptura. Unidad: px.
+@export var break_shake_amplitude: float = 16.0
+## Duración de esa vibración. Unidad: s.
+@export var break_shake_duration: float = 0.6
+## Partículas de la ráfaga grande de gas de la ruptura.
+@export var break_gas_amount: int = 80
+## Duración de la animación de apertura de las hojas. Unidad: s.
+@export var break_duration: float = 0.35
+## Fragmentos de polígono que salen despedidos al romperse.
+@export var break_debris_count: int = 6
+
+@export_group("Lanzamiento")
+## Velocidad vertical inicial del jugador, hacia arriba. Unidad: px/s.
+@export var launch_speed: float = 400.0
+## Tiempo tras el lanzamiento en que el jugador no responde al Input (la inercia y la gravedad
+## siguen actuando). Unidad: s.
+@export var control_lock_time: float = 0.5
+
+@export_group("Tentáculo")
+## Espera entre la ruptura y el inicio de la entrada del tentáculo. Unidad: s.
+@export var tentacle_entry_delay: float = 1.5
+## Duración de la subida del tentáculo desde fuera de pantalla hasta su posición. Unidad: s.
+@export var tentacle_entry_duration: float = 1.0

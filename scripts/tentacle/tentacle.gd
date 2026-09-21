@@ -35,6 +35,11 @@ var _time: float = 0.0
 var _player: Player
 ## false mientras el tentáculo está oculto e inofensivo (ver [method set_active]).
 var _active: bool = true
+## true = con el tentáculo inactivo, igual vigila que el jugador no caiga bajo la pantalla.
+var _watch_fall: bool = false
+## Desfase vertical de la entrada (ver [method enter]): positivo = más abajo. Unidad: px.
+var _entry_offset: float = 0.0
+var _entry_tween: Tween
 
 
 func _ready() -> void:
@@ -53,6 +58,10 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if not _active:
+		# Solo la red de seguridad de caída (ver [method set_fall_watch]).
+		_check_fell()
+		return
 	if _rising:
 		var speed: float = config.extra_rise_speed
 		# Con la cámara detenida en el final del nivel, sigue subiendo hasta cubrir la pantalla.
@@ -85,12 +94,41 @@ func set_active(active: bool) -> void:
 	_active = active
 	visible = active
 	_kill_zone.set_deferred("monitoring", active)
-	set_physics_process(active)
+	set_physics_process(active or _watch_fall)
 	set_process(active)
 	if active:
 		_follow_camera()
 		_update_kill_zone()
 		_update_body_polygon()
+
+
+## Con [param watch] `true`, un tentáculo inactivo sigue vigilando la caída: si el jugador cae bajo
+## el borde inferior de la pantalla muere con `&"fell"`, sin que el tentáculo haga falta. La intro lo
+## enciende en la ruptura (cuando empieza la partida) y el tentáculo entra recién después. Con el
+## tentáculo activo no cambia nada (el chequeo ya corre).
+func set_fall_watch(watch: bool) -> void:
+	_watch_fall = watch
+	if camera != null:
+		set_physics_process(_active or _watch_fall)
+
+
+## Activa el tentáculo y lo hace subir desde debajo de la pantalla hasta su posición normal en
+## [param duration] s (siempre anclado a la cámara). Mientras sube ya es letal donde esté su borde
+## superior. [method reset] cancela la entrada. La llama la intro tras `tentacle_entry_delay`.
+func enter(duration: float) -> void:
+	if camera == null:
+		return
+	if _entry_tween != null:
+		_entry_tween.kill()
+	# Arranca con el borde superior (más la onda) justo bajo el borde inferior de la pantalla.
+	_entry_offset = config.visible_height + config.wobble_amplitude
+	set_active(true)
+	if duration <= 0.0:
+		_entry_offset = 0.0
+		_follow_camera()
+		return
+	_entry_tween = create_tween()
+	_entry_tween.tween_property(self, "_entry_offset", 0.0, duration)
 
 
 ## Devuelve true si el tentáculo está activo (ver [method set_active]).
@@ -100,6 +138,9 @@ func is_active() -> bool:
 
 ## Vuelve a la posición inicial (anulando el ascenso extra acumulado) y reanuda el ascenso.
 func reset() -> void:
+	if _entry_tween != null:
+		_entry_tween.kill()
+	_entry_offset = 0.0
 	_extra_rise = 0.0
 	_rising = true
 	_follow_camera()
@@ -107,7 +148,7 @@ func reset() -> void:
 
 func _follow_camera() -> void:
 	var rect: Rect2 = camera.get_visible_rect()
-	global_position = Vector2(rect.position.x, camera.get_bottom_y() - config.visible_height - _extra_rise)
+	global_position = Vector2(rect.position.x, camera.get_bottom_y() - config.visible_height - _extra_rise + _entry_offset)
 
 
 ## Profundidad del cuerpo: desde el borde superior hasta pasado el borde de la pantalla.

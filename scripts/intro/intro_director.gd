@@ -1,6 +1,6 @@
 class_name IntroDirector
 extends Node
-## Director de la intro: orquesta la secuencia de golpes llamando hacia abajo a [Hatch],
+## Director de la intro: orquesta la secuencia de golpes, ruptura y lanzamiento llamando hacia abajo a [Hatch],
 ## [ScrollCamera], [Player] y [Tentacle], y avisa hacia arriba con señales.
 ##
 ## Lo crea [LevelController] en [method LevelController.play_intro]. Como el nivel está en pausa
@@ -10,7 +10,11 @@ extends Node
 
 ## Se emite en cada golpe. [param index] cuenta desde 0.
 signal hit(index: int)
-## Se emite al terminar la secuencia (después de la pausa posterior al último golpe).
+## Se emite en el instante de la ruptura, con el jugador ya lanzado. [LevelController] responde
+## empezando la partida (`GameManager.start_run`, HUD, scroll).
+signal broken
+## Se emite al terminar la secuencia (cuando el tentáculo empieza a entrar, o al saltearse esa
+## entrada porque la partida ya terminó).
 signal finished
 
 ## Parámetros de la secuencia. Lo asigna [LevelController].
@@ -59,8 +63,27 @@ func _run() -> void:
 		var pause: float = config.hit_interval if i < config.hit_count - 1 else config.pre_break_pause
 		if not await _wait(pause):
 			return
+	_break_and_launch()
+	# El tentáculo tarda en aparecer. Si la partida terminó antes (ganó o perdió), no entra.
+	if not await _wait(config.tentacle_entry_delay):
+		return
+	if GameManager.get_state() == GameManager.State.PLAYING:
+		_tentacle.enter(config.tentacle_entry_duration)
 	_playing = false
 	finished.emit()
+
+
+# Ruptura: la escotilla se rompe, la cámara vibra más fuerte y el jugador sale disparado hacia
+# arriba desde la escotilla. Desde este momento la partida está en curso (señal [signal broken]).
+func _break_and_launch() -> void:
+	_hatch.break_open()
+	_camera.shake(config.break_shake_amplitude, config.break_shake_duration)
+	# Desde ya vigila la caída: no hace falta que el tentáculo haya entrado para que caer bajo la
+	# pantalla mate.
+	_tentacle.set_fall_watch(true)
+	_player.global_position = _hatch.get_launch_position()
+	_player.launch(Vector2(0.0, -config.launch_speed), config.control_lock_time)
+	broken.emit()
 
 
 # Espera [param seconds]. Devuelve false si el director salió del árbol mientras tanto.
