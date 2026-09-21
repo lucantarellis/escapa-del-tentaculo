@@ -77,7 +77,7 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | 6 | Game manager y ciclo de partida | Hecho | brief-03 |
 | 7 | Niveles por segmentos | Hecho | brief-03 |
 | 8 | Pantalla de título y transición al juego | Hecho (pendiente de QA de LT) | brief-04 |
-| 8b | HUD mínimo (combustible y progreso) | En brief | brief-04 |
+| 8b | HUD mínimo (combustible y progreso) | Hecho (pendiente de QA de LT) | brief-04 |
 | 8c | Controles táctiles | Pendiente (al final, tras arte y balance) | — |
 | 9 | Arte final, audio y pulido | Pendiente | — |
 

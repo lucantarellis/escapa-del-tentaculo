@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scripts/levels/level_builder.gd" id="6_builder"]
 [ext_resource type="Resource" path="res://resources/configs/level_config.tres" id="7_levelcfg"]
 [ext_resource type="Script" path="res://scripts/levels/level_controller.gd" id="5_controller"]
+[ext_resource type="PackedScene" path="res://scenes/ui/Hud.tscn" id="20_hud"]
 
 [node name="Level" type="Node2D"]
 script = ExtResource("5_controller")
@@ -25,6 +26,9 @@ position = Vector2(180, 548)
 camera = NodePath("../ScrollCamera")
 
 [node name="DebugOverlay" parent="." node_paths=PackedStringArray("player") instance=ExtResource("2_overlay")]
+player = NodePath("../Player")
+
+[node name="Hud" parent="." node_paths=PackedStringArray("player") instance=ExtResource("20_hud")]
 player = NodePath("../Player")
 
 [node name="CaughtLayer" type="CanvasLayer" parent="."]

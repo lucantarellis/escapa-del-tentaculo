@@ -1,6 +1,6 @@
 # Arquitectura — Escapa del Tentáculo
 
-Documento vivo: se completa en cada paso del roadmap. Estado: **paso 8 completado** (pantalla de título).
+Documento vivo: se completa en cada paso del roadmap. Estado: **paso 8b completado** (pantalla de título y HUD mínimo).
 
 ## Árbol de escenas
 
@@ -19,7 +19,9 @@ Hay dos niveles jugables. `scenes/levels/Level.tscn` (nivel por segmentos, el pr
 Level (Node2D)                        script: level_controller.gd
 ├── LevelBuilder (Node2D)             script: level_builder.gd, config = level_config.tres
 │   └── SegmentStart, Segment.., SegmentEnd (LevelSegment)   escenas de scenes/levels/segments/, agregadas al iniciar
-├── ScrollCamera, Player, Tentacle, DebugOverlay (muestra la seed), CaughtLayer
+├── ScrollCamera, Player, Tentacle, DebugOverlay (muestra la seed)
+├── Hud (CanvasLayer, capa 80)         scenes/ui/Hud.tscn; barra de combustible y progreso (export: player)
+├── CaughtLayer (capa 90)
 ```
 
 Y `sandbox.tscn` (columna fija de prueba):
@@ -39,6 +41,7 @@ Sandbox (Node2D)                      scenes/levels/sandbox.tscn (escena de prue
 │   └── KillZone (Area2D, capa 4, máscara 2) → CollisionShape2D
 ├── DebugOverlay (CanvasLayer)        scenes/ui/DebugOverlay.tscn
 │   └── Label
+├── Hud (CanvasLayer, capa 80)        scenes/ui/Hud.tscn (export: player)
 ├── CaughtLayer (CanvasLayer)         mensaje de derrota (temporal)
 │   └── CaughtLabel (Label)
 ├── Obstacle1, Obstacle2 (Area2D, capa 3, máscara 2)               scenes/obstacles/Obstacle.tscn
@@ -57,8 +60,8 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 
 | Emisor | Señal | Receptor | Efecto |
 |---|---|---|---|
-| Player | `fuel_changed(current, maximum)` | _(nadie todavía; lo usará la UI)_ | Combustible cambió |
-| Player | `fuel_depleted()` / `fuel_refilled()` | _(nadie todavía)_ | Combustible vacío / recuperado |
+| Player | `fuel_changed(current, maximum)` | `Hud` | Actualiza la barra de combustible |
+| Player | `fuel_depleted()` / `fuel_refilled()` | `Hud` | La barra pasa a roja / vuelve a naranja |
 | Player | `thrust_started()` / `thrust_stopped()` | _(nadie todavía)_ | Feedback de propulsión |
 | Player | `jumped()` | _(nadie todavía)_ | Saltó |
 | Player | `died(cause)` | `LevelController` | Llama a `GameManager.notify_player_died(cause)`. Causas: `&"tentacle"`, `&"fell"`, `&"obstacle"`, `&"trap"` |
@@ -85,6 +88,7 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 ## Flujo de una partida
 
 0. **Título (solo con `Main`):** `Main` instancia `Level.tscn` con `autostart = false` (armado y en pausa, `GameManager` en `READY`) y encima el `TitleMenu`. Al pulsar JUGAR el menú se disuelve y `Main` llama a `LevelController.begin()`, que reanuda el nivel y llama a `start_run()`. Ver `docs/mecanicas/pantalla-titulo.md`.
+0b. **HUD:** el `Hud` (capa 80) queda oculto mientras el nivel está en pausa y `begin()` lo muestra. `LevelController` le fija el rango de progreso (Y del spawn y de la puerta). Ver `docs/mecanicas/hud.md`.
 1. Arranca el nivel (`Level.tscn`; con `autostart = true`, el valor por defecto, `begin()` se llama solo): `LevelController` arma el nivel con `LevelBuilder.build()` (segmentos por seed), ubica al jugador en el `PlayerSpawn`, fija el tope de la cámara con `ScrollCamera.set_stop_y()`, conecta `Player.died` y `Door.player_reached` (la del segmento final) con el `GameManager` y llama a `GameManager.start_run(seed)` (estado `PLAYING`). En `sandbox.tscn` no hay `LevelBuilder`: usa su nodo `GoalDoor` y seed 0. La cámara espera `start_delay` y empieza a subir; el tentáculo sube pegado al borde inferior.
 2. El jugador propulsa, camina o salta para subir y esquivar.
 3. **Derrota:** quien lo mata (tentáculo, caída, obstáculo, trampa) llama a `Player.die(cause)` → `died(cause)` → `GameManager.notify_player_died(cause)` → estado `LOST` → `LevelController` detiene el scroll y muestra el mensaje según la causa.

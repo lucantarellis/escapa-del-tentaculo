@@ -33,6 +33,7 @@ const WIN_TEXT: String = "ESCAPASTE — pulsá R para reiniciar"
 @onready var _builder: LevelBuilder = get_node_or_null("LevelBuilder") as LevelBuilder
 @onready var _message_label: Label = $CaughtLayer/CaughtLabel
 @onready var _debug_overlay: Node = get_node_or_null("DebugOverlay")
+@onready var _hud: Hud = get_node_or_null("Hud") as Hud
 
 var _run_seed: int = 0
 var _started: bool = false
@@ -52,6 +53,9 @@ func _ready() -> void:
 	else:
 		door.player_reached.connect(GameManager.notify_goal_reached)
 	_player.died.connect(GameManager.notify_player_died)
+	if _hud != null and door != null:
+		# El progreso va de la Y del jugador en el spawn a la Y de la puerta.
+		_hud.set_progress_range(_player.global_position.y, door.global_position.y)
 	GameManager.state_changed.connect(_on_state_changed)
 	_run_seed = run_seed
 	if autostart:
@@ -61,6 +65,9 @@ func _ready() -> void:
 		process_mode = Node.PROCESS_MODE_DISABLED
 		if _debug_overlay != null:
 			_debug_overlay.process_mode = Node.PROCESS_MODE_ALWAYS
+		# El HUD no se muestra en el título: aparece en `begin()`.
+		if _hud != null:
+			_hud.visible = false
 
 
 ## Empieza la partida: reanuda el nivel si estaba en pausa (ver [member autostart]) y avisa al
@@ -72,6 +79,8 @@ func begin() -> void:
 	process_mode = Node.PROCESS_MODE_INHERIT
 	if _debug_overlay != null:
 		_debug_overlay.process_mode = Node.PROCESS_MODE_INHERIT
+	if _hud != null:
+		_hud.visible = true
 	GameManager.start_run(_run_seed)
 
 

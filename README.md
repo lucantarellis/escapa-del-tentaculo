@@ -20,6 +20,8 @@ v0 — estructura inicial del proyecto. Sin lógica de gameplay implementada tod
 
 `scenes/main/Main.tscn` es la escena principal (`run/main_scene`): muestra la pantalla de título (nombre del juego y un botón **JUGAR**) sobre el nivel ya armado y quieto (`scenes/levels/Level.tscn`). Al pulsar JUGAR el título se disuelve y arranca el gameplay; R reinicia directo al juego. Ver `docs/mecanicas/pantalla-titulo.md`.
 
+Durante la partida hay un HUD mínimo (barra de combustible a la izquierda y progreso del nivel a la derecha). Ver `docs/mecanicas/hud.md`.
+
 ## Controles
 
 | Acción | Teclas |
@@ -64,7 +66,7 @@ escapa-del-tentaculo/
 │   ├── goal/                # puerta de meta
 │   ├── pickups/
 │   ├── tentacle/
-│   ├── ui/
+│   ├── ui/                  # DebugOverlay, TitleMenu, Hud
 │   └── levels/               # niveles jugables: Level.tscn (por segmentos), sandbox.tscn, lvl1.tscn
 │       └── segments/         # segmentos (piezas de nivel reutilizables)
 ├── scripts/
@@ -77,7 +79,7 @@ escapa-del-tentaculo/
 │   ├── main/                # main.gd (escena principal: título + nivel)
 │   ├── managers/            # game_manager.gd (autoload GameManager)
 │   ├── levels/              # level_controller.gd, level_builder.gd, level_segment.gd, level_config.gd
-│   └── ui/
+│   └── ui/                  # debug_overlay.gd, title_menu.gd, title_config.gd, hud.gd
 ├── resources/
 │   ├── configs/            # Resource de configuración (.tres) con los valores de gameplay
 │   ├── tilesets/
