@@ -67,8 +67,8 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | 3 | Tentáculo y condición de derrota | Hecho | brief-01 |
 | 4 | Obstáculos | Hecho | brief-02 |
 | 4b | Tanques de combustible | Hecho | brief-02 |
-| 5 | Puerta y victoria | En brief | brief-03 |
-| 6 | Game manager y ciclo de partida | En brief | brief-03 |
+| 5 | Puerta y victoria | Hecho | brief-03 |
+| 6 | Game manager y ciclo de partida | Hecho | brief-03 |
 | 7 | Niveles por segmentos | En brief | brief-03 |
 | 8 | Pantalla de título, UI mínima, controles táctiles | Pendiente | — |
 | 9 | Arte final, audio y pulido | Pendiente | — |

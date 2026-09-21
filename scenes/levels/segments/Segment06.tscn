@@ -1,0 +1,70 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
+[ext_resource type="PackedScene" path="res://scenes/obstacles/Obstacle.tscn" id="obs"]
+[ext_resource type="PackedScene" path="res://scenes/obstacles/PulseTrap.tscn" id="trap"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
+[ext_resource type="Resource" path="res://resources/configs/pulse_trap_offset_config.tres" id="trapcfg_off"]
+
+[node name="Segment06" type="Node2D"]
+script = ExtResource("seg")
+height = 640
+
+[node name="Platform1" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="Platform1"]
+color = Color(0.2275, 0.6078, 0.749, 1)
+polygon = PackedVector2Array(40, -30, 200, -30, 200, -18, 40, -18)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform1"]
+polygon = PackedVector2Array(40, -30, 200, -30, 200, -18, 40, -18)
+
+[node name="Platform2" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="Platform2"]
+color = Color(0.2275, 0.6078, 0.749, 1)
+polygon = PackedVector2Array(100, -250, 240, -250, 240, -238, 100, -238)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform2"]
+polygon = PackedVector2Array(100, -250, 240, -250, 240, -238, 100, -238)
+
+[node name="PulseTrap1" parent="." instance=ExtResource("trap")]
+position = Vector2(290, -262)
+size = Vector2(36, 60)
+config = ExtResource("trapcfg_off")
+
+[node name="FuelTank1" parent="." instance=ExtResource("tank")]
+position = Vector2(250, -268)
+
+[node name="FuelTank2" parent="." instance=ExtResource("tank")]
+position = Vector2(180, -608)
+
+[node name="Platform3" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="Platform3"]
+color = Color(0.2275, 0.6078, 0.749, 1)
+polygon = PackedVector2Array(190, -410, 330, -410, 330, -398, 190, -398)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform3"]
+polygon = PackedVector2Array(190, -410, 330, -410, 330, -398, 190, -398)
+
+[node name="Obstacle1" parent="." instance=ExtResource("obs")]
+position = Vector2(80, -420)
+size = Vector2(150, 24)
+
+[node name="Platform4" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="Platform4"]
+color = Color(0.2275, 0.6078, 0.749, 1)
+polygon = PackedVector2Array(100, -590, 260, -590, 260, -578, 100, -578)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform4"]
+polygon = PackedVector2Array(100, -590, 260, -590, 260, -578, 100, -578)

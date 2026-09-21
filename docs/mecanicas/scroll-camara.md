@@ -57,6 +57,10 @@ ScrollCamera (Camera2D, process_callback = Physics, sin suavizado)
     └── TopShape (CollisionShape2D)
 ```
 
+## Tope por instancia (`set_stop_y`)
+
+`set_stop_y(y: float) -> void` activa un tope de scroll en la Y `y` (Y mundo del **centro** de la cámara) solo para esa instancia, sin tocar el `ScrollConfig` compartido; pisa a `stop_at_enabled` / `stop_at_y`. Lo usa `LevelController` con `LevelBuilder.get_camera_stop_y()` para que el segmento final quede completo a la vista. Ver `niveles-por-segmentos.md`.
+
 ## Cómo probarlo
 
 1. Ejecutar `scenes/levels/sandbox.tscn` (F6). Tras 2 s la cámara sube.

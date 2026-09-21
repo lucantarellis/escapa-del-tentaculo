@@ -1,8 +1,19 @@
 # Arquitectura — Escapa del Tentáculo
 
-Documento vivo: se completa en cada paso del roadmap. Estado: **paso 6 completado** (game manager y ciclo de partida).
+Documento vivo: se completa en cada paso del roadmap. Estado: **paso 7 completado** (niveles por segmentos).
 
 ## Árbol de escenas
+
+Hay dos niveles jugables. `scenes/levels/Level.tscn` (nivel por segmentos, el principal):
+
+```
+Level (Node2D)                        script: level_controller.gd
+├── LevelBuilder (Node2D)             script: level_builder.gd, config = level_config.tres
+│   └── SegmentStart, Segment.., SegmentEnd (LevelSegment)   escenas de scenes/levels/segments/, agregadas al iniciar
+├── ScrollCamera, Player, Tentacle, DebugOverlay (muestra la seed), CaughtLayer
+```
+
+Y `sandbox.tscn` (columna fija de prueba):
 
 ```
 Sandbox (Node2D)                      scenes/levels/sandbox.tscn (escena de prueba: columna alta)
@@ -51,6 +62,7 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 | Obstacle (y derivados) | `player_hit(cause)` | _(nadie todavía)_ | Un jugador vivo tocó el obstáculo. Además el obstáculo llama a `Player.die(cause)`, que emite `died` |
 | FuelTank | `collected(amount)` | _(nadie todavía; lo usará la UI/feedback)_ | Un jugador recogió el tanque. Además el tanque llama a `Player.add_fuel(amount)` |
 | PulseTrap | `activated()` / `deactivated()` | _(nadie todavía)_ | La trampa pasó a activa / dejó de estarlo |
+| LevelBuilder | `level_built(level_seed)` | _(nadie todavía)_ | Se terminó de armar el nivel |
 | Tentacle | `player_caught(cause)` | _(nadie todavía)_ | El tentáculo atrapó al jugador. Además llama a `Player.die(cause)`, que emite `died` |
 
 ## Autoloads
@@ -61,8 +73,8 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 
 ## Flujo de una partida
 
-1. Arranca el nivel (`sandbox.tscn`): `LevelController` conecta `Player.died` y `Door.player_reached` con el `GameManager` y llama a `GameManager.start_run()` (estado `PLAYING`). La cámara espera `start_delay` y empieza a subir; el tentáculo sube pegado al borde inferior.
+1. Arranca el nivel (`Level.tscn`): `LevelController` arma el nivel con `LevelBuilder.build()` (segmentos por seed), ubica al jugador en el `PlayerSpawn`, fija el tope de la cámara con `ScrollCamera.set_stop_y()`, conecta `Player.died` y `Door.player_reached` (la del segmento final) con el `GameManager` y llama a `GameManager.start_run(seed)` (estado `PLAYING`). En `sandbox.tscn` no hay `LevelBuilder`: usa su nodo `GoalDoor` y seed 0. La cámara espera `start_delay` y empieza a subir; el tentáculo sube pegado al borde inferior.
 2. El jugador propulsa, camina o salta para subir y esquivar.
 3. **Derrota:** quien lo mata (tentáculo, caída, obstáculo, trampa) llama a `Player.die(cause)` → `died(cause)` → `GameManager.notify_player_died(cause)` → estado `LOST` → `LevelController` detiene el scroll y muestra el mensaje según la causa.
 4. **Victoria:** `Door.player_reached` → `GameManager.notify_goal_reached()` → estado `WON` → `LevelController` llama a `Player.win()`, detiene el scroll y muestra "ESCAPASTE". Tras ganar, `is_alive()` es `false`, así que los peligros no lo afectan; además el manager ignora cualquier notificación fuera de `PLAYING`.
-5. `restart` (R), escuchada por el `GameManager`, recarga la escena en cualquier momento (estado `READY`); el nivel vuelve a llamar a `start_run()`.
+5. `restart` (R), escuchada por el `GameManager`, recarga la escena en cualquier momento (estado `READY`); el nivel vuelve a llamar a `start_run()`. En `Level.tscn` cada recarga arma un nivel nuevo (con `seed` = 0).

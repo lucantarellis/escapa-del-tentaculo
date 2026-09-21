@@ -1,0 +1,69 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
+
+[node name="SegmentStart" type="Node2D"]
+script = ExtResource("seg")
+height = 640
+
+[node name="Floor" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="Floor"]
+color = Color(0.2275, 0.6078, 0.749, 1)
+polygon = PackedVector2Array(0, -20, 360, -20, 360, 0, 0, 0)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Floor"]
+polygon = PackedVector2Array(0, -20, 360, -20, 360, 0, 0, 0)
+
+[node name="StartPlatform" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="StartPlatform"]
+color = Color(0.2275, 0.6078, 0.749, 1)
+polygon = PackedVector2Array(100, -80, 260, -80, 260, -68, 100, -68)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StartPlatform"]
+polygon = PackedVector2Array(100, -80, 260, -80, 260, -68, 100, -68)
+
+[node name="Platform1" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="Platform1"]
+color = Color(0.2275, 0.6078, 0.749, 1)
+polygon = PackedVector2Array(60, -240, 200, -240, 200, -228, 60, -228)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform1"]
+polygon = PackedVector2Array(60, -240, 200, -240, 200, -228, 60, -228)
+
+[node name="Platform2" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="Platform2"]
+color = Color(0.2275, 0.6078, 0.749, 1)
+polygon = PackedVector2Array(200, -400, 320, -400, 320, -388, 200, -388)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform2"]
+polygon = PackedVector2Array(200, -400, 320, -400, 320, -388, 200, -388)
+
+[node name="Platform3" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="Platform3"]
+color = Color(0.2275, 0.6078, 0.749, 1)
+polygon = PackedVector2Array(80, -560, 220, -560, 220, -548, 80, -548)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform3"]
+polygon = PackedVector2Array(80, -560, 220, -560, 220, -548, 80, -548)
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(180, -92)
+
+[node name="FuelTank1" parent="." instance=ExtResource("tank")]
+position = Vector2(130, -258)

@@ -27,6 +27,7 @@ func _process(_delta: float) -> void:
 		"on_floor: %s" % player.is_on_floor(),
 		"propulsando: %s" % player.is_thrusting(),
 		"puede saltar: %s" % player.can_jump(),
+		"seed: %d" % GameManager.get_current_seed(),
 		"FPS: %d" % Engine.get_frames_per_second(),
 	]
 	_label.text = "\n".join(lines)

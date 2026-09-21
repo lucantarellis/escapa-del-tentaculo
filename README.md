@@ -69,7 +69,8 @@ escapa-del-tentaculo/
 │   ├── pickups/
 │   ├── tentacle/
 │   ├── ui/
-│   └── levels/               # niveles jugables (incluye lvl1.tscn)
+│   └── levels/               # niveles jugables: Level.tscn (por segmentos), sandbox.tscn, lvl1.tscn
+│       └── segments/         # segmentos (piezas de nivel reutilizables)
 ├── scripts/
 │   ├── camera/
 │   ├── player/
@@ -78,7 +79,7 @@ escapa-del-tentaculo/
 │   ├── pickups/
 │   ├── tentacle/
 │   ├── managers/            # game_manager.gd (autoload GameManager)
-│   ├── levels/              # level_controller.gd (script raíz de los niveles)
+│   ├── levels/              # level_controller.gd, level_builder.gd, level_segment.gd, level_config.gd
 │   └── ui/
 ├── resources/
 │   ├── configs/            # Resource de configuración (.tres) con los valores de gameplay
