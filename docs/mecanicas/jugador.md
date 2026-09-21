@@ -56,6 +56,7 @@ Un astronauta que se mueve con un jetpack de combustible limitado. Es la mecáni
 | `thrust_started()` / `thrust_stopped()` | Al empezar / dejar de propulsar |
 | `jumped()` | Al saltar |
 | `died(cause: StringName)` | Al morir |
+| `won()` | Al ganar (`win()`) |
 
 ## API pública
 
@@ -65,8 +66,10 @@ Un astronauta que se mueve con un jetpack de combustible limitado. Es la mecáni
 | `get_fuel_ratio() -> float` | Combustible de 0 a 1 |
 | `is_fuel_empty() -> bool` | true si combustible ≤ `jump_empty_threshold` |
 | `die(cause: StringName) -> void` | Desactiva el control y emite `died` |
+| `win() -> void` | Desactiva el control, deja al jugador quieto y emite `won`. Se ignora si ya murió o ya ganó. Desde ahí `is_alive()` es `false`, así que ningún peligro lo afecta |
+| `has_won() -> bool` | true si ganó |
 | `reset(spawn_position: Vector2) -> void` | Vuelve a vivo, quieto y con combustible inicial |
-| `get_fuel() -> float`, `is_thrusting() -> bool`, `can_jump() -> bool`, `get_current_gravity() -> float`, `is_alive() -> bool` | Consultas de estado (agregadas; las usa el overlay de debug) |
+| `get_fuel() -> float`, `is_thrusting() -> bool`, `can_jump() -> bool`, `get_current_gravity() -> float`, `is_alive() -> bool` | Consultas de estado (agregadas; las usa el overlay de debug). Ojo: `is_alive()` es "la partida sigue en curso para el jugador": devuelve `false` tras morir **y** tras ganar |
 
 ## Estructura de nodos
 

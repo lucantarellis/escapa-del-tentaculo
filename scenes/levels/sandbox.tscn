@@ -11,6 +11,7 @@
 [ext_resource type="Resource" path="res://resources/configs/moving_obstacle_vertical_config.tres" id="9_moving_cfg"]
 [ext_resource type="Resource" path="res://resources/configs/pulse_trap_offset_config.tres" id="10_trap_cfg"]
 [ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="11_tank"]
+[ext_resource type="PackedScene" path="res://scenes/goal/Door.tscn" id="12_door"]
 
 [node name="Sandbox" type="Node2D"]
 script = ExtResource("5_controller")
@@ -281,3 +282,6 @@ position = Vector2(176, -290)
 
 [node name="FuelTank4" parent="." instance=ExtResource("11_tank")]
 position = Vector2(110, -700)
+
+[node name="GoalDoor" parent="." instance=ExtResource("12_door")]
+position = Vector2(260, -1636)

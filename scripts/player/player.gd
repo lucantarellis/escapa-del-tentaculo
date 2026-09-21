@@ -21,6 +21,8 @@ signal thrust_stopped
 signal jumped
 ## Se emite al morir. [param cause] identifica el motivo (por ejemplo `&"tentacle"`).
 signal died(cause: StringName)
+## Se emite al ganar (ver [method win]).
+signal won
 
 ## Color del cuerpo con combustible (naranja de la paleta). Solo visual.
 const COLOR_BODY_NORMAL: Color = Color("#FF6B32")
@@ -40,7 +42,9 @@ var _fuel: float = 0.0
 var _gravity_blend: float = 0.0
 var _current_gravity: float = 0.0
 var _is_thrusting: bool = false
+## true mientras la partida sigue en curso para el jugador (ni murió ni ganó).
 var _is_alive: bool = true
+var _has_won: bool = false
 var _was_empty: bool = false
 
 
@@ -121,7 +125,9 @@ func get_current_gravity() -> float:
 	return _current_gravity
 
 
-## Devuelve true si el jugador está vivo y controlable.
+## Devuelve true mientras la partida sigue en curso para el jugador: está vivo, controlable
+## y todavía no ganó. Tras [method die] o [method win] devuelve false; por eso los peligros
+## y los tanques, que ignoran a un jugador no vivo, no afectan a quien ya ganó.
 func is_alive() -> bool:
 	return _is_alive
 
@@ -137,12 +143,32 @@ func die(cause: StringName) -> void:
 	died.emit(cause)
 
 
+## Devuelve true si el jugador ganó (llamó a [method win]).
+func has_won() -> bool:
+	return _has_won
+
+
+## Marca la victoria: desactiva el control, deja al jugador quieto y emite [signal won].
+## Desde ese momento [method is_alive] devuelve false, así que nada puede matarlo ni gasta
+## combustible. Se ignora si ya murió o ya ganó. La llama el nivel o el game manager.
+func win() -> void:
+	if not _is_alive:
+		return
+	_is_alive = false
+	_has_won = true
+	velocity = Vector2.ZERO
+	_set_thrusting(false)
+	_thrust_indicator.visible = false
+	won.emit()
+
+
 ## Deja al jugador vivo en [param spawn_position] (coordenadas globales), quieto y con
 ## el combustible inicial.
 func reset(spawn_position: Vector2) -> void:
 	global_position = spawn_position
 	velocity = Vector2.ZERO
 	_is_alive = true
+	_has_won = false
 	_gravity_blend = 0.0
 	_current_gravity = config.gravity_with_fuel
 	_set_thrusting(false)

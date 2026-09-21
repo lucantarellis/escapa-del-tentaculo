@@ -65,6 +65,7 @@ escapa-del-tentaculo/
 │   ├── main/                # escena principal (Main.tscn)
 │   ├── player/
 │   ├── obstacles/
+│   ├── goal/                # puerta de meta
 │   ├── pickups/
 │   ├── tentacle/
 │   ├── ui/
@@ -73,6 +74,7 @@ escapa-del-tentaculo/
 │   ├── camera/
 │   ├── player/
 │   ├── obstacles/
+│   ├── goal/
 │   ├── pickups/
 │   ├── tentacle/
 │   ├── managers/
