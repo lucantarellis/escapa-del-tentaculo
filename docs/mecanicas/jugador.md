@@ -81,4 +81,4 @@ Player (CharacterBody2D, grupo "player", capa 2, máscara 1)
 
 1. Abrir `scenes/levels/sandbox.tscn` y ejecutar con F6.
 2. Mover con WASD o flechas; F3 muestra u oculta el overlay con velocidad, combustible, gravedad y estado.
-3. Editar `resources/configs/player_config.tres` en el inspector (con el juego cerrado) y volver a ejecutar. Anotar los cambios que valgan la pena en `docs/TUNING_LOG.md`.
+3. Editar `resources/configs/player_config.tres` en el inspector (con el juego cerrado) y volver a ejecutar. Los valores que se ajustan mientras se prueba son de prueba, no de balance: no se anotan en `docs/TUNING_LOG.md`.

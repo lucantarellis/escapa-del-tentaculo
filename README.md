@@ -65,6 +65,7 @@ escapa-del-tentaculo/
 │   ├── main/                # escena principal (Main.tscn)
 │   ├── player/
 │   ├── obstacles/
+│   ├── pickups/
 │   ├── tentacle/
 │   ├── ui/
 │   └── levels/               # niveles jugables (incluye lvl1.tscn)
@@ -72,6 +73,7 @@ escapa-del-tentaculo/
 │   ├── camera/
 │   ├── player/
 │   ├── obstacles/
+│   ├── pickups/
 │   ├── tentacle/
 │   ├── managers/
 │   └── ui/

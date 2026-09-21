@@ -42,6 +42,24 @@ Reglas del proyecto. Si algo no está acá, seguir el estilo del código existen
 
 El jugador: layer 2, mask 1. Las `Area2D` de peligro o recogible detectan con mask 2. Los nombres están cargados en Project Settings → Layer Names → 2D Physics.
 
+## 3b. Colores de placeholder
+
+Mientras no haya arte final, el color de un `Polygon2D` comunica su función. Paleta completa en `assets/palette.md`.
+
+| Color | Significado | Ejemplos |
+|---|---|---|
+| Rojo `#D83232` | **Letal**: tocarlo mata | Tentáculo, obstáculos, trampa activa |
+| Cian `#63D6C5` | **Recogible / bueno** | Tanque de combustible |
+
+## 3c. Escenas de nivel reutilizables con `@tool`
+
+Obstáculos y tanques se colocan a mano en los niveles. Para poder verlos y ajustarlos en el editor:
+
+- Las propiedades de diseño de nivel (por ejemplo `size`, `travel`) son `@export` con **setter** que actualiza el visual y la colisión, y el script lleva `@tool`.
+- Todo código de juego (`_physics_process`, señales) debe salir temprano con `if Engine.is_editor_hint(): return`. El dibujo de ayudas (trayectorias) solo corre en el editor.
+- Cada instancia crea sus propias formas de colisión (no compartir el sub-recurso `Shape2D` entre instancias, o cambiar una cambia todas).
+- Lo que es tuning (velocidades, tiempos) va en un `Resource` de configuración; lo que es diseño de nivel (tamaño, recorrido) va en la instancia.
+
 ## 4. Acciones del Input Map
 
 El código usa siempre **acciones**, nunca teclas, para poder agregar controles táctiles sin tocar la lógica.
@@ -62,7 +80,7 @@ Las teclas están definidas con `physical_keycode` (posición física, independi
 
 Ningún número que afecte el gameplay va escrito en un script. Vive en un `Resource` de configuración editable desde el inspector y guardado como `.tres` en `resources/configs/`.
 
-Existentes (a medida que se implementen los pasos): `PlayerConfig`, `ScrollConfig`, `TentacleConfig`.
+Existentes (a medida que se implementen los pasos): `PlayerConfig`, `ScrollConfig`, `TentacleConfig`, `MovingObstacleConfig`, `PulseTrapConfig`, `FuelTankConfig`.
 
 ### Cómo agregar un parámetro nuevo
 
@@ -70,7 +88,7 @@ Existentes (a medida que se implementen los pasos): `PlayerConfig`, `ScrollConfi
 2. Usarla en el script de la mecánica leyendo `config.<variable>`. Nunca copiarla a una constante.
 3. Abrir el `.tres` en el inspector y confirmar el valor por defecto (el `.tres` solo guarda los valores distintos del default del script; si se quiere explícito, editarlo).
 4. Agregar una fila a la tabla de parámetros de `docs/mecanicas/<mecánica>.md`.
-5. Si el cambio altera la sensación de juego, anotarlo en `docs/TUNING_LOG.md`.
+5. `docs/TUNING_LOG.md` solo se usa para pruebas reales de balance, y cuando LT lo pide. Los valores que se ajustan mientras se prueba una checklist son valores de prueba: no se anotan.
 
 ## 6. Git
 
@@ -84,5 +102,5 @@ Existentes (a medida que se implementen los pasos): `PlayerConfig`, `ScrollConfi
 1. Copiar `docs/briefs/BRIEF_TEMPLATE.md` a `docs/briefs/brief-NN-<tema>.md` y completarlo.
 2. Ejecutarlo paso a paso. Al final de cada paso: checklist de prueba, LT juega y da el "seguí".
 3. Documentación es parte de "hecho": un documento por mecánica en `docs/mecanicas/`, y `ARQUITECTURA.md` al día.
-4. Cambios de valores que modifican la sensación → `docs/TUNING_LOG.md`.
+4. `docs/TUNING_LOG.md` es solo para pruebas reales de balance (a pedido de LT), no para los valores de prueba de cada checklist.
 5. Al cerrar el brief, actualizar `docs/ROADMAP.md` (estado y decisiones).

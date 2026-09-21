@@ -1,17 +1,29 @@
 extends Node2D
 ## TEMPORAL: controlador mínimo de la escena de prueba `sandbox.tscn`.
 ##
-## Muestra el mensaje de derrota, detiene el scroll y reinicia con `restart` recargando la
-## escena. Lo reemplaza el game manager (paso 6 del roadmap): no agregarle lógica nueva.
+## Escucha [signal Player.died], muestra el mensaje de derrota según la causa, detiene el
+## scroll y reinicia con `restart` recargando la escena. Lo reemplaza el game manager
+## (paso 6 del roadmap): no agregarle lógica nueva.
+
+## Texto de derrota por causa de muerte. Solo visual. Las causas no listadas usan
+## [constant DEFAULT_DEATH_TEXT].
+const DEATH_TEXTS: Dictionary = {
+	&"tentacle": "CAPTURADO — pulsá R para reiniciar",
+	&"fell": "CAPTURADO — pulsá R para reiniciar",
+	&"obstacle": "GOLPEADO — pulsá R para reiniciar",
+	&"trap": "GOLPEADO — pulsá R para reiniciar",
+}
+## Texto para una causa de muerte desconocida. Solo visual.
+const DEFAULT_DEATH_TEXT: String = "PERDISTE — pulsá R para reiniciar"
 
 @onready var _camera: ScrollCamera = $ScrollCamera
-@onready var _tentacle: Tentacle = $Tentacle
+@onready var _player: Player = $Player
 @onready var _caught_label: Label = $CaughtLayer/CaughtLabel
 
 
 func _ready() -> void:
 	_caught_label.visible = false
-	_tentacle.player_caught.connect(_on_player_caught)
+	_player.died.connect(_on_player_died)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -19,6 +31,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_tree().reload_current_scene()
 
 
-func _on_player_caught(_cause: StringName) -> void:
+func _on_player_died(cause: StringName) -> void:
+	_caught_label.text = DEATH_TEXTS.get(cause, DEFAULT_DEATH_TEXT)
 	_caught_label.visible = true
 	_camera.set_scrolling(false)

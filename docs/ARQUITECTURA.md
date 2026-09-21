@@ -1,6 +1,6 @@
 # Arquitectura — Escapa del Tentáculo
 
-Documento vivo: se completa en cada paso del roadmap. Estado: **paso 3 completado**.
+Documento vivo: se completa en cada paso del roadmap. Estado: **paso 4b completado** (obstáculos y tanques).
 
 ## Árbol de escenas
 
@@ -19,6 +19,13 @@ Sandbox (Node2D)                      scenes/levels/sandbox.tscn (escena de prue
 │   └── Label
 ├── CaughtLayer (CanvasLayer)         mensaje de derrota (temporal)
 │   └── CaughtLabel (Label)
+├── Obstacle1, Obstacle2 (Area2D, capa 3, máscara 2)               scenes/obstacles/Obstacle.tscn
+├── MovingObstacle1, MovingObstacle2 (Area2D, capa 3, máscara 2)   scenes/obstacles/MovingObstacle.tscn
+├── PulseTrap1, PulseTrap2 (Area2D, capa 3, máscara 2)             scenes/obstacles/PulseTrap.tscn
+│   └── Solid (StaticBody2D, capa 1)                               sólido mientras la trampa es segura
+├── FuelTank1..4 (Area2D, capa 6, máscara 2)                       scenes/pickups/FuelTank.tscn
+│   └── Body (Polygon2D), Detail, CollisionShape2D
+├── FuelLedge (StaticBody2D, capa 1)                               plataforma del tanque alto
 └── Floor / Ceiling / StartPlatform / Platform1..N (StaticBody2D, capa 1)
 ```
 
@@ -32,10 +39,13 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 | Player | `fuel_depleted()` / `fuel_refilled()` | _(nadie todavía)_ | Combustible vacío / recuperado |
 | Player | `thrust_started()` / `thrust_stopped()` | _(nadie todavía)_ | Feedback de propulsión |
 | Player | `jumped()` | _(nadie todavía)_ | Saltó |
-| Player | `died(cause)` | _(nadie todavía; lo usará el game manager)_ | Murió (causa `&"tentacle"` o `&"fell"`) |
+| Player | `died(cause)` | `sandbox_controller.gd` (temporal; luego el game manager) | Muestra el mensaje de derrota según la causa y detiene el scroll. Causas: `&"tentacle"`, `&"fell"`, `&"obstacle"`, `&"trap"` |
 | ScrollCamera | `scroll_started()` | _(nadie todavía)_ | La cámara empezó a subir |
 | ScrollCamera | `scroll_stopped()` | _(nadie todavía)_ | La cámara dejó de subir |
-| Tentacle | `player_caught(cause)` | `sandbox_controller.gd` (temporal) | Muestra "CAPTURADO" y detiene el scroll. Además el tentáculo llama a `Player.die(cause)` |
+| Obstacle (y derivados) | `player_hit(cause)` | _(nadie todavía)_ | Un jugador vivo tocó el obstáculo. Además el obstáculo llama a `Player.die(cause)`, que emite `died` |
+| FuelTank | `collected(amount)` | _(nadie todavía; lo usará la UI/feedback)_ | Un jugador recogió el tanque. Además el tanque llama a `Player.add_fuel(amount)` |
+| PulseTrap | `activated()` / `deactivated()` | _(nadie todavía)_ | La trampa pasó a activa / dejó de estarlo |
+| Tentacle | `player_caught(cause)` | _(nadie todavía)_ | El tentáculo atrapó al jugador. Además llama a `Player.die(cause)`, que emite `died` |
 
 ## Autoloads
 
@@ -47,5 +57,5 @@ _Se completa cuando exista el ciclo de partida. Hasta el paso 6, el ciclo es tem
 
 1. Arranca `sandbox.tscn`: la cámara espera `start_delay` y empieza a subir; el tentáculo sube pegado al borde inferior.
 2. El jugador propulsa, camina o salta para subir y esquivar.
-3. Si el tentáculo lo toca o cae bajo la pantalla: `Tentacle` emite `player_caught(cause)` y llama a `Player.die(cause)` (que emite `died`). El controlador muestra el mensaje y pausa el scroll.
+3. Si el tentáculo lo toca, cae bajo la pantalla o toca un obstáculo: quien lo mata llama a `Player.die(cause)`, que emite `died(cause)`. El controlador escucha `died`, muestra el mensaje según la causa y pausa el scroll.
 4. `restart` (R) recarga la escena en cualquier momento.

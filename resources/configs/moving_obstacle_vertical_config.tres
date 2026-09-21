@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="MovingObstacleConfig" format=3]
+
+[ext_resource type="Script" path="res://scripts/obstacles/moving_obstacle_config.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+speed = 45.0
+pause_at_ends = 0.5
+ease_at_ends = true
+start_delay = 1.0

@@ -1,7 +1,7 @@
 # Roadmap — Escapa del Tentáculo
 
-**Última actualización:** 2026-09-20
-**Estado global:** v0 publicada. Mecánicas base (pasos 0 a 3) implementadas en la rama `feature/mecanicas-base` (brief 01), pendientes de merge a `main`.
+**Última actualización:** 2026-09-21
+**Estado global:** v0 publicada. Mecánicas base (pasos 0 a 3) mergeadas a `main` (brief 01, PR #1). Obstáculos y tanques (pasos 4 y 4b) implementados y probados por LT en la rama `feature/obstaculos-tanques` (brief 02), pendientes de PR y merge a `main`.
 **Cómo usar este documento:** es la fuente de verdad del plan. Cada brief para Cowork se genera desde `docs/briefs/BRIEF_TEMPLATE.md` y, al cerrarse, actualiza la tabla de estado (sección 4) y el registro de decisiones (sección 2).
 
 ---
@@ -34,7 +34,12 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | Salto con combustible | `jump_requires_empty_fuel` es configurable; LT lo dejó en `false` en sus pruebas para poder saltar y propulsar a la vez. El default del script sigue en `true`: decidir el valor final al balancear | LT (a decidir) |
 | Coordenada de `stop_at_y` | Es la Y (mundo) del centro de la cámara, no del borde | Propuesta de Claude (brief 01, paso 2) |
 | Tentáculo: caída | La zona letal se extiende 96 px bajo la pantalla, por lo que la muerte por caída (`&"fell"`) es una red de seguridad: normalmente el contacto ocurre antes | Propuesta de Claude (brief 01, paso 3) |
-| Valores de prueba | Los `.tres` de configuración son valores de prueba de LT, no finales (ver `docs/TUNING_LOG.md`) | LT |
+| Colores de placeholder | Rojo `#D83232` = letal (tentáculo, obstáculos, trampa activa). Cian `#63D6C5` = recogible / bueno (tanques) | LT (brief 02) |
+| Obstáculos y tanques | Son escenas reutilizables, configurables por instancia (tamaño, recorrido, config `.tres`), para que el diseño de niveles (fijo o por segmentos) siga abierto | LT (brief 02) |
+| Valores de prueba | Los `.tres` de configuración son valores de prueba de LT, no finales. Sus ajustes durante las pruebas no se registran en `docs/TUNING_LOG.md` (solo se usa para pruebas reales de balance) | LT |
+| Trampa intermitente | Es sólida mientras es segura (inactiva o en aviso) para poder apoyarse encima; al activarse pasa a letal | LT (brief 02, paso 4) |
+| Causas de muerte | `&"tentacle"`, `&"fell"`, `&"obstacle"`, `&"trap"`. La muerte es siempre `Player.die(cause)` y el controlador escucha `Player.died(cause)` | Propuesta de Claude (brief 02) |
+| Tanques | `fuel_amount` 40 u (con `max_fuel` 100), un solo uso por defecto (`respawn_time` 0). El sobrante sobre `max_fuel` se pierde. Un tanque medido en simulación rinde ~489 px de subida vertical y un salto sin combustible ~61 px (referencias para el diseño de niveles, ver `docs/mecanicas/tanques.md`) | Propuesta de Claude (brief 02, paso 4b), probado por LT |
 
 ## 3. Principios de ingeniería
 
@@ -43,7 +48,7 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 3. **Input por acciones, nunca por teclas.** Facilita el control táctil final sin tocar la lógica del jugador.
 4. **Señales hacia arriba, llamadas hacia abajo.** Una escena hija emite señales; el padre la controla. Evita dependencias cruzadas entre escenas.
 5. **Un paso = algo jugable.** Al cerrar cada paso hay una checklist de prueba manual que LT juega antes de seguir.
-6. **Registro de tuning.** Los cambios de valores que cambian la sensación se anotan en `docs/TUNING_LOG.md`.
+6. **Registro de tuning.** `docs/TUNING_LOG.md` es solo para pruebas reales de balance, cuando LT lo pide. Los valores que LT ajusta mientras prueba una checklist son valores de prueba y no se anotan.
 7. **Git.** Rama por brief, un commit por paso, sin push ni PR sin confirmación de LT. Los `.tscn` dan conflictos de merge: LT y su socio coordinan quién toca cada escena.
 
 ## 4. Estado por paso
@@ -55,8 +60,8 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | 1 | Jugador con jetpack y combustible | Hecho | brief-01 |
 | 2 | Scroll y cámara | Hecho | brief-01 |
 | 3 | Tentáculo y condición de derrota | Hecho | brief-01 |
-| 4 | Obstáculos | Pendiente | — |
-| 4b | Tanques de combustible | Pendiente | — |
+| 4 | Obstáculos | Hecho | brief-02 |
+| 4b | Tanques de combustible | Hecho | brief-02 |
 | 5 | Puerta y victoria | Pendiente | — |
 | 6 | Game manager y ciclo de partida | Pendiente | — |
 | 7 | Nivel de prueba jugable | Pendiente | — |
@@ -85,9 +90,11 @@ Placeholder anclado al borde inferior, con zona letal. Caer bajo la pantalla tam
 
 ### Paso 4 — Obstáculos
 Un bloque estático primero (valida colisión y muerte). Luego variantes móviles y trampas, cada una como escena reutilizable.
+**Hecho (brief 02):** `Obstacle`, `MovingObstacle` y `PulseTrap` con sus configs. Ver `docs/mecanicas/obstaculos.md`.
 
 ### Paso 4b — Tanques de combustible
 Recogible que llama a `Player.add_fuel()`. Su ubicación (por ejemplo en plataformas elevadas, que solo se alcanzan saltando) es una herramienta de diseño de niveles.
+**Hecho (brief 02):** `FuelTank` con `FuelTankConfig`; 4 tanques en el sandbox. Ver `docs/mecanicas/tanques.md`.
 
 ### Paso 5 — Puerta y victoria
 `Area2D` al final del nivel. Al entrar el jugador, se gana.

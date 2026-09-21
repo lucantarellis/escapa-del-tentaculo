@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/pickups/fuel_tank.gd" id="1_tank"]
+[ext_resource type="Resource" path="res://resources/configs/fuel_tank_config.tres" id="2_config"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tank"]
+size = Vector2(12, 16)
+
+[node name="FuelTank" type="Area2D"]
+collision_layer = 32
+collision_mask = 2
+script = ExtResource("1_tank")
+config = ExtResource("2_config")
+
+[node name="Body" type="Polygon2D" parent="."]
+color = Color(0.3882, 0.8392, 0.7725, 1)
+polygon = PackedVector2Array(-6, -8, 6, -8, 6, 8, -6, 8)
+
+[node name="Detail" type="Polygon2D" parent="Body"]
+color = Color(0.7843, 0.9059, 0.9176, 1)
+polygon = PackedVector2Array(-4, -5, 4, -5, 4, -2, -4, -2)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_tank")
