@@ -29,6 +29,8 @@ const BODY_PADDING: float = 96.0
 @onready var _kill_shape: CollisionShape2D = $KillZone/CollisionShape2D
 
 var _extra_rise: float = 0.0
+## false congela el ascenso extra y el del final del nivel (ver [method set_rising]).
+var _rising: bool = true
 var _time: float = 0.0
 var _player: Player
 
@@ -49,7 +51,12 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	_extra_rise += config.extra_rise_speed * delta
+	if _rising:
+		var speed: float = config.extra_rise_speed
+		# Con la cámara detenida en el final del nivel, sigue subiendo hasta cubrir la pantalla.
+		if config.rise_after_camera_stops and camera.has_reached_end():
+			speed += config.end_rise_speed
+		_extra_rise += speed * delta
 	_follow_camera()
 	_update_kill_zone()
 	_check_fell()
@@ -60,9 +67,16 @@ func _process(delta: float) -> void:
 	_update_body_polygon()
 
 
-## Vuelve a la posición inicial (anulando el ascenso extra acumulado).
+## Activa o congela el ascenso (`extra_rise_speed` y `end_rise_speed`). El nivel lo congela al
+## terminar la partida (victoria o derrota). El tentáculo sigue anclado a la cámara.
+func set_rising(enabled: bool) -> void:
+	_rising = enabled
+
+
+## Vuelve a la posición inicial (anulando el ascenso extra acumulado) y reanuda el ascenso.
 func reset() -> void:
 	_extra_rise = 0.0
+	_rising = true
 	_follow_camera()
 
 

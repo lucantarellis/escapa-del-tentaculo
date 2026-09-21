@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="LevelConfig" format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/level_config.gd" id="1_cfg"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentStart.tscn" id="2_start"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentEnd.tscn" id="3_end"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment01.tscn" id="4_seg"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment02.tscn" id="5_seg"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment03.tscn" id="6_seg"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment04.tscn" id="7_seg"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment05.tscn" id="8_seg"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment06.tscn" id="9_seg"]
+
+[resource]
+script = ExtResource("1_cfg")
+segment_count = 6
+seed = 0
+avoid_repeat_window = 1
+start_segment = ExtResource("2_start")
+end_segment = ExtResource("3_end")
+segment_pool = Array[PackedScene]([ExtResource("4_seg"), ExtResource("5_seg"), ExtResource("6_seg"), ExtResource("7_seg"), ExtResource("8_seg"), ExtResource("9_seg")])

@@ -1,7 +1,7 @@
 # Roadmap — Escapa del Tentáculo
 
 **Última actualización:** 2026-09-21
-**Estado global:** v0 publicada. Mecánicas base (pasos 0 a 3) mergeadas a `main` (brief 01, PR #1). Obstáculos y tanques (pasos 4 y 4b) implementados y probados por LT en la rama `feature/obstaculos-tanques` (brief 02), pendientes de PR y merge a `main`.
+**Estado global:** v0 publicada. Mecánicas base (pasos 0 a 3) mergeadas a `main` (brief 01, PR #1). Obstáculos y tanques (pasos 4 y 4b) mergeados a `main` (brief 02, PR #2). Puerta, game manager y niveles por segmentos (pasos 5, 6 y 7) hechos y probados por LT (brief-03, rama `feature/puerta-game-manager-niveles`, pendiente de PR y merge a `main`). Siguiente: brief 04 (título, UI mínima y controles táctiles).
 **Cómo usar este documento:** es la fuente de verdad del plan. Cada brief para Cowork se genera desde `docs/briefs/BRIEF_TEMPLATE.md` y, al cerrarse, actualiza la tabla de estado (sección 4) y el registro de decisiones (sección 2).
 
 ---
@@ -39,6 +39,14 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | Valores de prueba | Los `.tres` de configuración son valores de prueba de LT, no finales. Sus ajustes durante las pruebas no se registran en `docs/TUNING_LOG.md` (solo se usa para pruebas reales de balance) | LT |
 | Trampa intermitente | Es sólida mientras es segura (inactiva o en aviso) para poder apoyarse encima; al activarse pasa a letal | LT (brief 02, paso 4) |
 | Causas de muerte | `&"tentacle"`, `&"fell"`, `&"obstacle"`, `&"trap"`. La muerte es siempre `Player.die(cause)` y el controlador escucha `Player.died(cause)` | Propuesta de Claude (brief 02) |
+| Fin de partida (MVP) | Al llegar a la puerta el jugador gana y el juego termina; se reinicia con R. Puntaje u otra progresión: a definir más adelante (no implementado, pero el estado queda desacoplado) | LT (brief 03) |
+| Niveles por segmentos | Cada partida ensambla segmentos escritos a mano (escenas de 360 px de ancho) elegidos al azar con una seed reproducible. Resuelve la decisión abierta de niveles fijos vs. por segmentos | LT (brief 03) |
+| `GameManager` | Autoload que lleva el estado de la partida (`READY`, `PLAYING`, `WON`, `LOST`) y avisa con señales; no conoce nodos de la escena | Propuesta de Claude, validada por LT (brief 03) |
+| Naranja = meta | Naranja `#FF6B32` = objetivo/meta (la puerta) | LT (brief 03) |
+| UI del MVP | Solo el mensaje de fin de partida (victoria o derrota) y el overlay F3 existente; el resto de la UI queda para el paso 8 | Propuesta de Claude (brief 03) |
+| Escena principal | `run/main_scene` seguirá siendo `Main.tscn`, que será la pantalla de título: título del juego y un botón grande de "jugar". Al pulsarlo el menú se disuelve hasta quedar transparente e inicia el juego sobre la escena de juego correspondiente (`Level.tscn`). `Level.tscn` no es la escena principal | LT (brief 03, cierre); se implementa en el paso 8 |
+| Tentáculo al final del nivel | Cuando la cámara se detiene en el final del nivel, el tentáculo sigue subiendo (`end_rise_speed`) hasta cubrir la pantalla: no hay refugio esperando. Se congela al ganar o perder | LT (QA del paso 7) |
+| Tanques por segmento | Los segmentos tienen dos tanques cada uno (más uno en inicio y final): con uno solo un nivel de 8 segmentos no se puede completar con los valores de prueba. Se rebalancea con el MVP | Propuesta de Claude (brief 03, paso 7) |
 | Tanques | `fuel_amount` 40 u (con `max_fuel` 100), un solo uso por defecto (`respawn_time` 0). El sobrante sobre `max_fuel` se pierde. Un tanque medido en simulación rinde ~489 px de subida vertical y un salto sin combustible ~61 px (referencias para el diseño de niveles, ver `docs/mecanicas/tanques.md`) | Propuesta de Claude (brief 02, paso 4b), probado por LT |
 
 ## 3. Principios de ingeniería
@@ -62,9 +70,9 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | 3 | Tentáculo y condición de derrota | Hecho | brief-01 |
 | 4 | Obstáculos | Hecho | brief-02 |
 | 4b | Tanques de combustible | Hecho | brief-02 |
-| 5 | Puerta y victoria | Pendiente | — |
-| 6 | Game manager y ciclo de partida | Pendiente | — |
-| 7 | Nivel de prueba jugable | Pendiente | — |
+| 5 | Puerta y victoria | Hecho | brief-03 |
+| 6 | Game manager y ciclo de partida | Hecho | brief-03 |
+| 7 | Niveles por segmentos | Hecho | brief-03 |
 | 8 | Pantalla de título, UI mínima, controles táctiles | Pendiente | — |
 | 9 | Arte final, audio y pulido | Pendiente | — |
 
@@ -102,11 +110,11 @@ Recogible que llama a `Player.add_fuel()`. Su ubicación (por ejemplo en platafo
 ### Paso 6 — Game manager
 Autoload con estados (jugando, ganó, perdió) y reinicio. Reemplaza el reinicio temporal del paso 3.
 
-### Paso 7 — Nivel de prueba
-`lvl1` armado con los bloques anteriores y jugado repetidamente para rebalancear.
+### Paso 7 — Niveles por segmentos
+Cada partida arma un nivel distinto ensamblando segmentos (escenas escritas a mano) elegidos al azar con una seed reproducible; el nivel termina en una puerta. El balance se hace después, con el MVP completo.
 
 ### Paso 8 — Título, UI y táctil
-Pantalla de título (ya descrita en el README), UI de combustible y distancia, y controles táctiles para la versión móvil (joystick o zonas táctiles que emitan las mismas acciones del Input Map).
+Pantalla de título en `Main.tscn` (escena principal): título del juego y un botón grande de jugar; al pulsarlo el menú se disuelve hasta quedar transparente e inicia el juego sobre `Level.tscn` (ya descrita en el README), UI de combustible y distancia, y controles táctiles para la versión móvil (joystick o zonas táctiles que emitan las mismas acciones del Input Map).
 
 ### Paso 9 — Arte y audio
 Integración de los tres sprite sheets (astronauta, tileset, tentáculo; el del tentáculo sigue pendiente de aprobación), audio y pulido.
@@ -114,7 +122,6 @@ Integración de los tres sprite sheets (astronauta, tileset, tentáculo; el del 
 ## 6. Riesgos y decisiones abiertas
 
 - **Espiral de muerte sin combustible.** Si el jugador se queda sin combustible lejos de una superficie, cae hacia el tentáculo. Hay que decidir en el diseño de niveles cuántos tanques hay y qué tan a mano quedan.
-- **Niveles fijos o por segmentos.** Abierto. Si es por segmentos, los obstáculos y tanques deben ser escenas reutilizables desde el paso 4.
 - **Controles táctiles.** Propulsión en 4 direcciones mantenida por dedo sugiere joystick virtual. Conviene prototiparlo antes de la etapa final, no después.
 - **Muerte por caída sin probar por LT.** El checklist del paso 3 (caer bajo el borde) se verificó por simulación, pero LT no lo probó jugando.
 - **Comportamiento del tentáculo.** Por ahora solo sube con la cámara. Ataques o variaciones quedan para más adelante.

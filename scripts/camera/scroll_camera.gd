@@ -29,6 +29,9 @@ var _moving: bool = false
 var _reached_end: bool = false
 var _delay_left: float = 0.0
 var _speed: float = 0.0
+## Tope de scroll propio de esta instancia (lo fija [method set_stop_y]); pisa al de la config.
+var _stop_override_enabled: bool = false
+var _stop_override_y: float = 0.0
 
 
 func _ready() -> void:
@@ -52,8 +55,10 @@ func _physics_process(delta: float) -> void:
 		var top_speed: float = maxf(config.max_scroll_speed, config.scroll_speed)
 		_speed = minf(_speed + config.scroll_acceleration * delta, top_speed)
 	global_position.y -= _speed * delta
-	if config.stop_at_enabled and global_position.y <= config.stop_at_y:
-		global_position.y = config.stop_at_y
+	var stop_enabled: bool = _stop_override_enabled or config.stop_at_enabled
+	var stop_y: float = _stop_override_y if _stop_override_enabled else config.stop_at_y
+	if stop_enabled and global_position.y <= stop_y:
+		global_position.y = stop_y
 		_reached_end = true
 		_set_moving(false)
 
@@ -63,6 +68,20 @@ func set_scrolling(enabled: bool) -> void:
 	_enabled = enabled
 	if not enabled:
 		_set_moving(false)
+
+
+## Activa un tope de scroll en [param y] (Y mundo del CENTRO de la cámara) solo para esta
+## instancia, sin modificar el `ScrollConfig` compartido. Lo usa [LevelBuilder] para que el
+## segmento final quede completo a la vista. Pisa a `stop_at_enabled` / `stop_at_y`.
+func set_stop_y(y: float) -> void:
+	_stop_override_enabled = true
+	_stop_override_y = y
+
+
+## Devuelve true si la cámara llegó a su tope de scroll (`stop_at_y` o [method set_stop_y]).
+## Se apaga con [method reset]. El [Tentacle] lo consulta para seguir subiendo al final del nivel.
+func has_reached_end() -> bool:
+	return _reached_end
 
 
 ## Devuelve la coordenada Y (mundo) del borde inferior de la pantalla. Unidad: px.

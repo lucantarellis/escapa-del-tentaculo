@@ -1,0 +1,59 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
+[ext_resource type="PackedScene" path="res://scenes/goal/Door.tscn" id="door"]
+
+[node name="SegmentEnd" type="Node2D"]
+script = ExtResource("seg")
+height = 640
+
+[node name="Platform1" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="Platform1"]
+color = Color(0.2275, 0.6078, 0.749, 1)
+polygon = PackedVector2Array(60, -30, 240, -30, 240, -18, 60, -18)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform1"]
+polygon = PackedVector2Array(60, -30, 240, -30, 240, -18, 60, -18)
+
+[node name="Platform2" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="Platform2"]
+color = Color(0.2275, 0.6078, 0.749, 1)
+polygon = PackedVector2Array(200, -190, 320, -190, 320, -178, 200, -178)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform2"]
+polygon = PackedVector2Array(200, -190, 320, -190, 320, -178, 200, -178)
+
+[node name="Platform3" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="Platform3"]
+color = Color(0.2275, 0.6078, 0.749, 1)
+polygon = PackedVector2Array(40, -350, 160, -350, 160, -338, 40, -338)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform3"]
+polygon = PackedVector2Array(40, -350, 160, -350, 160, -338, 40, -338)
+
+[node name="Platform4" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="Platform4"]
+color = Color(0.2275, 0.6078, 0.749, 1)
+polygon = PackedVector2Array(150, -500, 310, -500, 310, -488, 150, -488)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform4"]
+polygon = PackedVector2Array(150, -500, 310, -500, 310, -488, 150, -488)
+
+[node name="GoalDoor" parent="." instance=ExtResource("door")]
+position = Vector2(230, -536)
+
+[node name="FuelTank1" parent="." instance=ExtResource("tank")]
+position = Vector2(260, -208)

@@ -15,3 +15,6 @@ data_*/
 # System/tooling
 .DS_Store
 Thumbs.db
+
+# Obsidian (carpeta temporal de lectura de los .md)
+docs/.obsidian/

@@ -50,6 +50,7 @@ Mientras no haya arte final, el color de un `Polygon2D` comunica su función. Pa
 |---|---|---|
 | Rojo `#D83232` | **Letal**: tocarlo mata | Tentáculo, obstáculos, trampa activa |
 | Cian `#63D6C5` | **Recogible / bueno** | Tanque de combustible |
+| Naranja `#FF6B32` | **Objetivo / meta** | Puerta de salida |
 
 ## 3c. Escenas de nivel reutilizables con `@tool`
 

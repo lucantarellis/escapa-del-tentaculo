@@ -21,7 +21,7 @@ v0 — estructura inicial del proyecto. Sin lógica de gameplay implementada tod
 `scenes/main/Main.tscn` es la escena principal (`run/main_scene`), por ahora vacía. Diseño planeado para una iteración futura:
 
 - Pantalla de título con el nombre del juego y un botón **Play**.
-- De fondo, se ve la escena del nivel 1 (`scenes/levels/lvl1.tscn`).
+- De fondo, se ve la escena de juego (`scenes/levels/Level.tscn`).
 - Al presionar Play, la pantalla de título se disuelve y arranca el gameplay.
 
 ## Controles
@@ -65,23 +65,27 @@ escapa-del-tentaculo/
 │   ├── main/                # escena principal (Main.tscn)
 │   ├── player/
 │   ├── obstacles/
+│   ├── goal/                # puerta de meta
 │   ├── pickups/
 │   ├── tentacle/
 │   ├── ui/
-│   └── levels/               # niveles jugables (incluye lvl1.tscn)
+│   └── levels/               # niveles jugables: Level.tscn (por segmentos), sandbox.tscn, lvl1.tscn
+│       └── segments/         # segmentos (piezas de nivel reutilizables)
 ├── scripts/
 │   ├── camera/
 │   ├── player/
 │   ├── obstacles/
+│   ├── goal/
 │   ├── pickups/
 │   ├── tentacle/
-│   ├── managers/
+│   ├── managers/            # game_manager.gd (autoload GameManager)
+│   ├── levels/              # level_controller.gd, level_builder.gd, level_segment.gd, level_config.gd
 │   └── ui/
 ├── resources/
 │   ├── configs/            # Resource de configuración (.tres) con los valores de gameplay
 │   ├── tilesets/
 │   └── themes/
-├── autoload/
+├── autoload/               # reservada para escenas autoload (el GameManager es un script en scripts/managers/)
 ├── docs/                   # roadmap, convenciones, arquitectura, mecánicas y briefs
 │   ├── mecanicas/
 │   └── briefs/

@@ -11,6 +11,14 @@ extends Resource
 ## Velocidad adicional de ascenso respecto de la cámara (0 = pegado al borde). Unidad: px/s.
 @export var extra_rise_speed: float = 0.0
 
+@export_group("Final del nivel")
+## Si es true, cuando la cámara llega a su tope (final del nivel) el tentáculo sigue subiendo
+## hasta cubrir toda la pantalla, así el jugador no queda a salvo esperando.
+@export var rise_after_camera_stops: bool = true
+## Velocidad de ascenso del tentáculo una vez detenida la cámara (se suma a `extra_rise_speed`).
+## Unidad: px/s.
+@export var end_rise_speed: float = 40.0
+
 @export_group("Letalidad")
 ## Margen de gracia: la zona letal empieza este valor por debajo del borde superior del
 ## polígono visible. Unidad: px.

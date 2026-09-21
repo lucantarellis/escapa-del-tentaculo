@@ -6,6 +6,8 @@
 script = ExtResource("1_cfg")
 visible_height = 70.0
 extra_rise_speed = 0.0
+rise_after_camera_stops = true
+end_rise_speed = 40.0
 kill_zone_inset = 10.0
 kill_on_leaving_screen_bottom = true
 screen_bottom_margin = 24.0
