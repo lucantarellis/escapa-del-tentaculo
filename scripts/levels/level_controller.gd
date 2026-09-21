@@ -24,6 +24,7 @@ const WIN_TEXT: String = "ESCAPASTE — pulsá R para reiniciar"
 
 @onready var _camera: ScrollCamera = $ScrollCamera
 @onready var _player: Player = $Player
+@onready var _tentacle: Tentacle = $Tentacle
 @onready var _builder: LevelBuilder = get_node_or_null("LevelBuilder") as LevelBuilder
 @onready var _message_label: Label = $CaughtLayer/CaughtLabel
 
@@ -57,9 +58,11 @@ func _on_state_changed(new_state: GameManager.State, _old_state: GameManager.Sta
 		GameManager.State.WON:
 			_player.win()
 			_camera.set_scrolling(false)
+			_tentacle.set_rising(false)
 			_show_message(WIN_TEXT)
 		GameManager.State.LOST:
 			_camera.set_scrolling(false)
+			_tentacle.set_rising(false)
 			_show_message(DEATH_TEXTS.get(GameManager.get_last_death_cause(), DEFAULT_DEATH_TEXT))
 
 

@@ -78,6 +78,12 @@ func set_stop_y(y: float) -> void:
 	_stop_override_y = y
 
 
+## Devuelve true si la cámara llegó a su tope de scroll (`stop_at_y` o [method set_stop_y]).
+## Se apaga con [method reset]. El [Tentacle] lo consulta para seguir subiendo al final del nivel.
+func has_reached_end() -> bool:
+	return _reached_end
+
+
 ## Devuelve la coordenada Y (mundo) del borde inferior de la pantalla. Unidad: px.
 func get_bottom_y() -> float:
 	return global_position.y + _get_visible_size().y * 0.5

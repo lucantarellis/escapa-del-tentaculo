@@ -61,6 +61,8 @@ ScrollCamera (Camera2D, process_callback = Physics, sin suavizado)
 
 `set_stop_y(y: float) -> void` activa un tope de scroll en la Y `y` (Y mundo del **centro** de la cámara) solo para esa instancia, sin tocar el `ScrollConfig` compartido; pisa a `stop_at_enabled` / `stop_at_y`. Lo usa `LevelController` con `LevelBuilder.get_camera_stop_y()` para que el segmento final quede completo a la vista. Ver `niveles-por-segmentos.md`.
 
+`has_reached_end() -> bool` indica si la cámara llegó a su tope (lo usa el tentáculo para seguir subiendo al final del nivel; se apaga con `reset()`).
+
 ## Cómo probarlo
 
 1. Ejecutar `scenes/levels/sandbox.tscn` (F6). Tras 2 s la cámara sube.
