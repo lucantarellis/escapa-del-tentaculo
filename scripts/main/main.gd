@@ -4,9 +4,9 @@ extends Node
 ##
 ## Al abrir instancia el nivel (con [member LevelController.autostart] en `false`, o sea armado
 ## pero quieto) y encima el [TitleMenu]. Cuando el menú termina de disolverse, lo elimina y
-## llama a [method LevelController.play_intro] (intro de la escotilla; al terminar el nivel empieza
-## solo). Con R ([signal GameManager.restart_requested])
-## reconstruye solo el nivel, sin volver al título. Ver `docs/mecanicas/pantalla-titulo.md`.
+## llama a [method LevelController.play_intro] (intro de la escotilla: al romperse, el nivel empieza
+## solo). Con R ([signal GameManager.restart_requested]) reconstruye solo el nivel, sin volver al
+## título, y repite la intro. Ver `docs/mecanicas/pantalla-titulo.md`.
 
 ## Escena del nivel jugable. Estructural.
 const LEVEL_SCENE: PackedScene = preload("res://scenes/levels/Level.tscn")
@@ -49,4 +49,6 @@ func _on_restart_requested() -> void:
 	# escuchando al manager junto al nivel nuevo.
 	_level_holder.remove_child(_level)
 	_level.queue_free()
-	_level = _spawn_level(true)
+	# R repite la intro de la escotilla (sin título): el nivel nuevo arranca en pausa y se reproduce.
+	_level = _spawn_level(false)
+	_level.play_intro()

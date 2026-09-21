@@ -47,10 +47,18 @@ extends Resource
 
 @export_group("Lanzamiento")
 ## Velocidad vertical inicial del jugador, hacia arriba. Unidad: px/s.
-@export var launch_speed: float = 400.0
+@export var launch_speed: float = 560.0
 ## Tiempo tras el lanzamiento en que el jugador no responde al Input (la inercia y la gravedad
 ## siguen actuando). Unidad: s.
 @export var control_lock_time: float = 0.5
+
+@export_group("Cámara")
+## Distancia mínima entre el jugador y el borde superior de la pantalla mientras la cámara lo sigue
+## durante el vuelo. Unidad: px.
+@export var camera_follow_margin: float = 120.0
+## Tiempo máximo que la cámara sigue al jugador tras el lanzamiento (termina antes si llega al punto
+## más alto del vuelo). Unidad: s.
+@export var camera_follow_max_time: float = 3.0
 
 @export_group("Tentáculo")
 ## Espera entre la ruptura y el inicio de la entrada del tentáculo. Unidad: s.

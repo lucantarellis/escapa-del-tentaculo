@@ -31,7 +31,7 @@ y=0   O-----------------------+   <- origen (0, 0) = esquina INFERIOR izquierda
 - Ocupa **x ∈ [0, 360]** e **y ∈ [−height, 0]** en coordenadas locales. El constructor coloca el origen en la Y del borde inferior.
 - La raíz es un nodo con el script `LevelSegment` (`@tool`). En el editor dibuja el contorno blanco y muestra **advertencias** (icono amarillo en el árbol) si no tiene ningún `FuelTank` o si un hijo directo queda fuera del rectángulo (para un obstáculo se cuenta su bloque entero y, si es móvil, todo su recorrido).
 - `height` (px) es diseño de nivel. `requires_fuel_tank` (por defecto activo) controla la advertencia del tanque.
-- **Inicio** (`SegmentStart.tscn`): suelo, plataforma de inicio y un `Marker2D` llamado **`PlayerSpawn`** (en (180, −92): equivale a la posición (180, 548) del sandbox cuando el borde inferior está en Y = 640).
+- **Inicio** (`SegmentStart.tscn`): mide **1100 px** de alto (más que una pantalla) porque el jugador sale volando de la escotilla y sube ~650 px. Tiene suelo, plataformas alternadas a los costados (izquierda x 20–150, derecha x 210–340) y un **pasillo central libre (x ≈ 150–210)** de punta a punta para el vuelo, tres tanques, un `Marker2D` **`PlayerSpawn`** (en (85, −92), sobre la plataforma inicial de la izquierda: solo se usa sin intro) y un `Marker2D` **`HatchAnchor`** (en (180, −20), centro del piso: ahí va la escotilla).
 - **Final** (`SegmentEnd.tscn`): plataformas y una **`Door`** cerca de la parte superior. Sin tentáculo ni requisitos extra.
 
 ### Reglas de diseño (criterio del autor; no se validan)
@@ -53,7 +53,7 @@ y=0   O-----------------------+   <- origen (0, 0) = esquina INFERIOR izquierda
 | `Segment05` | Dos móviles horizontales que se cruzan en sentidos opuestos, con tanques en plataformas |
 | `Segment06` | Tanque pegado a una trampa vertical; bloque estático sobre una plataforma alta |
 
-`SegmentStart` y `SegmentEnd` tienen un tanque cada uno.
+`SegmentStart` (tres tanques, por su altura) y `SegmentEnd` (uno).
 
 ## Parámetros (`LevelConfig`, `resources/configs/level_config.tres`)
 
@@ -76,7 +76,7 @@ Nodo `Node2D` (debe estar en el origen (0, 0)) con `@export var config: LevelCon
 | `build(seed_override: int = 0) -> int` | Arma el nivel y devuelve la seed usada (limpia el anterior). Prioridad: `seed_override` ≠ 0, luego `config.seed` ≠ 0, luego una seed sorteada |
 | `clear() -> void` | Elimina los segmentos |
 | `get_player_spawn() -> Vector2` | Posición global del `PlayerSpawn` |
-| `get_hatch_position() -> Vector2` | Posición global del `HatchAnchor` del segmento de inicio ((290, 620) en el nivel actual: fuera del alcance de `StartPlatform`, para poder lanzar al jugador hacia arriba); ahí se ubica la `Hatch` de la intro |
+| `get_hatch_position() -> Vector2` | Posición global del `HatchAnchor` del segmento de inicio ((180, 620): centro del piso, con el pasillo del vuelo libre encima); ahí se ubica la `Hatch` de la intro |
 | `get_camera_stop_y() -> float` | Y global del centro de la cámara para que el segmento final quede completo a la vista (se pasa a `ScrollCamera.set_stop_y`) |
 | `get_segment_count() -> int` | Segmentos intermedios armados |
 | `get_seed() -> int`, `get_sequence() -> PackedInt32Array`, `get_segments() -> Array[LevelSegment]`, `get_goal_door() -> Door` | Consultas (índices del pool elegidos, segmentos de abajo hacia arriba, puerta del final) |

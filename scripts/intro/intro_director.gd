@@ -13,8 +13,8 @@ signal hit(index: int)
 ## Se emite en el instante de la ruptura, con el jugador ya lanzado. [LevelController] responde
 ## empezando la partida (`GameManager.start_run`, HUD, scroll).
 signal broken
-## Se emite al terminar la secuencia (cuando el tentáculo empieza a entrar, o al saltearse esa
-## entrada porque la partida ya terminó).
+## Se emite cuando el tentáculo empieza a entrar (o al saltearse esa entrada porque la partida ya
+## terminó). El director se libera solo cuando además la cámara soltó al jugador.
 signal finished
 
 ## Parámetros de la secuencia. Lo asigna [LevelController].
@@ -25,6 +25,8 @@ var _camera: ScrollCamera
 var _player: Player
 var _tentacle: Tentacle
 var _playing: bool = false
+## Tiempo transcurrido desde el lanzamiento mientras la cámara sigue al jugador; -1 si no la sigue.
+var _follow_time: float = -1.0
 
 
 func _init() -> void:
@@ -44,6 +46,26 @@ func play(hatch: Hatch, camera: ScrollCamera, player: Player, tentacle: Tentacle
 	if config == null:
 		config = IntroConfig.new()
 	_run()
+
+
+func _physics_process(delta: float) -> void:
+	if _follow_time < 0.0:
+		return
+	_follow_time += delta
+	# La cámara suelta al jugador al llegar al punto más alto del vuelo (ya recuperó el control), al
+	# pasar el tiempo máximo o si murió/ganó.
+	var control_back: bool = _follow_time > config.control_lock_time
+	var at_apex: bool = control_back and _player.velocity.y >= 0.0
+	if at_apex or _follow_time > config.camera_follow_max_time or not _player.is_alive():
+		_camera.stop_following()
+		_follow_time = -1.0
+		_free_if_done()
+
+
+# El director termina cuando acabó la secuencia y la cámara ya soltó al jugador.
+func _free_if_done() -> void:
+	if not _playing and _follow_time < 0.0:
+		queue_free()
 
 
 ## Devuelve true mientras la secuencia está en curso.
@@ -71,6 +93,7 @@ func _run() -> void:
 		_tentacle.enter(config.tentacle_entry_duration)
 	_playing = false
 	finished.emit()
+	_free_if_done()
 
 
 # Ruptura: la escotilla se rompe, la cámara vibra más fuerte y el jugador sale disparado hacia
@@ -83,6 +106,10 @@ func _break_and_launch() -> void:
 	_tentacle.set_fall_watch(true)
 	_player.global_position = _hatch.get_launch_position()
 	_player.launch(Vector2(0.0, -config.launch_speed), config.control_lock_time)
+	# El vuelo puede pasar por encima de la pantalla inicial: la cámara sube lo necesario para que el
+	# jugador no salga de la vista.
+	_camera.follow_up(_player, config.camera_follow_margin)
+	_follow_time = 0.0
 	broken.emit()
 
 

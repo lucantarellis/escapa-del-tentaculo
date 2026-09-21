@@ -131,7 +131,6 @@ func play_intro() -> void:
 	_intro_director.config = intro_config
 	add_child(_intro_director)
 	_intro_director.broken.connect(_on_intro_broken)
-	_intro_director.finished.connect(_on_intro_finished)
 	_intro_director.play(_hatch, _camera, _player, _tentacle)
 
 
@@ -139,10 +138,6 @@ func play_intro() -> void:
 func _on_intro_broken() -> void:
 	_begin(false)
 
-
-func _on_intro_finished() -> void:
-	_intro_director.queue_free()
-	_intro_director = null
 
 
 func _exit_tree() -> void:
