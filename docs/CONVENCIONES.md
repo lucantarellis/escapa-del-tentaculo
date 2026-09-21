@@ -88,7 +88,7 @@ Existentes (a medida que se implementen los pasos): `PlayerConfig`, `ScrollConfi
 2. Usarla en el script de la mecánica leyendo `config.<variable>`. Nunca copiarla a una constante.
 3. Abrir el `.tres` en el inspector y confirmar el valor por defecto (el `.tres` solo guarda los valores distintos del default del script; si se quiere explícito, editarlo).
 4. Agregar una fila a la tabla de parámetros de `docs/mecanicas/<mecánica>.md`.
-5. Si el cambio altera la sensación de juego, anotarlo en `docs/TUNING_LOG.md`.
+5. `docs/TUNING_LOG.md` solo se usa para pruebas reales de balance, y cuando LT lo pide. Los valores que se ajustan mientras se prueba una checklist son valores de prueba: no se anotan.
 
 ## 6. Git
 
@@ -102,5 +102,5 @@ Existentes (a medida que se implementen los pasos): `PlayerConfig`, `ScrollConfi
 1. Copiar `docs/briefs/BRIEF_TEMPLATE.md` a `docs/briefs/brief-NN-<tema>.md` y completarlo.
 2. Ejecutarlo paso a paso. Al final de cada paso: checklist de prueba, LT juega y da el "seguí".
 3. Documentación es parte de "hecho": un documento por mecánica en `docs/mecanicas/`, y `ARQUITECTURA.md` al día.
-4. Cambios de valores que modifican la sensación → `docs/TUNING_LOG.md`.
+4. `docs/TUNING_LOG.md` es solo para pruebas reales de balance (a pedido de LT), no para los valores de prueba de cada checklist.
 5. Al cerrar el brief, actualizar `docs/ROADMAP.md` (estado y decisiones).

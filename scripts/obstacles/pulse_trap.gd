@@ -4,6 +4,10 @@ extends Obstacle
 ## Trampa intermitente: un bloque que alterna entre inactivo (seguro), aviso (seguro,
 ## parpadea) y activo (letal).
 ##
+## Mientras es segura (inactiva o en aviso) es SÓLIDA: el hijo `Solid` (capa 1 `world`) hace
+## que el jugador pueda apoyarse encima como en una plataforma. Al activarse la solidez se
+## quita y el bloque pasa a ser letal (un jugador apoyado encima muere).
+##
 ## El ciclo dura `off_time + on_time` y empieza por la fase segura: con `initial_offset` = 0
 ## la trampa arranca inactiva. Las fases se calculan a partir del tiempo transcurrido.
 ## Si el jugador está dentro cuando se activa, muere.
@@ -29,6 +33,8 @@ const WARNING_BLINK_HZ: float = 6.0
 ## Parámetros del ciclo (ver [PulseTrapConfig]).
 @export var config: PulseTrapConfig
 
+@onready var _solid_shape: CollisionShape2D = $Solid/CollisionShape2D
+
 var _state: State = State.OFF
 var _elapsed: float = 0.0
 
@@ -51,6 +57,7 @@ func _ready() -> void:
 	# Estado inicial sin diferir: todavía no hay física en curso.
 	_state = _compute_state()
 	monitoring = _state == State.ON
+	_solid_shape.disabled = _state == State.ON
 	_apply_visual()
 
 
@@ -69,6 +76,16 @@ func _physics_process(delta: float) -> void:
 func reset() -> void:
 	_elapsed = 0.0
 	_change_state(_compute_state())
+
+
+# Además de la forma letal (base), ajusta la forma sólida de `Solid` al tamaño.
+func _update_shape() -> void:
+	super()
+	if not is_node_ready():
+		return
+	if not _solid_shape.shape is RectangleShape2D:
+		_solid_shape.shape = RectangleShape2D.new()
+	(_solid_shape.shape as RectangleShape2D).size = size
 
 
 # Fase actual según el tiempo. Orden del ciclo: [0, off_time) segura (con el aviso al final),
@@ -93,6 +110,8 @@ func _change_state(new_state: State) -> void:
 	var was_on: bool = _state == State.ON
 	_state = new_state
 	set_active(new_state == State.ON)
+	# Sólida solo mientras es segura. Diferido: se cambia dentro del paso de física.
+	_solid_shape.set_deferred("disabled", new_state == State.ON)
 	_apply_visual()
 	if new_state == State.ON and not was_on:
 		activated.emit()

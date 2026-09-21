@@ -61,7 +61,7 @@ ScrollCamera (Camera2D, process_callback = Physics, sin suavizado)
 
 1. Ejecutar `scenes/levels/sandbox.tscn` (F6). Tras 2 s la cámara sube.
 2. Empujar al jugador contra los costados y hacia arriba: no debe poder salir.
-3. Editar `scroll_config.tres` (por ejemplo `scroll_speed` o `scroll_acceleration`) y volver a ejecutar. Anotar cambios relevantes en `docs/TUNING_LOG.md`.
+3. Editar `scroll_config.tres` (por ejemplo `scroll_speed` o `scroll_acceleration`) y volver a ejecutar. Los valores que se ajustan mientras se prueba son de prueba, no de balance: no se anotan en `docs/TUNING_LOG.md`.
 
 ## Sandbox en columna
 

@@ -22,6 +22,7 @@ Sandbox (Node2D)                      scenes/levels/sandbox.tscn (escena de prue
 ├── Obstacle1, Obstacle2 (Area2D, capa 3, máscara 2)               scenes/obstacles/Obstacle.tscn
 ├── MovingObstacle1, MovingObstacle2 (Area2D, capa 3, máscara 2)   scenes/obstacles/MovingObstacle.tscn
 ├── PulseTrap1, PulseTrap2 (Area2D, capa 3, máscara 2)             scenes/obstacles/PulseTrap.tscn
+│   └── Solid (StaticBody2D, capa 1)                               sólido mientras la trampa es segura
 └── Floor / Ceiling / StartPlatform / Platform1..N (StaticBody2D, capa 1)
 ```
 

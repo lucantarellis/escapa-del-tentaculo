@@ -58,7 +58,7 @@ Script en la raíz de `sandbox.tscn`, marcado TEMPORAL. Escucha `Player.died(cau
 ## Cómo probarlo
 
 1. Ejecutar `scenes/levels/sandbox.tscn` (F6) y quedarse quieto sobre la plataforma de inicio: el tentáculo llega y aparece el mensaje.
-2. Con R se reinicia. Editar `tentacle_config.tres` y repetir. Anotar los cambios relevantes en `docs/TUNING_LOG.md`.
+2. Con R se reinicia. Editar `tentacle_config.tres` y repetir. Los valores que se ajustan mientras se prueba son de prueba, no de balance: no se anotan en `docs/TUNING_LOG.md`.
 
 ## Sandbox
 

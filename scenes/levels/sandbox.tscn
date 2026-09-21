@@ -8,17 +8,8 @@
 [ext_resource type="PackedScene" path="res://scenes/obstacles/Obstacle.tscn" id="6_obstacle"]
 [ext_resource type="PackedScene" path="res://scenes/obstacles/MovingObstacle.tscn" id="7_moving"]
 [ext_resource type="PackedScene" path="res://scenes/obstacles/PulseTrap.tscn" id="8_trap"]
-[ext_resource type="Script" path="res://scripts/obstacles/moving_obstacle_config.gd" id="9_moving_cfg"]
-[ext_resource type="Script" path="res://scripts/obstacles/pulse_trap_config.gd" id="10_trap_cfg"]
-
-[sub_resource type="Resource" id="MovingConfig_vertical"]
-script = ExtResource("9_moving_cfg")
-speed = 45.0
-start_delay = 1.0
-
-[sub_resource type="Resource" id="TrapConfig_offset"]
-script = ExtResource("10_trap_cfg")
-initial_offset = 1.5
+[ext_resource type="Resource" path="res://resources/configs/moving_obstacle_vertical_config.tres" id="9_moving_cfg"]
+[ext_resource type="Resource" path="res://resources/configs/pulse_trap_offset_config.tres" id="10_trap_cfg"]
 
 [node name="Sandbox" type="Node2D"]
 script = ExtResource("5_controller")
@@ -256,7 +247,7 @@ travel = Vector2(240, 0)
 position = Vector2(170, -40)
 size = Vector2(24, 60)
 travel = Vector2(0, -90)
-config = SubResource("MovingConfig_vertical")
+config = ExtResource("9_moving_cfg")
 
 [node name="PulseTrap1" parent="." instance=ExtResource("8_trap")]
 position = Vector2(100, -235)
@@ -265,4 +256,4 @@ size = Vector2(200, 20)
 [node name="PulseTrap2" parent="." instance=ExtResource("8_trap")]
 position = Vector2(150, -300)
 size = Vector2(24, 60)
-config = SubResource("TrapConfig_offset")
+config = ExtResource("10_trap_cfg")

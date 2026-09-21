@@ -36,7 +36,8 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | Tentáculo: caída | La zona letal se extiende 96 px bajo la pantalla, por lo que la muerte por caída (`&"fell"`) es una red de seguridad: normalmente el contacto ocurre antes | Propuesta de Claude (brief 01, paso 3) |
 | Colores de placeholder | Rojo `#D83232` = letal (tentáculo, obstáculos, trampa activa). Cian `#63D6C5` = recogible / bueno (tanques) | LT (brief 02) |
 | Obstáculos y tanques | Son escenas reutilizables, configurables por instancia (tamaño, recorrido, config `.tres`), para que el diseño de niveles (fijo o por segmentos) siga abierto | LT (brief 02) |
-| Valores de prueba | Los `.tres` de configuración son valores de prueba de LT, no finales (ver `docs/TUNING_LOG.md`) | LT |
+| Valores de prueba | Los `.tres` de configuración son valores de prueba de LT, no finales. Sus ajustes durante las pruebas no se registran en `docs/TUNING_LOG.md` (solo se usa para pruebas reales de balance) | LT |
+| Trampa intermitente | Es sólida mientras es segura (inactiva o en aviso) para poder apoyarse encima; al activarse pasa a letal | LT (brief 02, paso 4) |
 
 ## 3. Principios de ingeniería
 
@@ -45,7 +46,7 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 3. **Input por acciones, nunca por teclas.** Facilita el control táctil final sin tocar la lógica del jugador.
 4. **Señales hacia arriba, llamadas hacia abajo.** Una escena hija emite señales; el padre la controla. Evita dependencias cruzadas entre escenas.
 5. **Un paso = algo jugable.** Al cerrar cada paso hay una checklist de prueba manual que LT juega antes de seguir.
-6. **Registro de tuning.** Los cambios de valores que cambian la sensación se anotan en `docs/TUNING_LOG.md`.
+6. **Registro de tuning.** `docs/TUNING_LOG.md` es solo para pruebas reales de balance, cuando LT lo pide. Los valores que LT ajusta mientras prueba una checklist son valores de prueba y no se anotan.
 7. **Git.** Rama por brief, un commit por paso, sin push ni PR sin confirmación de LT. Los `.tscn` dan conflictos de merge: LT y su socio coordinan quién toca cada escena.
 
 ## 4. Estado por paso

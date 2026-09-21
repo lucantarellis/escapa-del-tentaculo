@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="PulseTrapConfig" format=3]
+
+[ext_resource type="Script" path="res://scripts/obstacles/pulse_trap_config.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+on_time = 1.5
+off_time = 1.5
+warning_time = 0.5
+initial_offset = 1.5

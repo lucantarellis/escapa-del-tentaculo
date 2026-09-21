@@ -9,12 +9,13 @@ Peligros que llenan el recorrido entre el jugador y la puerta. Hay tres, todos l
 
 - **`Obstacle`**: bloque estático. Estrecha pasillos o bloquea zonas.
 - **`MovingObstacle`**: bloque que va y viene entre dos puntos. Obliga a cronometrar el paso.
-- **`PulseTrap`**: bloque que alterna entre seguro y letal, con un aviso antes de activarse. Obliga a esperar o a cruzar en la ventana segura.
+- **`PulseTrap`**: bloque que alterna entre seguro y letal, con un aviso antes de activarse. Mientras es seguro es **sólido**: el jugador puede apoyarse encima como en una plataforma, pero tiene que bajarse antes de que se active.
 
 ## Modelo en palabras simples
 
-- **Son `Area2D`, no cuerpos físicos.** Detectan al jugador (capa 3 `obstacles`, máscara 2 `player`) pero no lo empujan ni lo frenan: rozar un obstáculo no es rebotar, es morir. Por eso no hace falta ninguna lógica de choque en el jugador.
+- **Son `Area2D`, no cuerpos físicos** (salvo la parte sólida de la trampa, ver abajo). Detectan al jugador (capa 3 `obstacles`, máscara 2 `player`) pero no lo empujan ni lo frenan: rozar un obstáculo no es rebotar, es morir. Por eso no hace falta ninguna lógica de choque en el jugador.
 - **Qué mata.** Cuando un `Player` vivo entra en el área, el obstáculo emite `player_hit(cause)` y llama a `Player.die(cause)`, que emite `Player.died(cause)`. Un jugador ya muerto se ignora (no se emite dos veces).
+- **La trampa es sólida mientras es segura.** Además del `Area2D` letal, `PulseTrap` tiene un hijo `Solid` (`StaticBody2D`, capa 1 `world`) con la misma forma. Está activo cuando la trampa está inactiva o en aviso, y se desactiva al activarse. Así el jugador puede caminar o aterrizar encima, y si sigue ahí cuando se activa, muere (cae dentro del área letal unos frames después).
 - **La causa** (`cause`) es un `StringName` configurable por instancia. Por defecto `&"obstacle"` (estático y móvil) y `&"trap"` (trampa). El controlador de partida la usa para elegir el mensaje.
 - **Herencia.** `MovingObstacle` y `PulseTrap` extienden `Obstacle`: comparten forma, colisión y detección. Sus escenas son escenas heredadas de `Obstacle.tscn`.
 - **Reutilizables y configurables por instancia.** Lo que es *diseño de nivel* (tamaño, recorrido) se edita en la instancia; lo que es *tuning* (velocidad, tiempos) vive en un `Resource`. Para que dos instancias tengan tuning distinto (por ejemplo otro `start_delay`), hacer el recurso único (Make Unique en el inspector) o duplicar el `.tres`.
@@ -27,8 +28,8 @@ Peligros que llenan el recorrido entre el jugador y la puerta. Hay tres, todos l
 | Estado | Color |
 |---|---|
 | Letal (estático, móvil, trampa activa) | Rojo `#D83232` |
-| Trampa inactiva | Azul frío `#3A9BBF` con alfa 0,35 |
-| Trampa en aviso | Parpadeo entre azul inactivo y blanco azulado `#C8E7EA` |
+| Trampa inactiva (sólida) | Azul frío `#3A9BBF` con alfa 0,35 |
+| Trampa en aviso (sólida) | Parpadeo entre azul inactivo y blanco azulado `#C8E7EA` |
 
 ## Parámetros
 
@@ -89,6 +90,8 @@ Obstacle (Area2D, capa 4, máscara 2)      script: obstacle.gd (@tool)
 
 MovingObstacle: escena heredada de Obstacle + moving_obstacle.gd + config
 PulseTrap:      escena heredada de Obstacle + pulse_trap.gd + config, cause = &"trap", cuerpo azul translúcido
+└── Solid (StaticBody2D, capa 1, máscara 0)      sólido mientras la trampa es segura
+    └── CollisionShape2D (RectangleShape2D)      una forma propia por instancia
 ```
 
 ## Cómo colocarlos en un nivel
@@ -96,15 +99,31 @@ PulseTrap:      escena heredada de Obstacle + pulse_trap.gd + config, cause = &"
 1. Arrastrar `Obstacle.tscn`, `MovingObstacle.tscn` o `PulseTrap.tscn` al nivel. La posición es el **centro** del bloque.
 2. Ajustar `size` en el inspector: el polígono y el área letal cambian en el editor.
 3. `MovingObstacle`: ajustar `travel`. En el editor se dibuja la trayectoria y el contorno del bloque en su posición final; la posición del nodo es el extremo inicial. Un recorrido de (0, -90) sube 90 px.
-4. Para que dos instancias no vayan sincronizadas, darles configs distintas (Make Unique) y cambiar `start_delay` (móvil) o `initial_offset` (trampa). En `sandbox.tscn`, `MovingObstacle2` y `PulseTrap2` lo hacen con recursos propios.
+4. Para que dos instancias no vayan sincronizadas, darles configs distintas: duplicar el `.tres` en `resources/configs/`, asignarlo en `Config` y cambiar `start_delay` (móvil) o `initial_offset` (trampa). En `sandbox.tscn`, `MovingObstacle2` y `PulseTrap2` lo hacen con `moving_obstacle_vertical_config.tres` y `pulse_trap_offset_config.tres`.
 5. Tener en cuenta el tamaño del jugador (16×24 px) al dimensionar pasillos; el margen correcto se descubre jugando.
+
+## Instancias del sandbox
+
+Para ver la config de una instancia: abrir `sandbox.tscn`, elegirla en el árbol de escena y mirar el inspector (grupo **Configuración → Config**, y **Recorrido → Travel** en las móviles). Haciendo clic en el recurso se abre el `.tres` que se edita.
+
+| Nodo | Posición (centro) | Tamaño | Config | Diferencia |
+|---|---|---|---|---|
+| `Obstacle1` | (130, 400) | 260×24 | — | Estrecha el pasillo: deja 100 px a la derecha |
+| `Obstacle2` | (80, 250) | 100×80 | — | Bloque grande |
+| `MovingObstacle1` | (60, 90) | 40×20 | `moving_obstacle_config.tres` | Horizontal, `travel` (240, 0), empieza de inmediato, 60 px/s |
+| `MovingObstacle2` | (170, -40) | 24×60 | `moving_obstacle_vertical_config.tres` | Vertical, `travel` (0, -90), espera 1 s (`start_delay`), 45 px/s |
+| `PulseTrap1` | (100, -235) | 200×20 | `pulse_trap_config.tres` | Ancha, `initial_offset` 0: arranca inactiva |
+| `PulseTrap2` | (150, -300) | 24×60 | `pulse_trap_offset_config.tres` | Angosta, `initial_offset` 1,5: arranca activa |
+
+`MovingObstacle1` está en Y = 90 (visible al arrancar la partida); `MovingObstacle2` en Y = -40 aparece más arriba, cuando la cámara sube.
 
 ## Cómo probarlos
 
 1. Abrir `scenes/levels/sandbox.tscn` (F6). Los obstáculos están en el primer tramo (Y entre 480 y -320).
 2. Tocar un obstáculo: aparece "GOLPEADO — pulsá R para reiniciar". R reinicia.
-3. Editar `moving_obstacle_config.tres` o `pulse_trap_config.tres` con el juego cerrado y repetir. Anotar los cambios relevantes en `docs/TUNING_LOG.md`.
+3. Editar `moving_obstacle_config.tres`, `pulse_trap_config.tres` o los de las instancias con el juego cerrado y repetir. Los valores que se ajustan mientras se prueba son de prueba, no de balance: no se anotan en `docs/TUNING_LOG.md`.
 4. Cambiar `size` de una instancia en el editor y comprobar que el área letal coincide con el dibujo.
+5. Aterrizar sobre una `PulseTrap` inactiva: se puede caminar encima. Quedarse hasta que se active: muere.
 
 ## Notas técnicas
 
