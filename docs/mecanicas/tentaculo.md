@@ -1,7 +1,7 @@
 # Mecánica: tentáculo y condición de derrota
 
 **Archivos:** `scripts/tentacle/tentacle.gd`, `scripts/tentacle/tentacle_config.gd`, `scenes/tentacle/Tentacle.tscn`, `resources/configs/tentacle_config.tres`.
-**Temporal:** `scripts/levels/sandbox_controller.gd` (mensaje de derrota y reinicio; lo reemplaza el game manager del paso 6).
+**Derrota:** `scripts/levels/level_controller.gd` y el autoload `GameManager` (mensaje y reinicio; ver `game-manager.md`).
 
 ## Propósito
 
@@ -51,9 +51,9 @@ Tentacle (Node2D)          origen = borde superior (sin ondular), esquina izquie
     └── CollisionShape2D (RectangleShape2D, se redimensiona cada tick)
 ```
 
-## Manejo temporal de derrota (`sandbox_controller.gd`)
+## Manejo de la derrota
 
-Script en la raíz de `sandbox.tscn`, marcado TEMPORAL. Escucha `Player.died(cause)` (no `player_caught`): para `&"tentacle"` y `&"fell"` muestra "CAPTURADO — pulsá R para reiniciar" y detiene el scroll (`ScrollCamera.set_scrolling(false)`). El mapa causa → texto es la constante `DEATH_TEXTS`. Con la acción `restart` (R) recarga la escena en cualquier momento, lo que deja combustible, cámara y tentáculo en su estado inicial.
+El tentáculo llama a `Player.die(cause)`. `Player.died(cause)` llega a `LevelController`, que la pasa a `GameManager.notify_player_died`; el manager pasa a `LOST` y el controlador detiene el scroll y muestra "CAPTURADO — pulsá R para reiniciar" para `&"tentacle"` y `&"fell"` (mapa `DEATH_TEXTS`). R (acción `restart`) la maneja el `GameManager` y recarga la escena, lo que deja combustible, cámara y tentáculo en su estado inicial. Ver `game-manager.md`.
 
 ## Cómo probarlo
 

@@ -77,13 +77,14 @@ escapa-del-tentaculo/
 │   ├── goal/
 │   ├── pickups/
 │   ├── tentacle/
-│   ├── managers/
+│   ├── managers/            # game_manager.gd (autoload GameManager)
+│   ├── levels/              # level_controller.gd (script raíz de los niveles)
 │   └── ui/
 ├── resources/
 │   ├── configs/            # Resource de configuración (.tres) con los valores de gameplay
 │   ├── tilesets/
 │   └── themes/
-├── autoload/
+├── autoload/               # reservada para escenas autoload (el GameManager es un script en scripts/managers/)
 ├── docs/                   # roadmap, convenciones, arquitectura, mecánicas y briefs
 │   ├── mecanicas/
 │   └── briefs/

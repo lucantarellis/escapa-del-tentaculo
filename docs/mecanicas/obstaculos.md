@@ -1,7 +1,7 @@
 # Mecánica: obstáculos
 
 **Archivos:** `scripts/obstacles/obstacle.gd`, `moving_obstacle.gd`, `moving_obstacle_config.gd`, `pulse_trap.gd`, `pulse_trap_config.gd`; escenas `scenes/obstacles/Obstacle.tscn`, `MovingObstacle.tscn`, `PulseTrap.tscn`; configs `resources/configs/moving_obstacle_config.tres` y `pulse_trap_config.tres`.
-**Temporal:** `scripts/levels/sandbox_controller.gd` muestra el mensaje de derrota (lo reemplaza el game manager, paso 6).
+**Derrota:** `LevelController` muestra el mensaje según la causa (ver `game-manager.md`).
 
 ## Propósito
 

@@ -1,12 +1,12 @@
 # Arquitectura — Escapa del Tentáculo
 
-Documento vivo: se completa en cada paso del roadmap. Estado: **paso 5 completado** (puerta y victoria).
+Documento vivo: se completa en cada paso del roadmap. Estado: **paso 6 completado** (game manager y ciclo de partida).
 
 ## Árbol de escenas
 
 ```
 Sandbox (Node2D)                      scenes/levels/sandbox.tscn (escena de prueba: columna alta)
-│                                     script: sandbox_controller.gd (TEMPORAL, lo reemplaza el game manager)
+│                                     script: level_controller.gd (LevelController; habla con el autoload GameManager)
 ├── ScrollCamera (Camera2D)           scenes/camera/ScrollCamera.tscn
 │   └── ScreenBounds (StaticBody2D)   límites laterales y superior, se mueven con la cámara
 │       └── LeftShape, RightShape, TopShape
@@ -41,9 +41,11 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 | Player | `fuel_depleted()` / `fuel_refilled()` | _(nadie todavía)_ | Combustible vacío / recuperado |
 | Player | `thrust_started()` / `thrust_stopped()` | _(nadie todavía)_ | Feedback de propulsión |
 | Player | `jumped()` | _(nadie todavía)_ | Saltó |
-| Player | `died(cause)` | `sandbox_controller.gd` (temporal; luego el game manager) | Muestra el mensaje de derrota según la causa y detiene el scroll. Causas: `&"tentacle"`, `&"fell"`, `&"obstacle"`, `&"trap"` |
+| Player | `died(cause)` | `LevelController` | Llama a `GameManager.notify_player_died(cause)`. Causas: `&"tentacle"`, `&"fell"`, `&"obstacle"`, `&"trap"` |
 | Player | `won()` | _(nadie todavía)_ | El jugador ganó (`Player.win()`); desde ahí `is_alive()` es `false` |
-| Door | `player_reached()` | `sandbox_controller.gd` (temporal; luego el game manager) | Un jugador vivo llegó a la puerta. El controlador llama a `Player.win()`, muestra "ESCAPASTE" y detiene el scroll. La puerta no llama a `Player` |
+| Door | `player_reached()` | `LevelController` | Un jugador vivo llegó a la puerta. El controlador llama a `GameManager.notify_goal_reached()`. La puerta no llama a `Player` |
+| GameManager | `state_changed(new, old)` | `LevelController` | En `WON`: `Player.win()`, detiene el scroll y muestra "ESCAPASTE". En `LOST`: detiene el scroll y muestra el mensaje según la causa |
+| GameManager | `run_started(seed)` / `run_won()` / `run_lost(cause)` | _(nadie todavía; lo usarán UI y audio)_ | Hitos de la partida |
 | ScrollCamera | `scroll_started()` | _(nadie todavía)_ | La cámara empezó a subir |
 | ScrollCamera | `scroll_stopped()` | _(nadie todavía)_ | La cámara dejó de subir |
 | Obstacle (y derivados) | `player_hit(cause)` | _(nadie todavía)_ | Un jugador vivo tocó el obstáculo. Además el obstáculo llama a `Player.die(cause)`, que emite `died` |
@@ -53,14 +55,14 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 
 ## Autoloads
 
-Ninguno por ahora. El game manager (paso 6 del roadmap) será el primero.
+| Nombre | Script | Qué hace |
+|---|---|---|
+| `GameManager` | `scripts/managers/game_manager.gd` | Estado de la partida (`READY`, `PLAYING`, `WON`, `LOST`), seed y causa de derrota; señales de fin de partida; reinicio con R. No conoce nodos de la escena. Ver `docs/mecanicas/game-manager.md` |
 
 ## Flujo de una partida
 
-_Se completa cuando exista el ciclo de partida. Hasta el paso 6, el ciclo es temporal y vive en `sandbox_controller.gd`:_
-
-1. Arranca `sandbox.tscn`: la cámara espera `start_delay` y empieza a subir; el tentáculo sube pegado al borde inferior.
+1. Arranca el nivel (`sandbox.tscn`): `LevelController` conecta `Player.died` y `Door.player_reached` con el `GameManager` y llama a `GameManager.start_run()` (estado `PLAYING`). La cámara espera `start_delay` y empieza a subir; el tentáculo sube pegado al borde inferior.
 2. El jugador propulsa, camina o salta para subir y esquivar.
-3. Si el tentáculo lo toca, cae bajo la pantalla o toca un obstáculo: quien lo mata llama a `Player.die(cause)`, que emite `died(cause)`. El controlador escucha `died`, muestra el mensaje según la causa y pausa el scroll.
-4. Si llega a la puerta: `Door.player_reached` → el controlador llama a `Player.win()`, muestra "ESCAPASTE" y pausa el scroll. Estados de fin: el jugador queda no vivo (`is_alive()` = `false`) también al ganar, así los peligros, que ignoran a un jugador no vivo, no pueden matarlo después.
-5. `restart (R) recarga la escena en cualquier momento.
+3. **Derrota:** quien lo mata (tentáculo, caída, obstáculo, trampa) llama a `Player.die(cause)` → `died(cause)` → `GameManager.notify_player_died(cause)` → estado `LOST` → `LevelController` detiene el scroll y muestra el mensaje según la causa.
+4. **Victoria:** `Door.player_reached` → `GameManager.notify_goal_reached()` → estado `WON` → `LevelController` llama a `Player.win()`, detiene el scroll y muestra "ESCAPASTE". Tras ganar, `is_alive()` es `false`, así que los peligros no lo afectan; además el manager ignora cualquier notificación fuera de `PLAYING`.
+5. `restart` (R), escuchada por el `GameManager`, recarga la escena en cualquier momento (estado `READY`); el nivel vuelve a llamar a `start_run()`.
