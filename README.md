@@ -18,7 +18,7 @@ Abrir la carpeta del proyecto desde Godot (Project Manager → Import → selecc
 
 v0 — estructura inicial del proyecto. Sin lógica de gameplay implementada todavía (eso queda para iteraciones posteriores). Ya existe una escena de prueba (`scenes/levels/lvl1.tscn`) creada durante el setup inicial en el editor.
 
-`scenes/main/Main.tscn` es la escena principal (`run/main_scene`): muestra la pantalla de título (nombre del juego y un botón **JUGAR**) sobre el nivel ya armado y quieto (`scenes/levels/Level.tscn`). Al pulsar JUGAR el título se disuelve y arranca el gameplay; R reinicia directo al juego. Ver `docs/mecanicas/pantalla-titulo.md`.
+`scenes/main/Main.tscn` es la escena principal (`run/main_scene`): muestra la pantalla de título (nombre del juego y un botón **JUGAR**) sobre el nivel ya armado y quieto (`scenes/levels/Level.tscn`). Al pulsar JUGAR el título se disuelve, una escotilla golpea tres veces (vibración de cámara y gas), se rompe, el jugador sale disparado hacia arriba, arranca el gameplay y poco después entra el tentáculo (ver `docs/mecanicas/intro-escotilla.md`); R reinicia directo al juego, repitiendo la intro (sin título). Ver `docs/mecanicas/pantalla-titulo.md`.
 
 Durante la partida hay un HUD mínimo (barra de combustible a la izquierda y progreso del nivel a la derecha). Ver `docs/mecanicas/hud.md`.
 

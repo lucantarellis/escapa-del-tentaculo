@@ -36,6 +36,7 @@ const THRUST_INDICATOR_DISTANCE: float = 16.0
 
 @onready var _body: Polygon2D = $Body
 @onready var _thrust_indicator: Polygon2D = $ThrustIndicator
+@onready var _collision: CollisionShape2D = $CollisionShape2D
 
 var _fuel: float = 0.0
 ## 0 = gravedad con combustible, 1 = gravedad sin combustible.
@@ -46,6 +47,10 @@ var _is_thrusting: bool = false
 var _is_alive: bool = true
 var _has_won: bool = false
 var _was_empty: bool = false
+## true mientras el jugador está congelado (ver [method set_frozen]).
+var _frozen: bool = false
+## Tiempo que le queda al bloqueo del Input tras un lanzamiento (ver [method launch]). Unidad: s.
+var _control_lock_left: float = 0.0
 
 
 func _ready() -> void:
@@ -61,7 +66,10 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if not _is_alive:
 		return
-	var input: Vector2 = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	# Con el control bloqueado (tras un lanzamiento) no se lee el Input: solo actúan la inercia y la gravedad.
+	var locked: bool = _control_lock_left > 0.0
+	_control_lock_left = maxf(_control_lock_left - delta, 0.0)
+	var input: Vector2 = Vector2.ZERO if locked else Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var on_floor: bool = is_on_floor()
 	# Sobre una superficie el eje horizontal se camina (sin combustible); el jetpack solo
 	# se usa solo para subir.
@@ -75,7 +83,8 @@ func _physics_process(delta: float) -> void:
 	elif not walking:
 		velocity = velocity.move_toward(Vector2.ZERO, config.coasting_drag * delta)
 	_apply_gravity(delta)
-	_try_jump()
+	if not locked:
+		_try_jump()
 	_move_with_bounce()
 	_update_fuel(thrusting, delta)
 	_set_thrusting(thrusting)
@@ -162,9 +171,46 @@ func win() -> void:
 	won.emit()
 
 
+## Congela o descongela al jugador. Con [param frozen] `true` oculta el cuerpo y el indicador de
+## propulsión, detiene su `_physics_process` y desactiva la colisión (no se ve, no se mueve ni
+## choca con nada). Con `false` lo revierte. Lo usa la intro mientras el jugador está "detrás de
+## la escotilla". [method reset] lo descongela.
+func set_frozen(frozen: bool) -> void:
+	_frozen = frozen
+	set_physics_process(not frozen)
+	_body.visible = not frozen
+	_collision.set_deferred("disabled", frozen)
+	if frozen:
+		_thrust_indicator.visible = false
+	else:
+		_update_visuals(Vector2.ZERO)
+
+
+## Lanza al jugador: lo descongela, le da [param launch_velocity] (px/s) y bloquea el Input
+## durante [param control_lock] s (propulsión, caminata y salto). En ese tiempo la inercia
+## (`coasting_drag`) y la gravedad actúan normalmente y las colisiones también. La cuenta se lleva
+## en `_physics_process`. [method reset] la anula. La usa la intro al romperse la escotilla.
+func launch(launch_velocity: Vector2, control_lock: float) -> void:
+	set_frozen(false)
+	velocity = launch_velocity
+	_control_lock_left = maxf(control_lock, 0.0)
+
+
+## Devuelve true mientras el Input está bloqueado por un lanzamiento (ver [method launch]).
+func is_control_locked() -> bool:
+	return _control_lock_left > 0.0
+
+
+## Devuelve true si el jugador está congelado (ver [method set_frozen]).
+func is_frozen() -> bool:
+	return _frozen
+
+
 ## Deja al jugador vivo en [param spawn_position] (coordenadas globales), quieto y con
 ## el combustible inicial.
 func reset(spawn_position: Vector2) -> void:
+	set_frozen(false)
+	_control_lock_left = 0.0
 	global_position = spawn_position
 	velocity = Vector2.ZERO
 	_is_alive = true

@@ -1,7 +1,7 @@
 # Roadmap — Escapa del Tentáculo
 
 **Última actualización:** 2026-09-21
-**Estado global:** v0 publicada. Mecánicas base (pasos 0 a 3) mergeadas a `main` (brief 01, PR #1). Obstáculos y tanques (pasos 4 y 4b) mergeados a `main` (brief 02, PR #2). Puerta, game manager y niveles por segmentos (pasos 5, 6 y 7) mergeados a `main` (brief 03, PR #3). Pantalla de título (paso 8) y HUD mínimo (paso 8b) hechos y probados por LT (brief 04, rama `feature/titulo-y-hud`, pendiente de PR y merge). Siguiente: brief 05 (intro de la escotilla, paso 8d). Los controles táctiles (paso 8c) quedan para el final, después del arte y el balance.
+**Estado global:** v0 publicada. Mecánicas base (pasos 0 a 3) mergeadas a `main` (brief 01, PR #1). Obstáculos y tanques (pasos 4 y 4b) mergeados a `main` (brief 02, PR #2). Puerta, game manager y niveles por segmentos (pasos 5, 6 y 7) mergeados a `main` (brief 03, PR #3). Pantalla de título (paso 8) y HUD mínimo (paso 8b) hechos, probados por LT y mergeados a `main` (brief 04, PR #4). Intro de la escotilla (pasos 8d y 8e, brief 05, rama `feature/intro-escotilla`) hecha y probada por LT, pendiente de PR y merge. Siguiente: balance del MVP, arte y audio (paso 9). Los controles táctiles (paso 8c) quedan para el final, después del arte y el balance.
 **Cómo usar este documento:** es la fuente de verdad del plan. Cada brief para Cowork se genera desde `docs/briefs/BRIEF_TEMPLATE.md` y, al cerrarse, actualiza la tabla de estado (sección 4) y el registro de decisiones (sección 2).
 
 ---
@@ -46,7 +46,11 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | UI del MVP | Solo el mensaje de fin de partida (victoria o derrota) y el overlay F3 existente; el resto de la UI queda para los pasos 8 y 8b | Propuesta de Claude (brief 03) |
 | HUD minimalista | Solo barra de combustible y progreso del nivel (altura recorrida entre spawn y puerta). Sin puntaje, seed, botón de reinicio ni distancia numérica. Solo lectura | LT (brief 04) |
 | Transición título → juego | `Main` instancia `Level.tscn` detrás del menú, en pausa; al pulsar JUGAR el menú se disuelve y la partida arranca. R reinicia directo al juego (nivel nuevo) sin volver al título | LT (brief 04) |
-| Intro de la escotilla | Al pulsar JUGAR la cámara vibra tres veces (golpes del tentáculo) con gas que escapa de una escotilla en la parte inferior del nivel; la escotilla se rompe, el jugador (que estaba detrás, no visible) sale disparado hacia arriba y al rato aparece el tentáculo como hoy. R salta la intro. Todo con polígonos placeholder | LT (post-QA del brief 04); se implementa en el brief 05 |
+| Intro de la escotilla | Al pulsar JUGAR la cámara vibra tres veces (golpes del tentáculo) con gas que escapa de una escotilla en la parte inferior del nivel; la escotilla se rompe, el jugador (que estaba detrás, no visible) sale disparado hacia arriba y al rato aparece el tentáculo como hoy. R repite la intro (decisión posterior de LT: antes la saltaba). Todo con polígonos placeholder | LT (post-QA del brief 04); se implementa en el brief 05 |
+| Intro: director y escena propia | La secuencia la orquesta `IntroDirector` (llama hacia abajo a `Hatch`, `ScrollCamera`, `Player` y `Tentacle`; emite `hit`, `broken`, `finished`). La escotilla es una escena propia (`Hatch.tscn`). Todos los tiempos y magnitudes viven en `IntroConfig` | Propuesta de Claude (brief 05), pendiente de validar jugando |
+| Intro: cuándo se reproduce | Al pulsar JUGAR y con cada R (`Main` reconstruye el nivel y llama a `LevelController.play_intro()`). `Level.tscn` (F6) y `sandbox.tscn` solos la saltan: escotilla ya rota, tentáculo activo desde el primer frame y jugador en el `PlayerSpawn` (sin lanzamiento). R durante la intro no hace nada (`GameManager` en `READY`) | Propuesta de Claude (brief 05) |
+| Intro: `start_delay` | Sin cambios: la cámara empieza a subir `start_delay` s después de la ruptura (inicio de la partida) | Propuesta de Claude (brief 05) |
+| Intro: escotilla centrada y vuelo | La escotilla va centrada. El segmento de inicio mide 1100 px con un pasillo central libre para el vuelo (~640 px de altura); durante el vuelo la cámara sube lo necesario para que el jugador nunca salga de la vista (`ScrollCamera.follow_up`) | LT (QA del paso 8e) |
 | Controles táctiles | Se implementan al final (paso 8c), cuando lo demás esté cerrado. Mientras tanto, solo teclado | LT (brief 04) |
 | Escena principal | `run/main_scene` seguirá siendo `Main.tscn`, que será la pantalla de título: título del juego y un botón grande de "jugar". Al pulsarlo el menú se disuelve hasta quedar transparente e inicia el juego sobre la escena de juego correspondiente (`Level.tscn`). `Level.tscn` no es la escena principal | LT (brief 03, cierre); se implementa en el paso 8 |
 | Tentáculo al final del nivel | Cuando la cámara se detiene en el final del nivel, el tentáculo sigue subiendo (`end_rise_speed`) hasta cubrir la pantalla: no hay refugio esperando. Se congela al ganar o perder | LT (QA del paso 7) |
@@ -79,7 +83,8 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | 7 | Niveles por segmentos | Hecho | brief-03 |
 | 8 | Pantalla de título y transición al juego | Hecho | brief-04 |
 | 8b | HUD mínimo (combustible y progreso) | Hecho | brief-04 |
-| 8d | Intro de la escotilla (3 golpes, escotilla que se rompe, jugador disparado) | Pendiente (brief 05) | — |
+| 8d | Intro de la escotilla: escotilla, tres golpes de cámara y gas | Hecho | brief-05 |
+| 8e | Intro de la escotilla: ruptura, lanzamiento del jugador y entrada del tentáculo | Hecho | brief-05 |
 | 8c | Controles táctiles | Pendiente (al final, tras arte y balance) | — |
 | 9 | Arte final, audio y pulido | Pendiente | — |
 
@@ -127,6 +132,14 @@ Pantalla de título en `Main.tscn` (escena principal): título del juego y un bo
 ### Paso 8b — HUD mínimo
 Barra de combustible (naranja, roja al vaciarse) y progreso del nivel (0 % en el spawn, 100 % en la puerta), muy discretos, de solo lectura, visibles solo durante la partida.
 **Hecho cuando:** ambos indicadores siguen al jugador, se reinician con R y no tapan el juego ni el mensaje de fin.
+
+### Paso 8d — Intro de la escotilla: golpes y gas
+Al pulsar JUGAR se ve una escotilla abajo (sin tentáculo ni jugador); la cámara vibra tres veces y en cada golpe sale gas. Nuevos: `IntroConfig`, `Hatch`, `IntroDirector`, `ScrollCamera.shake`, `Player.set_frozen`, `Tentacle.set_active`, `LevelController.play_intro()`. Al terminar los golpes la partida arranca como hoy.
+**Hecho cuando:** la secuencia de golpes se ve y se siente bien, no se mueve nada más durante la intro y R, `Level.tscn` y `sandbox.tscn` siguen sin intro.
+
+### Paso 8e — Intro de la escotilla: ruptura y lanzamiento
+Tras el tercer golpe la escotilla se rompe, el jugador sale disparado hacia arriba (`Player.launch`, control bloqueado un instante), empieza la partida y, tras un retraso, el tentáculo entra desde abajo (`Tentacle.enter`). La red de seguridad de caída está activa desde el inicio de la partida.
+**Hecho cuando:** la secuencia completa funciona y ganar, perder y R siguen igual.
 
 ### Paso 8c — Controles táctiles (diferido al final)
 Joystick o zonas táctiles que emitan las mismas acciones del Input Map, para la versión móvil. Se hace después del arte y el balance.
