@@ -24,8 +24,8 @@ size = Vector2(80, 12)
 platform_type = 0
 
 [node name="MidGuard" parent="." instance=ExtResource("plat")]
-position = Vector2(180, -190)
-size = Vector2(14, 45)
+position = Vector2(180, -183)
+size = Vector2(14, 30)
 platform_type = 4
 
 [node name="RightCrumble" parent="." instance=ExtResource("plat")]

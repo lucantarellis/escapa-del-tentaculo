@@ -21,7 +21,7 @@ moves = true
 travel = Vector2(180, 0)
 
 [node name="Guard" parent="." instance=ExtResource("plat")]
-position = Vector2(300, -135)
+position = Vector2(335, -135)
 size = Vector2(16, 55)
 platform_type = 4
 

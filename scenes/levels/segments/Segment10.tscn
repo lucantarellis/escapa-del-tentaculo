@@ -23,7 +23,7 @@ position = Vector2(30, -190)
 size = Vector2(36, 18)
 platform_type = 4
 moves = true
-travel = Vector2(260, 0)
+travel = Vector2(220, 0)
 
 [node name="Bypass" parent="." instance=ExtResource("plat")]
 position = Vector2(320, -190)

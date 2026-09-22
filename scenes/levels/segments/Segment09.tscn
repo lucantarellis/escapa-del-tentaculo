@@ -6,7 +6,7 @@
 
 [node name="Segment09" type="Node2D"]
 script = ExtResource("seg")
-height = 300
+height = 320
 
 [node name="Start" parent="." instance=ExtResource("plat")]
 position = Vector2(160, -28)
@@ -29,7 +29,7 @@ size = Vector2(80, 12)
 platform_type = 5
 
 [node name="End" parent="." instance=ExtResource("plat")]
-position = Vector2(180, -266)
+position = Vector2(180, -292)
 size = Vector2(140, 12)
 platform_type = 0
 

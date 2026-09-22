@@ -23,7 +23,7 @@ position = Vector2(90, -228)
 size = Vector2(90, 12)
 platform_type = 1
 moves = true
-travel = Vector2(160, 0)
+travel = Vector2(140, 0)
 
 [node name="Guard" parent="." instance=ExtResource("plat")]
 position = Vector2(300, -228)

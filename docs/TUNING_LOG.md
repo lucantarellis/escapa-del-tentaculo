@@ -113,6 +113,25 @@ Validado headless: los 16 segmentos del pool pasan `check_seg_generic.gd` (tanqu
 
 Pendiente que LT juegue los 10 segmentos nuevos (aislados con F6, como se explica en `niveles-por-segmentos.md`, o directamente F5 con varias seeds) para confirmar que los saltos son alcanzables y que las combinaciones nuevas se sienten bien — en particular el `LETHAL` vertical (`Segment15`) y el `ONE_WAY` móvil (`Segment12`), que son mecánicas nuevas sin precedente en el pool.
 
+### Corrección: plataformas superpuestas / huecos angostos en los segmentos nuevos
+
+LT jugó los segmentos nuevos y reportó, con capturas: en un nivel (seed 419004191) una plataforma rompible se solapaba con una normal; en otro (seed 1568452245) una one-way quedaba tan pegada a una normal que el jugador quedaba atascado sin poder avanzar, a merced del tentáculo.
+
+Escribí un script que recorre los 16 `.tscn` del pool y detecta, por geometría (no por juego), dos cosas: plataformas cuyos rectángulos se superponen (incluyendo las posiciones de ida y vuelta de las que tienen `moves`) y huecos verticales menores a la altura del jugador (24 px) entre una plataforma y la que tiene arriba, donde quedaría atascado. Encontró 8 casos reales en los segmentos nuevos (ninguno en `Segment01`–`Segment06`, que ya estaban confirmados jugando):
+
+- `Segment07`: hueco de 22 px entre `Step2` (one-way) y `End` — coincide con la segunda captura de LT.
+- `Segment08`: `Crumble2` (rompible) se solapaba 25×8 px con `Converge` — coincide con la primera captura.
+- `Segment09`: mismo hueco de 22 px entre `Pulse2` y `End`.
+- `Segment10`: `SweeperA` (letal móvil) se solapaba con `Bypass` en el extremo de su recorrido.
+- `Segment11`: `Ferry` (móvil) se solapaba 50×12 px con `LandingCrumble` en el extremo de su recorrido.
+- `Segment12`: la one-way móvil se solapaba con `Guard` en el extremo de su recorrido.
+- `Segment14`: `MidGuard` (letal) quedaba a 14,5 px de `Converge` (y, al corregirlo moviéndolo, a 8,5 px de la plataforma de abajo) — se resolvió angostándolo (45→30 px de alto) y centrándolo a mitad de camino entre las dos plataformas vecinas, con ~29 px de margen a cada lado.
+- `Segment16`: `Bridge` (one-way móvil) se solapaba 3×12 px con `Guard` en el extremo de su recorrido.
+
+Corregido separando posiciones, acortando recorridos (`travel`) o angostando el obstáculo según el caso. Revalidado: el script de solapamiento no encuentra más casos en ningún segmento del pool, `check_seg_generic.gd` sigue en verde en los 16, y `LevelBuilder.build()` con las mismas 7 seeds sigue armando el nivel sin errores.
+
+Pendiente que LT vuelva a jugar (mismas seeds si quiere reproducir exacto: 419004191 y 1568452245, y algunas más) para confirmar que ya no aparecen ni el solapamiento ni el atascamiento, y seguir con el resto del QA de los segmentos nuevos (alcance de saltos, sensación de las combinaciones).
+
 ## Cambios (una fila por parámetro)
 
 | Ronda | Fecha | Parámetro | Valor anterior | Valor nuevo | Evidencia | Cómo se sintió |

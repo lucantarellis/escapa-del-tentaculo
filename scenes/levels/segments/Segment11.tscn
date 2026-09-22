@@ -18,11 +18,11 @@ position = Vector2(100, -133)
 size = Vector2(70, 12)
 platform_type = 0
 moves = true
-travel = Vector2(160, 0)
+travel = Vector2(120, 0)
 
 [node name="LandingCrumble" parent="." instance=ExtResource("plat")]
-position = Vector2(280, -133)
-size = Vector2(70, 12)
+position = Vector2(300, -133)
+size = Vector2(60, 12)
 platform_type = 2
 
 [node name="SafeTimed" parent="." instance=ExtResource("plat")]

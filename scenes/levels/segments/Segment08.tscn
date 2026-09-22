@@ -24,7 +24,7 @@ size = Vector2(80, 12)
 platform_type = 3
 
 [node name="Crumble2" parent="." instance=ExtResource("plat")]
-position = Vector2(140, -228)
+position = Vector2(80, -228)
 size = Vector2(70, 12)
 platform_type = 2
 
