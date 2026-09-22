@@ -2,109 +2,56 @@
 
 [ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
 [ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
+[ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
 
 [node name="Segment01" type="Node2D"]
 script = ExtResource("seg")
 height = 640
 
-[node name="Start" type="StaticBody2D" parent="."]
-collision_layer = 1
-collision_mask = 0
+[node name="Start" parent="." instance=ExtResource("plat")]
+position = Vector2(100, -34)
+size = Vector2(120, 12)
+platform_type = 0
 
-[node name="Polygon2D" type="Polygon2D" parent="Start"]
-color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(40, -40, 160, -40, 160, -28, 40, -28)
+[node name="Branch1Near" parent="." instance=ExtResource("plat")]
+position = Vector2(100, -146)
+size = Vector2(80, 12)
+platform_type = 1
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Start"]
-polygon = PackedVector2Array(40, -40, 160, -40, 160, -28, 40, -28)
+[node name="Branch1Far" parent="." instance=ExtResource("plat")]
+position = Vector2(260, -146)
+size = Vector2(80, 12)
+platform_type = 2
 
-[node name="Branch1Near" type="StaticBody2D" parent="."]
-collision_layer = 1
-collision_mask = 0
+[node name="Converge1" parent="." instance=ExtResource("plat")]
+position = Vector2(190, -258)
+size = Vector2(80, 12)
+platform_type = 0
 
-[node name="Polygon2D" type="Polygon2D" parent="Branch1Near"]
-color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(60, -152, 140, -152, 140, -140, 60, -140)
+[node name="BonusLedge" parent="." instance=ExtResource("plat")]
+position = Vector2(50, -244)
+size = Vector2(60, 12)
+platform_type = 3
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Branch1Near"]
-polygon = PackedVector2Array(60, -152, 140, -152, 140, -140, 60, -140)
+[node name="Branch2Left" parent="." instance=ExtResource("plat")]
+position = Vector2(90, -370)
+size = Vector2(80, 12)
+platform_type = 3
 
-[node name="Branch1Far" type="StaticBody2D" parent="."]
-collision_layer = 1
-collision_mask = 0
+[node name="Branch2Right" parent="." instance=ExtResource("plat")]
+position = Vector2(290, -370)
+size = Vector2(80, 12)
+platform_type = 1
 
-[node name="Polygon2D" type="Polygon2D" parent="Branch1Far"]
-color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(220, -152, 300, -152, 300, -140, 220, -140)
+[node name="Converge2" parent="." instance=ExtResource("plat")]
+position = Vector2(190, -482)
+size = Vector2(80, 12)
+platform_type = 0
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Branch1Far"]
-polygon = PackedVector2Array(220, -152, 300, -152, 300, -140, 220, -140)
-
-[node name="Converge1" type="StaticBody2D" parent="."]
-collision_layer = 1
-collision_mask = 0
-
-[node name="Polygon2D" type="Polygon2D" parent="Converge1"]
-color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(150, -264, 230, -264, 230, -252, 150, -252)
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Converge1"]
-polygon = PackedVector2Array(150, -264, 230, -264, 230, -252, 150, -252)
-
-[node name="BonusLedge" type="StaticBody2D" parent="."]
-collision_layer = 1
-collision_mask = 0
-
-[node name="Polygon2D" type="Polygon2D" parent="BonusLedge"]
-color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(20, -250, 80, -250, 80, -238, 20, -238)
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="BonusLedge"]
-polygon = PackedVector2Array(20, -250, 80, -250, 80, -238, 20, -238)
-
-[node name="Branch2Left" type="StaticBody2D" parent="."]
-collision_layer = 1
-collision_mask = 0
-
-[node name="Polygon2D" type="Polygon2D" parent="Branch2Left"]
-color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(50, -376, 130, -376, 130, -364, 50, -364)
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Branch2Left"]
-polygon = PackedVector2Array(50, -376, 130, -376, 130, -364, 50, -364)
-
-[node name="Branch2Right" type="StaticBody2D" parent="."]
-collision_layer = 1
-collision_mask = 0
-
-[node name="Polygon2D" type="Polygon2D" parent="Branch2Right"]
-color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(250, -376, 330, -376, 330, -364, 250, -364)
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Branch2Right"]
-polygon = PackedVector2Array(250, -376, 330, -376, 330, -364, 250, -364)
-
-[node name="Converge2" type="StaticBody2D" parent="."]
-collision_layer = 1
-collision_mask = 0
-
-[node name="Polygon2D" type="Polygon2D" parent="Converge2"]
-color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(150, -488, 230, -488, 230, -476, 150, -476)
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Converge2"]
-polygon = PackedVector2Array(150, -488, 230, -488, 230, -476, 150, -476)
-
-[node name="End" type="StaticBody2D" parent="."]
-collision_layer = 1
-collision_mask = 0
-
-[node name="Polygon2D" type="Polygon2D" parent="End"]
-color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(100, -600, 220, -600, 220, -588, 100, -588)
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="End"]
-polygon = PackedVector2Array(100, -600, 220, -600, 220, -588, 100, -588)
+[node name="End" parent="." instance=ExtResource("plat")]
+position = Vector2(160, -594)
+size = Vector2(120, 12)
+platform_type = 0
 
 [node name="FuelTankBonus" parent="." instance=ExtResource("tank")]
 position = Vector2(50, -262)
