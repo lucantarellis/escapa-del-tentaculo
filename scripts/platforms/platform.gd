@@ -193,7 +193,12 @@ func _update_shape() -> void:
 	(_footprint_shape.shape as RectangleShape2D).size = size
 	if not _lethal_shape.shape is RectangleShape2D:
 		_lethal_shape.shape = RectangleShape2D.new()
-	(_lethal_shape.shape as RectangleShape2D).size = size
+	# Un poco más chico que el dibujo (lethal_margin por lado): sin esto, un roce apenas por
+	# la esquina del jugador cuenta como golpe aunque no se vea así (confirmado con LT: el
+	# rectángulo del jugador se solapaba unos px con la esquina de un LETHAL angosto).
+	var lethal_margin: float = config.lethal_margin if config != null else 2.0
+	var lethal_size: Vector2 = (size - Vector2(lethal_margin, lethal_margin) * 2.0).max(Vector2(2.0, 2.0))
+	(_lethal_shape.shape as RectangleShape2D).size = lethal_size
 
 
 # Aplica lo que depende del tipo: color, colisión de un sentido, sensores activos y estado
@@ -237,7 +242,11 @@ func _process_breakable(delta: float) -> void:
 			_apply_solid(true)
 			restored.emit()
 		return
-	if _breaking:
+	if _breaking and _is_step_occupied_and_landed():
+		# Solo cuenta mientras el jugador está realmente parado encima (on_floor), no
+		# mientras cae y apenas atraviesa la franja sensora de camino a aterrizar — LT
+		# reportó que a veces se rompía antes de tocarla, y era justo esto: el sensor está
+		# pegado arriba del borde y el jugador lo cruza un poco antes de aterrizar de verdad.
 		_break_timer += delta
 		if _break_timer >= config.break_delay:
 			_breaking = false
@@ -351,6 +360,17 @@ func _get_move_progress() -> float:
 	if config.moving_ease_at_ends:
 		progress = smoothstep(0.0, 1.0, progress)
 	return progress
+
+
+# true si hay un Player vivo apoyado (on_floor) dentro de la franja sensora de "pisado". Se
+# usa para BREAKABLE: no alcanza con estar cruzando la franja, tiene que estar realmente
+# parado encima.
+func _is_step_occupied_and_landed() -> bool:
+	for body: Node2D in _step_sensor.get_overlapping_bodies():
+		var player: Player = body as Player
+		if player != null and player.is_alive() and player.is_on_floor():
+			return true
+	return false
 
 
 # true si hay un Player vivo dentro del rectángulo completo de la plataforma. Se usa antes

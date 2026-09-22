@@ -26,6 +26,12 @@ extends Resource
 ## jugador en una caída rápida; ver nota en `docs/mecanicas/plataformas.md`. Unidad: px.
 @export var one_way_margin: float = 5.0
 
+@export_group("Letal (LETHAL / PULSE en ON)")
+## Cuánto más chico es el área letal que el dibujo, por lado (se resta de cada borde). Da
+## margen de gracia en las esquinas: sin esto, rozar apenas la esquina de un bloque angosto
+## cuenta como golpe aunque no se sienta así. Unidad: px.
+@export var lethal_margin: float = 2.0
+
 @export_group("Movimiento (moves = true)")
 ## Velocidad media de desplazamiento. Con `moving_ease_at_ends` el pico es 1,5x. Unidad: px/s.
 @export var moving_speed: float = 60.0
