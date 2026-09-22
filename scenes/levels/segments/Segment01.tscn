@@ -13,10 +13,10 @@ collision_mask = 0
 
 [node name="Polygon2D" type="Polygon2D" parent="Platform1"]
 color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(40, -40, 160, -40, 160, -28, 40, -28)
+polygon = PackedVector2Array(80, -40, 120, -40, 120, -28, 80, -28)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform1"]
-polygon = PackedVector2Array(40, -40, 160, -40, 160, -28, 40, -28)
+polygon = PackedVector2Array(80, -40, 120, -40, 120, -28, 80, -28)
 
 [node name="Platform2" type="StaticBody2D" parent="."]
 collision_layer = 1
@@ -24,10 +24,10 @@ collision_mask = 0
 
 [node name="Polygon2D" type="Polygon2D" parent="Platform2"]
 color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(100, -152, 220, -152, 220, -140, 100, -140)
+polygon = PackedVector2Array(125, -134, 165, -134, 165, -122, 125, -122)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform2"]
-polygon = PackedVector2Array(100, -152, 220, -152, 220, -140, 100, -140)
+polygon = PackedVector2Array(125, -134, 165, -134, 165, -122, 125, -122)
 
 [node name="Platform3" type="StaticBody2D" parent="."]
 collision_layer = 1
@@ -35,10 +35,10 @@ collision_mask = 0
 
 [node name="Polygon2D" type="Polygon2D" parent="Platform3"]
 color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(40, -264, 160, -264, 160, -252, 40, -252)
+polygon = PackedVector2Array(80, -228, 120, -228, 120, -216, 80, -216)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform3"]
-polygon = PackedVector2Array(40, -264, 160, -264, 160, -252, 40, -252)
+polygon = PackedVector2Array(80, -228, 120, -228, 120, -216, 80, -216)
 
 [node name="Platform4" type="StaticBody2D" parent="."]
 collision_layer = 1
@@ -46,10 +46,10 @@ collision_mask = 0
 
 [node name="Polygon2D" type="Polygon2D" parent="Platform4"]
 color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(100, -376, 220, -376, 220, -364, 100, -364)
+polygon = PackedVector2Array(125, -322, 165, -322, 165, -310, 125, -310)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform4"]
-polygon = PackedVector2Array(100, -376, 220, -376, 220, -364, 100, -364)
+polygon = PackedVector2Array(125, -322, 165, -322, 165, -310, 125, -310)
 
 [node name="Platform5" type="StaticBody2D" parent="."]
 collision_layer = 1
@@ -57,10 +57,10 @@ collision_mask = 0
 
 [node name="Polygon2D" type="Polygon2D" parent="Platform5"]
 color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(40, -488, 160, -488, 160, -476, 40, -476)
+polygon = PackedVector2Array(80, -416, 120, -416, 120, -404, 80, -404)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform5"]
-polygon = PackedVector2Array(40, -488, 160, -488, 160, -476, 40, -476)
+polygon = PackedVector2Array(80, -416, 120, -416, 120, -404, 80, -404)
 
 [node name="Platform6" type="StaticBody2D" parent="."]
 collision_layer = 1
@@ -68,13 +68,21 @@ collision_mask = 0
 
 [node name="Polygon2D" type="Polygon2D" parent="Platform6"]
 color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(100, -600, 220, -600, 220, -588, 100, -588)
+polygon = PackedVector2Array(125, -510, 165, -510, 165, -498, 125, -498)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform6"]
-polygon = PackedVector2Array(100, -600, 220, -600, 220, -588, 100, -588)
+polygon = PackedVector2Array(125, -510, 165, -510, 165, -498, 125, -498)
+
+[node name="Platform7" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="Platform7"]
+color = Color(0.2275, 0.6078, 0.749, 1)
+polygon = PackedVector2Array(80, -604, 120, -604, 120, -592, 80, -592)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform7"]
+polygon = PackedVector2Array(80, -604, 120, -604, 120, -592, 80, -592)
 
 [node name="FuelTank1" parent="." instance=ExtResource("tank")]
-position = Vector2(100, -284)
-
-[node name="FuelTank2" parent="." instance=ExtResource("tank")]
-position = Vector2(100, -508)
+position = Vector2(145, -342)
