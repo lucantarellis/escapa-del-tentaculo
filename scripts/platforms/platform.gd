@@ -396,5 +396,12 @@ func _try_hit(body: Node2D) -> void:
 	var player: Player = body as Player
 	if player == null or not player.is_alive():
 		return
+	# Diagnóstico temporal (brief 06, ronda 2): LT reportó muertes sin nada visible tocándolo.
+	# Con esto, la consola de salida de Godot (al correr con F5/F6 desde el editor) dice
+	# exactamente qué plataforma fue, su tipo y dónde, en vez de tener que adivinar mirando
+	# la captura de pantalla. Sacar cuando se confirme que no hace falta más.
+	print("[Platform] '%s' (%s) golpeó al jugador en %s (jugador en %s)" % [
+		name, PlatformType.keys()[platform_type], str(global_position), str(player.global_position),
+	])
 	player_hit.emit(cause)
 	player.die(cause)
