@@ -1,0 +1,53 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="1_player"]
+[ext_resource type="PackedScene" path="res://scenes/ui/DebugOverlay.tscn" id="2_overlay"]
+[ext_resource type="PackedScene" path="res://scenes/camera/ScrollCamera.tscn" id="3_camera"]
+[ext_resource type="PackedScene" path="res://scenes/tentacle/Tentacle.tscn" id="4_tentacle"]
+[ext_resource type="Script" path="res://scripts/levels/level_controller.gd" id="5_controller"]
+[ext_resource type="Script" path="res://scripts/levels/level_builder.gd" id="6_builder"]
+[ext_resource type="Resource" path="res://resources/configs/level_config_segment_qa.tres" id="7_levelcfg"]
+[ext_resource type="PackedScene" path="res://scenes/ui/Hud.tscn" id="20_hud"]
+[ext_resource type="PackedScene" path="res://scenes/intro/Hatch.tscn" id="21_hatch"]
+[ext_resource type="Resource" path="res://resources/configs/intro_config.tres" id="22_introcfg"]
+
+[node name="LevelSegmentQA" type="Node2D"]
+script = ExtResource("5_controller")
+intro_config = ExtResource("22_introcfg")
+
+[node name="LevelBuilder" type="Node2D" parent="."]
+script = ExtResource("6_builder")
+config = ExtResource("7_levelcfg")
+
+[node name="ScrollCamera" parent="." instance=ExtResource("3_camera")]
+position = Vector2(180, 320)
+
+[node name="Hatch" parent="." instance=ExtResource("21_hatch")]
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+position = Vector2(180, 548)
+
+[node name="Tentacle" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("4_tentacle")]
+camera = NodePath("../ScrollCamera")
+
+[node name="DebugOverlay" parent="." node_paths=PackedStringArray("player") instance=ExtResource("2_overlay")]
+player = NodePath("../Player")
+
+[node name="Hud" parent="." node_paths=PackedStringArray("player") instance=ExtResource("20_hud")]
+player = NodePath("../Player")
+
+[node name="CaughtLayer" type="CanvasLayer" parent="."]
+layer = 90
+
+[node name="CaughtLabel" type="Label" parent="CaughtLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0.0196, 0.0235, 0.0353, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
