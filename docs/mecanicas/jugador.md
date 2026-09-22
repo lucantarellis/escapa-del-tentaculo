@@ -13,7 +13,7 @@ Un astronauta que se mueve con un jetpack de combustible limitado. Es la mecáni
 - **Frenado suave.** Al soltar, la velocidad baja de a poco (`coasting_drag`). Ese valor define qué tan "flotante" se siente.
 - **Contra-empuje.** Si se propulsa en sentido opuesto al movimiento, la aceleración se multiplica (`counter_thrust_multiplier`) en ese eje, para poder frenar rápido. Se evalúa por eje: en una diagonal, solo se potencia el eje que se opone.
 - **Caminar.** Apoyado en una superficie, el eje horizontal se *camina*: acelera hasta `walk_max_speed` sin gastar combustible, tenga o no. El jetpack solo interviene para subir (arriba consume combustible). En el aire, la propulsión funciona como se describe arriba.
-- **Gravedad que depende del combustible.** Con combustible, la gravedad es casi nula (`gravity_with_fuel`): se flota. Cuando el combustible llega a 0 la gravedad sube (`gravity_without_fuel`) de forma gradual (`gravity_transition_time`) y el jugador cae. Esto crea la tensión del juego: quedarse sin combustible lejos de una superficie es peligroso.
+- **Gravedad única (brief 06, ronda 1).** `gravity_with_fuel` y `gravity_without_fuel` se llevaron al mismo valor: la gravedad ya no cambia al quedarse sin combustible. `gravity_transition_time` queda sin efecto práctico (ambas gravedades son iguales) pero no se quitó del código.
 - **Salto.** Sin combustible y apoyado en una superficie, `jump` da un impulso hacia arriba (`jump_velocity`). Sirve para llegar a un tanque elevado. Con combustible no se puede saltar (configurable).
 - **Rebote.** Al chocar contra una superficie a más de `bounce_min_speed`, se devuelve una fracción (`wall_bounce`) de la velocidad de impacto. Con 0 se detiene o desliza; con 1 rebota de forma elástica.
 - **Orden de cálculo por frame** (`_physics_process`): entrada → caminar (si está apoyado) y/o propulsión, o frenado → gravedad → salto → movimiento y rebote → consumo de combustible → visuales.
@@ -24,12 +24,12 @@ Un astronauta que se mueve con un jetpack de combustible limitado. Es la mecáni
 |---|---|---|---|---|---|---|
 | Propulsión | `thrust_acceleration` | float | 700 | px/s² | Aceleración al mantener una dirección | Más alto = respuesta más nerviosa |
 | Propulsión | `max_speed` | float | 180 | px/s | Tope de velocidad al propulsar | Relacionarlo con `scroll_speed`: debe poder superarlo con margen |
-| Propulsión | `counter_thrust_multiplier` | float | 1.5 | × | Multiplica la aceleración al oponerse a la velocidad | 1 = sin ayuda para frenar |
+| Propulsión | `counter_thrust_multiplier` | float | 0.9 | × | Multiplica la aceleración al oponerse a la velocidad | Brief 06, ronda 1: bajado de 1.5 (frenaba de forma muy brusca) |
 | Propulsión | `coasting_drag` | float | 90 | px/s² | Frenado sin entrada | Bajo = deriva larga; alto = frena seco |
-| Caminar | `walk_acceleration` | float | 600 | px/s² | Aceleración horizontal apoyado. No gasta combustible | Parámetro agregado a pedido de LT |
-| Caminar | `walk_max_speed` | float | 100 | px/s | Velocidad máxima caminando | Parámetro agregado a pedido de LT |
-| Gravedad | `gravity_with_fuel` | float | 30 | px/s² | Gravedad con combustible | **Ver nota abajo** |
-| Gravedad | `gravity_without_fuel` | float | 500 | px/s² | Gravedad sin combustible | Define cuán castigador es quedarse sin nafta |
+| Caminar | `walk_acceleration` | float | 700 | px/s² | Aceleración horizontal apoyado. No gasta combustible | Brief 06, ronda 1: subido de 600 |
+| Caminar | `walk_max_speed` | float | 140 | px/s | Velocidad máxima caminando | Brief 06, ronda 1: subido de 100 (se sentía tosco) |
+| Gravedad | `gravity_with_fuel` | float | 250 | px/s² | Gravedad con combustible | Brief 06, ronda 1: unificada con `gravity_without_fuel` |
+| Gravedad | `gravity_without_fuel` | float | 250 | px/s² | Gravedad sin combustible | Brief 06, ronda 1: igualada a `gravity_with_fuel` a pedido de LT |
 | Gravedad | `gravity_transition_time` | float | 0.5 | s | Interpolación entre ambas gravedades | 0 = cambio instantáneo |
 | Gravedad | `max_fall_speed` | float | 400 | px/s | Tope de velocidad de caída | Limita la caída, no frena una caída que ya lo superaba |
 | Combustible | `max_fuel` | float | 100 | u | Capacidad | |
@@ -37,14 +37,14 @@ Un astronauta que se mueve con un jetpack de combustible limitado. Es la mecáni
 | Combustible | `fuel_consumption_per_second` | float | 15 | u/s | Consumo mientras se propulsa | Con 15 u/s hay ~6,7 s de propulsión continua. Una de las dos variables de dificultad |
 | Combustible | `min_fuel_to_thrust` | float | 0.0 | u | Umbral mínimo para propulsar | |
 | Combustible | `fuel_regen_per_second` | float | 0.0 | u/s | Regeneración pasiva | 0 = solo tanques |
-| Salto | `jump_velocity` | float | 260 | px/s | Impulso vertical del salto | Con gravedad 500 sube ≈ 68 px |
+| Salto | `jump_velocity` | float | 260 | px/s | Impulso vertical del salto | Con gravedad 250 (única) sube ≈ 133 px; a revisar en próximas rondas |
 | Salto | `jump_requires_empty_fuel` | bool | true | — | Solo saltar sin combustible | |
 | Salto | `jump_empty_threshold` | float | 0.0 | u | Combustible ≤ este valor = "vacío" | También define gravedad alta y color rojo |
 | Salto | `jump_requires_floor` | bool | true | — | Solo saltar apoyado | |
 | Colisión | `wall_bounce` | float | 0.25 | 0 a 1 | Rebote al chocar | |
 | Colisión | `bounce_min_speed` | float | 40 | px/s | Impacto mínimo para rebotar | **Parámetro agregado** (no estaba en el brief): sin él el jugador vibra al apoyarse |
 
-> **Nota sobre `gravity_with_fuel` y `coasting_drag`.** El frenado se aplica antes que la gravedad. Con los valores iniciales el frenado (90) es mayor que la gravedad (30), así que al soltar el jugador se queda prácticamente flotando en el lugar en vez de hundirse lentamente. Para que se hunda de forma visible, subir `gravity_with_fuel` por encima de `coasting_drag` o bajar el drag.
+> **Nota histórica.** Antes del brief 06 la gravedad con combustible (30) era menor que `coasting_drag` (90) y el jugador quedaba casi flotando al soltar. Desde el brief 06, ronda 1, la gravedad es única (250, igual con y sin combustible) y ya no depende de este balance.
 
 ## Señales
 

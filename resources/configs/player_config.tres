@@ -4,6 +4,10 @@
 
 [resource]
 script = ExtResource("1_cfg")
-gravity_with_fuel = 150.0
+gravity_with_fuel = 250.0
+gravity_without_fuel = 250.0
+counter_thrust_multiplier = 0.9
+walk_acceleration = 700.0
+walk_max_speed = 140.0
 jump_requires_empty_fuel = false
 wall_bounce = 0.15
