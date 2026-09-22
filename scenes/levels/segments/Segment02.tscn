@@ -1,62 +1,44 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
-[ext_resource type="PackedScene" path="res://scenes/obstacles/Obstacle.tscn" id="obs"]
-[ext_resource type="PackedScene" path="res://scenes/obstacles/MovingObstacle.tscn" id="mov"]
 [ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
+[ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
 
 [node name="Segment02" type="Node2D"]
 script = ExtResource("seg")
-height = 640
+height = 360
 
-[node name="Platform1" type="StaticBody2D" parent="."]
-collision_layer = 1
-collision_mask = 0
+[node name="Start" parent="." instance=ExtResource("plat")]
+position = Vector2(90, -28)
+size = Vector2(140, 12)
+platform_type = 0
 
-[node name="Polygon2D" type="Polygon2D" parent="Platform1"]
-color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(100, -30, 260, -30, 260, -18, 100, -18)
+[node name="Shortcut" parent="." instance=ExtResource("plat")]
+position = Vector2(60, -150)
+size = Vector2(50, 12)
+platform_type = 2
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform1"]
-polygon = PackedVector2Array(100, -30, 260, -30, 260, -18, 100, -18)
+[node name="Gate" parent="." instance=ExtResource("plat")]
+position = Vector2(250, -140)
+size = Vector2(70, 12)
+platform_type = 5
 
-[node name="Obstacle1" parent="." instance=ExtResource("obs")]
-position = Vector2(60, -250)
-size = Vector2(120, 200)
+[node name="Hazard" parent="." instance=ExtResource("plat")]
+position = Vector2(320, -150)
+size = Vector2(20, 40)
+platform_type = 4
 
-[node name="Obstacle2" parent="." instance=ExtResource("obs")]
-position = Vector2(300, -250)
-size = Vector2(120, 200)
+[node name="Ferry" parent="." instance=ExtResource("plat")]
+position = Vector2(160, -250)
+size = Vector2(90, 12)
+platform_type = 0
+moves = true
+travel = Vector2(100, 0)
 
-[node name="MovingObstacle1" parent="." instance=ExtResource("mov")]
-position = Vector2(140, -430)
-size = Vector2(36, 16)
-travel = Vector2(80, 0)
+[node name="End" parent="." instance=ExtResource("plat")]
+position = Vector2(190, -338)
+size = Vector2(130, 12)
+platform_type = 0
 
 [node name="FuelTank1" parent="." instance=ExtResource("tank")]
-position = Vector2(180, -250)
-
-[node name="FuelTank2" parent="." instance=ExtResource("tank")]
-position = Vector2(60, -518)
-
-[node name="Platform2" type="StaticBody2D" parent="."]
-collision_layer = 1
-collision_mask = 0
-
-[node name="Polygon2D" type="Polygon2D" parent="Platform2"]
-color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(20, -500, 110, -500, 110, -488, 20, -488)
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform2"]
-polygon = PackedVector2Array(20, -500, 110, -500, 110, -488, 20, -488)
-
-[node name="Platform3" type="StaticBody2D" parent="."]
-collision_layer = 1
-collision_mask = 0
-
-[node name="Polygon2D" type="Polygon2D" parent="Platform3"]
-color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(120, -600, 240, -600, 240, -588, 120, -588)
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform3"]
-polygon = PackedVector2Array(120, -600, 240, -600, 240, -588, 120, -588)
+position = Vector2(160, -270)
