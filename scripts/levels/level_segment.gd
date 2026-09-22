@@ -92,6 +92,9 @@ func _get_child_rect(child: Node) -> Rect2:
 	if child is Door:
 		var door: Door = child as Door
 		return Rect2(door.position - door.size * 0.5, door.size)
+	if child is Platform:
+		var platform: Platform = child as Platform
+		return Rect2(platform.position - platform.size * 0.5, platform.size)
 	if child is StaticBody2D:
 		var body: StaticBody2D = child as StaticBody2D
 		var points: PackedVector2Array = PackedVector2Array()
