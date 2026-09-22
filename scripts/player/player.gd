@@ -81,7 +81,10 @@ func _physics_process(delta: float) -> void:
 	if thrusting:
 		_apply_thrust(thrust_input, delta)
 	elif not walking:
-		velocity = velocity.move_toward(Vector2.ZERO, config.coasting_drag * delta)
+		# Apoyado y sin propulsar se frena con ground_friction (más fuerte que el aire),
+		# para no deslizarse con los pies en el piso; en el aire se usa coasting_drag.
+		var stop_drag: float = config.ground_friction if on_floor else config.coasting_drag
+		velocity = velocity.move_toward(Vector2.ZERO, stop_drag * delta)
 	_apply_gravity(delta)
 	if not locked:
 		_try_jump()

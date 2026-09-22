@@ -2,68 +2,59 @@
 
 [ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
 [ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
+[ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
 
 [node name="Segment01" type="Node2D"]
 script = ExtResource("seg")
 height = 640
 
-[node name="Platform1" type="StaticBody2D" parent="."]
-collision_layer = 1
-collision_mask = 0
+[node name="Start" parent="." instance=ExtResource("plat")]
+position = Vector2(100, -34)
+size = Vector2(120, 12)
+platform_type = 0
 
-[node name="Polygon2D" type="Polygon2D" parent="Platform1"]
-color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(40, -40, 160, -40, 160, -28, 40, -28)
+[node name="Branch1Near" parent="." instance=ExtResource("plat")]
+position = Vector2(100, -146)
+size = Vector2(80, 12)
+platform_type = 1
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform1"]
-polygon = PackedVector2Array(40, -40, 160, -40, 160, -28, 40, -28)
+[node name="Branch1Far" parent="." instance=ExtResource("plat")]
+position = Vector2(260, -146)
+size = Vector2(80, 12)
+platform_type = 2
 
-[node name="Platform2" type="StaticBody2D" parent="."]
-collision_layer = 1
-collision_mask = 0
+[node name="Converge1" parent="." instance=ExtResource("plat")]
+position = Vector2(190, -258)
+size = Vector2(80, 12)
+platform_type = 0
 
-[node name="Polygon2D" type="Polygon2D" parent="Platform2"]
-color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(200, -190, 320, -190, 320, -178, 200, -178)
+[node name="BonusLedge" parent="." instance=ExtResource("plat")]
+position = Vector2(50, -244)
+size = Vector2(60, 12)
+platform_type = 3
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform2"]
-polygon = PackedVector2Array(200, -190, 320, -190, 320, -178, 200, -178)
+[node name="Branch2Left" parent="." instance=ExtResource("plat")]
+position = Vector2(90, -370)
+size = Vector2(80, 12)
+platform_type = 3
 
-[node name="Platform3" type="StaticBody2D" parent="."]
-collision_layer = 1
-collision_mask = 0
+[node name="Branch2Right" parent="." instance=ExtResource("plat")]
+position = Vector2(290, -370)
+size = Vector2(80, 12)
+platform_type = 5
 
-[node name="Polygon2D" type="Polygon2D" parent="Platform3"]
-color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(50, -340, 170, -340, 170, -328, 50, -328)
+[node name="Converge2" parent="." instance=ExtResource("plat")]
+position = Vector2(190, -482)
+size = Vector2(80, 12)
+platform_type = 0
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform3"]
-polygon = PackedVector2Array(50, -340, 170, -340, 170, -328, 50, -328)
+[node name="End" parent="." instance=ExtResource("plat")]
+position = Vector2(160, -594)
+size = Vector2(120, 12)
+platform_type = 0
 
-[node name="Platform4" type="StaticBody2D" parent="."]
-collision_layer = 1
-collision_mask = 0
+[node name="FuelTankBonus" parent="." instance=ExtResource("tank")]
+position = Vector2(50, -262)
 
-[node name="Polygon2D" type="Polygon2D" parent="Platform4"]
-color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(190, -490, 310, -490, 310, -478, 190, -478)
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform4"]
-polygon = PackedVector2Array(190, -490, 310, -490, 310, -478, 190, -478)
-
-[node name="Platform5" type="StaticBody2D" parent="."]
-collision_layer = 1
-collision_mask = 0
-
-[node name="Polygon2D" type="Polygon2D" parent="Platform5"]
-color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(60, -600, 180, -600, 180, -588, 60, -588)
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform5"]
-polygon = PackedVector2Array(60, -600, 180, -600, 180, -588, 60, -588)
-
-[node name="FuelTank1" parent="." instance=ExtResource("tank")]
-position = Vector2(110, -358)
-
-[node name="FuelTank2" parent="." instance=ExtResource("tank")]
-position = Vector2(250, -508)
+[node name="FuelTankMain" parent="." instance=ExtResource("tank")]
+position = Vector2(190, -508)

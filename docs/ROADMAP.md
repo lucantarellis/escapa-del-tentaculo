@@ -1,7 +1,7 @@
 # Roadmap — Escapa del Tentáculo
 
 **Última actualización:** 2026-09-21
-**Estado global:** v0 publicada. Mecánicas base (pasos 0 a 3) mergeadas a `main` (brief 01, PR #1). Obstáculos y tanques (pasos 4 y 4b) mergeados a `main` (brief 02, PR #2). Puerta, game manager y niveles por segmentos (pasos 5, 6 y 7) mergeados a `main` (brief 03, PR #3). Pantalla de título (paso 8) y HUD mínimo (paso 8b) hechos, probados por LT y mergeados a `main` (brief 04, PR #4). Intro de la escotilla (pasos 8d y 8e, brief 05, rama `feature/intro-escotilla`) hecha y probada por LT, pendiente de PR y merge. Siguiente: balance del MVP, arte y audio (paso 9). Los controles táctiles (paso 8c) quedan para el final, después del arte y el balance.
+**Estado global:** v0 publicada. En curso: balance del MVP por rondas de tuning (brief 06, rama `feature/tuning-mvp`; ver `docs/TUNING_LOG.md`). Mecánicas base (pasos 0 a 3) mergeadas a `main` (brief 01, PR #1). Obstáculos y tanques (pasos 4 y 4b) mergeados a `main` (brief 02, PR #2). Puerta, game manager y niveles por segmentos (pasos 5, 6 y 7) mergeados a `main` (brief 03, PR #3). Pantalla de título (paso 8) y HUD mínimo (paso 8b) hechos, probados por LT y mergeados a `main` (brief 04, PR #4). Intro de la escotilla (pasos 8d y 8e, brief 05, rama `feature/intro-escotilla`) hecha y probada por LT, pendiente de PR y merge. Siguiente: balance del MVP, arte y audio (paso 9). Los controles táctiles (paso 8c) quedan para el final, después del arte y el balance.
 **Cómo usar este documento:** es la fuente de verdad del plan. Cada brief para Cowork se genera desde `docs/briefs/BRIEF_TEMPLATE.md` y, al cerrarse, actualiza la tabla de estado (sección 4) y el registro de decisiones (sección 2).
 
 ---
@@ -56,6 +56,8 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | Tentáculo al final del nivel | Cuando la cámara se detiene en el final del nivel, el tentáculo sigue subiendo (`end_rise_speed`) hasta cubrir la pantalla: no hay refugio esperando. Se congela al ganar o perder | LT (QA del paso 7) |
 | Tanques por segmento | Los segmentos tienen dos tanques cada uno (más uno en inicio y final): con uno solo un nivel de 8 segmentos no se puede completar con los valores de prueba. Se rebalancea con el MVP | Propuesta de Claude (brief 03, paso 7) |
 | Tanques | `fuel_amount` 40 u (con `max_fuel` 100), un solo uso por defecto (`respawn_time` 0). El sobrante sobre `max_fuel` se pierde. Un tanque medido en simulación rinde ~489 px de subida vertical y un salto sin combustible ~61 px (referencias para el diseño de niveles, ver `docs/mecanicas/tanques.md`) | Propuesta de Claude (brief 02, paso 4b), probado por LT |
+| Balance del MVP por rondas | El tuning se hace en rondas iterativas (Claude propone y da un checklist, LT juega y responde OK/KO, Claude simula y ajusta), sin avanzar sin el "seguí" de LT. Cada cambio se registra en `docs/TUNING_LOG.md`. Las simulaciones informan; el "se siente bien" es de LT | LT (brief 06) |
+| Objetivos de diseño del balance | Partida completa de ~3 min para un jugador competente; ~25–30 % de victoria; todas las muertes por error propio o desconocimiento (que enseñen para la próxima run); prioridades: tensión, exigencia y exploración/descubrimiento | LT (brief 06, Paso 0) |
 
 ## 3. Principios de ingeniería
 
@@ -85,6 +87,7 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | 8b | HUD mínimo (combustible y progreso) | Hecho | brief-04 |
 | 8d | Intro de la escotilla: escotilla, tres golpes de cámara y gas | Hecho | brief-05 |
 | 8e | Intro de la escotilla: ruptura, lanzamiento del jugador y entrada del tentáculo | Hecho | brief-05 |
+| 8f | Balance del MVP (rondas de tuning) | En curso | brief-06 |
 | 8c | Controles táctiles | Pendiente (al final, tras arte y balance) | — |
 | 9 | Arte final, audio y pulido | Pendiente | — |
 

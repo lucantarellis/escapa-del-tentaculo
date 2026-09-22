@@ -9,12 +9,22 @@
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment04.tscn" id="7_seg"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment05.tscn" id="8_seg"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment06.tscn" id="9_seg"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment07.tscn" id="10_seg"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment08.tscn" id="11_seg"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment09.tscn" id="12_seg"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment10.tscn" id="13_seg"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment11.tscn" id="14_seg"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment12.tscn" id="15_seg"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment13.tscn" id="16_seg"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment14.tscn" id="17_seg"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment15.tscn" id="18_seg"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment16.tscn" id="19_seg"]
 
 [resource]
 script = ExtResource("1_cfg")
 segment_count = 6
 seed = 0
-avoid_repeat_window = 1
+avoid_repeat_window = 3
 start_segment = ExtResource("2_start")
 end_segment = ExtResource("3_end")
-segment_pool = Array[PackedScene]([ExtResource("4_seg"), ExtResource("5_seg"), ExtResource("6_seg"), ExtResource("7_seg"), ExtResource("8_seg"), ExtResource("9_seg")])
+segment_pool = Array[PackedScene]([ExtResource("4_seg"), ExtResource("5_seg"), ExtResource("6_seg"), ExtResource("7_seg"), ExtResource("8_seg"), ExtResource("9_seg"), ExtResource("10_seg"), ExtResource("11_seg"), ExtResource("12_seg"), ExtResource("13_seg"), ExtResource("14_seg"), ExtResource("15_seg"), ExtResource("16_seg"), ExtResource("17_seg"), ExtResource("18_seg"), ExtResource("19_seg")])

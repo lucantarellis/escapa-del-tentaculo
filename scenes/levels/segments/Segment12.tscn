@@ -4,37 +4,31 @@
 [ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
 [ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
 
-[node name="Segment06" type="Node2D"]
+[node name="Segment12" type="Node2D"]
 script = ExtResource("seg")
-height = 360
+height = 300
 
 [node name="Start" parent="." instance=ExtResource("plat")]
-position = Vector2(120, -28)
-size = Vector2(160, 12)
+position = Vector2(160, -28)
+size = Vector2(140, 12)
 platform_type = 0
 
-[node name="Pulse" parent="." instance=ExtResource("plat")]
-position = Vector2(140, -140)
+[node name="MovingOneWay" parent="." instance=ExtResource("plat")]
+position = Vector2(90, -135)
 size = Vector2(80, 12)
-platform_type = 5
+platform_type = 1
+moves = true
+travel = Vector2(180, 0)
 
 [node name="Guard" parent="." instance=ExtResource("plat")]
-position = Vector2(260, -150)
-size = Vector2(14, 50)
+position = Vector2(335, -135)
+size = Vector2(16, 55)
 platform_type = 4
 
-[node name="Crumble" parent="." instance=ExtResource("plat")]
-position = Vector2(160, -250)
-size = Vector2(90, 12)
-platform_type = 2
-
 [node name="End" parent="." instance=ExtResource("plat")]
-position = Vector2(180, -338)
-size = Vector2(130, 12)
+position = Vector2(180, -238)
+size = Vector2(140, 12)
 platform_type = 0
 
 [node name="FuelTank1" parent="." instance=ExtResource("tank")]
-position = Vector2(140, -158)
-
-[node name="FuelTank2" parent="." instance=ExtResource("tank")]
-position = Vector2(160, -270)
+position = Vector2(90, -153)

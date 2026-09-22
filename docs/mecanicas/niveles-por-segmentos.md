@@ -39,19 +39,29 @@ y=0   O-----------------------+   <- origen (0, 0) = esquina INFERIOR izquierda
 1. **Apoyos en las uniones:** una plataforma en los primeros ≈ 120 px (y > −120) y otra en los últimos ≈ 120 px (y < −520), para que el jugador siempre tenga dónde apoyarse al pasar de un segmento a otro.
 2. **Nada peligroso en las uniones:** ningún obstáculo ni trampa a menos de ≈ 60 px del borde superior o inferior, así nunca se superponen con los del segmento vecino. Los actuales quedan a 150 px o más.
 3. **Al menos un tanque alcanzable.** Los segmentos actuales tienen dos (uno "cómodo" y otro más arriesgado): un nivel de 8 segmentos necesita ≈ 4500 px de subida y un tanque de 40 u rinde ≈ 489 px, así que con un solo tanque por segmento el nivel no se puede completar.
-4. Usar las escenas existentes (`Obstacle`, `MovingObstacle`, `PulseTrap`, `FuelTank`) con configs por instancia.
-5. Referencias de alcance (ver `tanques.md`): un salto sin combustible llega a ≈ 61 px; un tanque de 40 u rinde ≈ 489 px en vertical. Las plataformas actuales están separadas ≈ 150–160 px.
+4. Usar las escenas existentes (`Platform` en sus distintas tipologías — ver `plataformas.md` —, `FuelTank`) con configs por instancia.
+5. **Referencias de alcance del salto (brief 06, ronda 2).** Con la gravedad única (250) y `jump_velocity` 260, el ápice del salto es ≈ 133 px y el alcance horizontal depende de cuánto se sube: +90 px de subida deja ≈ 53 px de desvío horizontal disponible, +100 px ≈ 60 px, +110 px ≈ 68 px, +120 px ≈ 76 px, +130 px ≈ 87 px (cerca del ápice). Para que un segmento sea cruzable saltando (sin combustible) conviene un margen del orden del 10-15 % bajo esos máximos: por ejemplo, Δy = 112 px con Δx = 60 px (usado en el piloto de `Segment01`). Un tanque de 40 u sigue rindiendo ≈ 489 px en vertical (ver `tanques.md`).
 
 ## Los segmentos del pool
 
 | Escena | Idea |
 |---|---|
-| `Segment01` | Plataformas escalonadas alternando izquierda/derecha; un tanque a mitad y otro cerca del techo |
-| `Segment02` | Pasillo estrechado por dos bloques estáticos, con un tanque adentro; arriba, un obstáculo móvil horizontal |
-| `Segment03` | Dos trampas intermitentes anchas con distinto desfase (`initial_offset`); tanques en plataformas |
-| `Segment04` | Tanque en una repisa elevada 45 px que solo se alcanza saltando desde la plataforma vecina (sin combustible) |
-| `Segment05` | Dos móviles horizontales que se cruzan en sentidos opuestos, con tanques en plataformas |
-| `Segment06` | Tanque pegado a una trampa vertical; bloque estático sobre una plataforma alta |
+| `Segment01` | Rediseño ronda 2: dos ramas con `ONE_WAY`/`BREAKABLE`, convergencia, `TIMED`/`PULSE` arriba |
+| `Segment02` | Atajo `BREAKABLE` vs. compuerta `PULSE` con `LETHAL` fijo al lado; ferry (`STATIC moves=true`) con tanque encima |
+| `Segment03` | `BREAKABLE` vs. `ONE_WAY` en paralelo; `TIMED` + `LETHAL` fijo (`Guard`) arriba |
+| `Segment04` | `ONE_WAY` vs. ferry (`STATIC moves=true`); `PULSE` arriba |
+| `Segment05` | `LETHAL` móvil horizontal (`Sweeper`) entre dos estáticas; `TIMED` arriba |
+| `Segment06` | `PULSE` + `LETHAL` fijo (`Guard`); `BREAKABLE` arriba |
+| `Segment07` | Escalera de `ONE_WAY` con un `LETHAL` fijo (`Guard`) al costado para esquivar de paso |
+| `Segment08` | Cascada de `BREAKABLE` en paralelo a una ruta `TIMED` segura; convergen antes del final |
+| `Segment09` | Corredor con dos `PULSE` en el mismo reloj: cruzar el primero, esperar, cruzar el segundo |
+| `Segment10` | Dos `LETHAL` móviles (`Sweeper`) cruzándose en sentidos opuestos, con un `ONE_WAY` de bypass |
+| `Segment11` | Ferry (`STATIC moves=true`) que desemboca en una `BREAKABLE`, alternativa por una `TIMED` |
+| `Segment12` | `ONE_WAY` móvil (`moves=true`) junto a un `LETHAL` fijo |
+| `Segment13` | Escalada ajustada `TIMED`/`PULSE` con una `BREAKABLE` de bonus a un lado (tanque extra) |
+| `Segment14` | Tres caminos en paralelo (`ONE_WAY`, esquivar un `LETHAL` fijo, `BREAKABLE`) que convergen |
+| `Segment15` | `LETHAL` móvil con recorrido **vertical** (`travel` en Y) en vez del habitual horizontal |
+| `Segment16` | Compuerta `PULSE`, puente `ONE_WAY` móvil, `LETHAL` fijo y una `BREAKABLE` de bonus |
 
 `SegmentStart` (tres tanques, por su altura) y `SegmentEnd` (uno).
 
@@ -61,9 +71,9 @@ y=0   O-----------------------+   <- origen (0, 0) = esquina INFERIOR izquierda
 |---|---|---|---|---|
 | Nivel | `segment_count` | 6 | — | Cantidad de segmentos intermedios por partida |
 | Nivel | `seed` | 0 | — | 0 = aleatoria en cada partida; distinto de 0 = fija (reproduce un nivel) |
-| Nivel | `avoid_repeat_window` | 1 | — | Un segmento no se repite dentro de los últimos N elegidos |
+| Nivel | `avoid_repeat_window` | 3 | — | Un segmento no se repite dentro de los últimos N elegidos |
 | Segmentos | `start_segment` / `end_segment` | `SegmentStart` / `SegmentEnd` | — | Escenas fijas de inicio y final |
-| Segmentos | `segment_pool` | los 6 intermedios | — | Escenas candidatas (`Array[PackedScene]`) |
+| Segmentos | `segment_pool` | los 16 intermedios (`Segment01`–`Segment16`) | — | Escenas candidatas (`Array[PackedScene]`) |
 
 Los valores son de prueba: el balance se hace con el MVP completo.
 

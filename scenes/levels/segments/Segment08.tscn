@@ -1,0 +1,45 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
+[ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
+
+[node name="Segment08" type="Node2D"]
+script = ExtResource("seg")
+height = 320
+
+[node name="Start" parent="." instance=ExtResource("plat")]
+position = Vector2(160, -28)
+size = Vector2(140, 12)
+platform_type = 0
+
+[node name="Crumble1" parent="." instance=ExtResource("plat")]
+position = Vector2(90, -128)
+size = Vector2(70, 12)
+platform_type = 2
+
+[node name="Safe1" parent="." instance=ExtResource("plat")]
+position = Vector2(230, -128)
+size = Vector2(80, 12)
+platform_type = 3
+
+[node name="Crumble2" parent="." instance=ExtResource("plat")]
+position = Vector2(80, -228)
+size = Vector2(70, 12)
+platform_type = 2
+
+[node name="Converge" parent="." instance=ExtResource("plat")]
+position = Vector2(200, -232)
+size = Vector2(100, 12)
+platform_type = 0
+
+[node name="End" parent="." instance=ExtResource("plat")]
+position = Vector2(180, -292)
+size = Vector2(140, 12)
+platform_type = 0
+
+[node name="FuelTank1" parent="." instance=ExtResource("tank")]
+position = Vector2(230, -146)
+
+[node name="FuelTank2" parent="." instance=ExtResource("tank")]
+position = Vector2(200, -250)

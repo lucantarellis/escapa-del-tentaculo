@@ -1,69 +1,42 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
-[ext_resource type="PackedScene" path="res://scenes/obstacles/PulseTrap.tscn" id="trap"]
 [ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
-[ext_resource type="Resource" path="res://resources/configs/pulse_trap_offset_config.tres" id="trapcfg_off"]
+[ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
 
 [node name="Segment03" type="Node2D"]
 script = ExtResource("seg")
-height = 640
+height = 360
 
-[node name="Platform1" type="StaticBody2D" parent="."]
-collision_layer = 1
-collision_mask = 0
+[node name="Start" parent="." instance=ExtResource("plat")]
+position = Vector2(100, -28)
+size = Vector2(140, 12)
+platform_type = 0
 
-[node name="Polygon2D" type="Polygon2D" parent="Platform1"]
-color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(60, -30, 300, -30, 300, -18, 60, -18)
+[node name="Crumble" parent="." instance=ExtResource("plat")]
+position = Vector2(80, -130)
+size = Vector2(60, 12)
+platform_type = 2
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform1"]
-polygon = PackedVector2Array(60, -30, 300, -30, 300, -18, 60, -18)
+[node name="Safe" parent="." instance=ExtResource("plat")]
+position = Vector2(240, -140)
+size = Vector2(70, 12)
+platform_type = 1
 
-[node name="Platform2" type="StaticBody2D" parent="."]
-collision_layer = 1
-collision_mask = 0
+[node name="Blink" parent="." instance=ExtResource("plat")]
+position = Vector2(160, -240)
+size = Vector2(80, 12)
+platform_type = 3
 
-[node name="Polygon2D" type="Polygon2D" parent="Platform2"]
-color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(190, -150, 330, -150, 330, -138, 190, -138)
+[node name="Guard" parent="." instance=ExtResource("plat")]
+position = Vector2(280, -248)
+size = Vector2(18, 50)
+platform_type = 4
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform2"]
-polygon = PackedVector2Array(190, -150, 330, -150, 330, -138, 190, -138)
-
-[node name="PulseTrap1" parent="." instance=ExtResource("trap")]
-position = Vector2(100, -240)
-size = Vector2(160, 18)
-
-[node name="PulseTrap2" parent="." instance=ExtResource("trap")]
-position = Vector2(260, -340)
-size = Vector2(160, 18)
-config = ExtResource("trapcfg_off")
-
-[node name="Platform3" type="StaticBody2D" parent="."]
-collision_layer = 1
-collision_mask = 0
-
-[node name="Polygon2D" type="Polygon2D" parent="Platform3"]
-color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(140, -440, 220, -440, 220, -428, 140, -428)
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform3"]
-polygon = PackedVector2Array(140, -440, 220, -440, 220, -428, 140, -428)
+[node name="End" parent="." instance=ExtResource("plat")]
+position = Vector2(180, -338)
+size = Vector2(130, 12)
+platform_type = 0
 
 [node name="FuelTank1" parent="." instance=ExtResource("tank")]
-position = Vector2(180, -458)
-
-[node name="FuelTank2" parent="." instance=ExtResource("tank")]
-position = Vector2(260, -168)
-
-[node name="Platform4" type="StaticBody2D" parent="."]
-collision_layer = 1
-collision_mask = 0
-
-[node name="Polygon2D" type="Polygon2D" parent="Platform4"]
-color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(100, -590, 260, -590, 260, -578, 100, -578)
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform4"]
-polygon = PackedVector2Array(100, -590, 260, -590, 260, -578, 100, -578)
+position = Vector2(160, -258)

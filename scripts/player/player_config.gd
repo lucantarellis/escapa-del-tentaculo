@@ -24,6 +24,10 @@ extends Resource
 @export var walk_acceleration: float = 600.0
 ## Velocidad máxima al caminar. Unidad: px/s.
 @export var walk_max_speed: float = 100.0
+## Frenado horizontal al soltar la entrada estando apoyado y sin propulsar (brief 06,
+## ronda 1: antes se usaba `coasting_drag`, pensado para el aire, y el jugador se
+## deslizaba de más con los pies en el piso). Unidad: px/s².
+@export var ground_friction: float = 400.0
 
 @export_group("Gravedad")
 ## Gravedad mientras hay combustible (casi nula). Unidad: px/s².

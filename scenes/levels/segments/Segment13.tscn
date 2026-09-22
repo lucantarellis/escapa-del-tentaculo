@@ -1,0 +1,45 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
+[ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
+
+[node name="Segment13" type="Node2D"]
+script = ExtResource("seg")
+height = 340
+
+[node name="Start" parent="." instance=ExtResource("plat")]
+position = Vector2(160, -28)
+size = Vector2(140, 12)
+platform_type = 0
+
+[node name="Timed1" parent="." instance=ExtResource("plat")]
+position = Vector2(110, -128)
+size = Vector2(80, 12)
+platform_type = 3
+
+[node name="Pulse1" parent="." instance=ExtResource("plat")]
+position = Vector2(230, -228)
+size = Vector2(80, 12)
+platform_type = 5
+
+[node name="BonusCrumble" parent="." instance=ExtResource("plat")]
+position = Vector2(320, -228)
+size = Vector2(50, 12)
+platform_type = 2
+
+[node name="Timed2" parent="." instance=ExtResource("plat")]
+position = Vector2(150, -322)
+size = Vector2(80, 12)
+platform_type = 3
+
+[node name="End" parent="." instance=ExtResource("plat")]
+position = Vector2(180, -334)
+size = Vector2(140, 12)
+platform_type = 0
+
+[node name="FuelTank1" parent="." instance=ExtResource("tank")]
+position = Vector2(110, -146)
+
+[node name="FuelTankBonus" parent="." instance=ExtResource("tank")]
+position = Vector2(320, -246)
