@@ -61,6 +61,8 @@ const STEP_SENSOR_HEIGHT: float = 6.0
 @onready var _collision: CollisionShape2D = $CollisionShape2D
 @onready var _step_sensor: Area2D = $StepSensor
 @onready var _step_shape: CollisionShape2D = $StepSensor/CollisionShape2D
+@onready var _footprint_sensor: Area2D = $FootprintSensor
+@onready var _footprint_shape: CollisionShape2D = $FootprintSensor/CollisionShape2D
 
 var _breaking: bool = false
 var _broken: bool = false
@@ -133,6 +135,9 @@ func _update_shape() -> void:
 		_step_shape.shape = RectangleShape2D.new()
 	(_step_shape.shape as RectangleShape2D).size = Vector2(size.x, STEP_SENSOR_HEIGHT)
 	_step_sensor.position = Vector2(0.0, -half.y - STEP_SENSOR_HEIGHT * 0.5)
+	if not _footprint_shape.shape is RectangleShape2D:
+		_footprint_shape.shape = RectangleShape2D.new()
+	(_footprint_shape.shape as RectangleShape2D).size = size
 
 
 # Aplica lo que depende del tipo: color, colisión de un sentido, y estado sólido inicial.
@@ -146,6 +151,7 @@ func _apply_type() -> void:
 	if Engine.is_editor_hint():
 		return
 	_step_sensor.set_deferred("monitoring", platform_type == PlatformType.BREAKABLE)
+	_footprint_sensor.set_deferred("monitoring", platform_type == PlatformType.TIMED)
 	_breaking = false
 	_break_timer = 0.0
 	if platform_type == PlatformType.TIMED:
@@ -179,11 +185,26 @@ func _process_timed(delta: float) -> void:
 	if duration <= 0.0:
 		return
 	if _timed_elapsed >= duration:
+		# No volver a aparecer empujando al jugador: si está en medio, esperar a que se vaya
+		# (no se pierde tiempo de más: se retoma apenas se libera).
+		if not _timed_on and _is_footprint_occupied():
+			_timed_elapsed = duration
+			return
 		_timed_elapsed -= duration
 		_timed_on = not _timed_on
 		_apply_solid(_timed_on)
 		if _timed_on:
 			restored.emit()
+
+
+# true si hay un Player vivo dentro del rectángulo completo de la plataforma. Se usa antes
+# de volverse sólida (TIMED) para no reaparecer empujando al jugador.
+func _is_footprint_occupied() -> bool:
+	for body: Node2D in _footprint_sensor.get_overlapping_bodies():
+		var player: Player = body as Player
+		if player != null and player.is_alive():
+			return true
+	return false
 
 
 # Activa o desactiva la colisión y la visual. Diferido: seguro dentro de callbacks de física.
