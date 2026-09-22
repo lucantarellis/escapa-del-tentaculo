@@ -41,7 +41,7 @@ platform_type = 3
 [node name="Branch2Right" parent="." instance=ExtResource("plat")]
 position = Vector2(290, -370)
 size = Vector2(80, 12)
-platform_type = 1
+platform_type = 5
 
 [node name="Converge2" parent="." instance=ExtResource("plat")]
 position = Vector2(190, -482)
