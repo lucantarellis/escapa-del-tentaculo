@@ -7,82 +7,107 @@
 script = ExtResource("seg")
 height = 640
 
-[node name="Platform1" type="StaticBody2D" parent="."]
+[node name="Start" type="StaticBody2D" parent="."]
 collision_layer = 1
 collision_mask = 0
 
-[node name="Polygon2D" type="Polygon2D" parent="Platform1"]
+[node name="Polygon2D" type="Polygon2D" parent="Start"]
 color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(80, -40, 120, -40, 120, -28, 80, -28)
+polygon = PackedVector2Array(40, -40, 160, -40, 160, -28, 40, -28)
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform1"]
-polygon = PackedVector2Array(80, -40, 120, -40, 120, -28, 80, -28)
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Start"]
+polygon = PackedVector2Array(40, -40, 160, -40, 160, -28, 40, -28)
 
-[node name="Platform2" type="StaticBody2D" parent="."]
+[node name="Branch1Near" type="StaticBody2D" parent="."]
 collision_layer = 1
 collision_mask = 0
 
-[node name="Polygon2D" type="Polygon2D" parent="Platform2"]
+[node name="Polygon2D" type="Polygon2D" parent="Branch1Near"]
 color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(125, -134, 165, -134, 165, -122, 125, -122)
+polygon = PackedVector2Array(60, -152, 140, -152, 140, -140, 60, -140)
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform2"]
-polygon = PackedVector2Array(125, -134, 165, -134, 165, -122, 125, -122)
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Branch1Near"]
+polygon = PackedVector2Array(60, -152, 140, -152, 140, -140, 60, -140)
 
-[node name="Platform3" type="StaticBody2D" parent="."]
+[node name="Branch1Far" type="StaticBody2D" parent="."]
 collision_layer = 1
 collision_mask = 0
 
-[node name="Polygon2D" type="Polygon2D" parent="Platform3"]
+[node name="Polygon2D" type="Polygon2D" parent="Branch1Far"]
 color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(80, -228, 120, -228, 120, -216, 80, -216)
+polygon = PackedVector2Array(220, -152, 300, -152, 300, -140, 220, -140)
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform3"]
-polygon = PackedVector2Array(80, -228, 120, -228, 120, -216, 80, -216)
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Branch1Far"]
+polygon = PackedVector2Array(220, -152, 300, -152, 300, -140, 220, -140)
 
-[node name="Platform4" type="StaticBody2D" parent="."]
+[node name="Converge1" type="StaticBody2D" parent="."]
 collision_layer = 1
 collision_mask = 0
 
-[node name="Polygon2D" type="Polygon2D" parent="Platform4"]
+[node name="Polygon2D" type="Polygon2D" parent="Converge1"]
 color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(125, -322, 165, -322, 165, -310, 125, -310)
+polygon = PackedVector2Array(150, -264, 230, -264, 230, -252, 150, -252)
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform4"]
-polygon = PackedVector2Array(125, -322, 165, -322, 165, -310, 125, -310)
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Converge1"]
+polygon = PackedVector2Array(150, -264, 230, -264, 230, -252, 150, -252)
 
-[node name="Platform5" type="StaticBody2D" parent="."]
+[node name="BonusLedge" type="StaticBody2D" parent="."]
 collision_layer = 1
 collision_mask = 0
 
-[node name="Polygon2D" type="Polygon2D" parent="Platform5"]
+[node name="Polygon2D" type="Polygon2D" parent="BonusLedge"]
 color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(80, -416, 120, -416, 120, -404, 80, -404)
+polygon = PackedVector2Array(20, -250, 80, -250, 80, -238, 20, -238)
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform5"]
-polygon = PackedVector2Array(80, -416, 120, -416, 120, -404, 80, -404)
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="BonusLedge"]
+polygon = PackedVector2Array(20, -250, 80, -250, 80, -238, 20, -238)
 
-[node name="Platform6" type="StaticBody2D" parent="."]
+[node name="Branch2Left" type="StaticBody2D" parent="."]
 collision_layer = 1
 collision_mask = 0
 
-[node name="Polygon2D" type="Polygon2D" parent="Platform6"]
+[node name="Polygon2D" type="Polygon2D" parent="Branch2Left"]
 color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(125, -510, 165, -510, 165, -498, 125, -498)
+polygon = PackedVector2Array(50, -376, 130, -376, 130, -364, 50, -364)
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform6"]
-polygon = PackedVector2Array(125, -510, 165, -510, 165, -498, 125, -498)
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Branch2Left"]
+polygon = PackedVector2Array(50, -376, 130, -376, 130, -364, 50, -364)
 
-[node name="Platform7" type="StaticBody2D" parent="."]
+[node name="Branch2Right" type="StaticBody2D" parent="."]
 collision_layer = 1
 collision_mask = 0
 
-[node name="Polygon2D" type="Polygon2D" parent="Platform7"]
+[node name="Polygon2D" type="Polygon2D" parent="Branch2Right"]
 color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(80, -604, 120, -604, 120, -592, 80, -592)
+polygon = PackedVector2Array(250, -376, 330, -376, 330, -364, 250, -364)
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform7"]
-polygon = PackedVector2Array(80, -604, 120, -604, 120, -592, 80, -592)
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Branch2Right"]
+polygon = PackedVector2Array(250, -376, 330, -376, 330, -364, 250, -364)
 
-[node name="FuelTank1" parent="." instance=ExtResource("tank")]
-position = Vector2(145, -342)
+[node name="Converge2" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="Converge2"]
+color = Color(0.2275, 0.6078, 0.749, 1)
+polygon = PackedVector2Array(150, -488, 230, -488, 230, -476, 150, -476)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Converge2"]
+polygon = PackedVector2Array(150, -488, 230, -488, 230, -476, 150, -476)
+
+[node name="End" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="End"]
+color = Color(0.2275, 0.6078, 0.749, 1)
+polygon = PackedVector2Array(100, -600, 220, -600, 220, -588, 100, -588)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="End"]
+polygon = PackedVector2Array(100, -600, 220, -600, 220, -588, 100, -588)
+
+[node name="FuelTankBonus" parent="." instance=ExtResource("tank")]
+position = Vector2(50, -262)
+
+[node name="FuelTankMain" parent="." instance=ExtResource("tank")]
+position = Vector2(190, -508)
