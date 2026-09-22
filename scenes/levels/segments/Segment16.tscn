@@ -1,0 +1,47 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
+[ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
+
+[node name="Segment16" type="Node2D"]
+script = ExtResource("seg")
+height = 340
+
+[node name="Start" parent="." instance=ExtResource("plat")]
+position = Vector2(160, -28)
+size = Vector2(140, 12)
+platform_type = 0
+
+[node name="Gate" parent="." instance=ExtResource("plat")]
+position = Vector2(140, -128)
+size = Vector2(80, 12)
+platform_type = 5
+
+[node name="Bridge" parent="." instance=ExtResource("plat")]
+position = Vector2(90, -228)
+size = Vector2(90, 12)
+platform_type = 1
+moves = true
+travel = Vector2(160, 0)
+
+[node name="Guard" parent="." instance=ExtResource("plat")]
+position = Vector2(300, -228)
+size = Vector2(16, 55)
+platform_type = 4
+
+[node name="BonusCrumble" parent="." instance=ExtResource("plat")]
+position = Vector2(320, -140)
+size = Vector2(50, 12)
+platform_type = 2
+
+[node name="End" parent="." instance=ExtResource("plat")]
+position = Vector2(180, -312)
+size = Vector2(140, 12)
+platform_type = 0
+
+[node name="FuelTank1" parent="." instance=ExtResource("tank")]
+position = Vector2(140, -146)
+
+[node name="FuelTankBonus" parent="." instance=ExtResource("tank")]
+position = Vector2(320, -158)

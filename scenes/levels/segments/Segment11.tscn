@@ -1,0 +1,39 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
+[ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
+
+[node name="Segment11" type="Node2D"]
+script = ExtResource("seg")
+height = 320
+
+[node name="Start" parent="." instance=ExtResource("plat")]
+position = Vector2(100, -28)
+size = Vector2(120, 12)
+platform_type = 0
+
+[node name="Ferry" parent="." instance=ExtResource("plat")]
+position = Vector2(100, -133)
+size = Vector2(70, 12)
+platform_type = 0
+moves = true
+travel = Vector2(160, 0)
+
+[node name="LandingCrumble" parent="." instance=ExtResource("plat")]
+position = Vector2(280, -133)
+size = Vector2(70, 12)
+platform_type = 2
+
+[node name="SafeTimed" parent="." instance=ExtResource("plat")]
+position = Vector2(180, -233)
+size = Vector2(80, 12)
+platform_type = 3
+
+[node name="End" parent="." instance=ExtResource("plat")]
+position = Vector2(180, -292)
+size = Vector2(140, 12)
+platform_type = 0
+
+[node name="FuelTank1" parent="." instance=ExtResource("tank")]
+position = Vector2(280, -151)

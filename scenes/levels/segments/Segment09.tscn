@@ -1,0 +1,37 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
+[ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
+
+[node name="Segment09" type="Node2D"]
+script = ExtResource("seg")
+height = 300
+
+[node name="Start" parent="." instance=ExtResource("plat")]
+position = Vector2(160, -28)
+size = Vector2(140, 12)
+platform_type = 0
+
+[node name="Pulse1" parent="." instance=ExtResource("plat")]
+position = Vector2(110, -130)
+size = Vector2(80, 12)
+platform_type = 5
+
+[node name="Rest" parent="." instance=ExtResource("plat")]
+position = Vector2(220, -130)
+size = Vector2(60, 12)
+platform_type = 0
+
+[node name="Pulse2" parent="." instance=ExtResource("plat")]
+position = Vector2(150, -232)
+size = Vector2(80, 12)
+platform_type = 5
+
+[node name="End" parent="." instance=ExtResource("plat")]
+position = Vector2(180, -266)
+size = Vector2(140, 12)
+platform_type = 0
+
+[node name="FuelTank1" parent="." instance=ExtResource("tank")]
+position = Vector2(220, -148)

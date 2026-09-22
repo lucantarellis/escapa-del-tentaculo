@@ -1,0 +1,34 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
+[ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
+
+[node name="Segment12" type="Node2D"]
+script = ExtResource("seg")
+height = 300
+
+[node name="Start" parent="." instance=ExtResource("plat")]
+position = Vector2(160, -28)
+size = Vector2(140, 12)
+platform_type = 0
+
+[node name="MovingOneWay" parent="." instance=ExtResource("plat")]
+position = Vector2(90, -135)
+size = Vector2(80, 12)
+platform_type = 1
+moves = true
+travel = Vector2(180, 0)
+
+[node name="Guard" parent="." instance=ExtResource("plat")]
+position = Vector2(300, -135)
+size = Vector2(16, 55)
+platform_type = 4
+
+[node name="End" parent="." instance=ExtResource("plat")]
+position = Vector2(180, -238)
+size = Vector2(140, 12)
+platform_type = 0
+
+[node name="FuelTank1" parent="." instance=ExtResource("tank")]
+position = Vector2(90, -153)
