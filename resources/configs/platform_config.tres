@@ -10,6 +10,7 @@ timed_on_duration = 2.0
 timed_off_duration = 1.0
 timed_start_on = true
 one_way_margin = 5.0
+lethal_margin = 2.0
 moving_speed = 60.0
 moving_pause_at_ends = 0.5
 moving_ease_at_ends = true
