@@ -12,7 +12,7 @@ Un astronauta que se mueve con un jetpack de combustible limitado. Es la mecáni
 - **Propulsión.** Mientras se mantiene una dirección (WASD o flechas), el jugador *acelera* en esa dirección hasta un tope (`max_speed`). No hay velocidad instantánea: hay inercia.
 - **Frenado suave.** Al soltar, la velocidad baja de a poco (`coasting_drag`). Ese valor define qué tan "flotante" se siente.
 - **Contra-empuje.** Si se propulsa en sentido opuesto al movimiento, la aceleración se multiplica (`counter_thrust_multiplier`) en ese eje, para poder frenar rápido. Se evalúa por eje: en una diagonal, solo se potencia el eje que se opone.
-- **Caminar.** Apoyado en una superficie, el eje horizontal se *camina*: acelera hasta `walk_max_speed` sin gastar combustible, tenga o no. El jetpack solo interviene para subir (arriba consume combustible). En el aire, la propulsión funciona como se describe arriba.
+- **Caminar.** Apoyado en una superficie, el eje horizontal se *camina*: acelera hasta `walk_max_speed` sin gastar combustible, tenga o no. El jetpack solo interviene para subir (arriba consume combustible). En el aire, la propulsión funciona como se describe arriba. Al soltar la entrada estando apoyado y sin propulsar, se frena con `ground_friction` (brief 06, ronda 1: antes usaba `coasting_drag`, el frenado del aire, y el jugador se deslizaba de más con los pies en el piso).
 - **Gravedad única (brief 06, ronda 1).** `gravity_with_fuel` y `gravity_without_fuel` se llevaron al mismo valor: la gravedad ya no cambia al quedarse sin combustible. `gravity_transition_time` queda sin efecto práctico (ambas gravedades son iguales) pero no se quitó del código.
 - **Salto.** Sin combustible y apoyado en una superficie, `jump` da un impulso hacia arriba (`jump_velocity`). Sirve para llegar a un tanque elevado. Con combustible no se puede saltar (configurable).
 - **Rebote.** Al chocar contra una superficie a más de `bounce_min_speed`, se devuelve una fracción (`wall_bounce`) de la velocidad de impacto. Con 0 se detiene o desliza; con 1 rebota de forma elástica.
@@ -28,6 +28,7 @@ Un astronauta que se mueve con un jetpack de combustible limitado. Es la mecáni
 | Propulsión | `coasting_drag` | float | 90 | px/s² | Frenado sin entrada | Bajo = deriva larga; alto = frena seco |
 | Caminar | `walk_acceleration` | float | 700 | px/s² | Aceleración horizontal apoyado. No gasta combustible | Brief 06, ronda 1: subido de 600 |
 | Caminar | `walk_max_speed` | float | 140 | px/s | Velocidad máxima caminando | Brief 06, ronda 1: subido de 100 (se sentía tosco) |
+| Caminar | `ground_friction` | float | 900 | px/s² | Frenado horizontal apoyado y sin propulsar | Brief 06, ronda 1: parámetro nuevo (antes se usaba `coasting_drag`, pensado para el aire; LT reportó deslizamiento en el piso) |
 | Gravedad | `gravity_with_fuel` | float | 250 | px/s² | Gravedad con combustible | Brief 06, ronda 1: unificada con `gravity_without_fuel` |
 | Gravedad | `gravity_without_fuel` | float | 250 | px/s² | Gravedad sin combustible | Brief 06, ronda 1: igualada a `gravity_with_fuel` a pedido de LT |
 | Gravedad | `gravity_transition_time` | float | 0.5 | s | Interpolación entre ambas gravedades | 0 = cambio instantáneo |

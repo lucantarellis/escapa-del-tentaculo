@@ -84,8 +84,25 @@ Lectura: el combustible parece generoso para un recorrido perfecto y solo se vue
 
 | Ronda | Fecha | Parámetro | Valor anterior | Valor nuevo | Evidencia | Cómo se sintió |
 |---|---|---|---|---|---|---|
-| pre-tuning (brief 01) | 2026-09-20 | `gravity_with_fuel` | 30 | 150 | Juego de LT: con 30 el jugador quedaba flotando (el freno de 90 lo anulaba) | Pendiente: se le pregunta a LT en la ronda 1 |
-| pre-tuning (brief 01) | 2026-09-20 | `wall_bounce` | 0.25 | 0.15 | Juego de LT | Pendiente: se le pregunta a LT en la ronda 1 |
+| pre-tuning (brief 01) | 2026-09-20 | `gravity_with_fuel` | 30 | 150 | Juego de LT: con 30 el jugador quedaba flotando (el freno de 90 lo anulaba) | Reemplazado en la ronda 1 (ver abajo): con 150 el ascenso se sentía controlable, pero el salto se sentía más alto que el jetpack y la caída lenta y "clunky" |
+| pre-tuning (brief 01) | 2026-09-20 | `wall_bounce` | 0.25 | 0.15 | Juego de LT | Ronda 1: bien así, no se toca |
+| 1 | 2026-09-22 | `gravity_with_fuel` | 150 | 250 | LT pidió gravedad única (que no cambie al quedarse sin combustible) y una caída menos lenta. Simulación: a 250, caer 1 s da 127 px (76 px a 150); el ascenso a fondo con el jetpack baja solo de 177 a ~165 px/s | Pendiente de que LT lo juegue (checklist ronda 2) |
+| 1 | 2026-09-22 | `gravity_without_fuel` | 500 | 250 | Igualada a `gravity_with_fuel` a pedido explícito de LT ("debería ser la misma gravedad con y sin combustible, debemos encontrar el sweet spot"). Confirmado por simulación headless: `get_current_gravity()` da 250 tanto con combustible como después de vaciarlo | Pendiente |
+| 1 | 2026-09-22 | `jump_velocity` | 260 (sin cambio) | 260 | Con la gravedad unificada en 250, el salto da ≈133 px de altura (antes ≈139 px con combustible o ≈55 px vacío, según el caso). Se deja sin cambiar hasta ver cómo se siente con la gravedad nueva | Pendiente. Si sigue sintiéndose "más alto que el jetpack" se ajusta en la ronda 2 |
+| 1 | 2026-09-22 | `counter_thrust_multiplier` | 1.5 | 0.9 | LT: "el freno es demasiado brusco, cambio la dirección hacia abajo y ya empiezo a bajar". Simulación: frenar desde 180 px/s tarda 183 ms con 1.5 y 267 ms con 0.9 (no depende de la gravedad) | Pendiente |
+| 1 | 2026-09-22 | `walk_acceleration` | 600 | 700 | LT: "caminar y saltar se siente muy tosco". Ajuste especulativo para emparejar el caminar con la sensación del jetpack (`thrust_acceleration` 700); a confirmar jugando | Pendiente |
+| 1 | 2026-09-22 | `walk_max_speed` | 100 | 140 | Mismo motivo que `walk_acceleration`: 100 px/s es bajo frente a `max_speed` 180 del jetpack, lo que puede hacer que el impulso horizontal de un salto se note poco | Pendiente |
+
+### Nota de la ronda 1: caminar y saltar sin combustible
+
+LT reportó que sin combustible "caminar y saltar no se puede, solo salta en dirección hacia arriba". Revisando `player.gd`: el salto (`_try_jump`) no depende del combustible salvo que `jump_requires_empty_fuel` lo pida (está en `false`), y caminar (`_apply_walk`) tampoco consume ni depende de combustible; la velocidad horizontal de caminar se conserva al saltar y decae con `coasting_drag` en el aire. No encontré una razón en el código para que el salto pierda el control horizontal por completo. Dos hipótesis, para confirmar jugando con los valores nuevos (`walk_max_speed` 140, `coasting_drag` sin cambiar en 90): (a) es un problema de sensación por velocidades bajas, que esta ronda ya ajusta; (b) el jugador quiere control horizontal en el aire independiente del combustible (hoy en el aire sin apoyo el movimiento horizontal es propulsión, que si no hay combustible no hace nada) — **si esto último es lo que hace falta, es un cambio de mecánica (código), y lo consulto antes de tocar nada.**
+
+### Pendiente del backlog (anotado, no aplicado en esta ronda)
+
+- **Duración (LT, punto 1):** extender el nivel con más segmentos en vez de bajar `scroll_speed`. Se trabaja en la ronda de "Nivel" (backlog área 5), no en esta.
+- **Exigencia por salto/combustible (LT, puntos 2 y 5):** diseñar para que la mayoría de las plataformas se alcancen saltando, y usar el combustible como decisión táctica, no como requisito. Necesita el bot de alcanzabilidad (herramienta pendiente) antes de tocar el diseño de segmentos.
+- **Tentáculo con ataques (LT, punto 4):** a futuro se puede sumar riesgo más allá de la velocidad de ascenso. Fuera de alcance del brief 06 salvo que LT lo pida entrar.
+- **Exploración/descubrimiento de mecánicas (LT, punto 6):** usar elementos existentes de forma que el jugador los descubra en juego (por ejemplo, introducir un tipo de obstáculo o pickup ya construido en un segmento donde antes no aparecía). Se retoma cuando se trabaje el diseño de segmentos; no genera nivel nuevo ni arte nuevo.
 
 ## Valores finales del MVP
 
