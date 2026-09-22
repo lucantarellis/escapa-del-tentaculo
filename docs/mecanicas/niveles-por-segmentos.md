@@ -40,7 +40,7 @@ y=0   O-----------------------+   <- origen (0, 0) = esquina INFERIOR izquierda
 2. **Nada peligroso en las uniones:** ningún obstáculo ni trampa a menos de ≈ 60 px del borde superior o inferior, así nunca se superponen con los del segmento vecino. Los actuales quedan a 150 px o más.
 3. **Al menos un tanque alcanzable.** Los segmentos actuales tienen dos (uno "cómodo" y otro más arriesgado): un nivel de 8 segmentos necesita ≈ 4500 px de subida y un tanque de 40 u rinde ≈ 489 px, así que con un solo tanque por segmento el nivel no se puede completar.
 4. Usar las escenas existentes (`Obstacle`, `MovingObstacle`, `PulseTrap`, `FuelTank`) con configs por instancia.
-5. Referencias de alcance (ver `tanques.md`): un salto sin combustible llega a ≈ 61 px; un tanque de 40 u rinde ≈ 489 px en vertical. Las plataformas actuales están separadas ≈ 150–160 px.
+5. **Referencias de alcance del salto (brief 06, ronda 2).** Con la gravedad única (250) y `jump_velocity` 260, el ápice del salto es ≈ 133 px y el alcance horizontal depende de cuánto se sube: +90 px de subida deja ≈ 53 px de desvío horizontal disponible, +100 px ≈ 60 px, +110 px ≈ 68 px, +120 px ≈ 76 px, +130 px ≈ 87 px (cerca del ápice). Para que un segmento sea cruzable saltando (sin combustible) conviene un margen del orden del 10-15 % bajo esos máximos: por ejemplo, Δy = 112 px con Δx = 60 px (usado en el piloto de `Segment01`). Un tanque de 40 u sigue rindiendo ≈ 489 px en vertical (ver `tanques.md`).
 
 ## Los segmentos del pool
 

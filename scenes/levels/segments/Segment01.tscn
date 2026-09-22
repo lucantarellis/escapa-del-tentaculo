@@ -24,10 +24,10 @@ collision_mask = 0
 
 [node name="Polygon2D" type="Polygon2D" parent="Platform2"]
 color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(200, -190, 320, -190, 320, -178, 200, -178)
+polygon = PackedVector2Array(100, -152, 220, -152, 220, -140, 100, -140)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform2"]
-polygon = PackedVector2Array(200, -190, 320, -190, 320, -178, 200, -178)
+polygon = PackedVector2Array(100, -152, 220, -152, 220, -140, 100, -140)
 
 [node name="Platform3" type="StaticBody2D" parent="."]
 collision_layer = 1
@@ -35,10 +35,10 @@ collision_mask = 0
 
 [node name="Polygon2D" type="Polygon2D" parent="Platform3"]
 color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(50, -340, 170, -340, 170, -328, 50, -328)
+polygon = PackedVector2Array(40, -264, 160, -264, 160, -252, 40, -252)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform3"]
-polygon = PackedVector2Array(50, -340, 170, -340, 170, -328, 50, -328)
+polygon = PackedVector2Array(40, -264, 160, -264, 160, -252, 40, -252)
 
 [node name="Platform4" type="StaticBody2D" parent="."]
 collision_layer = 1
@@ -46,10 +46,10 @@ collision_mask = 0
 
 [node name="Polygon2D" type="Polygon2D" parent="Platform4"]
 color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(190, -490, 310, -490, 310, -478, 190, -478)
+polygon = PackedVector2Array(100, -376, 220, -376, 220, -364, 100, -364)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform4"]
-polygon = PackedVector2Array(190, -490, 310, -490, 310, -478, 190, -478)
+polygon = PackedVector2Array(100, -376, 220, -376, 220, -364, 100, -364)
 
 [node name="Platform5" type="StaticBody2D" parent="."]
 collision_layer = 1
@@ -57,13 +57,24 @@ collision_mask = 0
 
 [node name="Polygon2D" type="Polygon2D" parent="Platform5"]
 color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(60, -600, 180, -600, 180, -588, 60, -588)
+polygon = PackedVector2Array(40, -488, 160, -488, 160, -476, 40, -476)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform5"]
-polygon = PackedVector2Array(60, -600, 180, -600, 180, -588, 60, -588)
+polygon = PackedVector2Array(40, -488, 160, -488, 160, -476, 40, -476)
+
+[node name="Platform6" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="Platform6"]
+color = Color(0.2275, 0.6078, 0.749, 1)
+polygon = PackedVector2Array(100, -600, 220, -600, 220, -588, 100, -588)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Platform6"]
+polygon = PackedVector2Array(100, -600, 220, -600, 220, -588, 100, -588)
 
 [node name="FuelTank1" parent="." instance=ExtResource("tank")]
-position = Vector2(110, -358)
+position = Vector2(100, -284)
 
 [node name="FuelTank2" parent="." instance=ExtResource("tank")]
-position = Vector2(250, -508)
+position = Vector2(100, -508)
