@@ -4,25 +4,37 @@
 
 ## Propósito
 
-Hasta la ronda 2 cada plataforma de un segmento era un `StaticBody2D` armado a mano (`Polygon2D` + `CollisionPolygon2D` con las cuatro esquinas escritas a mano). Para poder variar el tipo de plataforma sin repetir esa estructura y sin tocar código en cada segmento, `Platform` la reemplaza por una escena única, parametrizada por `size` y `platform_type`, siguiendo el mismo patrón que `obstacles/` (`Obstacle` + `size` + `Config`).
+Todo lo que el jugador pisa, esquiva o lo mata en un segmento es una sola cosa: `Platform`. Antes había dos sistemas separados solo porque tenían nombres distintos (`Platform` para lo sólido, `Obstacle`/`MovingObstacle`/`PulseTrap` para lo letal) — se unificaron en la ronda 2 en un solo tipo, con dos ejes independientes:
+
+- **`platform_type`**: qué hace al tocarla — sólida siempre, solo desde arriba, se rompe, aparece y desaparece, mata siempre, o alterna entre segura y letal.
+- **`moves`**: si además va y viene entre dos puntos. Es independiente del tipo: una plataforma sólida puede moverse (te lleva con ella) y una letal también (el viejo `MovingObstacle`).
+
+`Obstacle`, `MovingObstacle` y `PulseTrap` (`scripts/obstacles/`) siguen existiendo porque todavía los usan `sandbox.tscn` y los segmentos 02, 03, 05 y 06 — se migran a `Platform` cuando se rediseñen esos segmentos con el sistema nuevo. No agregar instancias nuevas de esos tres: para cualquier plataforma nueva, usar `Platform`.
 
 ## Tipologías (`platform_type`)
 
-| Tipo | Comportamiento | Color placeholder |
-|---|---|---|
-| `STATIC` | Sólida siempre, colisiona desde cualquier lado. Es la plataforma "de toda la vida". | Celeste `#3A9BBF` |
-| `ONE_WAY` | Sólida solo desde arriba: se puede saltar a través desde abajo o los costados, y caer de nuevo a través de ella. | Verde `#8CC94C` |
-| `BREAKABLE` | Se rompe (deja de ser sólida) después de `break_delay` segundos parada encima, y vuelve a aparecer tras `respawn_time`. | Naranja `#E59A4C` |
-| `TIMED` | Alterna sólida/ausente en un ciclo fijo: `timed_on_duration` sólida, `timed_off_duration` ausente, repite. | Violeta `#B364C9` |
+| Tipo | Comportamiento | Color placeholder | Reemplaza a |
+|---|---|---|---|
+| `STATIC` | Sólida siempre, colisiona desde cualquier lado. | Celeste `#3A9BBF` | (plataformas de antes) |
+| `ONE_WAY` | Sólida solo desde arriba: se puede saltar a través desde abajo o los costados, y caer de nuevo a través de ella. | Verde `#8CC94C` | — |
+| `BREAKABLE` | Se rompe (deja de ser sólida) después de `break_delay` segundos parada encima, y vuelve a aparecer tras `respawn_time`. No mata directamente: el riesgo es la caída. | Naranja `#E59A4C` | — |
+| `TIMED` | Alterna sólida/ausente en un ciclo fijo: `timed_on_duration` sólida, `timed_off_duration` ausente. Si el jugador está en medio cuando le tocaría volverse sólida, espera a que se libere (no lo empuja). | Violeta `#B364C9` | — |
+| `LETHAL` | Nunca sólida, siempre letal al tocarla. | Rojo `#D83232` | `Obstacle` |
+| `PULSE` | Alterna segura y sólida (con aviso parpadeante) / letal, en un ciclo fijo. | Azul `#3A9BBF` (segura) → blanco parpadeante (aviso) → rojo `#D83232` (letal) | `PulseTrap` |
+
+`moves = true` (cualquier tipo) reemplaza a `MovingObstacle` cuando además `platform_type = LETHAL`, y agrega "plataforma móvil que se puede pisar" cuando el tipo es sólido — algo que no existía antes.
 
 ## Modelo en palabras simples
 
-- **Es un `StaticBody2D`** (capa 1 `world`, máscara 0), igual que antes: el jugador choca físicamente contra ella (a diferencia de `Obstacle`, que es un `Area2D` letal). `size` regenera el polígono visual y la forma de colisión (`RectangleShape2D`); el origen del nodo es el **centro** del bloque, igual que `Obstacle`/`Door` (antes era la esquina inferior izquierda de la lista de puntos).
-- **`ONE_WAY`** usa la propiedad nativa `one_way_collision` del `CollisionShape2D`, con un margen (`one_way_margin` en `PlatformConfig`, 5 px por defecto) más grande que el default del motor (1 px) para que no se atraviese al caer rápido. Validado en una prueba headless aislada: el jugador atraviesa subiendo y aterriza normalmente al caer. **Ojo:** la ronda anterior encontramos un bug de one-way en una prueba encadenada (subir y bajar por la misma trayectoria varias veces); esta prueba nueva es más simple, así que conviene confirmarlo también jugando, no solo con la simulación.
-- **`BREAKABLE`** usa un sensor (`Area2D` hijo, `StepSensor`) pegado al borde superior del bloque que detecta cuándo el jugador está parado encima; ahí arranca la cuenta de `break_delay`. Al romperse, se desactiva la colisión (diferido, seguro dentro de física) y se oculta; después de `respawn_time` vuelve. En la prueba headless se rompió ~0,45 s después de empezar a caer el jugador — con `break_delay` = 0,15 s por defecto, se sintió bastante inmediata (el sensor puede activarse un poco antes de que el juego marque `on_floor`). Si en el playtest se siente "se rompe apenas la toco", es cuestión de subir `break_delay` en el config, no un bug.
-- **`TIMED`** no necesita detectar al jugador: un timer interno alterna sólida/ausente. Si el jugador está parado encima cuando se desactiva, cae (no hay red de seguridad, es la gracia del tipo).
-- **Todas comparten forma y tuning-vs-diseño**: `size` y `platform_type` son diseño de nivel (se editan por instancia); los tiempos (`break_delay`, `respawn_time`, `timed_on_duration`, `timed_off_duration`, `timed_start_on`, `one_way_margin`) son tuning y viven en `PlatformConfig` (`resources/configs/platform_config.tres`). Para que una instancia tenga tiempos propios, duplicar el `.tres` o hacerlo único en el inspector.
-- **`@tool`**: en el editor se ve el color según el tipo y el nombre del tipo dibujado arriba del bloque, para identificarlas de un vistazo sin correr el juego.
+- **Es un `AnimatableBody2D`** (subtipo de `StaticBody2D`, capa 1 `world`, máscara 0): el jugador choca físicamente contra ella cuando es sólida. `sync_to_physics` hace que, si se mueve (`moves = true`), el jugador parado encima se mueva con ella en vez de quedarse atrás. `size` regenera el polígono visual y la forma de colisión; el origen del nodo es el **centro** del bloque.
+- **Letalidad** (`LETHAL`, y `PULSE` en fase ON) usa un `Area2D` hijo (`LethalArea`, capa 0, máscara 2 `player`) del tamaño completo del bloque: si un `Player` vivo la toca, `Player.die(cause)`. `cause` es configurable por instancia, igual que en el viejo `Obstacle`.
+- **`ONE_WAY`** usa la propiedad nativa `one_way_collision` del `CollisionShape2D`, con margen configurable (`one_way_margin`, 5 px por defecto, más grande que el default del motor de 1 px). Validado en una prueba headless aislada: el jugador atraviesa subiendo y aterriza normal al caer. Ojo: la ronda anterior encontramos un bug de one-way en una prueba más encadenada — confirmado ahora por LT jugando que funciona bien.
+- **`BREAKABLE`** usa un sensor (`StepSensor`, franja fina pegada al borde superior) para detectar "parado encima" y arrancar la cuenta de `break_delay`. Feedback de LT: con el valor por defecto (0,15 s) no da tiempo de reaccionar — **queda así a propósito**, es la plataforma-trampa: parece un buen camino pero desaparece apenas la pisás.
+- **`TIMED`** usa un segundo sensor (`FootprintSensor`, del tamaño completo) solo para revisar, antes de volverse sólida, si el jugador está en medio — si lo está, espera a que se libere en vez de empujarlo (bug encontrado y arreglado en el playtest de LT).
+- **`PULSE`** es una máquina de tres fases (segura → aviso parpadeante → letal → repite), igual que el viejo `PulseTrap`: mientras es segura, es sólida (se puede parar encima); al activarse, dejar de ser sólida y pasa a matar.
+- **`moves`** reutiliza el mismo cálculo de recorrido que el viejo `MovingObstacle` (velocidad, pausa en los extremos, suavizado, `start_delay`), pero como propiedad independiente del tipo: aplica iguales a `STATIC` (plataforma móvil pisable) que a `LETHAL` (bloque móvil letal).
+- **Diseño de nivel vs. tuning**: `size`, `platform_type`, `moves`, `travel` y `cause` son diseño de nivel (por instancia). Los tiempos (`break_delay`, `respawn_time`, `timed_on_duration`, `timed_off_duration`, `timed_start_on`, `one_way_margin`, `moving_*`, `pulse_*`) son tuning y viven en `PlatformConfig` (`resources/configs/platform_config.tres`). Para que una instancia tenga tiempos propios, duplicar el `.tres` o hacerlo único en el inspector.
+- **`@tool`**: en el editor se ve el color según el tipo/fase, el nombre del tipo arriba del bloque, y si `moves` es true, la trayectoria dibujada en rojo.
 
 ## Parámetros
 
@@ -30,8 +42,11 @@ Hasta la ronda 2 cada plataforma de un segmento era un `StaticBody2D` armado a m
 
 | Variable | Tipo | Valor inicial | Unidad | Efecto |
 |---|---|---|---|---|
-| `size` | Vector2 | (80, 12) | px | Tamaño del bloque (ancho, alto) |
+| `size` | Vector2 | (80, 12) | px | Tamaño del bloque |
 | `platform_type` | enum | `STATIC` | — | Tipología (ver tabla arriba) |
+| `cause` | StringName | `&"obstacle"` | — | Causa que recibe `Player.die` (solo LETHAL / PULSE en ON) |
+| `moves` | bool | false | — | Si va y viene entre su posición inicial y `inicial + travel` |
+| `travel` | Vector2 | (120, 0) | px | Desplazamiento del extremo final (solo si `moves`) |
 | `config` | PlatformConfig | `platform_config.tres` | — | Tiempos (ver abajo) |
 
 ### `PlatformConfig`
@@ -44,26 +59,38 @@ Hasta la ronda 2 cada plataforma de un segmento era un `StaticBody2D` armado a m
 | Temporizada | `timed_off_duration` | float | 1,0 | s | Segundos ausente por ciclo |
 | Temporizada | `timed_start_on` | bool | true | — | Si el ciclo empieza sólida o ausente |
 | One-way | `one_way_margin` | float | 5,0 | px | Margen de colisión de un solo sentido |
+| Movimiento | `moving_speed` | float | 60 | px/s | Velocidad media de desplazamiento |
+| Movimiento | `moving_pause_at_ends` | float | 0,5 | s | Pausa en cada extremo |
+| Movimiento | `moving_ease_at_ends` | bool | true | — | Acelera/frena suave cerca de los extremos |
+| Movimiento | `moving_start_delay` | float | 0,0 | s | Espera antes de empezar (desfasar instancias) |
+| Pulso | `pulse_on_time` | float | 1,5 | s | Tiempo letal por ciclo |
+| Pulso | `pulse_off_time` | float | 1,5 | s | Tiempo segura por ciclo (incluye el aviso) |
+| Pulso | `pulse_warning_time` | float | 0,5 | s | Últimos segundos seguros en que parpadea |
+| Pulso | `pulse_initial_offset` | float | 0,0 | s | Desfase del ciclo al empezar |
 
 ## Señales
 
 | Señal | Cuándo se emite |
 |---|---|
-| `breaking_started` | Una `BREAKABLE` empezó a romperse (el jugador se paró encima) |
+| `breaking_started` | Una `BREAKABLE` empezó a romperse |
 | `broke` | Una `BREAKABLE` se rompió |
-| `restored` | Una `BREAKABLE` o `TIMED` volvió a estar sólida |
+| `restored` | Una `BREAKABLE`, `TIMED` o `PULSE` volvió a estar sólida/segura |
+| `player_hit(cause)` | Un `Player` vivo tocó la plataforma en fase letal |
 
 ## API pública
 
 | Función | Descripción |
 |---|---|
-| `reset() -> void` | Vuelve al estado inicial: sólida, sin romper, fase temporizada de arranque |
+| `reset() -> void` | Vuelve al estado inicial: posición de origen, sin romper, fase de arranque |
 
 ## Cómo probarlas
 
-Ver el flujo de QA por segmento en `docs/mecanicas/niveles-por-segmentos.md` (`LevelSegmentQA.tscn` + `level_config_segment_qa.tres`). `Segment01` tiene ejemplos de los cuatro tipos: `Start`/`Converge1`/`Converge2`/`End` son `STATIC`; `Branch1Near`/`Branch2Right` son `ONE_WAY`; `Branch1Far` es `BREAKABLE`; `BonusLedge`/`Branch2Left` son `TIMED`.
+Ver el flujo de QA por segmento en `docs/mecanicas/niveles-por-segmentos.md` (`LevelSegmentQA.tscn` + `level_config_segment_qa.tres`). `Segment01` tiene ejemplos de `STATIC`, `ONE_WAY`, `BREAKABLE` y `TIMED`. Los tipos `LETHAL`, `PULSE` y `moves` todavía no tienen ejemplo en un segmento — validados por ahora solo con pruebas headless (`$HOME/sims/platform_test5.gd`).
 
-## Pendiente
+## Feedback de LT (ronda 2) y estado
 
-- Confirmar la sensación de `break_delay` y `one_way_margin` jugando (ver notas arriba).
-- Evaluar si conviene una quinta tipología para "romper desde abajo" (golpear el borde inferior), pedida por LT junto con plataformas verticales, resbaladizas y trampolín — no implementadas todavía.
+- One-way: confirmado que funciona bien jugando.
+- Rompible: se queda como trampa a propósito (no da tiempo de reaccionar).
+- Temporizada: arreglado el bug de empujar al jugador al reaparecer encima suyo.
+- Pendiente: más diversidad de ubicación y tipos por segmento (en curso).
+- Pendiente: evaluar una quinta tipología para "romper desde abajo" (golpear el borde inferior), y mecánicas no implementadas: plataformas resbaladizas, trampolín, corriente de aire.
