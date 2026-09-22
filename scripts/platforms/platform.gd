@@ -224,7 +224,7 @@ func _apply_type() -> void:
 			_apply_solid(_timed_on)
 			_lethal_area.set_deferred("monitoring", false)
 		PlatformType.LETHAL:
-			_apply_solid(false)
+			_apply_solid(false, true)
 			_lethal_area.set_deferred("monitoring", true)
 		PlatformType.PULSE:
 			_pulse_state = _compute_pulse_state()
@@ -383,10 +383,13 @@ func _is_footprint_occupied() -> bool:
 	return false
 
 
-# Activa o desactiva la colisión y la visual. Diferido: seguro dentro de callbacks de física.
-func _apply_solid(solid: bool) -> void:
+# Activa o desactiva la colisión física. Por defecto la visual acompaña a `solid` (plataformas
+# normales/rompibles desaparecen al dejar de ser sólidas). Pasar `body_visible` aparte para los
+# casos donde la plataforma sigue mostrándose aunque no sea sólida (p. ej. LETHAL, que nunca
+# colisiona físicamente pero sí debe verse). Diferido: seguro dentro de callbacks de física.
+func _apply_solid(solid: bool, body_visible: bool = solid) -> void:
 	_collision.set_deferred("disabled", not solid)
-	_body.visible = solid
+	_body.visible = body_visible
 
 
 func _on_step_entered(body: Node2D) -> void:
