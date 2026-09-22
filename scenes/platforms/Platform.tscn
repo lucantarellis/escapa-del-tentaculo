@@ -15,9 +15,14 @@ size = Vector2(80, 6)
 resource_local_to_scene = true
 size = Vector2(80, 12)
 
-[node name="Platform" type="StaticBody2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lethal"]
+resource_local_to_scene = true
+size = Vector2(80, 12)
+
+[node name="Platform" type="AnimatableBody2D"]
 collision_layer = 1
 collision_mask = 0
+sync_to_physics = true
 script = ExtResource("1_platform")
 config = ExtResource("2_config")
 
@@ -44,3 +49,11 @@ monitoring = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FootprintSensor"]
 shape = SubResource("RectangleShape2D_footprint")
+
+[node name="LethalArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LethalArea"]
+shape = SubResource("RectangleShape2D_lethal")

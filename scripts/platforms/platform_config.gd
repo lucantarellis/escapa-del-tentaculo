@@ -25,3 +25,25 @@ extends Resource
 ## Margen de detección de colisión de un solo sentido. Muy chico puede dejar atravesar al
 ## jugador en una caída rápida; ver nota en `docs/mecanicas/plataformas.md`. Unidad: px.
 @export var one_way_margin: float = 5.0
+
+@export_group("Movimiento (moves = true)")
+## Velocidad media de desplazamiento. Con `moving_ease_at_ends` el pico es 1,5x. Unidad: px/s.
+@export var moving_speed: float = 60.0
+## Pausa en cada extremo del recorrido. Unidad: s.
+@export var moving_pause_at_ends: float = 0.5
+## Si es true, acelera y frena suave cerca de los extremos.
+@export var moving_ease_at_ends: bool = true
+## Espera antes de empezar a moverse; sirve para desfasar varias instancias. Unidad: s.
+@export var moving_start_delay: float = 0.0
+
+@export_group("Pulso (PULSE)")
+## Tiempo letal (fase ON) del ciclo. Unidad: s.
+@export var pulse_on_time: float = 1.5
+## Tiempo segura (fase OFF, incluye el aviso) del ciclo. Unidad: s.
+@export var pulse_off_time: float = 1.5
+## Últimos segundos de la fase segura en que parpadea antes de activarse. Se recorta a
+## `pulse_off_time`; 0 = sin aviso. Unidad: s.
+@export var pulse_warning_time: float = 0.5
+## Desfase del ciclo al empezar. Con 0 arranca segura; con `pulse_off_time` arranca letal.
+## Sirve para desincronizar varias instancias. Unidad: s.
+@export var pulse_initial_offset: float = 0.0
