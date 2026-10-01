@@ -22,7 +22,11 @@ Todo lo que el jugador pisa, esquiva o lo mata en un segmento es una sola cosa: 
 | `LETHAL` | Nunca sólida, siempre letal al tocarla. | Rojo `#D83232` | `Obstacle` |
 | `PULSE` | Alterna segura y sólida (con aviso parpadeante) / letal, en un ciclo fijo. | Azul `#3A9BBF` (segura) → blanco parpadeante (aviso) → rojo `#D83232` (letal) | `PulseTrap` |
 
-`moves = true` (cualquier tipo) reemplaza a `MovingObstacle` cuando además `platform_type = LETHAL`, y agrega "plataforma móvil que se puede pisar" cuando el tipo es sólido — algo que no existía antes.
+| `PROJECTILE` | Letal desde que aparece, incluso quieta. Se dispara por cámara o por distancia, vuela en línea recta y al final explota, desaparece o rebota. | Rojo `#D83232` (la explosión, rojo translúcido) | — |
+
+Detalle completo de `PROJECTILE` en `docs/mecanicas/plataforma-proyectil.md`.
+
+`moves = true` (cualquier tipo, menos `PROJECTILE`, que lo ignora) reemplaza a `MovingObstacle` cuando además `platform_type = LETHAL`, y agrega "plataforma móvil que se puede pisar" cuando el tipo es sólido — algo que no existía antes.
 
 ## Modelo en palabras simples
 
@@ -47,7 +51,11 @@ Todo lo que el jugador pisa, esquiva o lo mata en un segmento es una sola cosa: 
 | `cause` | StringName | `&"obstacle"` | — | Causa que recibe `Player.die` (solo LETHAL / PULSE en ON) |
 | `moves` | bool | false | — | Si va y viene entre su posición inicial y `inicial + travel` |
 | `travel` | Vector2 | (120, 0) | px | Desplazamiento del extremo final (solo si `moves`) |
+| `projectile_trigger` | enum | `CAMERA` | — | Solo `PROJECTILE`: qué lo dispara (`CAMERA` o `DISTANCE`) |
+| `projectile_end` | enum | `EXPLODE` | — | Solo `PROJECTILE`: qué hace al final del recorrido (`EXPLODE`, `DESTROY` o `BOUNCE`) |
 | `config` | PlatformConfig | `platform_config.tres` | — | Tiempos (ver abajo) |
+
+`travel` también es la dirección y el recorrido de un `PROJECTILE`.
 
 ### `PlatformConfig`
 
@@ -59,6 +67,7 @@ Todo lo que el jugador pisa, esquiva o lo mata en un segmento es una sola cosa: 
 | Temporizada | `timed_off_duration` | float | 1,0 | s | Segundos ausente por ciclo |
 | Temporizada | `timed_start_on` | bool | true | — | Si el ciclo empieza sólida o ausente |
 | One-way | `one_way_margin` | float | 5,0 | px | Margen de colisión de un solo sentido |
+| Letal | `lethal_margin` | float | 2,0 | px | Cuánto más chica es el área letal que el dibujo, por lado (margen de gracia en las esquinas) |
 | Movimiento | `moving_speed` | float | 60 | px/s | Velocidad media de desplazamiento |
 | Movimiento | `moving_pause_at_ends` | float | 0,5 | s | Pausa en cada extremo |
 | Movimiento | `moving_ease_at_ends` | bool | true | — | Acelera/frena suave cerca de los extremos |
@@ -67,6 +76,13 @@ Todo lo que el jugador pisa, esquiva o lo mata en un segmento es una sola cosa: 
 | Pulso | `pulse_off_time` | float | 1,5 | s | Tiempo segura por ciclo (incluye el aviso) |
 | Pulso | `pulse_warning_time` | float | 0,5 | s | Últimos segundos seguros en que parpadea |
 | Pulso | `pulse_initial_offset` | float | 0,0 | s | Desfase del ciclo al empezar |
+| Proyectil | `projectile_speed` | float | 180 | px/s | Velocidad de vuelo |
+| Proyectil | `projectile_trigger_distance` | float | 160 | px | Radio de disparo del disparador `DISTANCE` |
+| Proyectil | `projectile_start_delay` | float | 0,0 | s | Espera entre el disparo y el inicio del movimiento |
+| Proyectil | `projectile_screen_margin` | float | 0 | px | Margen extra de pantalla para el disparador `CAMERA` |
+| Proyectil | `projectile_bounce_count` | int | 3 | rebotes | Rebotes contra la pantalla antes de desaparecer (final `BOUNCE`) |
+| Proyectil | `explosion_radius` | float | 48 | px | Radio de la zona letal de la explosión |
+| Proyectil | `explosion_duration` | float | 0,3 | s | Duración de la zona letal de la explosión |
 
 ## Señales
 
@@ -75,17 +91,20 @@ Todo lo que el jugador pisa, esquiva o lo mata en un segmento es una sola cosa: 
 | `breaking_started` | Una `BREAKABLE` empezó a romperse |
 | `broke` | Una `BREAKABLE` se rompió |
 | `restored` | Una `BREAKABLE`, `TIMED` o `PULSE` volvió a estar sólida/segura |
-| `player_hit(cause)` | Un `Player` vivo tocó la plataforma en fase letal |
+| `player_hit(cause)` | Un `Player` vivo tocó la plataforma en fase letal (o lo alcanzó la explosión de un `PROJECTILE`) |
+| `launched` | Un `PROJECTILE` se disparó y empezó a moverse |
+| `exploded` | Un `PROJECTILE` explotó (al final del recorrido o al golpear al jugador) |
+| `vanished` | Un `PROJECTILE` desapareció (oculto y desactivado, no borrado) |
 
 ## API pública
 
 | Función | Descripción |
 |---|---|
-| `reset() -> void` | Vuelve al estado inicial: posición de origen, sin romper, fase de arranque |
+| `reset() -> void` | Vuelve al estado inicial: posición de origen, sin romper, fase de arranque. Un `PROJECTILE` vuelve quieto, visible y sin disparar, aunque ya hubiera desaparecido |
 
 ## Cómo probarlas
 
-Ver el flujo de QA por segmento en `docs/mecanicas/niveles-por-segmentos.md` (`LevelSegmentQA.tscn` + `level_config_segment_qa.tres`). `Segment01` tiene ejemplos de `STATIC`, `ONE_WAY`, `BREAKABLE` y `TIMED`. Los tipos `LETHAL`, `PULSE` y `moves` todavía no tienen ejemplo en un segmento — validados por ahora solo con pruebas headless (`$HOME/sims/platform_test5.gd`).
+Ver el flujo de QA por segmento en `docs/mecanicas/niveles-por-segmentos.md` (`LevelSegmentQA.tscn` + `level_config_segment_qa.tres`). `Segment01` tiene ejemplos de `STATIC`, `ONE_WAY`, `BREAKABLE` y `TIMED`. `SegmentProyectilQA` (fuera del pool; ver `docs/mecanicas/plataforma-proyectil.md`) tiene un ejemplo de cada combinación de `PROJECTILE`. Los tipos `LETHAL`, `PULSE` y `moves` todavía no tienen ejemplo en un segmento — validados por ahora solo con pruebas headless (`$HOME/sims/platform_test5.gd`).
 
 ## Feedback de LT (ronda 2) y estado
 

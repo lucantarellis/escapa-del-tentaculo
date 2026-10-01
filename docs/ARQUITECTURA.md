@@ -83,6 +83,7 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 | Obstacle (y derivados) | `player_hit(cause)` | _(nadie todavía)_ | Un jugador vivo tocó el obstáculo. Además el obstáculo llama a `Player.die(cause)`, que emite `died` |
 | FuelTank | `collected(amount)` | _(nadie todavía; lo usará la UI/feedback)_ | Un jugador recogió el tanque. Además el tanque llama a `Player.add_fuel(amount)` |
 | PulseTrap | `activated()` / `deactivated()` | _(nadie todavía)_ | La trampa pasó a activa / dejó de estarlo |
+| Platform (`PROJECTILE`) | `launched()` / `exploded()` / `vanished()` | _(nadie todavía)_ | El proyectil se disparó / explotó / desapareció. Ver `docs/mecanicas/plataforma-proyectil.md` |
 | LevelBuilder | `level_built(level_seed)` | _(nadie todavía)_ | Se terminó de armar el nivel |
 | Tentacle | `player_caught(cause)` | _(nadie todavía)_ | El tentáculo atrapó al jugador. Además llama a `Player.die(cause)`, que emite `died` |
 

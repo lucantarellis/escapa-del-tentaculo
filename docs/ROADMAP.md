@@ -1,6 +1,6 @@
 # Roadmap — Escapa del Tentáculo
 
-**Última actualización:** 2026-09-21
+**Última actualización:** 2026-10-01
 **Estado global:** v0 publicada. En curso: balance del MVP por rondas de tuning (brief 06, rama `feature/tuning-mvp`; ver `docs/TUNING_LOG.md`). Mecánicas base (pasos 0 a 3) mergeadas a `main` (brief 01, PR #1). Obstáculos y tanques (pasos 4 y 4b) mergeados a `main` (brief 02, PR #2). Puerta, game manager y niveles por segmentos (pasos 5, 6 y 7) mergeados a `main` (brief 03, PR #3). Pantalla de título (paso 8) y HUD mínimo (paso 8b) hechos, probados por LT y mergeados a `main` (brief 04, PR #4). Intro de la escotilla (pasos 8d y 8e, brief 05, rama `feature/intro-escotilla`) hecha y probada por LT, pendiente de PR y merge. Siguiente: balance del MVP, arte y audio (paso 9). Los controles táctiles (paso 8c) quedan para el final, después del arte y el balance.
 **Cómo usar este documento:** es la fuente de verdad del plan. Cada brief para Cowork se genera desde `docs/briefs/BRIEF_TEMPLATE.md` y, al cerrarse, actualiza la tabla de estado (sección 4) y el registro de decisiones (sección 2).
 
@@ -51,6 +51,7 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | Intro: cuándo se reproduce | Al pulsar JUGAR y con cada R (`Main` reconstruye el nivel y llama a `LevelController.play_intro()`). `Level.tscn` (F6) y `sandbox.tscn` solos la saltan: escotilla ya rota, tentáculo activo desde el primer frame y jugador en el `PlayerSpawn` (sin lanzamiento). R durante la intro no hace nada (`GameManager` en `READY`) | Propuesta de Claude (brief 05) |
 | Intro: `start_delay` | Sin cambios: la cámara empieza a subir `start_delay` s después de la ruptura (inicio de la partida) | Propuesta de Claude (brief 05) |
 | Intro: escotilla centrada y vuelo | La escotilla va centrada. El segmento de inicio mide 1100 px con un pasillo central libre para el vuelo (~640 px de altura); durante el vuelo la cámara sube lo necesario para que el jugador nunca salga de la vista (`ScrollCamera.follow_up`) | LT (QA del paso 8e) |
+| Plataforma proyectil | Tipo `PROJECTILE` de `Platform`: letal desde que aparece, se dispara por cámara o por distancia (uno solo), vuela en línea recta y al final explota, desaparece o rebota contra las paredes de la pantalla N veces; al golpear al jugador explota. "Desaparecer" oculta y desactiva (no `queue_free`) para que `reset()` la reviva. Doc: `docs/mecanicas/plataforma-proyectil.md` | Socio (iteración en `main-g`) |
 | Controles táctiles | Se implementan al final (paso 8c), cuando lo demás esté cerrado. Mientras tanto, solo teclado | LT (brief 04) |
 | Escena principal | `run/main_scene` seguirá siendo `Main.tscn`, que será la pantalla de título: título del juego y un botón grande de "jugar". Al pulsarlo el menú se disuelve hasta quedar transparente e inicia el juego sobre la escena de juego correspondiente (`Level.tscn`). `Level.tscn` no es la escena principal | LT (brief 03, cierre); se implementa en el paso 8 |
 | Tentáculo al final del nivel | Cuando la cámara se detiene en el final del nivel, el tentáculo sigue subiendo (`end_rise_speed`) hasta cubrir la pantalla: no hay refugio esperando. Se congela al ganar o perder | LT (QA del paso 7) |
@@ -88,6 +89,7 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | 8d | Intro de la escotilla: escotilla, tres golpes de cámara y gas | Hecho | brief-05 |
 | 8e | Intro de la escotilla: ruptura, lanzamiento del jugador y entrada del tentáculo | Hecho | brief-05 |
 | 8f | Balance del MVP (rondas de tuning) | En curso | brief-06 |
+| 8g | Plataforma proyectil (`PROJECTILE`) | Hecho en la rama `main-g`, pendiente de prueba jugando | — |
 | 8c | Controles táctiles | Pendiente (al final, tras arte y balance) | — |
 | 9 | Arte final, audio y pulido | Pendiente | — |
 
