@@ -12,6 +12,9 @@ extends AnimatableBody2D
 ## `platform_type` decide el comportamiento (tabla completa en la doc); `moves` es
 ## independiente del tipo — cualquier tipo puede moverse o quedarse quieto. Los tiempos de
 ## cada tipo viven en `config` (ver [PlatformConfig]), no acá.
+## `PROJECTILE` es un caso aparte: letal desde el inicio, quieta hasta que se cumple su disparador
+## (cámara o distancia), después vuela en línea recta y al final explota, desaparece o rebota
+## (ver `docs/mecanicas/plataforma-proyectil.md`); no usa `moves`.
 ## `@tool`: tamaño, tipo y trayectoria se ven en el editor.
 
 ## Una [BREAKABLE] empezó a romperse (el jugador se paró encima).
@@ -22,6 +25,12 @@ signal broke
 signal restored
 ## Un [Player] vivo tocó la plataforma mientras era letal (LETHAL, o PULSE en fase ON).
 signal player_hit(cause: StringName)
+## Un [PROJECTILE] se disparó y empezó a moverse.
+signal launched
+## Un [PROJECTILE] explotó (al final del recorrido o al golpear al jugador).
+signal exploded
+## Un [PROJECTILE] desapareció (ocultado y desactivado; [method reset] lo revive).
+signal vanished
 
 ## Tipologías disponibles. Ver cada grupo de [PlatformConfig] para sus tiempos.
 enum PlatformType {
@@ -31,7 +40,21 @@ enum PlatformType {
 	TIMED,     ## Alterna sólida/ausente en un ciclo fijo. Ver `timed_on_duration`/`timed_off_duration`.
 	LETHAL,    ## Nunca sólida, siempre letal. Reemplaza a `Obstacle`.
 	PULSE,     ## Alterna segura y sólida / letal, con aviso. Reemplaza a `PulseTrap`.
+	PROJECTILE, ## Letal; quieta hasta su disparador, luego vuela en línea recta. Ver `projectile_*`.
 }
+## Qué dispara el movimiento de un [PROJECTILE]. Solo uno por plataforma.
+enum ProjectileTrigger {
+	CAMERA,   ## Arranca cuando la plataforma entra en el rectángulo visible de la cámara.
+	DISTANCE, ## Arranca cuando el jugador entra en el radio `projectile_trigger_distance`.
+}
+## Qué hace un [PROJECTILE] al llegar al final de su recorrido.
+enum ProjectileEnd {
+	EXPLODE, ## Explota: zona letal de radio `explosion_radius` que dura `explosion_duration`.
+	DESTROY, ## Desaparece (se oculta y desactiva; no se borra, así `reset()` la revive).
+	BOUNCE,  ## Rebota contra las 4 paredes de la pantalla `projectile_bounce_count` veces.
+}
+## Estados internos de un [PROJECTILE].
+enum ProjectileState { IDLE, WAITING, FLYING, EXPLODING, GONE }
 ## Estados internos de PULSE (además del tipo). Igual que el `PulseTrap` original.
 enum PulseState { OFF, WARNING, ON }
 
@@ -42,6 +65,7 @@ const COLOR_BY_TYPE: Dictionary = {
 	PlatformType.BREAKABLE: Color(0.898, 0.6, 0.298, 1.0),
 	PlatformType.TIMED: Color(0.702, 0.396, 0.788, 1.0),
 	PlatformType.LETHAL: Color(0.8471, 0.1961, 0.1961, 1.0),
+	PlatformType.PROJECTILE: Color(0.8471, 0.1961, 0.1961, 1.0),
 }
 const PULSE_OFF_COLOR: Color = Color(0.2275, 0.6078, 0.749, 0.35)
 const PULSE_WARNING_COLOR: Color = Color(0.7843, 0.9059, 0.9176, 0.9)
@@ -52,6 +76,17 @@ const PULSE_WARNING_BLINK_HZ: float = 6.0
 const STEP_SENSOR_HEIGHT: float = 6.0
 ## Color de la ayuda de trayectoria en el editor cuando `moves` es true. Solo visual.
 const PATH_COLOR: Color = Color(0.8471, 0.1961, 0.1961, 0.6)
+## Color de la zona letal de la explosión de un PROJECTILE. Solo visual.
+const EXPLOSION_COLOR: Color = Color(0.8471, 0.1961, 0.1961, 0.55)
+## Color del radio de disparo y del radio de explosión dibujados en el editor. Solo visual.
+const PROJECTILE_HELPER_COLOR: Color = Color(1.0, 1.0, 1.0, 0.45)
+## Largo de la flecha de dirección en el editor para el final BOUNCE (el recorrido real lo
+## decide el rebote contra la pantalla). Solo visual. Unidad: px.
+const BOUNCE_PREVIEW_LENGTH: float = 80.0
+## Radios usados si la plataforma no tiene `config` (valores por defecto de [PlatformConfig]).
+## Estructural. Unidad: px.
+const DEFAULT_TRIGGER_RADIUS: float = 160.0
+const DEFAULT_EXPLOSION_RADIUS: float = 48.0
 
 @export_group("Forma")
 ## Tamaño del bloque (ancho, alto). Es diseño de nivel, no tuning. Unidad: px.
@@ -73,17 +108,32 @@ const PATH_COLOR: Color = Color(0.8471, 0.1961, 0.1961, 0.6)
 @export var cause: StringName = &"obstacle"
 
 @export_group("Movimiento")
-## Si es true, la plataforma va y viene entre su posición inicial y `inicial + travel`.
+## Si es true, la plataforma va y viene entre su posición inicial y `inicial + travel`. Ignorado
+## por PROJECTILE.
 ## Independiente de `platform_type`: cualquier tipo puede moverse (por ejemplo una TIMED que
 ## además se mueve, o el equivalente del viejo `MovingObstacle` con `platform_type = LETHAL`).
 @export var moves: bool = false:
 	set(value):
 		moves = value
 		queue_redraw()
-## Desplazamiento del extremo final respecto de la posición inicial. Unidad: px.
+## Desplazamiento del extremo final respecto de la posición inicial. Con PROJECTILE es el recorrido
+## en línea recta: su dirección es la dirección de vuelo y su largo es hasta dónde llega (con el
+## final BOUNCE solo importa la dirección). Unidad: px.
 @export var travel: Vector2 = Vector2(120.0, 0.0):
 	set(value):
 		travel = value
+		queue_redraw()
+
+@export_group("Proyectil")
+## Qué dispara el movimiento (solo PROJECTILE): entrar en cámara o que el jugador se acerque.
+@export var projectile_trigger: ProjectileTrigger = ProjectileTrigger.CAMERA:
+	set(value):
+		projectile_trigger = value
+		queue_redraw()
+## Qué hace al llegar al final del recorrido (solo PROJECTILE).
+@export var projectile_end: ProjectileEnd = ProjectileEnd.EXPLODE:
+	set(value):
+		projectile_end = value
 		queue_redraw()
 
 @export_group("Configuración")
@@ -98,6 +148,10 @@ const PATH_COLOR: Color = Color(0.8471, 0.1961, 0.1961, 0.6)
 @onready var _footprint_shape: CollisionShape2D = $FootprintSensor/CollisionShape2D
 @onready var _lethal_area: Area2D = $LethalArea
 @onready var _lethal_shape: CollisionShape2D = $LethalArea/CollisionShape2D
+@onready var _trigger_area: Area2D = $TriggerArea
+@onready var _trigger_shape: CollisionShape2D = $TriggerArea/CollisionShape2D
+@onready var _explosion_area: Area2D = $ExplosionArea
+@onready var _explosion_shape: CollisionShape2D = $ExplosionArea/CollisionShape2D
 
 var _breaking: bool = false
 var _broken: bool = false
@@ -109,6 +163,11 @@ var _pulse_state: PulseState = PulseState.OFF
 var _pulse_elapsed: float = 0.0
 var _origin: Vector2 = Vector2.ZERO
 var _move_elapsed: float = 0.0
+var _proj_state: ProjectileState = ProjectileState.IDLE
+var _proj_elapsed: float = 0.0
+var _proj_travelled: float = 0.0
+var _proj_bounces: int = 0
+var _proj_velocity: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
@@ -122,6 +181,7 @@ func _ready() -> void:
 	_step_sensor.body_entered.connect(_on_step_entered)
 	_step_sensor.body_exited.connect(_on_step_exited)
 	_lethal_area.body_entered.connect(_on_lethal_entered)
+	_explosion_area.body_entered.connect(_on_explosion_entered)
 	_timed_on = config.timed_start_on
 	_origin = position
 	_pulse_state = _compute_pulse_state()
@@ -131,7 +191,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
-	if moves:
+	if moves and platform_type != PlatformType.PROJECTILE:
 		_move_elapsed += delta
 		position = _origin + travel * _get_move_progress()
 	match platform_type:
@@ -141,19 +201,27 @@ func _physics_process(delta: float) -> void:
 			_process_timed(delta)
 		PlatformType.PULSE:
 			_process_pulse(delta)
+		PlatformType.PROJECTILE:
+			_process_projectile(delta)
 
 
 func _draw() -> void:
 	if not Engine.is_editor_hint():
+		# En juego solo se dibuja la explosión de un PROJECTILE (el resto usa el Polygon2D).
+		if platform_type == PlatformType.PROJECTILE and _proj_state == ProjectileState.EXPLODING:
+			draw_circle(Vector2.ZERO, _get_explosion_radius(), EXPLOSION_COLOR)
 		return
 	var half: Vector2 = size * 0.5
 	draw_string(ThemeDB.fallback_font, Vector2(-half.x, -half.y - 4.0), PlatformType.keys()[platform_type], HORIZONTAL_ALIGNMENT_LEFT, -1, 10)
-	if moves:
+	if moves and platform_type != PlatformType.PROJECTILE:
 		draw_line(Vector2.ZERO, travel, PATH_COLOR, 2.0)
 		draw_rect(Rect2(travel - half, size), PATH_COLOR, false, 2.0)
+	if platform_type == PlatformType.PROJECTILE:
+		_draw_projectile_preview(half)
 
 
-## Vuelve al estado inicial: sólida (salvo LETHAL/PULSE en ON), sin romper, en el origen.
+## Vuelve al estado inicial: sólida (salvo LETHAL/PULSE en ON), sin romper, en el origen. Un
+## PROJECTILE vuelve quieto, visible y sin disparar (también si ya había desaparecido).
 func reset() -> void:
 	_breaking = false
 	_broken = false
@@ -167,6 +235,8 @@ func reset() -> void:
 	_change_pulse_state(_pulse_state)
 	if platform_type == PlatformType.TIMED:
 		_apply_solid(_timed_on)
+	elif platform_type == PlatformType.PROJECTILE:
+		_setup_projectile()
 	elif platform_type != PlatformType.LETHAL and platform_type != PlatformType.PULSE:
 		_apply_solid(true)
 
@@ -199,6 +269,12 @@ func _update_shape() -> void:
 	var lethal_margin: float = config.lethal_margin if config != null else 2.0
 	var lethal_size: Vector2 = (size - Vector2(lethal_margin, lethal_margin) * 2.0).max(Vector2(2.0, 2.0))
 	(_lethal_shape.shape as RectangleShape2D).size = lethal_size
+	if not _trigger_shape.shape is CircleShape2D:
+		_trigger_shape.shape = CircleShape2D.new()
+	(_trigger_shape.shape as CircleShape2D).radius = _get_trigger_radius()
+	if not _explosion_shape.shape is CircleShape2D:
+		_explosion_shape.shape = CircleShape2D.new()
+	(_explosion_shape.shape as CircleShape2D).radius = _get_explosion_radius()
 
 
 # Aplica lo que depende del tipo: color, colisión de un sentido, sensores activos y estado
@@ -226,6 +302,8 @@ func _apply_type() -> void:
 		PlatformType.LETHAL:
 			_apply_solid(false, true)
 			_lethal_area.set_deferred("monitoring", true)
+		PlatformType.PROJECTILE:
+			_setup_projectile()
 		PlatformType.PULSE:
 			_pulse_state = _compute_pulse_state()
 			_change_pulse_state(_pulse_state)
@@ -419,6 +497,9 @@ func _try_hit(body: Node2D) -> void:
 	var player: Player = body as Player
 	if player == null or not player.is_alive():
 		return
+	# Un PROJECTILE que ya explotó o desapareció no golpea por el cuerpo: lo hace la explosión.
+	if platform_type == PlatformType.PROJECTILE and (_proj_state == ProjectileState.EXPLODING or _proj_state == ProjectileState.GONE):
+		return
 	# Diagnóstico temporal (brief 06, ronda 2): LT reportó muertes sin nada visible tocándolo.
 	# Con esto, la consola de salida de Godot (al correr con F5/F6 desde el editor) dice
 	# exactamente qué plataforma fue, su tipo y dónde, en vez de tener que adivinar mirando
@@ -428,3 +509,214 @@ func _try_hit(body: Node2D) -> void:
 	])
 	player_hit.emit(cause)
 	player.die(cause)
+	if platform_type == PlatformType.PROJECTILE:
+		_start_explosion()
+
+
+# --- PROJECTILE -------------------------------------------------------------------------------
+
+# Deja al proyectil en su estado inicial: quieto en el origen, visible, letal, sin sólido y con
+# el disparador armado. Lo usan _apply_type (al arrancar) y reset().
+func _setup_projectile() -> void:
+	_proj_state = ProjectileState.IDLE
+	_proj_elapsed = 0.0
+	_proj_travelled = 0.0
+	_proj_bounces = 0
+	_proj_velocity = Vector2.ZERO
+	if config != null and travel.length() > 0.01:
+		_proj_velocity = travel.normalized() * config.projectile_speed
+	_apply_solid(false, true)
+	_lethal_area.set_deferred("monitoring", true)
+	_trigger_area.set_deferred("monitoring", projectile_trigger == ProjectileTrigger.DISTANCE)
+	_explosion_area.set_deferred("monitoring", false)
+	queue_redraw()
+
+
+func _process_projectile(delta: float) -> void:
+	match _proj_state:
+		ProjectileState.IDLE:
+			_hit_overlapping_lethal_bodies()
+			if _is_projectile_trigger_met():
+				_proj_elapsed = 0.0
+				_proj_state = ProjectileState.WAITING
+				_trigger_area.set_deferred("monitoring", false)
+				if config.projectile_start_delay <= 0.0:
+					_launch()
+		ProjectileState.WAITING:
+			_hit_overlapping_lethal_bodies()
+			_proj_elapsed += delta
+			if _proj_elapsed >= config.projectile_start_delay:
+				_launch()
+		ProjectileState.FLYING:
+			_fly(delta)
+			if _proj_state == ProjectileState.FLYING:
+				_hit_overlapping_lethal_bodies()
+		ProjectileState.EXPLODING:
+			_proj_elapsed += delta
+			_hit_overlapping_explosion_bodies()
+			if _proj_elapsed >= config.explosion_duration:
+				_vanish()
+
+
+# true si se cumple el disparador elegido (solo uno a la vez).
+func _is_projectile_trigger_met() -> bool:
+	if projectile_trigger == ProjectileTrigger.CAMERA:
+		var screen: Rect2 = _get_screen_rect()
+		if screen.size == Vector2.ZERO:
+			return false
+		var own: Rect2 = Rect2(global_position - size * 0.5, size)
+		return screen.grow(config.projectile_screen_margin).intersects(own)
+	# `monitoring` se aplica diferido: en el primer frame puede estar todavía apagado.
+	if not _trigger_area.monitoring:
+		return false
+	for body: Node2D in _trigger_area.get_overlapping_bodies():
+		var player: Player = body as Player
+		if player != null and player.is_alive():
+			return true
+	return false
+
+
+func _launch() -> void:
+	_proj_state = ProjectileState.FLYING
+	_proj_elapsed = 0.0
+	launched.emit()
+
+
+func _fly(delta: float) -> void:
+	var length: float = travel.length()
+	if length < 0.01 or config.projectile_speed <= 0.0:
+		_finish_route()
+		return
+	if projectile_end == ProjectileEnd.BOUNCE:
+		position += _proj_velocity * delta
+		_bounce_against_screen()
+		return
+	var step: float = config.projectile_speed * delta
+	var remaining: float = length - _proj_travelled
+	if step >= remaining:
+		position = _origin + travel
+		_proj_travelled = length
+		_finish_route()
+	else:
+		position += travel / length * step
+		_proj_travelled += step
+
+
+# Final del recorrido para EXPLODE y DESTROY (BOUNCE termina en _bounce_against_screen).
+func _finish_route() -> void:
+	if projectile_end == ProjectileEnd.EXPLODE:
+		_start_explosion()
+	else:
+		_vanish()
+
+
+# Rebote contra las 4 paredes de la pantalla (rectángulo visible de la cámara, que se mueve con
+# ella). Solo cuenta si va hacia afuera de esa pared; una plataforma que arranca asomada y va
+# hacia adentro no rebota. Un choque de esquina cuenta como dos rebotes (uno por eje). Con los
+# rebotes agotados, el siguiente choque la hace desaparecer.
+func _bounce_against_screen() -> void:
+	var screen: Rect2 = _get_screen_rect()
+	if screen.size == Vector2.ZERO:
+		return
+	var half: Vector2 = size * 0.5
+	var center: Vector2 = global_position
+	var hit_x: bool = (center.x - half.x < screen.position.x and _proj_velocity.x < 0.0) \
+			or (center.x + half.x > screen.end.x and _proj_velocity.x > 0.0)
+	var hit_y: bool = (center.y - half.y < screen.position.y and _proj_velocity.y < 0.0) \
+			or (center.y + half.y > screen.end.y and _proj_velocity.y > 0.0)
+	if hit_x:
+		if _proj_bounces >= config.projectile_bounce_count:
+			_vanish()
+			return
+		_proj_bounces += 1
+		_proj_velocity.x = -_proj_velocity.x
+	if hit_y:
+		if _proj_bounces >= config.projectile_bounce_count:
+			_vanish()
+			return
+		_proj_bounces += 1
+		_proj_velocity.y = -_proj_velocity.y
+
+
+# Explota en la posición actual: oculta el bloque, apaga la zona letal del cuerpo y enciende la
+# zona de la explosión durante `explosion_duration`.
+func _start_explosion() -> void:
+	if _proj_state == ProjectileState.EXPLODING or _proj_state == ProjectileState.GONE:
+		return
+	_proj_state = ProjectileState.EXPLODING
+	_proj_elapsed = 0.0
+	_body.visible = false
+	_lethal_area.set_deferred("monitoring", false)
+	_trigger_area.set_deferred("monitoring", false)
+	_explosion_area.set_deferred("monitoring", true)
+	queue_redraw()
+	exploded.emit()
+
+
+# Desaparece: queda oculta y sin ninguna zona activa. No se borra (queue_free) para que
+# reset() pueda revivirla.
+func _vanish() -> void:
+	if _proj_state == ProjectileState.GONE:
+		return
+	_proj_state = ProjectileState.GONE
+	_body.visible = false
+	_lethal_area.set_deferred("monitoring", false)
+	_trigger_area.set_deferred("monitoring", false)
+	_explosion_area.set_deferred("monitoring", false)
+	queue_redraw()
+	vanished.emit()
+
+
+# Red de seguridad: si el jugador ya estaba dentro cuando se encendió la explosión, igual muere.
+func _hit_overlapping_explosion_bodies() -> void:
+	if not _explosion_area.monitoring:
+		return
+	for body: Node2D in _explosion_area.get_overlapping_bodies():
+		_hit_by_explosion(body)
+
+
+func _on_explosion_entered(body: Node2D) -> void:
+	_hit_by_explosion(body)
+
+
+func _hit_by_explosion(body: Node2D) -> void:
+	var player: Player = body as Player
+	if player == null or not player.is_alive():
+		return
+	player_hit.emit(cause)
+	player.die(cause)
+
+
+# Rectángulo visible de la cámara activa en coordenadas globales. Rect2() vacío si no hay cámara.
+func _get_screen_rect() -> Rect2:
+	var camera: Camera2D = get_viewport().get_camera_2d()
+	if camera == null:
+		return Rect2()
+	if camera is ScrollCamera:
+		return (camera as ScrollCamera).get_visible_rect()
+	var view: Vector2 = get_viewport_rect().size / camera.zoom
+	return Rect2(camera.get_screen_center_position() - view * 0.5, view)
+
+
+func _get_trigger_radius() -> float:
+	return config.projectile_trigger_distance if config != null else DEFAULT_TRIGGER_RADIUS
+
+
+func _get_explosion_radius() -> float:
+	return config.explosion_radius if config != null else DEFAULT_EXPLOSION_RADIUS
+
+
+# Ayudas del editor para PROJECTILE: dirección y fin del recorrido, radio de disparo y radio de
+# explosión en el punto donde explotaría.
+func _draw_projectile_preview(half: Vector2) -> void:
+	if projectile_end == ProjectileEnd.BOUNCE:
+		var end_point: Vector2 = travel.normalized() * BOUNCE_PREVIEW_LENGTH if travel.length() > 0.01 else Vector2.ZERO
+		draw_line(Vector2.ZERO, end_point, PATH_COLOR, 2.0)
+		draw_circle(end_point, 4.0, PATH_COLOR)
+	else:
+		draw_line(Vector2.ZERO, travel, PATH_COLOR, 2.0)
+		draw_rect(Rect2(travel - half, size), PATH_COLOR, false, 2.0)
+		if projectile_end == ProjectileEnd.EXPLODE:
+			draw_arc(travel, _get_explosion_radius(), 0.0, TAU, 48, PROJECTILE_HELPER_COLOR, 1.5)
+	if projectile_trigger == ProjectileTrigger.DISTANCE:
+		draw_arc(Vector2.ZERO, _get_trigger_radius(), 0.0, TAU, 64, PROJECTILE_HELPER_COLOR, 1.5)

@@ -94,7 +94,12 @@ func _get_child_rect(child: Node) -> Rect2:
 		return Rect2(door.position - door.size * 0.5, door.size)
 	if child is Platform:
 		var platform: Platform = child as Platform
-		return Rect2(platform.position - platform.size * 0.5, platform.size)
+		var platform_rect: Rect2 = Rect2(platform.position - platform.size * 0.5, platform.size)
+		# Un PROJECTILE recorre `travel` en línea recta; con el final BOUNCE rebota contra la
+		# pantalla, así que el recorrido no se acota al segmento.
+		if platform.platform_type == Platform.PlatformType.PROJECTILE and platform.projectile_end != Platform.ProjectileEnd.BOUNCE:
+			platform_rect = platform_rect.merge(Rect2(platform_rect.position + platform.travel, platform.size))
+		return platform_rect
 	if child is StaticBody2D:
 		var body: StaticBody2D = child as StaticBody2D
 		var points: PackedVector2Array = PackedVector2Array()

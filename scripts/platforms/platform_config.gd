@@ -53,3 +53,22 @@ extends Resource
 ## Desfase del ciclo al empezar. Con 0 arranca segura; con `pulse_off_time` arranca letal.
 ## Sirve para desincronizar varias instancias. Unidad: s.
 @export var pulse_initial_offset: float = 0.0
+
+@export_group("Proyectil (PROJECTILE)")
+## Velocidad de vuelo una vez disparado. Unidad: px/s.
+@export var projectile_speed: float = 180.0
+## Radio de disparo para el disparador DISTANCE: arranca cuando el cuerpo del jugador toca el
+## círculo de este radio centrado en la plataforma. Unidad: px.
+@export var projectile_trigger_distance: float = 160.0
+## Espera entre que se cumple el disparador y que empieza a moverse. Unidad: s.
+@export var projectile_start_delay: float = 0.0
+## Margen extra del rectángulo de pantalla para el disparador CAMERA. Positivo: se dispara antes
+## de entrar en pantalla; negativo: después de entrar un poco. Unidad: px.
+@export var projectile_screen_margin: float = 0.0
+## Cantidad de rebotes contra las paredes de la pantalla (final BOUNCE). Al chocar una vez más,
+## desaparece. Unidad: rebotes.
+@export var projectile_bounce_count: int = 3
+## Radio de la zona letal de la explosión. Unidad: px.
+@export var explosion_radius: float = 48.0
+## Cuánto dura la zona letal de la explosión antes de desaparecer. Unidad: s.
+@export var explosion_duration: float = 0.3

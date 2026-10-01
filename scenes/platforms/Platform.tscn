@@ -19,6 +19,14 @@ size = Vector2(80, 12)
 resource_local_to_scene = true
 size = Vector2(80, 12)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_trigger"]
+resource_local_to_scene = true
+radius = 160.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_explosion"]
+resource_local_to_scene = true
+radius = 48.0
+
 [node name="Platform" type="AnimatableBody2D"]
 collision_layer = 1
 collision_mask = 0
@@ -57,3 +65,19 @@ monitoring = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LethalArea"]
 shape = SubResource("RectangleShape2D_lethal")
+
+[node name="TriggerArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TriggerArea"]
+shape = SubResource("CircleShape2D_trigger")
+
+[node name="ExplosionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExplosionArea"]
+shape = SubResource("CircleShape2D_explosion")
