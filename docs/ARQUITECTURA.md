@@ -39,7 +39,7 @@ Sandbox (Node2D)                      scenes/levels/sandbox.tscn (escena de prue
 ├── GoalDoor (Area2D, capa 5, máscara 2)  scenes/goal/Door.tscn (puerta de meta, cerca de la cima)
 │   └── Body (Polygon2D), Handle, CollisionShape2D
 ├── Player (CharacterBody2D)          scenes/player/Player.tscn
-│   └── Body, CollisionShape2D, ThrustIndicator
+│   └── Body, CollisionShape2D, ThrustIndicator, DashCooldownBar
 ├── Tentacle (Node2D)                 scenes/tentacle/Tentacle.tscn (export: camera)
 │   ├── BodyPolygon (Polygon2D)
 │   └── KillZone (Area2D, capa 4, máscara 2) → CollisionShape2D

@@ -1,6 +1,6 @@
 # Mecánica: jugador con jetpack
 
-**Archivos:** `scripts/player/player.gd`, `scripts/player/player_config.gd`, `scenes/player/Player.tscn`, `resources/configs/player_config.tres`.
+**Archivos:** `scripts/player/player.gd`, `scripts/player/player_config.gd`, `scripts/player/dash_cooldown_bar.gd`, `scenes/player/Player.tscn`, `resources/configs/player_config.tres`.
 **Escena de prueba:** `scenes/levels/sandbox.tscn` (F6 en el editor). **Overlay de debug:** `scenes/ui/DebugOverlay.tscn` (F3).
 
 ## Propósito
@@ -16,7 +16,8 @@ Un astronauta que se mueve con un jetpack de combustible limitado. Es la mecáni
 - **Gravedad única (brief 06, ronda 1).** `gravity_with_fuel` y `gravity_without_fuel` se llevaron al mismo valor: la gravedad ya no cambia al quedarse sin combustible. `gravity_transition_time` queda sin efecto práctico (ambas gravedades son iguales) pero no se quitó del código.
 - **Salto.** Sin combustible y apoyado en una superficie, `jump` da un impulso hacia arriba (`jump_velocity`). Sirve para llegar a un tanque elevado. Con combustible no se puede saltar (configurable).
 - **Rebote.** Al chocar contra una superficie a más de `bounce_min_speed`, se devuelve una fracción (`wall_bounce`) de la velocidad de impacto. Con 0 se detiene o desliza; con 1 rebota de forma elástica.
-- **Orden de cálculo por frame** (`_physics_process`): entrada → caminar (si está apoyado) y/o propulsión, o frenado → gravedad → salto → movimiento y rebote → consumo de combustible → visuales.
+- **Dash lateral.** Con `dash` (Shift) el jugador se lanza en línea recta `dash_distance` px en `dash_duration` s, sin gravedad y sin control, en el aire o en el piso. Va hacia el lado que se mantiene (A/D o flechas); si no se mantiene ninguno, hacia el último lado pulsado (al empezar, derecha). Si además se mantiene arriba (W o ↑), sale en **diagonal hacia arriba** a 45°, recorriendo `dash_diagonal_distance` px en total en el mismo tiempo. Cuesta `dash_fuel_cost` u fijos (si hay menos, no se hace) y tiene un enfriamiento de `dash_cooldown` s contado desde que arranca. Al terminar queda con velocidad 0. Si choca con una pared o un techo se detiene ahí, sin rebote. **No es invulnerable:** un obstáculo o trampa en el camino lo mata (`obstacle` / `trap`). Mientras dura el enfriamiento aparece una barrita sobre la cabeza que se llena y desaparece (`show_cooldown_bar` la activa o desactiva).
+- **Orden de cálculo por frame** (`_physics_process`): entrada → enfriamiento y dash (si está en curso, reemplaza todo lo que sigue) → caminar (si está apoyado) y/o propulsión, o frenado → gravedad → salto → movimiento y rebote → consumo de combustible → visuales.
 
 ## Parámetros (`PlayerConfig`)
 
@@ -42,6 +43,12 @@ Un astronauta que se mueve con un jetpack de combustible limitado. Es la mecáni
 | Salto | `jump_requires_empty_fuel` | bool | true | — | Solo saltar sin combustible | |
 | Salto | `jump_empty_threshold` | float | 0.0 | u | Combustible ≤ este valor = "vacío" | También define gravedad alta y color rojo |
 | Salto | `jump_requires_floor` | bool | true | — | Solo saltar apoyado | |
+| Dash | `dash_distance` | float | 90 | px | Distancia que recorre el dash | Más alto = cruza más espacio de un tirón |
+| Dash | `dash_diagonal_distance` | float | 90 | px | Distancia total del dash en diagonal hacia arriba (45°) | 0 desactiva solo el dash diagonal |
+| Dash | `dash_duration` | float | 0.15 | s | Duración del dash (velocidad = distancia / duración) | Mínimo efectivo 0.01 |
+| Dash | `dash_cooldown` | float | 1.0 | s | Espera entre dashes, contada desde que empieza uno | 0 = sin espera |
+| Dash | `dash_fuel_cost` | float | 10 | u | Combustible fijo por dash | 7 o 12 para variar la dificultad. Con menos que esto no hay dash |
+| Dash | `show_cooldown_bar` | bool | true | — | Muestra la barrita de enfriamiento sobre el jugador | Solo visual |
 | Colisión | `wall_bounce` | float | 0.25 | 0 a 1 | Rebote al chocar | |
 | Colisión | `bounce_min_speed` | float | 40 | px/s | Impacto mínimo para rebotar | **Parámetro agregado** (no estaba en el brief): sin él el jugador vibra al apoyarse |
 
@@ -74,6 +81,9 @@ Un astronauta que se mueve con un jetpack de combustible limitado. Es la mecáni
 | `is_control_locked() -> bool` | true mientras dura el bloqueo del Input |
 | `set_frozen(frozen: bool) -> void` | `true`: oculta el cuerpo y el indicador de propulsión, detiene `_physics_process` y desactiva la colisión. `false`: lo revierte. La intro lo usa mientras el jugador está "detrás de la escotilla" |
 | `is_frozen() -> bool` | true si está congelado |
+| `can_dash() -> bool` | true si puede hacer un dash ya: vivo, sin bloqueo de control, sin dash en curso, sin enfriamiento y con combustible suficiente |
+| `is_dashing() -> bool` | true mientras dura el dash |
+| `get_dash_cooldown_ratio() -> float` | Avance del enfriamiento de 0 a 1 (1 = listo). Lo usa la barrita |
 | `get_fuel() -> float`, `is_thrusting() -> bool`, `can_jump() -> bool`, `get_current_gravity() -> float`, `is_alive() -> bool` | Consultas de estado (agregadas; las usa el overlay de debug). Ojo: `is_alive()` es "la partida sigue en curso para el jugador": devuelve `false` tras morir **y** tras ganar |
 
 ## Estructura de nodos
@@ -82,11 +92,13 @@ Un astronauta que se mueve con un jetpack de combustible limitado. Es la mecáni
 Player (CharacterBody2D, grupo "player", capa 2, máscara 1)
 ├── Body (Polygon2D, 16×24, naranja; rojo sin combustible)
 ├── CollisionShape2D (RectangleShape2D 16×24)
-└── ThrustIndicator (Polygon2D pequeño, blanco azulado, aparece hacia la dirección de propulsión)
+├── ThrustIndicator (Polygon2D pequeño, blanco azulado, aparece hacia la dirección de propulsión)
+└── DashCooldownBar (Node2D con `DashCooldownBar`, 16×3 px sobre la cabeza, blanco azulado; solo visible durante el enfriamiento)
 ```
 
 ## Cómo probarlo
 
 1. Abrir `scenes/levels/sandbox.tscn` y ejecutar con F6.
 2. Mover con WASD o flechas; F3 muestra u oculta el overlay con velocidad, combustible, gravedad y estado.
-3. Editar `resources/configs/player_config.tres` en el inspector (con el juego cerrado) y volver a ejecutar. Los valores que se ajustan mientras se prueba son de prueba, no de balance: no se anotan en `docs/TUNING_LOG.md`.
+3. Shift hace el dash (con W apretado, en diagonal hacia arriba): probar a la izquierda y a la derecha, en el aire y en el piso, contra una pared, con poco combustible (con menos de `dash_fuel_cost` no sale) y viendo la barrita durante 1 s.
+4. Editar `resources/configs/player_config.tres` en el inspector (con el juego cerrado) y volver a ejecutar. Los valores que se ajustan mientras se prueba son de prueba, no de balance: no se anotan en `docs/TUNING_LOG.md`.

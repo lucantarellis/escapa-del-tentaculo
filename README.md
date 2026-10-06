@@ -28,6 +28,7 @@ Durante la partida hay un HUD mínimo (barra de combustible a la izquierda y pro
 |---|---|
 | Propulsar (izquierda / derecha / arriba / abajo) | A D W S o flechas |
 | Saltar (solo sin combustible y apoyado en una superficie) | Espacio |
+| Dash lateral (gasta combustible, tiene enfriamiento) | Shift |
 | Reiniciar (directo al juego, sin volver al título) | R |
 | Mostrar u ocultar el overlay de debug | F3 |
 
