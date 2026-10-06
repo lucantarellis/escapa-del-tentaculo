@@ -1,6 +1,6 @@
 class_name PlayerConfig
 extends Resource
-## Parámetros de gameplay del jugador (jetpack, gravedad, combustible, salto, colisión).
+## Parámetros de gameplay del jugador (jetpack, gravedad, combustible, salto, dash, colisión).
 ##
 ## Todos los valores son un punto de partida para iterar jugando. Se editan desde el
 ## inspector sobre `resources/configs/player_config.tres`; ningún número de gameplay
@@ -61,6 +61,24 @@ extends Resource
 @export var jump_empty_threshold: float = 0.0
 ## Si es true, solo se puede saltar apoyado en una superficie.
 @export var jump_requires_floor: bool = true
+
+@export_group("Dash")
+## Distancia que recorre un dash si no choca con nada. Unidad: px.
+@export var dash_distance: float = 90.0
+## Distancia total que recorre el dash en diagonal hacia arriba (mantener arriba + dash), en línea
+## recta a 45°, si no choca con nada. Unidad: px.
+@export var dash_diagonal_distance: float = 90.0
+## Duración del dash: define qué tan seco se siente (velocidad = distancia / duración).
+## Se usa como mínimo 0,01 s. Unidad: s.
+@export var dash_duration: float = 0.15
+## Espera para poder volver a hacer un dash, contada desde que empieza el anterior.
+## Unidad: s.
+@export var dash_cooldown: float = 1.0
+## Combustible que gasta cada dash. Con menos que esto no se puede hacer dash. Unidad: u.
+@export var dash_fuel_cost: float = 10.0
+## Si es true, muestra una barrita sobre el jugador mientras el dash está en cooldown.
+## Solo visual: el dash funciona igual con la barra apagada.
+@export var show_cooldown_bar: bool = true
 
 @export_group("Colisión")
 ## Rebote al chocar: 0 = se detiene o desliza, 1 = rebote elástico. Rango: 0 a 1.

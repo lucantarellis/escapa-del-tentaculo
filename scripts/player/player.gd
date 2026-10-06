@@ -4,8 +4,9 @@ extends CharacterBody2D
 ##
 ## Propulsa en 4 direcciones (combinables) con inercia, gasta combustible al propulsar y
 ## tiene gravedad casi nula mientras queda combustible. Sin combustible la gravedad sube y
-## puede saltar desde una superficie. Todos los valores salen de [PlayerConfig].
-## Ver `docs/mecanicas/jugador.md`.
+## puede saltar desde una superficie. Con la acción `dash` se lanza hacia un costado (o en
+## diagonal hacia arriba si se mantiene arriba) una distancia fija, a cambio de un poco de combustible y con un tiempo de espera (cooldown).
+## Todos los valores salen de [PlayerConfig]. Ver `docs/mecanicas/jugador.md`.
 
 ## Se emite cada vez que cambia el combustible.
 signal fuel_changed(current: float, maximum: float)
@@ -37,6 +38,7 @@ const THRUST_INDICATOR_DISTANCE: float = 16.0
 @onready var _body: Polygon2D = $Body
 @onready var _thrust_indicator: Polygon2D = $ThrustIndicator
 @onready var _collision: CollisionShape2D = $CollisionShape2D
+@onready var _cooldown_bar: DashCooldownBar = $DashCooldownBar
 
 var _fuel: float = 0.0
 ## 0 = gravedad con combustible, 1 = gravedad sin combustible.
@@ -51,6 +53,17 @@ var _was_empty: bool = false
 var _frozen: bool = false
 ## Tiempo que le queda al bloqueo del Input tras un lanzamiento (ver [method launch]). Unidad: s.
 var _control_lock_left: float = 0.0
+## Dirección (vector unitario) del dash en curso: horizontal o diagonal hacia arriba. Solo vale mientras hay un dash.
+var _dash_direction: Vector2 = Vector2.RIGHT
+## Velocidad del dash en curso (distancia / duración). Solo vale mientras hay un dash. Unidad: px/s.
+var _dash_speed: float = 0.0
+## Distancia que le falta recorrer al dash en curso (0 = no hay dash). Unidad: px.
+var _dash_distance_left: float = 0.0
+## Tiempo que falta para poder hacer otro dash. Unidad: s.
+var _dash_cooldown_left: float = 0.0
+## Último lado al que se apretó moverse (-1 izquierda, 1 derecha): hacia dónde va el dash
+## cuando no se aprieta ninguna dirección.
+var _facing: float = 1.0
 
 
 func _ready() -> void:
@@ -60,6 +73,7 @@ func _ready() -> void:
 	_current_gravity = config.gravity_with_fuel
 	_was_empty = is_fuel_empty()
 	_update_visuals(Vector2.ZERO)
+	_update_cooldown_bar()
 	fuel_changed.emit(_fuel, config.max_fuel)
 
 
@@ -70,6 +84,18 @@ func _physics_process(delta: float) -> void:
 	var locked: bool = _control_lock_left > 0.0
 	_control_lock_left = maxf(_control_lock_left - delta, 0.0)
 	var input: Vector2 = Vector2.ZERO if locked else Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	_tick_dash_cooldown(delta)
+	if input.x != 0.0:
+		_facing = signf(input.x)
+	# Con "arriba" mantenido el dash sale en diagonal hacia arriba; si no, es lateral.
+	var dash_up: bool = input.y < 0.0
+	if _dash_distance_left <= 0.0 and Input.is_action_just_pressed("dash") and can_dash() and _get_dash_distance(dash_up) > 0.0:
+		_start_dash(dash_up)
+	# Un dash en curso (o uno que arranca ahora) reemplaza al movimiento normal: sin propulsión,
+	# sin caminar, sin gravedad y sin salto hasta que termina.
+	if _dash_distance_left > 0.0:
+		_process_dash(delta)
+		return
 	var on_floor: bool = is_on_floor()
 	# Sobre una superficie el eje horizontal se camina (sin combustible); el jetpack solo
 	# se usa solo para subir.
@@ -132,6 +158,29 @@ func can_jump() -> bool:
 	return true
 
 
+## Devuelve true si en este momento se puede hacer un dash: el jugador está vivo y con
+## control, no hay otro dash en curso ni en cooldown, la distancia es mayor a 0 y alcanza el
+## combustible (`dash_fuel_cost`).
+func can_dash() -> bool:
+	if not _is_alive or is_control_locked() or _dash_distance_left > 0.0:
+		return false
+	if _dash_cooldown_left > 0.0 or maxf(config.dash_distance, config.dash_diagonal_distance) <= 0.0:
+		return false
+	return _fuel >= config.dash_fuel_cost
+
+
+## Devuelve true mientras hay un dash en curso.
+func is_dashing() -> bool:
+	return _dash_distance_left > 0.0
+
+
+## Devuelve cuánto se recuperó el cooldown del dash, de 0.0 (recién usado) a 1.0 (listo).
+func get_dash_cooldown_ratio() -> float:
+	if config.dash_cooldown <= 0.0:
+		return 1.0
+	return clampf(1.0 - _dash_cooldown_left / config.dash_cooldown, 0.0, 1.0)
+
+
 ## Devuelve la gravedad que se está aplicando ahora. Unidad: px/s².
 func get_current_gravity() -> float:
 	return _current_gravity
@@ -150,8 +199,10 @@ func die(cause: StringName) -> void:
 		return
 	_is_alive = false
 	velocity = Vector2.ZERO
+	_dash_distance_left = 0.0
 	_set_thrusting(false)
 	_thrust_indicator.visible = false
+	_update_cooldown_bar()
 	died.emit(cause)
 
 
@@ -169,8 +220,10 @@ func win() -> void:
 	_is_alive = false
 	_has_won = true
 	velocity = Vector2.ZERO
+	_dash_distance_left = 0.0
 	_set_thrusting(false)
 	_thrust_indicator.visible = false
+	_update_cooldown_bar()
 	won.emit()
 
 
@@ -184,9 +237,11 @@ func set_frozen(frozen: bool) -> void:
 	_body.visible = not frozen
 	_collision.set_deferred("disabled", frozen)
 	if frozen:
+		_dash_distance_left = 0.0
 		_thrust_indicator.visible = false
 	else:
 		_update_visuals(Vector2.ZERO)
+	_update_cooldown_bar()
 
 
 ## Lanza al jugador: lo descongela, le da [param launch_velocity] (px/s) y bloquea el Input
@@ -220,11 +275,72 @@ func reset(spawn_position: Vector2) -> void:
 	_has_won = false
 	_gravity_blend = 0.0
 	_current_gravity = config.gravity_with_fuel
+	_dash_distance_left = 0.0
+	_dash_cooldown_left = 0.0
+	_facing = 1.0
 	_set_thrusting(false)
 	_fuel = clampf(config.starting_fuel, 0.0, config.max_fuel)
 	_was_empty = is_fuel_empty()
 	fuel_changed.emit(_fuel, config.max_fuel)
 	_update_visuals(Vector2.ZERO)
+	_update_cooldown_bar()
+
+
+# Empieza un dash hacia `_facing` (en diagonal hacia arriba si `up`): gasta el combustible y
+# arranca el cooldown. Hay que comprobar `can_dash()` antes.
+func _start_dash(up: bool) -> void:
+	_dash_direction = Vector2(_facing, -1.0).normalized() if up else Vector2(_facing, 0.0)
+	_dash_distance_left = _get_dash_distance(up)
+	_dash_speed = _dash_distance_left / maxf(config.dash_duration, 0.01)
+	_dash_cooldown_left = maxf(config.dash_cooldown, 0.0)
+	_set_fuel(_fuel - config.dash_fuel_cost)
+	_set_thrusting(false)
+	_update_cooldown_bar()
+
+
+# Avanza el dash en curso un frame, en línea recta. No pasa por `_move_with_bounce`: contra una
+# pared se detiene sin rebotar. El último paso se acorta para recorrer exactamente la
+# distancia configurada.
+func _process_dash(delta: float) -> void:
+	var step: float = minf(_dash_speed * delta, _dash_distance_left)
+	velocity = _dash_direction * (step / delta)
+	move_and_slide()
+	_dash_distance_left -= step
+	# `is_zero_approx` evita un frame extra por la sobra mínima del redondeo de decimales.
+	if _dash_distance_left <= 0.0 or is_zero_approx(_dash_distance_left) or is_on_wall() or is_on_ceiling():
+		_end_dash()
+	_update_fuel(false, delta)
+	_set_thrusting(false)
+	_update_visuals(Vector2.ZERO)
+
+
+# Termina el dash y frena en seco: así el desplazamiento total es la distancia configurada,
+# sin deriva extra por la inercia.
+func _end_dash() -> void:
+	_dash_distance_left = 0.0
+	velocity = Vector2.ZERO
+
+
+# Distancia del dash según el tipo: lateral o diagonal hacia arriba.
+func _get_dash_distance(up: bool) -> float:
+	return config.dash_diagonal_distance if up else config.dash_distance
+
+
+func _tick_dash_cooldown(delta: float) -> void:
+	if _dash_cooldown_left <= 0.0:
+		return
+	_dash_cooldown_left = maxf(_dash_cooldown_left - delta, 0.0)
+	_update_cooldown_bar()
+
+
+# La barra solo se ve mientras el dash está en cooldown, si la config lo permite y mientras el
+# jugador está vivo y visible.
+func _update_cooldown_bar() -> void:
+	var should_show: bool = config.show_cooldown_bar and _is_alive and not _frozen \
+			and _dash_cooldown_left > 0.0 and config.dash_cooldown > 0.0
+	_cooldown_bar.visible = should_show
+	if should_show:
+		_cooldown_bar.set_ratio(1.0 - _dash_cooldown_left / config.dash_cooldown)
 
 
 func _apply_thrust(input: Vector2, delta: float) -> void:

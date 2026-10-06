@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/player/player.gd" id="1_player"]
 [ext_resource type="Resource" path="res://resources/configs/player_config.tres" id="2_config"]
+[ext_resource type="Script" path="res://scripts/player/dash_cooldown_bar.gd" id="3_dashbar"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(16, 24)
@@ -23,3 +24,8 @@ shape = SubResource("RectangleShape2D_body")
 visible = false
 color = Color(0.7843, 0.9059, 0.9176, 1)
 polygon = PackedVector2Array(-3, -3, 3, -3, 3, 3, -3, 3)
+
+[node name="DashCooldownBar" type="Node2D" parent="."]
+visible = false
+position = Vector2(0, -23)
+script = ExtResource("3_dashbar")
