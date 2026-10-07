@@ -24,8 +24,8 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | Física | Gravedad casi nula, pero no cero, mientras hay combustible. Movimiento con inercia configurable, arrancando con deriva suave | LT |
 | Combustible | Cantidad limitada. Se recarga solo con tanques recogibles | LT (límite) / Propuesta de Claude (solo con tanques) |
 | Sin combustible | La gravedad sube a un valor normal y el jugador puede saltar desde una superficie para alcanzar un tanque elevado | LT (salto) / Propuesta de Claude (detalle), parametrizado |
-| Scroll | La cámara sube a velocidad constante configurable | Propuesta de Claude |
-| Tentáculo | Anclado al borde inferior de la cámara. Contacto = derrota | LT |
+| Scroll | Originalmente la cámara subía a velocidad constante configurable. Reemplazado por el seguimiento al jugador (ver fila "Cámara sigue al jugador"); el modo anterior queda con `follow_player` apagado | Propuesta de Claude |
+| Tentáculo | Originalmente anclado al borde inferior de la cámara. Contacto = derrota | LT |
 | Parametrización | Todo valor de gameplay es una variable exportada en un `Resource` de configuración, para iterar y descubrir qué es divertido | LT |
 | Documentación | Obligatoria: cualquier persona debe poder entender el código leyendo `docs/` y los comentarios | LT |
 | Teclas | WASD y flechas para propulsar, Espacio para saltar, R reinicia, F3 debug | Propuesta de Claude |
@@ -38,6 +38,7 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | Obstáculos y tanques | Son escenas reutilizables, configurables por instancia (tamaño, recorrido, config `.tres`), para que el diseño de niveles (fijo o por segmentos) siga abierto | LT (brief 02) |
 | Valores de prueba | Los `.tres` de configuración son valores de prueba de LT, no finales. Sus ajustes durante las pruebas no se registran en `docs/TUNING_LOG.md` (solo se usa para pruebas reales de balance) | LT |
 | Trampa intermitente | Es sólida mientras es segura (inactiva o en aviso) para poder apoyarse encima; al activarse pasa a letal | LT (brief 02, paso 4) |
+| Cámara sigue al jugador | La cámara sube y baja con el jugador (lo muestra a 60 % de la altura, suavizado 6, sin bajar de su posición inicial). El tentáculo sube por su cuenta (`rise_speed`, `rise_acceleration`, `max_rise_speed`), puede quedar fuera de pantalla y todo lo que esté bajo su borde superior es letal. `follow_player` apagado devuelve el modo anterior. Valores iniciales de prueba, sin balancear | Socio (Guido, iteración en `main-g`), pendiente de validar jugando |
 | Causas de muerte | `&"tentacle"`, `&"fell"`, `&"obstacle"`, `&"trap"`. La muerte es siempre `Player.die(cause)` y el controlador escucha `Player.died(cause)` | Propuesta de Claude (brief 02) |
 | Fin de partida (MVP) | Al llegar a la puerta el jugador gana y el juego termina; se reinicia con R. Puntaje u otra progresión: a definir más adelante (no implementado, pero el estado queda desacoplado) | LT (brief 03) |
 | Niveles por segmentos | Cada partida ensambla segmentos escritos a mano (escenas de 360 px de ancho) elegidos al azar con una seed reproducible. Resuelve la decisión abierta de niveles fijos vs. por segmentos | LT (brief 03) |
@@ -158,7 +159,7 @@ Integración de los tres sprite sheets (astronauta, tileset, tentáculo; el del 
 - **Espiral de muerte sin combustible.** Si el jugador se queda sin combustible lejos de una superficie, cae hacia el tentáculo. Hay que decidir en el diseño de niveles cuántos tanques hay y qué tan a mano quedan.
 - **Controles táctiles.** Propulsión en 4 direcciones mantenida por dedo sugiere joystick virtual. Conviene prototiparlo antes de la etapa final, no después.
 - **Muerte por caída sin probar por LT.** El checklist del paso 3 (caer bajo el borde) se verificó por simulación, pero LT no lo probó jugando.
-- **Comportamiento del tentáculo.** Por ahora solo sube con la cámara. Ataques o variaciones quedan para más adelante.
+- **Comportamiento del tentáculo.** Por ahora solo sube solo, a velocidad con aceleración. Ataques o variaciones quedan para más adelante.
 - **Escalado pixel-perfect.** Durante el prototipo se usa escalado fraccional. La decisión de escalado entero se toma con el arte final.
 - **Curva de dificultad.** La velocidad de scroll y el consumo de combustible son las dos variables que más la definen.
 

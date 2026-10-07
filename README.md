@@ -1,6 +1,6 @@
 # Escapa del Tentáculo
 
-Un astronauta escapa de un tentáculo alienígena dentro de una nave espacial, usando un jetpack para esquivar obstáculos mientras la pantalla sube a velocidad constante, hasta llegar a una puerta antes de que el tentáculo lo atrape.
+Un astronauta escapa de un tentáculo alienígena dentro de una nave espacial, usando un jetpack para esquivar obstáculos mientras la cámara lo sigue y el tentáculo sube por su cuenta, hasta llegar a una puerta antes de que el tentáculo lo atrape.
 
 ## Requisitos
 

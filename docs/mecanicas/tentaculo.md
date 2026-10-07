@@ -5,12 +5,13 @@
 
 ## Propósito
 
-Es la amenaza: una masa roja anclada al borde inferior de la pantalla que sube con la cámara. Si el jugador la toca, o cae por debajo del borde inferior, pierde. Obliga a subir sin quedarse atrás.
+Es la amenaza: una masa roja que sube por su cuenta a una velocidad configurable. Todo lo que queda por debajo de su borde superior es letal. Si el jugador la toca, o cae por debajo del borde inferior de la pantalla, pierde. Obliga a subir sin quedarse atrás.
 
 ## Modelo en palabras simples
 
-- **Anclado a la cámara.** En cada tick de física el tentáculo se coloca con su borde superior a `visible_height` px por encima del borde inferior de la pantalla (`camera.get_bottom_y() - visible_height`). Con `extra_rise_speed` > 0 sube además a esa velocidad, acumulándose: gana terreno sobre la cámara.
-- **Final del nivel.** Cuando la cámara llega a su tope (`ScrollCamera.has_reached_end()`, por ejemplo al detenerse con el segmento final a la vista), el tentáculo no se queda quieto: sube a `end_rise_speed` (más `extra_rise_speed`) hasta cubrir toda la pantalla. Como el jugador no puede salir por arriba (pared de la cámara), no hay refugio: hay que llegar a la puerta antes de que lo alcance. Al ganar o perder el nivel congela el ascenso con `set_rising(false)`.
+- **Sube sola (por defecto, cámara con `follow_player`).** Arranca con su borde superior a `visible_height` px sobre el borde inferior de la pantalla. Cuando la cámara se pone en marcha (tras `start_delay`) empieza a subir a `rise_speed`; con `rise_acceleration_enabled` aumenta `rise_acceleration` px/s por segundo hasta `max_rise_speed`, y sin ella sube siempre a `rise_speed`. Ya no depende de la cámara: si el jugador sube rápido queda **fuera de la pantalla**, por debajo, y sigue subiendo a su ritmo. La zona letal cubre todo lo que está por debajo de su borde superior (hasta `FREE_RISE_KILL_DEPTH` = 8000 px), incluso fuera de la pantalla. Al ganar o perder se congela con `set_rising(false)`.
+- **Modo anterior (cámara con `follow_player` apagado): anclado a la cámara.** En cada tick de física el tentáculo se coloca con su borde superior a `visible_height` px por encima del borde inferior de la pantalla (`camera.get_bottom_y() - visible_height`). Con `extra_rise_speed` > 0 sube además a esa velocidad, acumulándose: gana terreno sobre la cámara.
+- **Final del nivel (solo modo anterior).** Cuando la cámara llega a su tope (`ScrollCamera.has_reached_end()`, por ejemplo al detenerse con el segmento final a la vista), el tentáculo no se queda quieto: sube a `end_rise_speed` (más `extra_rise_speed`) hasta cubrir toda la pantalla. Como el jugador no puede salir por arriba (pared de la cámara), no hay refugio: hay que llegar a la puerta antes de que lo alcance. Al ganar o perder el nivel congela el ascenso con `set_rising(false)`.
 - **Cuerpo.** Un `Polygon2D` rojo cuyo borde superior son `wobble_segments + 1` puntos que suben y bajan con una onda senoidal (`wobble_amplitude`, `wobble_frequency`). El cuerpo siempre se extiende hasta 96 px por debajo del borde de la pantalla, así nunca queda un hueco aunque suba más rápido que la cámara.
 - **Zona letal (`KillZone`, `Area2D`, capa 4, máscara 2).** Un rectángulo que empieza `kill_zone_inset` px *por debajo* del borde superior del polígono visible (margen de gracia: rozar la punta ondulante no mata) y llega hasta el fondo del cuerpo. Se redimensiona cada tick.
 - **Dos formas de morir.** Contacto: la `KillZone` detecta al `Player` → causa `&"tentacle"`. Caída: si `kill_on_leaving_screen_bottom` está activo y el centro del jugador queda más de `screen_bottom_margin` px por debajo del borde inferior → causa `&"fell"`. En la práctica el contacto casi siempre ocurre antes (el tentáculo cubre el borde inferior); la caída es una red de seguridad, por ejemplo si `visible_height` se lleva a valores muy chicos o el jugador atraviesa la zona a mucha velocidad.
@@ -21,9 +22,13 @@ Es la amenaza: una masa roja anclada al borde inferior de la pantalla que sube c
 | Grupo | Variable | Tipo | Valor inicial | Unidad | Efecto | Consejo de tuning |
 |---|---|---|---|---|---|---|
 | Posición | `visible_height` | float | 70 | px | Cuánto se ve sobre el borde inferior | Más alto = más amenazante y menos espacio jugable |
-| Posición | `extra_rise_speed` | float | 0.0 | px/s | Ascenso adicional respecto de la cámara | Usar valores chicos (2–10): se acumula y acaba tapando la pantalla |
-| Final del nivel | `rise_after_camera_stops` | bool | true | — | Al detenerse la cámara en el final del nivel, el tentáculo sigue subiendo hasta cubrir la pantalla | Si se desactiva, quien llega al final queda a salvo mientras la cámara esté quieta |
-| Final del nivel | `end_rise_speed` | float | 40 | px/s | Velocidad de ascenso con la cámara detenida (se suma a `extra_rise_speed`) | 40 = igual que el scroll: sigue como si la cámara no se hubiera detenido |
+| Ascenso propio | `rise_speed` | float | 40 | px/s | Velocidad inicial de ascenso | Debe ser menor que la velocidad de subida del jugador para que sea escapable |
+| Ascenso propio | `rise_acceleration_enabled` | bool | true | — | Prende o apaga la aceleración | Apagado = velocidad constante `rise_speed` |
+| Ascenso propio | `rise_acceleration` | float | 1.0 | px/s² | Aumento de velocidad por segundo. Solo con la casilla prendida | Valores chicos (0,5–3) se sienten a lo largo de un nivel |
+| Ascenso propio | `max_rise_speed` | float | 120 | px/s | Tope de velocidad | |
+| Posición | `extra_rise_speed` | float | 0.0 | px/s | Ascenso adicional respecto de la cámara. Solo modo anterior | Usar valores chicos (2–10): se acumula y acaba tapando la pantalla |
+| Final del nivel | `rise_after_camera_stops` | bool | true | — | Solo modo anterior. Al detenerse la cámara en el final del nivel, el tentáculo sigue subiendo hasta cubrir la pantalla | Si se desactiva, quien llega al final queda a salvo mientras la cámara esté quieta |
+| Final del nivel | `end_rise_speed` | float | 40 | px/s | Solo modo anterior. Velocidad de ascenso con la cámara detenida (se suma a `extra_rise_speed`) | 40 = igual que el scroll: sigue como si la cámara no se hubiera detenido |
 | Letalidad | `kill_zone_inset` | float | 10 | px | Margen de gracia bajo el borde visible | 0 = mata al rozar la punta |
 | Letalidad | `kill_on_leaving_screen_bottom` | bool | true | — | Caer bajo la pantalla mata | |
 | Letalidad | `screen_bottom_margin` | float | 24 | px | Cuánto bajo el borde cuenta como caída (desde el centro del jugador) | |
@@ -41,12 +46,12 @@ Es la amenaza: una masa roja anclada al borde inferior de la pantalla que sube c
 
 | Función | Descripción |
 |---|---|
-| `set_rising(enabled: bool) -> void` | Activa o congela el ascenso (`extra_rise_speed` y `end_rise_speed`). `LevelController` lo congela al ganar o perder |
+| `set_rising(enabled: bool) -> void` | Activa o congela el ascenso (`rise_speed` con la cámara siguiendo al jugador; `extra_rise_speed` y `end_rise_speed` en el modo anterior). `LevelController` lo congela al ganar o perder |
 | `set_active(active: bool) -> void` | `false`: lo oculta, apaga `KillZone.monitoring`, el chequeo de caída (`_check_fell`) y la animación, y deja de seguir a la cámara. `true`: lo restaura y lo reubica. Estado inicial: activo (el sandbox no cambia). La intro lo apaga hasta empezar la partida |
 | `is_active() -> bool` | true si está activo |
 | `set_fall_watch(watch: bool) -> void` | Con el tentáculo inactivo, sigue vigilando la caída: el jugador bajo el borde inferior de la pantalla muere con `&"fell"`. La intro lo enciende en la ruptura |
 | `enter(duration: float) -> void` | Lo activa y lo hace subir desde debajo de la pantalla hasta su posición normal en `duration` s (desfase interno `_entry_offset` animado con un `Tween`, siempre anclado a la cámara). Mientras sube ya es letal donde esté su borde superior. `reset()` lo cancela. La intro lo llama tras `tentacle_entry_delay` |
-| `reset() -> void` | Anula el ascenso extra acumulado, reanuda el ascenso y vuelve al borde de la cámara |
+| `reset() -> void` | Anula el ascenso acumulado (velocidad y altura), reanuda el ascenso y vuelve a `visible_height` sobre el borde inferior de la pantalla |
 
 Exportadas: `config: TentacleConfig` y `camera: ScrollCamera` (obligatoria; sin ella el tentáculo se desactiva y avisa con un error).
 
@@ -65,7 +70,7 @@ El tentáculo llama a `Player.die(cause)`. `Player.died(cause)` llega a `LevelCo
 
 ## Cómo probarlo
 
-1. Ejecutar `scenes/levels/sandbox.tscn` (F6) y quedarse quieto sobre la plataforma de inicio: el tentáculo llega y aparece el mensaje.
+1. Ejecutar `scenes/levels/Level.tscn` (F6) y quedarse quieto: tras unos 3 s el tentáculo llega y aparece el mensaje. Subir rápido: el tentáculo queda fuera de la pantalla, por debajo, y sigue subiendo; frenar y esperarlo debe matar igual.
 2. Con R se reinicia. Editar `tentacle_config.tres` y repetir. Los valores que se ajustan mientras se prueba son de prueba, no de balance: no se anotan en `docs/TUNING_LOG.md`.
 
 ## Sandbox
