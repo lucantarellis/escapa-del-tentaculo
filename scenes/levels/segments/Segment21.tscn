@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://0sutmev6yb84"]
+
+[ext_resource type="Script" uid="uid://babh65w3a025g" path="res://scripts/levels/level_segment.gd" id="1_mcuby"]
+[ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="2_13t3b"]
+[ext_resource type="Script" uid="uid://cphk3uui2un6l" path="res://scripts/platforms/platform_config.gd" id="3_13t3b"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="3_w40ed"]
+
+[sub_resource type="Resource" id="Resource_vbomv"]
+script = ExtResource("3_13t3b")
+moving_speed = 180.0
+metadata/_custom_type_script = "uid://cphk3uui2un6l"
+
+[node name="Segment21" type="Node2D" unique_id=975552168]
+script = ExtResource("1_mcuby")
+height = 340.0
+
+[node name="Start" parent="." unique_id=1021958743 instance=ExtResource("2_13t3b")]
+position = Vector2(297, -363)
+size = Vector2(15, 15)
+platform_type = 4
+moves = true
+travel = Vector2(120, 720)
+config = SubResource("Resource_vbomv")
+
+[node name="Platform3" parent="." unique_id=1758587698 instance=ExtResource("2_13t3b")]
+position = Vector2(-33, -391)
+size = Vector2(15, 15)
+platform_type = 4
+moves = true
+travel = Vector2(500, 360)
+config = SubResource("Resource_vbomv")
+
+[node name="Platform5" parent="." unique_id=85307030 instance=ExtResource("2_13t3b")]
+position = Vector2(-114, -269)
+size = Vector2(15, 15)
+platform_type = 4
+moves = true
+travel = Vector2(500, 360)
+config = SubResource("Resource_vbomv")
+
+[node name="Platform6" parent="." unique_id=674121524 instance=ExtResource("2_13t3b")]
+position = Vector2(-54, -12)
+size = Vector2(15, 15)
+platform_type = 4
+moves = true
+travel = Vector2(500, -360)
+config = SubResource("Resource_vbomv")
+
+[node name="Platform4" parent="." unique_id=1484711322 instance=ExtResource("2_13t3b")]
+position = Vector2(477, -282)
+size = Vector2(15, 15)
+platform_type = 4
+moves = true
+travel = Vector2(-600, 360)
+config = SubResource("Resource_vbomv")
+
+[node name="Platform" parent="." unique_id=1206942638 instance=ExtResource("2_13t3b")]
+position = Vector2(288, -31)
+
+[node name="End" parent="." unique_id=1670973443 instance=ExtResource("2_13t3b")]
+position = Vector2(222, -367)
+size = Vector2(15, 15)
+platform_type = 4
+moves = true
+travel = Vector2(-300, 360.1)
+config = SubResource("Resource_vbomv")
+
+[node name="FuelTank" parent="." unique_id=158984427 instance=ExtResource("3_w40ed")]
+position = Vector2(285, -55)

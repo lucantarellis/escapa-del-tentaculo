@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://coclxd7tgsw60"]
+
+[ext_resource type="Script" uid="uid://babh65w3a025g" path="res://scripts/levels/level_segment.gd" id="1_tkk56"]
+[ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="2_50h6a"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="3_50h6a"]
+
+[node name="Segment20" type="Node2D" unique_id=975552168]
+script = ExtResource("1_tkk56")
+height = 340.0
+
+[node name="Start" parent="." unique_id=809392946 instance=ExtResource("2_50h6a")]
+position = Vector2(271, -16)
+
+[node name="Platform" parent="." unique_id=1330409331 instance=ExtResource("2_50h6a")]
+position = Vector2(308, -52)
+size = Vector2(60, 12)
+
+[node name="Platform2" parent="." unique_id=1760728198 instance=ExtResource("2_50h6a")]
+position = Vector2(338, -88)
+size = Vector2(40, 12)
+
+[node name="Platform3" parent="." unique_id=1575408623 instance=ExtResource("2_50h6a")]
+position = Vector2(114, -107)
+rotation = -0.5235988
+size = Vector2(250, 12)
+platform_type = 4
+
+[node name="Platform4" parent="." unique_id=2040861633 instance=ExtResource("2_50h6a")]
+position = Vector2(269, -268)
+rotation = 0.5235988
+size = Vector2(190, 12)
+platform_type = 4
+
+[node name="Platform5" parent="." unique_id=863007671 instance=ExtResource("2_50h6a")]
+position = Vector2(-35.999992, -127)
+rotation = -0.87266463
+size = Vector2(200, 25)
+moves = true
+travel = Vector2(158, 10)
+
+[node name="FuelTank" parent="." unique_id=376899086 instance=ExtResource("3_50h6a")]
+position = Vector2(291, -159)

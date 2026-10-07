@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://cypiirxlyabo3"]
+
+[ext_resource type="Script" uid="uid://babh65w3a025g" path="res://scripts/levels/level_segment.gd" id="1_s1udk"]
+[ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="2_e3xlj"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="3_e3xlj"]
+
+[node name="Segment19" type="Node2D" unique_id=975552168]
+script = ExtResource("1_s1udk")
+height = 340.0
+
+[node name="Start" parent="." unique_id=809392946 instance=ExtResource("2_e3xlj")]
+position = Vector2(268, -17)
+
+[node name="Platform2" parent="." unique_id=1297737392 instance=ExtResource("2_e3xlj")]
+position = Vector2(506, -99)
+size = Vector2(300, 30)
+platform_type = 4
+moves = true
+travel = Vector2(-180, 0)
+
+[node name="Platform3" parent="." unique_id=1757909525 instance=ExtResource("2_e3xlj")]
+position = Vector2(-154, -175)
+size = Vector2(300, 30)
+platform_type = 4
+moves = true
+travel = Vector2(180, 0)
+
+[node name="Platform4" parent="." unique_id=372161177 instance=ExtResource("2_e3xlj")]
+position = Vector2(504, -267)
+size = Vector2(300, 30)
+platform_type = 4
+moves = true
+travel = Vector2(-180, 0)
+
+[node name="Platform" parent="." unique_id=108185826 instance=ExtResource("2_e3xlj")]
+position = Vector2(208, -302)
+size = Vector2(25, 12)
+platform_type = 2
+
+[node name="Plataform5" parent="." unique_id=705649529 instance=ExtResource("2_e3xlj")]
+position = Vector2(68.99999, -292)
+rotation = -2.549926
+size = Vector2(80, 6.17)
+platform_type = 2
+travel = Vector2(120, -1.005)
+
+[node name="FuelTank" parent="." unique_id=167996333 instance=ExtResource("3_e3xlj")]
+position = Vector2(276, -266)
+
+[node name="End" parent="." unique_id=1095286192 instance=ExtResource("2_e3xlj")]
+position = Vector2(315.00003, -162)
+rotation = -3.7332592
+size = Vector2(80, 6.17)
+platform_type = 2
+travel = Vector2(120, -1.005)

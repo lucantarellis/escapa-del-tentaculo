@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://dkc2t72l81xyc"]
+
+[ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
+[ext_resource type="Script" uid="uid://babh65w3a025g" path="res://scripts/levels/level_segment.gd" id="seg"]
+
+[node name="Segment17" type="Node2D" unique_id=975552168]
+script = ExtResource("seg")
+height = 340.0
+
+[node name="Start" parent="." unique_id=1100980172 instance=ExtResource("plat")]
+position = Vector2(268, -29)
+
+[node name="Platform" parent="." unique_id=1061662949 instance=ExtResource("plat")]
+position = Vector2(271, -271)
+size = Vector2(20, 12)
+moves = true
+travel = Vector2(-120, 0)
+
+[node name="Platform2" parent="." unique_id=1351119698 instance=ExtResource("plat")]
+position = Vector2(253, -153)
+size = Vector2(20, 12)
+moves = true
+travel = Vector2(-120, 0)
+
+[node name="Platform3" parent="." unique_id=1824407889 instance=ExtResource("plat")]
+position = Vector2(171, -30)
+size = Vector2(40, 12)
+
+[node name="Platform6" parent="." unique_id=683934158 instance=ExtResource("plat")]
+position = Vector2(93, -30)
+size = Vector2(40, 12)
+
+[node name="Platform4" parent="." unique_id=1843461884 instance=ExtResource("plat")]
+position = Vector2(72, -75)
+
+[node name="Platform7" parent="." unique_id=711623507 instance=ExtResource("plat")]
+position = Vector2(217, -75)
+
+[node name="Platform5" parent="." unique_id=1006354315 instance=ExtResource("plat")]
+position = Vector2(78, -207)
+size = Vector2(20, 12)
+moves = true
