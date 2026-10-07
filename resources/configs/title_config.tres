@@ -1,10 +1,7 @@
-[gd_resource type="Resource" script_class="TitleConfig" format=3]
+[gd_resource type="Resource" script_class="TitleConfig" format=3 uid="uid://blgscnkj3ure1"]
 
-[ext_resource type="Script" path="res://scripts/ui/title_config.gd" id="1_cfg"]
+[ext_resource type="Script" uid="uid://crv67y8hv3gjc" path="res://scripts/ui/title_config.gd" id="1_cfg"]
 
 [resource]
 script = ExtResource("1_cfg")
-fade_duration = 0.8
-fade_delay = 0.0
-title_text = "ESCAPA DEL TENTÁCULO"
-play_text = "JUGAR"
+title_text = "Lo que pongo aca se cambia\\"

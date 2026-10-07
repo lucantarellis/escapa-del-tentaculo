@@ -1,16 +1,7 @@
-[gd_resource type="Resource" script_class="TentacleConfig" format=3]
+[gd_resource type="Resource" script_class="TentacleConfig" format=3 uid="uid://cdx1ychim7kom"]
 
-[ext_resource type="Script" path="res://scripts/tentacle/tentacle_config.gd" id="1_cfg"]
+[ext_resource type="Script" uid="uid://dagyhdy8hxugv" path="res://scripts/tentacle/tentacle_config.gd" id="1_cfg"]
 
 [resource]
 script = ExtResource("1_cfg")
-visible_height = 70.0
-extra_rise_speed = 0.0
-rise_after_camera_stops = true
-end_rise_speed = 40.0
-kill_zone_inset = 10.0
-kill_on_leaving_screen_bottom = true
-screen_bottom_margin = 24.0
-wobble_amplitude = 6.0
-wobble_frequency = 2.0
-wobble_segments = 12
+visible_height = 30.0
