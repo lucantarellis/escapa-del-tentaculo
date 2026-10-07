@@ -1,8 +1,10 @@
 class_name Tentacle
 extends Node2D
-## Amenaza anclada al borde inferior de la cámara: tocarla o caer bajo la pantalla mata.
+## Amenaza que sube por el nivel: tocarla, o quedar por debajo de su borde superior, mata.
 ##
-## Sigue a la [ScrollCamera] en `_physics_process`. El origen del nodo es el borde superior
+## Con la cámara siguiendo al jugador (`ScrollConfig.follow_player`) sube sola, con velocidad y
+## aceleración propias, y puede quedar fuera de la pantalla. Con la cámara en el modo anterior
+## va anclada a su borde inferior y la sigue en `_physics_process`. El origen del nodo es el borde superior
 ## (sin ondular) del tentáculo; el cuerpo se extiende hacia abajo hasta pasar el borde de
 ## la pantalla. Ver `docs/mecanicas/tentaculo.md`.
 
@@ -17,6 +19,9 @@ const WOBBLE_PHASE_PER_SEGMENT: float = 0.8
 ## Cuánto se extiende el cuerpo y la zona letal por debajo del borde inferior de la
 ## pantalla, para que nunca quede un hueco. Estructural. Unidad: px.
 const BODY_PADDING: float = 96.0
+## Profundidad de la zona letal cuando el tentáculo sube por el nivel por su cuenta: todo lo que
+## queda por debajo de su borde superior es letal, se vea o no. Estructural. Unidad: px.
+const FREE_RISE_KILL_DEPTH: float = 8000.0
 
 ## Parámetros de gameplay. Si queda vacío se usan los valores por defecto de
 ## [TentacleConfig].
@@ -29,6 +34,10 @@ const BODY_PADDING: float = 96.0
 @onready var _kill_shape: CollisionShape2D = $KillZone/CollisionShape2D
 
 var _extra_rise: float = 0.0
+## Y (mundo) del borde superior del tentáculo cuando sube por su cuenta. Unidad: px.
+var _top_y: float = 0.0
+## Velocidad de ascenso actual cuando sube por su cuenta. Unidad: px/s.
+var _rise_speed: float = 0.0
 ## false congela el ascenso extra y el del final del nivel (ver [method set_rising]).
 var _rising: bool = true
 var _time: float = 0.0
@@ -52,6 +61,7 @@ func _ready() -> void:
 		return
 	_kill_shape.shape = RectangleShape2D.new()
 	_kill_zone.body_entered.connect(_on_kill_zone_body_entered)
+	_reset_free_rise()
 	_follow_camera()
 	_update_kill_zone()
 	_update_body_polygon()
@@ -62,7 +72,13 @@ func _physics_process(delta: float) -> void:
 		# Solo la red de seguridad de caída (ver [method set_fall_watch]).
 		_check_fell()
 		return
-	if _rising:
+	if _rising and camera.is_following_player():
+		# Sube por su cuenta, a la vez que la cámara empieza a seguir al jugador.
+		if camera.is_scroll_active():
+			if config.rise_acceleration_enabled:
+				_rise_speed = minf(_rise_speed + config.rise_acceleration * delta, maxf(config.max_rise_speed, config.rise_speed))
+			_top_y -= _rise_speed * delta
+	elif _rising:
 		var speed: float = config.extra_rise_speed
 		# Con la cámara detenida en el final del nivel, sigue subiendo hasta cubrir la pantalla.
 		if config.rise_after_camera_stops and camera.has_reached_end():
@@ -97,6 +113,7 @@ func set_active(active: bool) -> void:
 	set_physics_process(active or _watch_fall)
 	set_process(active)
 	if active:
+		_reset_free_rise()
 		_follow_camera()
 		_update_kill_zone()
 		_update_body_polygon()
@@ -143,23 +160,32 @@ func reset() -> void:
 	_entry_offset = 0.0
 	_extra_rise = 0.0
 	_rising = true
+	_reset_free_rise()
 	_follow_camera()
+
+
+# Deja el borde superior a `visible_height` px sobre el borde inferior de la pantalla y la velocidad
+# de ascenso en su valor inicial. Es el punto de partida del ascenso propio.
+func _reset_free_rise() -> void:
+	_top_y = camera.get_bottom_y() - config.visible_height
+	_rise_speed = config.rise_speed
 
 
 func _follow_camera() -> void:
 	var rect: Rect2 = camera.get_visible_rect()
-	global_position = Vector2(rect.position.x, camera.get_bottom_y() - config.visible_height - _extra_rise + _entry_offset)
+	var top_y: float = _top_y if camera.is_following_player() else camera.get_bottom_y() - config.visible_height - _extra_rise
+	global_position = Vector2(rect.position.x, top_y + _entry_offset)
 
 
 ## Profundidad del cuerpo: desde el borde superior hasta pasado el borde de la pantalla.
 func _get_depth() -> float:
-	return camera.get_bottom_y() - global_position.y + BODY_PADDING
+	return maxf(camera.get_bottom_y() - global_position.y + BODY_PADDING, BODY_PADDING)
 
 
 func _update_kill_zone() -> void:
 	var width: float = camera.get_visible_rect().size.x
 	var top: float = config.kill_zone_inset
-	var height: float = maxf(_get_depth() - top, 1.0)
+	var height: float = FREE_RISE_KILL_DEPTH if camera.is_following_player() else maxf(_get_depth() - top, 1.0)
 	var shape: RectangleShape2D = _kill_shape.shape as RectangleShape2D
 	shape.size = Vector2(width, height)
 	_kill_shape.position = Vector2(width * 0.5, top + height * 0.5)

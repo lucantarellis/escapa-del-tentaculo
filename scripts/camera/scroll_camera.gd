@@ -1,6 +1,7 @@
 class_name ScrollCamera
 extends Camera2D
-## Cámara que sube a velocidad configurable y mantiene al jugador dentro de la pantalla.
+## Cámara que sigue al jugador (sube y baja con él) o, en el modo anterior, sube a velocidad
+## configurable, y mantiene al jugador dentro de la pantalla.
 ##
 ## Se mueve en `_physics_process` (con `process_callback` en física y sin suavizado) para
 ## quedar sincronizada con el jugador. Lleva un hijo `ScreenBounds` con paredes invisibles
@@ -37,6 +38,8 @@ var _shake_tween: Tween
 ## Nodo que la cámara debe mantener a la vista (ver [method follow_up]); null si no hay.
 var _follow_target: Node2D
 var _follow_margin: float = 0.0
+## Jugador al que sigue la cámara con `follow_player` (se busca por el grupo `player`).
+var _player_target: Node2D
 
 
 func _ready() -> void:
@@ -50,19 +53,34 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	_apply_follow()
-	var should_move: bool = _enabled and not _reached_end
+	var follows_player: bool = config.follow_player
+	# Siguiendo al jugador la cámara nunca "termina": el tope solo limita hasta dónde sube.
+	var should_move: bool = _enabled and (follows_player or not _reached_end)
 	if should_move and _delay_left > 0.0:
 		_delay_left -= delta
 		should_move = _delay_left <= 0.0
+	# `_moving` (y `is_scroll_active`) respeta `start_delay` en ambos modos: el tentáculo lo usa
+	# para saber cuándo empezar a subir.
 	_set_moving(should_move)
+	var stop_enabled: bool = _stop_override_enabled or config.stop_at_enabled
+	var stop_y: float = _stop_override_y if _stop_override_enabled else config.stop_at_y
+	if follows_player:
+		# Siguiendo al jugador NO se espera `start_delay`: la cámara se queda en su posición
+		# inicial (`follow_stay_above_start`) hasta que el jugador llega a la altura deseada y
+		# desde ahí lo sigue, sin salto.
+		if not _enabled:
+			return
+		_follow_player_step(delta)
+		if stop_enabled:
+			global_position.y = maxf(global_position.y, stop_y)
+		_reached_end = stop_enabled and global_position.y <= stop_y
+		return
 	if not should_move:
 		return
 	if config.scroll_acceleration > 0.0:
 		var top_speed: float = maxf(config.max_scroll_speed, config.scroll_speed)
 		_speed = minf(_speed + config.scroll_acceleration * delta, top_speed)
 	global_position.y -= _speed * delta
-	var stop_enabled: bool = _stop_override_enabled or config.stop_at_enabled
-	var stop_y: float = _stop_override_y if _stop_override_enabled else config.stop_at_y
 	if stop_enabled and global_position.y <= stop_y:
 		global_position.y = stop_y
 		_reached_end = true
@@ -88,6 +106,17 @@ func set_stop_y(y: float) -> void:
 ## Se apaga con [method reset]. El [Tentacle] lo consulta para seguir subiendo al final del nivel.
 func has_reached_end() -> bool:
 	return _reached_end
+
+
+## Devuelve true mientras la cámara está activa: ya pasó la espera inicial y no está pausada ni
+## detenida en su tope. El [Tentacle] lo usa para empezar a subir a la vez que la cámara.
+func is_scroll_active() -> bool:
+	return _moving
+
+
+## Devuelve true si la cámara sigue al jugador (`ScrollConfig.follow_player`).
+func is_following_player() -> bool:
+	return config.follow_player
 
 
 ## Devuelve la coordenada Y (mundo) del borde inferior de la pantalla. Unidad: px.
@@ -147,6 +176,22 @@ func reset() -> void:
 	_delay_left = config.start_delay
 	_speed = config.scroll_speed
 	_set_moving(false)
+
+
+# Acerca el centro de la cámara a la Y que deja al jugador en `follow_screen_ratio` de la altura
+# de la pantalla. Sube y baja; el retraso lo da `follow_smoothing`.
+func _follow_player_step(delta: float) -> void:
+	if _player_target == null or not is_instance_valid(_player_target):
+		_player_target = get_tree().get_first_node_in_group(&"player") as Node2D
+	if _player_target == null:
+		return
+	var goal_y: float = _player_target.global_position.y + (0.5 - config.follow_screen_ratio) * _get_visible_size().y
+	var weight: float = 1.0
+	if config.follow_smoothing > 0.0:
+		weight = 1.0 - exp(-config.follow_smoothing * delta)
+	if config.follow_stay_above_start:
+		goal_y = minf(goal_y, _start_position.y)
+	global_position.y = lerpf(global_position.y, goal_y, weight)
 
 
 # Sube la cámara si el nodo seguido quedó por encima del margen superior.
