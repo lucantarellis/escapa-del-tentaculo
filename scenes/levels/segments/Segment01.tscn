@@ -1,60 +1,49 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://lbossgjwtsey"]
 
-[ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
-[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
 [ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
+[ext_resource type="Script" uid="uid://babh65w3a025g" path="res://scripts/levels/level_segment.gd" id="seg"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
 
-[node name="Segment01" type="Node2D"]
+[node name="Segment01" type="Node2D" unique_id=1406064389]
 script = ExtResource("seg")
-height = 640
 
-[node name="Start" parent="." instance=ExtResource("plat")]
-position = Vector2(100, -34)
-size = Vector2(120, 12)
-platform_type = 0
+[node name="Start" parent="." unique_id=318649586 instance=ExtResource("plat")]
+position = Vector2(55, -46)
+size = Vector2(32, 12)
 
-[node name="Branch1Near" parent="." instance=ExtResource("plat")]
-position = Vector2(100, -146)
-size = Vector2(80, 12)
-platform_type = 1
+[node name="Start2" parent="." unique_id=173502357 instance=ExtResource("plat")]
+position = Vector2(174, -46)
+size = Vector2(32, 12)
 
-[node name="Branch1Far" parent="." instance=ExtResource("plat")]
-position = Vector2(260, -146)
-size = Vector2(80, 12)
-platform_type = 2
+[node name="Start3" parent="." unique_id=253857168 instance=ExtResource("plat")]
+position = Vector2(302, -46)
+size = Vector2(32, 12)
 
-[node name="Converge1" parent="." instance=ExtResource("plat")]
+[node name="Converge1" parent="." unique_id=918504659 instance=ExtResource("plat")]
 position = Vector2(190, -258)
-size = Vector2(80, 12)
-platform_type = 0
 
-[node name="BonusLedge" parent="." instance=ExtResource("plat")]
-position = Vector2(50, -244)
+[node name="BonusLedge" parent="." unique_id=2110065249 instance=ExtResource("plat")]
+position = Vector2(176, -141)
 size = Vector2(60, 12)
 platform_type = 3
 
-[node name="Branch2Left" parent="." instance=ExtResource("plat")]
+[node name="Branch2Left" parent="." unique_id=206854602 instance=ExtResource("plat")]
 position = Vector2(90, -370)
-size = Vector2(80, 12)
 platform_type = 3
 
-[node name="Branch2Right" parent="." instance=ExtResource("plat")]
+[node name="Branch2Right" parent="." unique_id=2115192900 instance=ExtResource("plat")]
 position = Vector2(290, -370)
-size = Vector2(80, 12)
 platform_type = 5
 
-[node name="Converge2" parent="." instance=ExtResource("plat")]
+[node name="Converge2" parent="." unique_id=1044008279 instance=ExtResource("plat")]
 position = Vector2(190, -482)
-size = Vector2(80, 12)
-platform_type = 0
 
-[node name="End" parent="." instance=ExtResource("plat")]
+[node name="End" parent="." unique_id=1482642894 instance=ExtResource("plat")]
 position = Vector2(160, -594)
 size = Vector2(120, 12)
-platform_type = 0
 
-[node name="FuelTankBonus" parent="." instance=ExtResource("tank")]
-position = Vector2(50, -262)
+[node name="FuelTankBonus" parent="." unique_id=347998347 instance=ExtResource("tank")]
+position = Vector2(176, -159)
 
-[node name="FuelTankMain" parent="." instance=ExtResource("tank")]
+[node name="FuelTankMain" parent="." unique_id=1807092951 instance=ExtResource("tank")]
 position = Vector2(190, -508)
