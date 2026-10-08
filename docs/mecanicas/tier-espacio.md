@@ -36,7 +36,7 @@ PULSE, TIMED y BREAKABLE no aparecen en el espacio (son mecanismos de la nave).
 | Frenar propulsando | `counter_thrust_scale` 0,45: frenar de 250 px/s a 0 tarda 0,88 s y gasta el doble de combustible que en la nave (0,40 s) | Tier 2 → Jugador |
 | Fuego | Arranca 150 px bajo la pantalla a 60 px/s y acelera 25 px/s² hasta 280 px/s (cada vez más rápido: los impulsos permiten sacarle ventaja); aparece 1,5 s después de entrar | `tentacle_config_fire.tres`, `pursuer_delay` |
 
-El tier 2 usa **8 segmentos por partida** (`count_per_run`; los otros tiers, 5) porque en el espacio se avanza mucho más rápido.
+El tier 2 usa **5 segmentos por partida** (`count_per_run`, igual que los otros tiers; se probó con 8 y LT lo dejó en 5).
 
 Todos los valores son de prueba: el "se siente bien" es de LT.
 

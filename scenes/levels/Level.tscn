@@ -1,50 +1,50 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://mob76jn6laak"]
 
 [ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/ui/DebugOverlay.tscn" id="2_overlay"]
 [ext_resource type="PackedScene" path="res://scenes/camera/ScrollCamera.tscn" id="3_camera"]
 [ext_resource type="PackedScene" path="res://scenes/tentacle/Tentacle.tscn" id="4_tentacle"]
-[ext_resource type="Script" path="res://scripts/levels/level_builder.gd" id="6_builder"]
-[ext_resource type="Resource" path="res://resources/configs/level_config.tres" id="7_levelcfg"]
-[ext_resource type="Script" path="res://scripts/levels/level_controller.gd" id="5_controller"]
+[ext_resource type="Script" uid="uid://bmgk6a2bl3s5l" path="res://scripts/levels/level_controller.gd" id="5_controller"]
+[ext_resource type="Script" uid="uid://cnskpjhsd5yb3" path="res://scripts/levels/level_builder.gd" id="6_builder"]
+[ext_resource type="Resource" uid="uid://citfkytx86ll2" path="res://resources/configs/level_config.tres" id="7_levelcfg"]
 [ext_resource type="PackedScene" path="res://scenes/ui/Hud.tscn" id="20_hud"]
 [ext_resource type="PackedScene" path="res://scenes/intro/Hatch.tscn" id="21_hatch"]
-[ext_resource type="Resource" path="res://resources/configs/intro_config.tres" id="22_introcfg"]
-[ext_resource type="Script" path="res://scripts/levels/level_background.gd" id="23_bg"]
+[ext_resource type="Resource" uid="uid://dslpeg0ydf5k6" path="res://resources/configs/intro_config.tres" id="22_introcfg"]
+[ext_resource type="Script" uid="uid://cqjl7erwi3hee" path="res://scripts/levels/level_background.gd" id="23_bg"]
 
-[node name="Level" type="Node2D"]
+[node name="Level" type="Node2D" unique_id=2102741806]
 script = ExtResource("5_controller")
 intro_config = ExtResource("22_introcfg")
 
-[node name="Background" type="CanvasLayer" parent="."]
+[node name="Background" type="CanvasLayer" parent="." unique_id=1986665368]
 script = ExtResource("23_bg")
 
-[node name="LevelBuilder" type="Node2D" parent="."]
+[node name="LevelBuilder" type="Node2D" parent="." unique_id=1219280871]
 script = ExtResource("6_builder")
 config = ExtResource("7_levelcfg")
 
-[node name="ScrollCamera" parent="." instance=ExtResource("3_camera")]
+[node name="ScrollCamera" parent="." unique_id=1895773473 instance=ExtResource("3_camera")]
 position = Vector2(180, 320)
 
-[node name="Hatch" parent="." instance=ExtResource("21_hatch")]
+[node name="Hatch" parent="." unique_id=691880638 instance=ExtResource("21_hatch")]
 
-[node name="Player" parent="." instance=ExtResource("1_player")]
+[node name="Player" parent="." unique_id=1592760482 instance=ExtResource("1_player")]
 position = Vector2(180, 548)
 
-[node name="Tentacle" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("4_tentacle")]
+[node name="Tentacle" parent="." unique_id=243260281 node_paths=PackedStringArray("camera") instance=ExtResource("4_tentacle")]
 camera = NodePath("../ScrollCamera")
 
-[node name="DebugOverlay" parent="." node_paths=PackedStringArray("player") instance=ExtResource("2_overlay")]
+[node name="DebugOverlay" parent="." unique_id=1945648093 node_paths=PackedStringArray("player") instance=ExtResource("2_overlay")]
 player = NodePath("../Player")
 
-[node name="Hud" parent="." node_paths=PackedStringArray("player", "tentacle") instance=ExtResource("20_hud")]
+[node name="Hud" parent="." unique_id=1978149594 node_paths=PackedStringArray("player", "tentacle") instance=ExtResource("20_hud")]
 player = NodePath("../Player")
 tentacle = NodePath("../Tentacle")
 
-[node name="CaughtLayer" type="CanvasLayer" parent="."]
+[node name="CaughtLayer" type="CanvasLayer" parent="." unique_id=1103901421]
 layer = 90
 
-[node name="CaughtLabel" type="Label" parent="CaughtLayer"]
+[node name="CaughtLabel" type="Label" parent="CaughtLayer" unique_id=1980207212]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -53,7 +53,6 @@ grow_vertical = 2
 theme_override_colors/font_outline_color = Color(0.0196, 0.0235, 0.0353, 1)
 theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 18
-text = ""
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
