@@ -80,8 +80,11 @@ Los inicios tienen tres tanques (por su altura) y los finales uno.
 | Tier (`SegmentTier`) | `segments` | — | — | Escenas candidatas del tier |
 | Tier (`SegmentTier`) | `count_per_run` | 10 | segmentos | Cuántos segmentos de este tier se usan por partida |
 | Tier → Escenario | `display_name` | "La nave" / "El espacio" / "Dentro del alien" | — | Nombre del tier (depuración y docs) |
-| Tier → Escenario | `entry_segments` | vacío | — | Segmentos de entrada (transición): se sortea uno y va antes de los segmentos del tier. Vacío = sin transición |
+| Tier → Escenario | `entry_segments` | vacío | — | Segmentos de entrada (transición): se sortea uno y va antes de los segmentos del tier. Conservan su propio tileset. Vacío = sin transición |
 | Tier → Escenario | `walls_tileset` | vacío | — | TileSet de las paredes del tier (mismas coordenadas de atlas que `walls_tileset.tres`). Vacío = el de cada segmento |
+| Tier → Fondo | `background_color` | nave `#10141F`, espacio `#05060A` | — | Color de fondo del tier (alfa 0 = no cambia) |
+| Tier → Fondo | `background_stars` | espacio: sí | — | Estrellas con parallax |
+| Tier → Fondo | `background_fade` | 0,4 | s | Fundido al entrar al tier |
 | Tier → Perseguidor | `pursuer_config` | vacío | — | `TentacleConfig` del perseguidor del tier (tentáculo, fuego, ácido). Vacío = sigue el anterior |
 | Tier → Perseguidor | `pursuer_color` | rojo `#D83232` | — | Color placeholder del perseguidor; se aplica siempre al entrar al tier |
 | Tier → Perseguidor | `pursuer_reset_position` | true | — | Con `pursuer_config`: al entrar al tier, el perseguidor vuelve a su distancia inicial (uno nuevo que aparece) |

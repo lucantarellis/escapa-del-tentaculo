@@ -10,10 +10,14 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/Hud.tscn" id="20_hud"]
 [ext_resource type="PackedScene" path="res://scenes/intro/Hatch.tscn" id="21_hatch"]
 [ext_resource type="Resource" path="res://resources/configs/intro_config.tres" id="22_introcfg"]
+[ext_resource type="Script" path="res://scripts/levels/level_background.gd" id="23_bg"]
 
 [node name="Level" type="Node2D"]
 script = ExtResource("5_controller")
 intro_config = ExtResource("22_introcfg")
+
+[node name="Background" type="CanvasLayer" parent="."]
+script = ExtResource("23_bg")
 
 [node name="LevelBuilder" type="Node2D" parent="."]
 script = ExtResource("6_builder")

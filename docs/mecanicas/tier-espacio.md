@@ -19,13 +19,15 @@ Todos los valores son de prueba: el "se siente bien" de la física y del fuego e
 
 ## Transición (entrada del tier)
 
-Cada `SegmentSpaceEntryNN` tiene un nodo **`TierEvent`** a 40 px del borde inferior (en el editor se ve como una línea naranja). Cuando el jugador lo cruza subiendo, sin perder el control:
+Cada `SegmentSpaceEntryNN` empieza con el **casco exterior de la nave**: una franja de pared de lado a lado (y −36 a −72, con el tileset de la nave: las entradas conservan sus paredes) con una abertura en el centro (x ≈ 144–216) por donde sale el jugador. Justo encima (y −84) está el nodo **`TierEvent`** (en el editor, una línea naranja). Cuando el jugador lo cruza subiendo:
 
-1. sacude la cámara (`shake_amplitude` 18 px, `shake_duration` 0,9 s);
-2. destello de pantalla completa (`flash_color`, `flash_alpha` 0,8, `flash_duration` 0,5 s);
-3. la silueta del alien (placeholder violeta oscuro) cruza la pantalla hacia arriba por el fondo (`silhouette_delay` 0,25 s, `silhouette_duration` 1,1 s).
+1. **Cámara lenta** un instante (`slow_motion_scale` 0,25 durante `slow_motion_duration` 0,35 s reales) y **destello** (`flash_alpha` 0,8, `flash_duration` 0,5 s).
+2. **Explosión** desde el casco (`explosion_offset`): anillo naranja que se expande hasta `explosion_radius` 560 px en `explosion_duration` 0,8 s y `fire_particles` 70 partículas de fuego hacia arriba.
+3. **Eyección:** el jugador recibe `eject_speed` 450 px/s hacia arriba y `eject_control_lock` 0,3 s sin control.
+4. **Restos del casco letales** (`HullDebris`, `scripts/levels/hull_debris.gd`): `debris_count` 9 fragmentos rojos que aparecen a lo largo del casco (nunca a menos de `debris_min_player_distance` 70 px del jugador) y salen girando en direcciones al azar a 110–260 px/s. Durante `debris_grace_time` 0,25 s no matan; después, tocarlos mata con la causa `&"debris"`. Se borran al salir de la vista.
+5. **Sacudida** fuerte (`shake_amplitude` 28 px, `shake_duration` 1,2 s) y la **silueta del alien** (escala 2, 0,8 s) huyendo hacia arriba por el fondo.
 
-El cambio de física y de perseguidor no lo hace el evento: lo hace `LevelController` al cruzar el borde del tier (el borde inferior del segmento de entrada), así que coinciden. Los valores del evento son `@export` del nodo (inspector, por instancia). `TierEvent` sirve para cualquier tier: el tier 3 lo va a usar con otros valores.
+Al cruzar el borde del tier (el borde inferior de la entrada), `LevelController` cambia el **fondo** (del interior azul oscuro de la nave al negro del espacio con estrellas, fundido de 0,4 s; ver `LevelBackground`, `scripts/levels/level_background.gd`), el perseguidor (el fuego) y la física. Todos los valores del evento son `@export` del nodo `TierEvent` (inspector, por instancia); cada parte se apaga con su valor en 0 o su casilla. `TierEvent` sirve para cualquier tier.
 
 ## Cómo probarlo
 

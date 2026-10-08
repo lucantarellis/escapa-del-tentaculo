@@ -33,16 +33,7 @@
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd08.tscn" id="end_08"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd09.tscn" id="end_09"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd10.tscn" id="end_10"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart01.tscn" id="start_01"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart02.tscn" id="start_02"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart03.tscn" id="start_03"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart04.tscn" id="start_04"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart05.tscn" id="start_05"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart06.tscn" id="start_06"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart07.tscn" id="start_07"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart08.tscn" id="start_08"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart09.tscn" id="start_09"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart10.tscn" id="start_10"]
+[ext_resource type="Resource" path="res://resources/configs/tentacle_config_fire.tres" id="fire_cfg"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpace01.tscn" id="space_01"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpace02.tscn" id="space_02"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpace03.tscn" id="space_03"]
@@ -56,21 +47,33 @@
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpaceEntry01.tscn" id="space_entry_01"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpaceEntry02.tscn" id="space_entry_02"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpaceEntry03.tscn" id="space_entry_03"]
-[ext_resource type="Resource" path="res://resources/configs/tentacle_config_fire.tres" id="fire_cfg"]
 [ext_resource type="TileSet" path="res://resources/tilesets/walls_tileset_space.tres" id="space_tiles"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart01.tscn" id="start_01"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart02.tscn" id="start_02"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart03.tscn" id="start_03"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart04.tscn" id="start_04"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart05.tscn" id="start_05"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart06.tscn" id="start_06"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart07.tscn" id="start_07"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart08.tscn" id="start_08"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart09.tscn" id="start_09"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart10.tscn" id="start_10"]
 
 [sub_resource type="Resource" id="Resource_tier1"]
 script = ExtResource("24_tier")
+background_color = Color(0.0627, 0.0784, 0.1216, 1)
 segments = Array[PackedScene]([ExtResource("4_seg"), ExtResource("5_seg"), ExtResource("6_seg"), ExtResource("7_seg"), ExtResource("8_seg"), ExtResource("9_seg"), ExtResource("10_seg"), ExtResource("11_seg"), ExtResource("12_seg"), ExtResource("13_seg"), ExtResource("14_seg"), ExtResource("15_seg"), ExtResource("16_seg"), ExtResource("17_seg"), ExtResource("18_seg"), ExtResource("19_seg"), ExtResource("19_ewu3o"), ExtResource("20_km1sb"), ExtResource("20_7kxs2"), ExtResource("22_58vi7"), ExtResource("23_58vi7")])
+count_per_run = 5
 display_name = "La nave"
 pursuer_color = Color(0.54134405, 0.3044531, 0.93466634, 1)
-count_per_run = 5
 
 [sub_resource type="Resource" id="Resource_tier2"]
 script = ExtResource("24_tier")
-display_name = "El espacio"
+background_color = Color(0.0196, 0.0235, 0.0392, 1)
+background_stars = true
 segments = Array[PackedScene]([ExtResource("space_01"), ExtResource("space_02"), ExtResource("space_03"), ExtResource("space_04"), ExtResource("space_05"), ExtResource("space_06"), ExtResource("space_07"), ExtResource("space_08"), ExtResource("space_09"), ExtResource("space_10")])
 count_per_run = 5
+display_name = "El espacio"
 entry_segments = Array[PackedScene]([ExtResource("space_entry_01"), ExtResource("space_entry_02"), ExtResource("space_entry_03")])
 walls_tileset = ExtResource("space_tiles")
 pursuer_config = ExtResource("fire_cfg")
@@ -80,8 +83,8 @@ air_drag_scale = 0.22
 
 [sub_resource type="Resource" id="Resource_tier3"]
 script = ExtResource("24_tier")
-display_name = "Dentro del alien"
 count_per_run = 5
+display_name = "Dentro del alien"
 
 [resource]
 script = ExtResource("1_cfg")

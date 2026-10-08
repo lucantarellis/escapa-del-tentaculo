@@ -23,9 +23,18 @@ extends Resource
 ## segmentos del tier (ej.: la nave explota, la extremidad del alien). Vacío = sin transición.
 @export var entry_segments: Array[PackedScene] = []
 ## TileSet de las paredes de los segmentos de este tier (metal, chatarra, carne). Vacío = el de
-## cada segmento. Debe respetar las coordenadas de atlas de `walls_tileset.tres` (tile sólido en
+## cada segmento. No se aplica a los segmentos de entrada: conservan el suyo (por ejemplo, el
+## casco de la nave en la entrada del espacio). Debe respetar las coordenadas de atlas de `walls_tileset.tres` (tile sólido en
 ## (0, 0) y diagonal en (1, 0) con alternativas 0–3) para que lo pintado se vea igual.
 @export var walls_tileset: TileSet
+
+@export_group("Fondo")
+## Color de fondo del tier. Con alfa 0 no cambia el fondo al entrar.
+@export var background_color: Color = Color(0.0, 0.0, 0.0, 0.0)
+## Si es true, el fondo muestra estrellas (el espacio).
+@export var background_stars: bool = false
+## Duración del fundido al nuevo fondo al entrar al tier. Unidad: s.
+@export var background_fade: float = 0.4
 
 @export_group("Perseguidor")
 ## Config del perseguidor en este tier (el tentáculo, el fuego, el ácido). Vacío = sigue el de

@@ -86,7 +86,7 @@ func build(seed_override: int = 0) -> int:
 		if entry_index >= 0:
 			var entry: LevelSegment = _place(tier.entry_segments[entry_index], bottom_y)
 			if entry != null:
-				_apply_tier_tileset(entry, tier)
+				# La entrada conserva sus paredes (ej.: el casco de la nave al salir al espacio).
 				bottom_y -= entry.height
 		for index: int in _draw_tier(tier):
 			_sequence.append(index)

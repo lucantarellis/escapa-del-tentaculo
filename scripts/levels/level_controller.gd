@@ -27,6 +27,7 @@ const DEATH_TEXTS: Dictionary = {
 	&"fell": "CAPTURADO — pulsá R para reiniciar",
 	&"obstacle": "GOLPEADO — pulsá R para reiniciar",
 	&"trap": "GOLPEADO — pulsá R para reiniciar",
+	&"debris": "GOLPEADO — pulsá R para reiniciar",
 }
 ## Texto para una causa de muerte desconocida. Solo visual.
 const DEFAULT_DEATH_TEXT: String = "PERDISTE — pulsá R para reiniciar"
@@ -48,6 +49,7 @@ const WIN_TEXT: String = "ESCAPASTE — pulsá R para reiniciar"
 @onready var _debug_overlay: Node = get_node_or_null("DebugOverlay")
 @onready var _hud: Hud = get_node_or_null("Hud") as Hud
 @onready var _hatch: Hatch = get_node_or_null("Hatch") as Hatch
+@onready var _background: LevelBackground = get_node_or_null("Background") as LevelBackground
 
 var _run_seed: int = 0
 var _started: bool = false
@@ -178,8 +180,11 @@ func get_current_tier() -> int:
 # Aplica el escenario del tier: perseguidor y física del jugador. El tileset de paredes ya lo
 # puso el LevelBuilder al armar.
 func _enter_tier(tier_index: int) -> void:
+	var first: bool = _current_tier < 0
 	_current_tier = tier_index
 	var tier: SegmentTier = _builder.config.tiers[tier_index]
+	if tier != null and _background != null and tier.background_color.a > 0.0:
+		_background.apply_style(tier.background_color, tier.background_stars, 0.0 if first else tier.background_fade)
 	if tier != null:
 		_tentacle.apply_pursuer(tier.pursuer_config, tier.pursuer_color, tier.pursuer_reset_position)
 		_player.set_physics_scales(tier.gravity_scale, tier.air_drag_scale)

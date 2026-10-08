@@ -34,7 +34,7 @@ Consecuencia: morir después de ganar (o ganar después de morir) no cambia el r
 |---|---|
 | `run_started(run_seed: int)` | Empezó la partida |
 | `run_won()` | El jugador ganó |
-| `run_lost(cause: StringName)` | El jugador perdió, con la causa (`&"tentacle"`, `&"fell"`, `&"obstacle"`, `&"trap"`) |
+| `run_lost(cause: StringName)` | El jugador perdió, con la causa (`&"tentacle"`, `&"fell"`, `&"obstacle"`, `&"trap"`, `&"debris"`) |
 | `state_changed(new_state, old_state)` | Cambió el estado |
 | `restart_requested()` | Se pidió reiniciar. Si hay conexiones (por ejemplo `Main`), ellas reconstruyen el nivel y el manager **no** recarga la escena |
 

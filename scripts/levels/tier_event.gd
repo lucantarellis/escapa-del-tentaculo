@@ -1,13 +1,15 @@
 @tool
 class_name TierEvent
 extends Node2D
-## Momento de historia al entrar a un tier, sin quitarle el control al jugador: cuando el jugador
-## cruza (subiendo) la Y de este nodo, sacude la cámara, hace un destello y cruza una silueta del
-## alien hacia arriba por el fondo. Se pone en los segmentos de entrada de un tier
-## (`SegmentTier.entry_segments`). Ocurre una sola vez por partida (el nivel se rearma con R).
+## Momento de historia al entrar a un tier. Cuando el jugador cruza (subiendo) la Y de este nodo:
+## cámara lenta un instante, destello, explosión (anillo y fuego) desde abajo, eyección del
+## jugador hacia arriba, restos letales del casco en direcciones al azar ([HullDebris]), sacudida
+## y la silueta del alien huyendo por el fondo. Cada parte se activa y ajusta con `@export`.
+## Se pone en los segmentos de entrada de un tier (`SegmentTier.entry_segments`). Ocurre una
+## sola vez por partida (el nivel se rearma con R).
 ##
-## Todo es visual y placeholder (polígonos); el cambio de perseguidor y de física lo hace
-## [LevelController] al cruzar el borde del tier. Ver `docs/mecanicas/tier-espacio.md`.
+## Visuales placeholder (polígonos, partículas sin textura). El cambio de perseguidor, física y
+## fondo lo hace [LevelController] al cruzar el borde del tier. Ver `docs/mecanicas/tier-espacio.md`.
 
 ## Se emite cuando el evento se dispara.
 signal triggered
@@ -19,9 +21,46 @@ const EDITOR_LINE_COLOR: Color = Color(1.0, 0.42, 0.2, 0.8)
 
 @export_group("Cámara")
 ## Fuerza de la sacudida. Unidad: px.
-@export var shake_amplitude: float = 18.0
+@export var shake_amplitude: float = 28.0
 ## Duración de la sacudida. Unidad: s.
-@export var shake_duration: float = 0.9
+@export var shake_duration: float = 1.2
+## Escala de tiempo durante la cámara lenta (1 = sin cámara lenta).
+@export_range(0.05, 1.0, 0.05) var slow_motion_scale: float = 0.25
+## Duración de la cámara lenta, en tiempo real. Unidad: s.
+@export var slow_motion_duration: float = 0.35
+
+@export_group("Explosión")
+## Si es true, un anillo de fuego se expande desde abajo (desde el centro de `explosion_offset`).
+@export var explosion_enabled: bool = true
+## Origen de la explosión respecto de este nodo (por defecto, el centro del casco). Unidad: px.
+@export var explosion_offset: Vector2 = Vector2(180.0, 40.0)
+## Color del anillo y del fuego.
+@export var explosion_color: Color = Color("FF6B32")
+## Radio final del anillo. Unidad: px.
+@export var explosion_radius: float = 560.0
+## Duración de la expansión del anillo. Unidad: s.
+@export var explosion_duration: float = 0.8
+## Cantidad de partículas de fuego.
+@export var fire_particles: int = 70
+
+@export_group("Eyección")
+## Velocidad hacia arriba que recibe el jugador (0 = sin eyección). Unidad: px/s.
+@export var eject_speed: float = 450.0
+## Tiempo sin control tras la eyección. Unidad: s.
+@export var eject_control_lock: float = 0.3
+
+@export_group("Restos del casco")
+## Cantidad de fragmentos letales (0 = sin restos).
+@export var debris_count: int = 9
+## Velocidad mínima y máxima de los fragmentos. Unidad: px/s.
+@export var debris_speed_min: float = 110.0
+@export var debris_speed_max: float = 260.0
+## Tamaño de los fragmentos. Unidad: px.
+@export var debris_size: float = 14.0
+## Distancia horizontal mínima al jugador donde puede aparecer un fragmento. Unidad: px.
+@export var debris_min_player_distance: float = 70.0
+## Tiempo inicial en que un fragmento todavía no mata. Unidad: s.
+@export var debris_grace_time: float = 0.25
 
 @export_group("Destello")
 ## Color del destello que cubre la pantalla.
@@ -35,11 +74,11 @@ const EDITOR_LINE_COLOR: Color = Color(1.0, 0.42, 0.2, 0.8)
 ## Si es true, la silueta del alien cruza la pantalla hacia arriba por el fondo.
 @export var show_silhouette: bool = true
 ## Tiempo que tarda la silueta en cruzar la pantalla. Unidad: s.
-@export var silhouette_duration: float = 1.1
+@export var silhouette_duration: float = 0.8
 ## Espera desde el destello hasta que aparece la silueta. Unidad: s.
 @export var silhouette_delay: float = 0.25
 ## Escala de la silueta (1 = unos 120 px de alto).
-@export var silhouette_scale: float = 1.4
+@export var silhouette_scale: float = 2.0
 
 var _fired: bool = false
 
@@ -60,12 +99,13 @@ func _physics_process(_delta: float) -> void:
 	for node: Node in get_tree().get_nodes_in_group(&"player"):
 		var player: Player = node as Player
 		if player != null and player.is_alive() and player.global_position.y <= global_position.y:
-			fire()
+			fire(player)
 			return
 
 
-## Dispara el evento (si no se disparó antes).
-func fire() -> void:
+## Dispara el evento (si no se disparó antes). [param player] es el jugador que lo cruzó
+## (para la eyección y para no hacer aparecer restos encima de él).
+func fire(player: Player = null) -> void:
 	if _fired:
 		return
 	_fired = true
@@ -73,10 +113,102 @@ func fire() -> void:
 	var camera: ScrollCamera = get_viewport().get_camera_2d() as ScrollCamera
 	if camera != null:
 		camera.shake(shake_amplitude, shake_duration)
+	_play_slow_motion()
 	_play_flash()
+	if explosion_enabled:
+		_play_explosion()
+	if player != null and eject_speed > 0.0:
+		player.launch(Vector2(player.velocity.x * 0.5, -eject_speed), eject_control_lock)
+	_spawn_debris(player)
 	if show_silhouette:
 		_play_silhouette()
 	triggered.emit()
+
+
+# Cámara lenta medida en tiempo real (el temporizador ignora la escala de tiempo).
+func _play_slow_motion() -> void:
+	if slow_motion_scale >= 1.0 or slow_motion_duration <= 0.0:
+		return
+	Engine.time_scale = slow_motion_scale
+	await get_tree().create_timer(slow_motion_duration, true, false, true).timeout
+	Engine.time_scale = 1.0
+
+
+func _exit_tree() -> void:
+	# Si el nivel se descarga en plena cámara lenta (R), no dejar el juego lento.
+	if _fired:
+		Engine.time_scale = 1.0
+
+
+# Anillo que se expande desde el casco y partículas de fuego.
+func _play_explosion() -> void:
+	var origin: Vector2 = global_position + explosion_offset
+	var ring: Node2D = Node2D.new()
+	ring.global_position = origin
+	ring.z_index = 5
+	get_parent().add_child(ring)
+	ring.global_position = origin
+	var state: Dictionary = {"r": 0.0, "a": 1.0}
+	ring.draw.connect(func() -> void:
+		ring.draw_circle(Vector2.ZERO, state["r"], Color(explosion_color, 0.25 * state["a"]))
+		ring.draw_arc(Vector2.ZERO, state["r"], 0.0, TAU, 64, Color(explosion_color, state["a"]), 10.0))
+	var tween: Tween = ring.create_tween().set_parallel(true)
+	tween.tween_method(func(v: float) -> void:
+		state["r"] = v * explosion_radius
+		state["a"] = 1.0 - v
+		ring.queue_redraw(), 0.0, 1.0, explosion_duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	tween.chain().tween_callback(ring.queue_free)
+	if fire_particles > 0:
+		var fire: CPUParticles2D = CPUParticles2D.new()
+		fire.global_position = origin
+		fire.z_index = 4
+		fire.emitting = false
+		fire.one_shot = true
+		fire.explosiveness = 0.9
+		fire.amount = fire_particles
+		fire.lifetime = 1.2
+		fire.direction = Vector2.UP
+		fire.spread = 80.0
+		fire.initial_velocity_min = 120.0
+		fire.initial_velocity_max = 380.0
+		fire.gravity = Vector2.ZERO
+		fire.scale_amount_min = 4.0
+		fire.scale_amount_max = 9.0
+		fire.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
+		fire.emission_rect_extents = Vector2(170.0, 8.0)
+		var ramp: Gradient = Gradient.new()
+		ramp.set_color(0, Color(1.0, 0.9, 0.5, 1.0))
+		ramp.set_color(1, Color(explosion_color, 0.0))
+		fire.color_ramp = ramp
+		get_parent().add_child(fire)
+		fire.global_position = origin
+		fire.emitting = true
+		get_tree().create_timer(2.0).timeout.connect(fire.queue_free)
+
+
+# Fragmentos letales del casco: aparecen a lo largo del casco, lejos del jugador, y salen en
+# direcciones al azar.
+func _spawn_debris(player: Player) -> void:
+	if debris_count <= 0:
+		return
+	var origin: Vector2 = global_position + explosion_offset
+	var spawned: int = 0
+	var tries: int = 0
+	while spawned < debris_count and tries < debris_count * 10:
+		tries += 1
+		var x: float = randf_range(origin.x - 170.0, origin.x + 170.0)
+		if player != null and absf(x - player.global_position.x) < debris_min_player_distance:
+			continue
+		var debris: HullDebris = HullDebris.new()
+		var angle: float = randf_range(0.0, TAU)
+		debris.velocity = Vector2(cos(angle), sin(angle)) * randf_range(debris_speed_min, debris_speed_max)
+		debris.spin = randf_range(-6.0, 6.0)
+		debris.size = debris_size
+		debris.grace_time = debris_grace_time
+		debris.position = Vector2(x, origin.y + randf_range(-10.0, 10.0))
+		get_parent().add_child(debris)
+		debris.global_position = Vector2(x, origin.y + randf_range(-10.0, 10.0))
+		spawned += 1
 
 
 func _play_flash() -> void:
