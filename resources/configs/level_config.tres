@@ -23,16 +23,6 @@
 [ext_resource type="PackedScene" uid="uid://coclxd7tgsw60" path="res://scenes/levels/segments/ship/Segment20.tscn" id="22_58vi7"]
 [ext_resource type="PackedScene" uid="uid://0sutmev6yb84" path="res://scenes/levels/segments/ship/Segment21.tscn" id="23_58vi7"]
 [ext_resource type="Script" uid="uid://b8hobj738gq54" path="res://scripts/levels/segment_tier.gd" id="24_tier"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd01.tscn" id="end_01"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd02.tscn" id="end_02"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd03.tscn" id="end_03"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd04.tscn" id="end_04"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd05.tscn" id="end_05"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd06.tscn" id="end_06"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd07.tscn" id="end_07"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd08.tscn" id="end_08"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd09.tscn" id="end_09"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd10.tscn" id="end_10"]
 [ext_resource type="Resource" path="res://resources/configs/tentacle_config_fire.tres" id="fire_cfg"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/ship/SegmentShipExit01.tscn" id="ship_exit_01"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/ship/SegmentShipExit02.tscn" id="ship_exit_02"]
@@ -61,6 +51,24 @@
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart08.tscn" id="start_08"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart09.tscn" id="start_09"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart10.tscn" id="start_10"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlien01.tscn" id="alien_01"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlien02.tscn" id="alien_02"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlien03.tscn" id="alien_03"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlien04.tscn" id="alien_04"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlien05.tscn" id="alien_05"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlien06.tscn" id="alien_06"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlien07.tscn" id="alien_07"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlien08.tscn" id="alien_08"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlien09.tscn" id="alien_09"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlien10.tscn" id="alien_10"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlienEntry01.tscn" id="alien_entry_01"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlienEntry02.tscn" id="alien_entry_02"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlienEntry03.tscn" id="alien_entry_03"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentBrain01.tscn" id="brain_01"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentBrain02.tscn" id="brain_02"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentBrain03.tscn" id="brain_03"]
+[ext_resource type="Resource" path="res://resources/configs/tentacle_config_acid.tres" id="acid_cfg"]
+[ext_resource type="TileSet" path="res://resources/tilesets/walls_tileset_alien.tres" id="alien_tiles"]
 
 [sub_resource type="Resource" id="Resource_tier1"]
 script = ExtResource("24_tier")
@@ -93,9 +101,17 @@ counter_thrust_scale = 0.45
 script = ExtResource("24_tier")
 count_per_run = 5
 display_name = "Dentro del alien"
+segments = Array[PackedScene]([ExtResource("alien_01"), ExtResource("alien_02"), ExtResource("alien_03"), ExtResource("alien_04"), ExtResource("alien_05"), ExtResource("alien_06"), ExtResource("alien_07"), ExtResource("alien_08"), ExtResource("alien_09"), ExtResource("alien_10")])
+entry_segments = Array[PackedScene]([ExtResource("alien_entry_01"), ExtResource("alien_entry_02"), ExtResource("alien_entry_03")])
+walls_tileset = ExtResource("alien_tiles")
+platform_tint = Color(0.7686, 0.4157, 0.4784, 1)
+background_color = Color(0.1176, 0.0392, 0.0627, 1)
+pursuer_config = ExtResource("acid_cfg")
+pursuer_color = Color(0.7098, 0.8275, 0.2275, 1)
+pursuer_delay = 1.0
 
 [resource]
 script = ExtResource("1_cfg")
 start_segments = Array[PackedScene]([ExtResource("start_01"), ExtResource("start_02"), ExtResource("start_03"), ExtResource("start_04"), ExtResource("start_05"), ExtResource("start_06"), ExtResource("start_07"), ExtResource("start_08"), ExtResource("start_09"), ExtResource("start_10")])
-end_segments = Array[PackedScene]([ExtResource("end_01"), ExtResource("end_02"), ExtResource("end_03"), ExtResource("end_04"), ExtResource("end_05"), ExtResource("end_06"), ExtResource("end_07"), ExtResource("end_08"), ExtResource("end_09"), ExtResource("end_10")])
+end_segments = Array[PackedScene]([ExtResource("brain_01"), ExtResource("brain_02"), ExtResource("brain_03")])
 tiers = Array[ExtResource("24_tier")]([SubResource("Resource_tier1"), SubResource("Resource_tier2"), SubResource("Resource_tier3")])
