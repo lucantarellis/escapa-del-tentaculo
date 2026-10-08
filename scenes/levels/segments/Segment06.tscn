@@ -1,43 +1,31 @@
-[gd_scene format=3]
+[gd_scene format=4 uid="uid://ct3n2jt0twyhf"]
 
-[ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
-[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
 [ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
+[ext_resource type="Script" uid="uid://babh65w3a025g" path="res://scripts/levels/level_segment.gd" id="seg"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
 [ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
 
-[node name="Segment06" type="Node2D"]
+[node name="Segment06" type="Node2D" unique_id=2049418694]
 script = ExtResource("seg")
-height = 360
+height = 360.0
 
-[node name="Start" parent="." instance=ExtResource("plat")]
-position = Vector2(120, -28)
-size = Vector2(160, 12)
-platform_type = 0
-
-[node name="Pulse" parent="." instance=ExtResource("plat")]
-position = Vector2(140, -140)
-size = Vector2(80, 12)
+[node name="Pulse" parent="." unique_id=1033898983 instance=ExtResource("plat")]
+position = Vector2(180, -54)
 platform_type = 5
 
-[node name="Guard" parent="." instance=ExtResource("plat")]
-position = Vector2(260, -150)
+[node name="Guard" parent="." unique_id=273032381 instance=ExtResource("plat")]
+position = Vector2(179, -295)
 size = Vector2(14, 50)
 platform_type = 4
 
-[node name="Crumble" parent="." instance=ExtResource("plat")]
-position = Vector2(160, -250)
-size = Vector2(90, 12)
-platform_type = 2
+[node name="FuelTank1" parent="." unique_id=326663111 instance=ExtResource("tank")]
+position = Vector2(179, -129)
 
-[node name="End" parent="." instance=ExtResource("plat")]
-position = Vector2(180, -338)
-size = Vector2(130, 12)
-platform_type = 0
+[node name="FuelTank2" parent="." unique_id=1719995790 instance=ExtResource("tank")]
+position = Vector2(179, -216)
 
-[node name="FuelTank1" parent="." instance=ExtResource("tank")]
-position = Vector2(140, -158)
+[node name="Walls" parent="." unique_id=1433626132 instance=ExtResource("walls")]
+tile_map_data = PackedByteArray("AAASAOb/AAAAAAAAAAASAPv/AAAAAAAAAAATAOb/AAAAAAAAAAATAOf/AAAAAAAAAAATAPr/AAAAAAAAAAATAPv/AAAAAAAAAAAUAOb/AAAAAAAAAAAUAOf/AAAAAAAAAAAUAOj/AAAAAAAAAAAUAOn/AAAAAAAAAAAUAPj/AAAAAAAAAAAUAPn/AAAAAAAAAAAUAPr/AAAAAAAAAAAUAPv/AAAAAAAAAAAVAOb/AAAAAAAAAAAVAOf/AAAAAAAAAAAVAOj/AAAAAAAAAAAVAOn/AAAAAAAAAAAVAPj/AAAAAAAAAAAVAPn/AAAAAAAAAAAVAPr/AAAAAAAAAAAVAPv/AAAAAAAAAAAWAOb/AAAAAAAAAAAWAOf/AAAAAAAAAAAWAPr/AAAAAAAAAAAWAPv/AAAAAAAAAAAXAOb/AAAAAAAAAAAXAPv/AAAAAAAAAAAVAOr/AAAAAAAAAAAVAOv/AAAAAAAAAAAVAOz/AAAAAAAAAAAVAO3/AAAAAAAAAAAVAO7/AAAAAAAAAAAVAO//AAAAAAAAAAAVAPD/AAAAAAAAAAAVAPH/AAAAAAAAAAAVAPL/AAAAAAAAAAAVAPP/AAAAAAAAAAAVAPT/AAAAAAAAAAAVAPX/AAAAAAAAAAAVAPb/AAAAAAAAAAAVAPf/AAAAAAAAAAAWAOj/AAAAAAAAAAAWAOn/AAAAAAAAAAAWAOr/AAAAAAAAAAAWAOv/AAAAAAAAAAAWAOz/AAAAAAAAAAAWAO3/AAAAAAAAAAAWAO7/AAAAAAAAAAAWAO//AAAAAAAAAAAWAPD/AAAAAAAAAAAWAPH/AAAAAAAAAAAWAPL/AAAAAAAAAAAWAPP/AAAAAAAAAAAWAPT/AAAAAAAAAAAWAPX/AAAAAAAAAAAWAPb/AAAAAAAAAAAWAPf/AAAAAAAAAAAWAPj/AAAAAAAAAAAWAPn/AAAAAAAAAAAXAOf/AAAAAAAAAAAXAOj/AAAAAAAAAAAXAOn/AAAAAAAAAAAXAPj/AAAAAAAAAAAXAPn/AAAAAAAAAAAXAPr/AAAAAAAAAAAYAOb/AAAAAAAAAAAYAOf/AAAAAAAAAAAYAPr/AAAAAAAAAAAYAPv/AAAAAAAAAAAZAOb/AAAAAAAAAAAZAPv/AAAAAAAAAAA=")
 
-[node name="FuelTank2" parent="." instance=ExtResource("tank")]
-position = Vector2(160, -270)
-
-[node name="Walls" parent="." instance=ExtResource("walls")]
+[node name="Walls2" parent="." unique_id=73918298 instance=ExtResource("walls")]
+tile_map_data = PackedByteArray("AAAEAOb/AAAAAAAAAAAEAPv/AAAAAAAAAAAFAOb/AAAAAAAAAAAFAOf/AAAAAAAAAAAFAPr/AAAAAAAAAAAFAPv/AAAAAAAAAAAGAOb/AAAAAAAAAAAGAOf/AAAAAAAAAAAGAOj/AAAAAAAAAAAGAOn/AAAAAAAAAAAGAPj/AAAAAAAAAAAGAPn/AAAAAAAAAAAGAPr/AAAAAAAAAAAGAPv/AAAAAAAAAAAHAOb/AAAAAAAAAAAHAOf/AAAAAAAAAAAHAOj/AAAAAAAAAAAHAOn/AAAAAAAAAAAHAOr/AAAAAAAAAAAHAOv/AAAAAAAAAAAHAOz/AAAAAAAAAAAHAO3/AAAAAAAAAAAHAO7/AAAAAAAAAAAHAO//AAAAAAAAAAAHAPD/AAAAAAAAAAAHAPH/AAAAAAAAAAAHAPL/AAAAAAAAAAAHAPP/AAAAAAAAAAAHAPT/AAAAAAAAAAAHAPX/AAAAAAAAAAAHAPb/AAAAAAAAAAAHAPf/AAAAAAAAAAAHAPj/AAAAAAAAAAAHAPn/AAAAAAAAAAAHAPr/AAAAAAAAAAAHAPv/AAAAAAAAAAAIAOb/AAAAAAAAAAAIAOf/AAAAAAAAAAAIAOj/AAAAAAAAAAAIAOn/AAAAAAAAAAAIAOr/AAAAAAAAAAAIAOv/AAAAAAAAAAAIAOz/AAAAAAAAAAAIAO3/AAAAAAAAAAAIAO7/AAAAAAAAAAAIAO//AAAAAAAAAAAIAPD/AAAAAAAAAAAIAPH/AAAAAAAAAAAIAPL/AAAAAAAAAAAIAPP/AAAAAAAAAAAIAPT/AAAAAAAAAAAIAPX/AAAAAAAAAAAIAPb/AAAAAAAAAAAIAPf/AAAAAAAAAAAIAPj/AAAAAAAAAAAIAPn/AAAAAAAAAAAIAPr/AAAAAAAAAAAIAPv/AAAAAAAAAAAJAOb/AAAAAAAAAAAJAOf/AAAAAAAAAAAJAOj/AAAAAAAAAAAJAOn/AAAAAAAAAAAJAPj/AAAAAAAAAAAJAPn/AAAAAAAAAAAJAPr/AAAAAAAAAAAJAPv/AAAAAAAAAAAKAOb/AAAAAAAAAAAKAOf/AAAAAAAAAAAKAPr/AAAAAAAAAAAKAPv/AAAAAAAAAAALAOb/AAAAAAAAAAALAPv/AAAAAAAAAAA=")

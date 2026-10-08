@@ -1,40 +1,47 @@
-[gd_scene format=3]
+[gd_scene format=4 uid="uid://pfi7offsx24a"]
 
-[ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
-[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
 [ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
+[ext_resource type="Script" uid="uid://babh65w3a025g" path="res://scripts/levels/level_segment.gd" id="seg"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
 [ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
 
-[node name="Segment09" type="Node2D"]
+[node name="Segment09" type="Node2D" unique_id=1492216273]
 script = ExtResource("seg")
-height = 320
+height = 320.0
 
-[node name="Start" parent="." instance=ExtResource("plat")]
-position = Vector2(160, -28)
-size = Vector2(140, 12)
-platform_type = 0
-
-[node name="Pulse1" parent="." instance=ExtResource("plat")]
-position = Vector2(110, -130)
-size = Vector2(80, 12)
+[node name="Pulse1" parent="." unique_id=1226358586 instance=ExtResource("plat")]
+position = Vector2(145, -244)
+size = Vector2(39.67, 12)
 platform_type = 5
 
-[node name="Rest" parent="." instance=ExtResource("plat")]
-position = Vector2(220, -130)
+[node name="Pulse3" parent="." unique_id=1526661713 instance=ExtResource("plat")]
+position = Vector2(311, -244)
+size = Vector2(39.67, 12)
+platform_type = 5
+
+[node name="Pulse4" parent="." unique_id=1633530219 instance=ExtResource("plat")]
+position = Vector2(233, -244)
+size = Vector2(39.67, 12)
+platform_type = 5
+
+[node name="Rest" parent="." unique_id=51879099 instance=ExtResource("plat")]
+position = Vector2(78, -66)
 size = Vector2(60, 12)
-platform_type = 0
 
-[node name="Pulse2" parent="." instance=ExtResource("plat")]
-position = Vector2(150, -232)
-size = Vector2(80, 12)
-platform_type = 5
+[node name="Rest2" parent="." unique_id=1497144034 instance=ExtResource("plat")]
+position = Vector2(180, -66)
+size = Vector2(60, 12)
 
-[node name="End" parent="." instance=ExtResource("plat")]
-position = Vector2(180, -292)
-size = Vector2(140, 12)
-platform_type = 0
+[node name="Rest3" parent="." unique_id=5247612 instance=ExtResource("plat")]
+position = Vector2(284, -66)
+size = Vector2(60, 12)
 
-[node name="FuelTank1" parent="." instance=ExtResource("tank")]
-position = Vector2(220, -148)
+[node name="FuelTank1" parent="." unique_id=660448126 instance=ExtResource("tank")]
+position = Vector2(174, -154)
 
-[node name="Walls" parent="." instance=ExtResource("walls")]
+[node name="Walls" parent="." unique_id=1631719619 instance=ExtResource("walls")]
+rotation = 1.5707964
+tile_map_data = PackedByteArray("AADt//n/AAAAAAAAAADt//r/AAAAAAAAAADt//v/AAAAAAAAAADu//j/AAAAAAAAAADu//n/AAAAAAAAAADu//r/AAAAAAAAAADu//v/AAAAAAAAAADu//z/AAAAAAAAAADv//j/AAAAAAAAAADv//n/AAAAAAAAAADv//r/AAAAAAAAAADv//v/AAAAAAAAAADv//z/AAAAAAAAAADv//3/AAAAAAAAAADw//n/AAAAAAAAAADw//r/AAAAAAAAAADw//v/AAAAAAAAAADw//z/AAAAAAAAAADw//3/AAAAAAAAAADx//r/AAAAAAAAAADx//v/AAAAAAAAAADx//z/AAAAAAAAAADx//3/AAAAAAAAAADx//7/AAAAAAAAAADp//n/AAAAAAAAAADp//r/AAAAAAAAAADp//v/AAAAAAAAAADq//j/AAAAAAAAAADq//n/AAAAAAAAAADq//r/AAAAAAAAAADq//v/AAAAAAAAAADq//z/AAAAAAAAAADr//f/AAAAAAAAAADr//j/AAAAAAAAAADr//n/AAAAAAAAAADr//r/AAAAAAAAAADr//v/AAAAAAAAAADr//z/AAAAAAAAAADr//3/AAAAAAAAAADs//f/AAAAAAAAAADs//j/AAAAAAAAAADs//n/AAAAAAAAAADs//r/AAAAAAAAAADs//v/AAAAAAAAAADs//z/AAAAAAAAAADs//3/AAAAAAAAAADt//f/AAAAAAAAAADt//j/AAAAAAAAAADt//z/AAAAAAAAAADt//3/AAAAAAAAAADt//7/AAAAAAAAAADu//f/AAAAAAAAAADu//3/AAAAAAAAAADu//7/AAAAAAAAAADu////AAAAAAAAAADv//7/AAAAAAAAAADv////AAAAAAAAAADw//7/AAAAAAAAAADw////AAAAAAAAAADx////AAAAAAAAAAA=")
+
+[node name="Walls2" parent="." unique_id=73918298 instance=ExtResource("walls")]
+tile_map_data = PackedByteArray("AAAVAPT/AAAAAAAAAAAVAPX/AAAAAAAAAAAVAPb/AAAAAAAAAAAWAPP/AAAAAAAAAAAWAPT/AAAAAAAAAAAWAPX/AAAAAAAAAAAWAPb/AAAAAAAAAAAWAPf/AAAAAAAAAAAXAPL/AAAAAAAAAAAXAPP/AAAAAAAAAAAXAPT/AAAAAAAAAAAXAPX/AAAAAAAAAAAXAPb/AAAAAAAAAAAXAPf/AAAAAAAAAAAYAPL/AAAAAAAAAAAYAPP/AAAAAAAAAAAYAPT/AAAAAAAAAAAYAPX/AAAAAAAAAAAYAPb/AAAAAAAAAAAYAPf/AAAAAAAAAAAXAPj/AAAAAAAAAAAYAPj/AAAAAAAAAAAZAPL/AAAAAAAAAAAZAPP/AAAAAAAAAAAZAPT/AAAAAAAAAAAZAPX/AAAAAAAAAAAZAPb/AAAAAAAAAAAZAPf/AAAAAAAAAAAZAPj/AAAAAAAAAAAZAPn/AAAAAAAAAAAaAPL/AAAAAAAAAAAaAPP/AAAAAAAAAAAaAPT/AAAAAAAAAAAaAPX/AAAAAAAAAAAaAPb/AAAAAAAAAAAaAPf/AAAAAAAAAAAaAPj/AAAAAAAAAAAaAPn/AAAAAAAAAAAaAPr/AAAAAAAAAAAbAPP/AAAAAAAAAAAbAPT/AAAAAAAAAAAbAPX/AAAAAAAAAAAbAPb/AAAAAAAAAAAbAPf/AAAAAAAAAAAbAPj/AAAAAAAAAAAbAPn/AAAAAAAAAAAbAPr/AAAAAAAAAAAcAPT/AAAAAAAAAAAcAPX/AAAAAAAAAAAcAPb/AAAAAAAAAAAcAPf/AAAAAAAAAAAcAPj/AAAAAAAAAAAcAPn/AAAAAAAAAAAcAPr/AAAAAAAAAAAdAPX/AAAAAAAAAAAdAPb/AAAAAAAAAAAdAPf/AAAAAAAAAAAdAPj/AAAAAAAAAAAdAPn/AAAAAAAAAAAdAPr/AAAAAAAAAAA=")
