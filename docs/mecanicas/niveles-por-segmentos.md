@@ -87,11 +87,11 @@ Los inicios tienen tres tanques (por su altura) y los finales uno.
 | Tier → Escenario | `entry_segments` | vacío | — | Segmentos de entrada (transición): se sortea uno y va antes de los segmentos del tier. Vacío = sin transición |
 | Tier → Escenario | `walls_tileset` | vacío | — | TileSet de las paredes del tier (mismas coordenadas de atlas que `walls_tileset.tres`). Vacío = el de cada segmento |
 | Tier → Perseguidor | `pursuer_config` | vacío | — | `TentacleConfig` del perseguidor del tier (tentáculo, fuego, ácido). Vacío = sigue el anterior |
-| Tier → Perseguidor | `pursuer_color` | rojo `#D83232` | — | Color placeholder del perseguidor (solo con `pursuer_config`) |
-| Tier → Perseguidor | `pursuer_reset_position` | true | — | Al entrar al tier, el perseguidor vuelve a su distancia inicial (uno nuevo que aparece) |
+| Tier → Perseguidor | `pursuer_color` | rojo `#D83232` | — | Color placeholder del perseguidor; se aplica siempre al entrar al tier |
+| Tier → Perseguidor | `pursuer_reset_position` | true | — | Con `pursuer_config`: al entrar al tier, el perseguidor vuelve a su distancia inicial (uno nuevo que aparece) |
 | Tier → Jugador | `player_config` | vacío | — | `PlayerConfig` del tier (ej.: gravedad del espacio). Vacío = sigue la anterior; el combustible se conserva |
 
-**Cambio de tier en la partida.** `LevelBuilder.get_tier_starts()` da la Y donde empieza cada tier. `LevelController` vigila al jugador y, al cruzar subiendo el borde de un tier, le aplica su escenario: `Tentacle.apply_pursuer(config, color, reset)` y `Player.apply_config(config)`, y emite `tier_entered(tier_index)` (`get_current_tier()` da el tier actual; -1 en el inicio). El tileset de paredes lo pone el `LevelBuilder` al armar. El HUD marca el inicio de cada tier en la línea de progreso.
+**Cambio de tier en la partida.** `LevelBuilder.get_tier_starts()` da la Y donde empieza cada tier. El segmento de inicio cuenta como parte del primer tier: su escenario se aplica desde el arranque. Para los siguientes, `LevelController` vigila al jugador y, al cruzar subiendo el borde de un tier, le aplica su escenario: `Tentacle.apply_pursuer(config, color, reset)` y `Player.apply_config(config)`, y emite `tier_entered(tier_index)` (`get_current_tier()` da el tier actual; -1 en el inicio). El tileset de paredes lo pone el `LevelBuilder` al armar. El HUD marca el inicio de cada tier (salvo el primero) en la línea de progreso.
 
 Los valores son de prueba: el balance se hace con el MVP completo.
 

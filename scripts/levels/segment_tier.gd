@@ -31,10 +31,11 @@ extends Resource
 ## Config del perseguidor en este tier (el tentáculo, el fuego, el ácido). Vacío = sigue el de
 ## antes. Al cruzar el borde del tier, [LevelController] se la aplica al [Tentacle].
 @export var pursuer_config: TentacleConfig
-## Color placeholder del perseguidor en este tier. Solo se usa si hay `pursuer_config`.
+## Color placeholder del perseguidor en este tier. Se aplica siempre al entrar (rojo = tentáculo).
 @export var pursuer_color: Color = Color("D83232")
 ## Si es true, al entrar al tier el perseguidor vuelve a su distancia inicial bajo la pantalla
-## (otro perseguidor que recién aparece). Si es false, sigue desde donde estaba.
+## (otro perseguidor que recién aparece). Si es false, sigue desde donde estaba. Solo con
+## `pursuer_config`.
 @export var pursuer_reset_position: bool = true
 
 @export_group("Jugador")

@@ -45,8 +45,8 @@ progreso = clamp((start_y − player.global_position.y) / (start_y − end_y), 0
 
 ## Récord y marcas de tier
 
-- **Récord:** una marca fina y más ancha que el marcador, blanco azulado tenue, en el mejor progreso guardado. Lo guarda `RunRecords` (`scripts/managers/run_records.gd`) en `user://records.cfg` al terminar cada partida del nivel por segmentos (el sandbox no cuenta). Si la partida lo supera, el mensaje de fin agrega "NUEVO RÉCORD" y la marca se mueve. Como todo segmento mide 640 px, el progreso de partidas distintas es comparable. `RunRecords.clear()` lo borra (pruebas).
-- **Tiers:** una marca corta y tenue en la Y donde empieza cada tier.
+- **Récord:** una marca fina en cian `#63D6C5`, más ancha que el marcador, en el mejor progreso guardado. Lo guarda `RunRecords` (`scripts/managers/run_records.gd`) en `user://records.cfg` al terminar cada partida del nivel por segmentos (el sandbox no cuenta). Si la partida lo supera, el mensaje de fin agrega "NUEVO RÉCORD" y la marca se mueve. Como todo segmento mide 640 px, el progreso de partidas distintas es comparable. `RunRecords.clear()` lo borra (pruebas).
+- **Tiers:** una marca corta y tenue (blanco azulado) en la Y donde empieza cada tier, salvo el primero (el inicio ya es parte de él).
 
 ## Cómo probarlo
 

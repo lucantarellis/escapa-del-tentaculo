@@ -24,10 +24,10 @@ const EMPTY_COLOR: Color = Color("D83232")
 const MARKER_COLOR: Color = Color("C8E7EA")
 ## Color del marcador del tentáculo (rojo letal). Solo visual.
 const TENTACLE_COLOR: Color = Color("D83232")
-## Color de la marca del récord (blanco azulado tenue). Solo visual.
-const RECORD_COLOR: Color = Color(0.7843, 0.9059, 0.9176, 0.55)
-## Tamaño de la marca del récord: más ancha y fina que el marcador del jugador (px). Solo visual.
-const RECORD_SIZE: Vector2 = Vector2(19.0, 2.0)
+## Color de la marca del récord (cian de la paleta, bien visible). Solo visual.
+const RECORD_COLOR: Color = Color(0.3882, 0.8392, 0.7725, 0.9)
+## Tamaño de la marca del récord: más ancha que el marcador del jugador (px). Solo visual.
+const RECORD_SIZE: Vector2 = Vector2(21.0, 2.0)
 ## Color de las marcas de inicio de tier. Solo visual.
 const TIER_MARK_COLOR: Color = Color(0.7843, 0.9059, 0.9176, 0.35)
 ## Tamaño de las marcas de inicio de tier (px). Solo visual.

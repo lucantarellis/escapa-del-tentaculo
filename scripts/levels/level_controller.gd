@@ -81,13 +81,18 @@ func _ready() -> void:
 	if _builder != null:
 		_tier_starts = _builder.get_tier_starts()
 	if _hud != null:
+		# Sin marca para el primer tier: el inicio ya es parte de él.
 		var ys: PackedFloat32Array = PackedFloat32Array()
-		for entry: Dictionary in _tier_starts:
-			ys.append(entry["y"])
+		for i: int in range(1, _tier_starts.size()):
+			ys.append(_tier_starts[i]["y"])
 		_hud.set_tier_marks(ys)
 		_hud.set_record(RunRecords.get_best_progress())
 	GameManager.state_changed.connect(_on_state_changed)
 	_run_seed = run_seed
+	# El segmento de inicio es parte del primer tier: su escenario rige desde el arranque.
+	if not _tier_starts.is_empty():
+		_enter_tier(int(_tier_starts[0]["tier"]))
+		_next_tier = 1
 	if _hatch != null:
 		_hatch.config = intro_config
 	if autostart:
@@ -179,8 +184,7 @@ func _enter_tier(tier_index: int) -> void:
 	_current_tier = tier_index
 	var tier: SegmentTier = _builder.config.tiers[tier_index] if _builder != null else null
 	if tier != null:
-		if tier.pursuer_config != null:
-			_tentacle.apply_pursuer(tier.pursuer_config, tier.pursuer_color, tier.pursuer_reset_position)
+		_tentacle.apply_pursuer(tier.pursuer_config, tier.pursuer_color, tier.pursuer_reset_position)
 		if tier.player_config != null:
 			_player.apply_config(tier.player_config)
 	tier_entered.emit(tier_index)

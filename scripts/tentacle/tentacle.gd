@@ -94,15 +94,15 @@ func _process(delta: float) -> void:
 	_update_body_polygon()
 
 
-## Cambia el perseguidor al entrar a un tier (ver [SegmentTier]): nueva [param new_config] y
-## color placeholder [param color]. Con [param reset_position] vuelve a su distancia inicial bajo
-## la pantalla, como un perseguidor que recién aparece; si no, sigue desde donde estaba (con la
-## velocidad de ascenso inicial de la config nueva).
+## Cambia el perseguidor al entrar a un tier (ver [SegmentTier]): color placeholder [param color]
+## siempre y, si [param new_config] no es null, la config nueva. Solo con config nueva:
+## [param reset_position] lo vuelve a su distancia inicial bajo la pantalla, como un perseguidor
+## que recién aparece; si no, sigue desde donde estaba (con la velocidad inicial de la config nueva).
 func apply_pursuer(new_config: TentacleConfig, color: Color, reset_position: bool) -> void:
+	_body.color = color
 	if new_config == null:
 		return
 	config = new_config
-	_body.color = color
 	if reset_position and camera != null:
 		_reset_free_rise()
 	else:
