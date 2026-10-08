@@ -19,6 +19,7 @@ Hay dos niveles jugables. `scenes/levels/Level.tscn` (nivel por segmentos, el pr
 Level (Node2D)                        script: level_controller.gd
 ├── LevelBuilder (Node2D)             script: level_builder.gd, config = level_config.tres
 │   └── SegmentStart, Segment.., SegmentEnd (LevelSegment)   escenas de scenes/levels/segments/, agregadas al iniciar
+│       └── Walls (TileMapLayer)       scenes/levels/Walls.tscn; paredes pintadas con tiles en cada segmento (ver mecanicas/paredes.md)
 ├── ScrollCamera
 ├── Hatch (Node2D, ALWAYS)             scenes/intro/Hatch.tscn; escotilla de la intro, en el HatchAnchor del segmento de inicio
 │   └── Visual (Frame, Hole, Glow, LeafLeft, LeafRight), GasParticles

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://babh65w3a025g" path="res://scripts/levels/level_segment.gd" id="1_qjvha"]
 [ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="2_fvsfk"]
+[ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
 
 [node name="Segment18" type="Node2D" unique_id=975552168]
 script = ExtResource("1_qjvha")
@@ -34,3 +35,5 @@ size = Vector2(160, 12)
 position = Vector2(54, -123)
 size = Vector2(20, 12)
 platform_type = 4
+
+[node name="Walls" parent="." instance=ExtResource("walls")]

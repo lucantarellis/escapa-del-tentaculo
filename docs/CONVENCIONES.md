@@ -61,6 +61,10 @@ Obstáculos y tanques se colocan a mano en los niveles. Para poder verlos y ajus
 - Cada instancia crea sus propias formas de colisión (no compartir el sub-recurso `Shape2D` entre instancias, o cambiar una cambia todas).
 - Lo que es tuning (velocidades, tiempos) va en un `Resource` de configuración; lo que es diseño de nivel (tamaño, recorrido) va en la instancia.
 
+## 3d. Paredes con tiles
+
+Las paredes de un segmento se pintan en su hijo `Walls` (`TileMapLayer`, grilla de 12 px, TileSet `resources/tilesets/walls_tileset.tres`), no se arman con `Platform`. Son sólidas (capa 1 `world`) y no matan. Detalle en `docs/mecanicas/paredes.md`.
+
 ## 4. Acciones del Input Map
 
 El código usa siempre **acciones**, nunca teclas, para poder agregar controles táctiles sin tocar la lógica.

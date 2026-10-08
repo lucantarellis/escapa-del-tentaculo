@@ -33,6 +33,10 @@ const OUTLINE_COLOR: Color = Color(1.0, 1.0, 1.0, 0.6)
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
+		# Al pintar paredes, revisar de nuevo si alguna celda quedó fuera del segmento.
+		for child: Node in get_children():
+			if child is TileMapLayer:
+				(child as TileMapLayer).changed.connect(update_configuration_warnings)
 		return
 	# Ejecutado solo con F6 (el segmento es la escena actual): sin nada que lo encuadre, el
 	# segmento queda fuera de pantalla (Y negativa). Se agrega una cámara para verlo aislado.
@@ -61,7 +65,8 @@ func has_fuel_tank() -> bool:
 
 
 ## Devuelve los hijos directos cuyo contenido sale del rectángulo del segmento. Para un
-## obstáculo se cuenta su bloque completo y, si es móvil, todo su recorrido.
+## obstáculo se cuenta su bloque completo y, si es móvil, todo su recorrido; para las paredes
+## (`TileMapLayer`), el rectángulo de todas las celdas pintadas.
 func get_out_of_bounds_children() -> Array[Node]:
 	var result: Array[Node] = []
 	var bounds: Rect2 = Rect2(0.0, -height, WIDTH, height).grow(0.5)
@@ -100,6 +105,14 @@ func _get_child_rect(child: Node) -> Rect2:
 		if platform.platform_type == Platform.PlatformType.PROJECTILE and platform.projectile_end != Platform.ProjectileEnd.BOUNCE:
 			platform_rect = platform_rect.merge(Rect2(platform_rect.position + platform.travel, platform.size))
 		return platform_rect
+	if child is TileMapLayer:
+		# Paredes pintadas con tiles: el rectángulo que cubren todas las celdas usadas.
+		var layer: TileMapLayer = child as TileMapLayer
+		var used: Rect2i = layer.get_used_rect()
+		if used.size == Vector2i.ZERO or layer.tile_set == null:
+			return Rect2(layer.position, Vector2.ZERO)
+		var tile: Vector2 = Vector2(layer.tile_set.tile_size)
+		return Rect2(layer.position + Vector2(used.position) * tile, Vector2(used.size) * tile)
 	if child is StaticBody2D:
 		var body: StaticBody2D = child as StaticBody2D
 		var points: PackedVector2Array = PackedVector2Array()

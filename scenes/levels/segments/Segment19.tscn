@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://babh65w3a025g" path="res://scripts/levels/level_segment.gd" id="1_s1udk"]
 [ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="2_e3xlj"]
 [ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="3_e3xlj"]
+[ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
 
 [node name="Segment19" type="Node2D" unique_id=975552168]
 script = ExtResource("1_s1udk")
@@ -53,3 +54,5 @@ rotation = -3.7332592
 size = Vector2(80, 6.17)
 platform_type = 2
 travel = Vector2(120, -1.005)
+
+[node name="Walls" parent="." instance=ExtResource("walls")]

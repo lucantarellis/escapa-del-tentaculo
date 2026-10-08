@@ -92,6 +92,7 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | 8e | Intro de la escotilla: ruptura, lanzamiento del jugador y entrada del tentáculo | Hecho | brief-05 |
 | 8f | Balance del MVP (rondas de tuning) | En curso | brief-06 |
 | 8g | Plataforma proyectil (`PROJECTILE`) | Hecho en la rama `main-g`, pendiente de prueba jugando | — |
+| 8h | Paredes pintadas con tiles (sólido + diagonal) | Hecho en la rama `main-l`, pendiente de pintar y probar jugando | — |
 | 8c | Controles táctiles | Pendiente (al final, tras arte y balance) | — |
 | 9 | Arte final, audio y pulido | Pendiente | — |
 
@@ -147,6 +148,9 @@ Al pulsar JUGAR se ve una escotilla abajo (sin tentáculo ni jugador); la cámar
 ### Paso 8e — Intro de la escotilla: ruptura y lanzamiento
 Tras el tercer golpe la escotilla se rompe, el jugador sale disparado hacia arriba (`Player.launch`, control bloqueado un instante), empieza la partida y, tras un retraso, el tentáculo entra desde abajo (`Tentacle.enter`). La red de seguridad de caída está activa desde el inicio de la partida.
 **Hecho cuando:** la secuencia completa funciona y ganar, perder y R siguen igual.
+
+### Paso 8h — Paredes pintadas con tiles
+`TileMapLayer` `Walls` en cada segmento, con un TileSet de 12 px (tile sólido y tile diagonal en cuatro orientaciones), colisión en la capa `world` y color placeholder celeste. Las plataformas no cambian. Se reemplaza por el tilemap real en el paso 9. Doc: `docs/mecanicas/paredes.md`.
 
 ### Paso 8c — Controles táctiles (diferido al final)
 Joystick o zonas táctiles que emitan las mismas acciones del Input Map, para la versión móvil. Se hace después del arte y el balance.

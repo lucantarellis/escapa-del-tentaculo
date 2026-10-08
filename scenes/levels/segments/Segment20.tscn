@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://babh65w3a025g" path="res://scripts/levels/level_segment.gd" id="1_tkk56"]
 [ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="2_50h6a"]
 [ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="3_50h6a"]
+[ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
 
 [node name="Segment20" type="Node2D" unique_id=975552168]
 script = ExtResource("1_tkk56")
@@ -40,3 +41,5 @@ travel = Vector2(158, 10)
 
 [node name="FuelTank" parent="." unique_id=376899086 instance=ExtResource("3_50h6a")]
 position = Vector2(291, -159)
+
+[node name="Walls" parent="." instance=ExtResource("walls")]

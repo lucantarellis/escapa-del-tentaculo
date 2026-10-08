@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
 [ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
+[ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
 
 [node name="SegmentStart" type="Node2D"]
 script = ExtResource("seg")
@@ -109,3 +110,5 @@ position = Vector2(275, -578)
 
 [node name="FuelTank3" parent="." instance=ExtResource("tank")]
 position = Vector2(275, -898)
+
+[node name="Walls" parent="." instance=ExtResource("walls")]
