@@ -20,7 +20,7 @@ Todo lo que el jugador pisa, esquiva o lo mata en un segmento es una sola cosa: 
 | `BREAKABLE` | Se rompe (deja de ser sólida) después de `break_delay` segundos parada encima, y vuelve a aparecer tras `respawn_time`. No mata directamente: el riesgo es la caída. | Naranja `#E59A4C` | — |
 | `TIMED` | Alterna sólida/ausente en un ciclo fijo: `timed_on_duration` sólida, `timed_off_duration` ausente. Si el jugador está en medio cuando le tocaría volverse sólida, espera a que se libere (no lo empuja). | Violeta `#B364C9` | — |
 | `LETHAL` | Nunca sólida, siempre letal al tocarla. | Rojo `#D83232` | `Obstacle` |
-| `PULSE` | Alterna segura y sólida (con aviso parpadeante) / letal, en un ciclo fijo. | Azul `#3A9BBF` (segura) → blanco parpadeante (aviso) → rojo `#D83232` (letal) | `PulseTrap` |
+| `PULSE` | Alterna segura (atravesable, con aviso parpadeante) / letal, en un ciclo fijo. Con `pulse_solid_when_safe` vuelve a ser sólida mientras es segura. | Azul `#3A9BBF` (segura) → blanco parpadeante (aviso) → rojo `#D83232` (letal) | `PulseTrap` |
 
 | `PROJECTILE` | Letal desde que aparece, incluso quieta. Se dispara por cámara o por distancia, vuela en línea recta y al final explota, desaparece o rebota. | Rojo `#D83232` (la explosión, rojo translúcido) | — |
 
@@ -35,7 +35,7 @@ Detalle completo de `PROJECTILE` en `docs/mecanicas/plataforma-proyectil.md`.
 - **`ONE_WAY`** usa la propiedad nativa `one_way_collision` del `CollisionShape2D`, con margen configurable (`one_way_margin`, 5 px por defecto, más grande que el default del motor de 1 px). Validado en una prueba headless aislada: el jugador atraviesa subiendo y aterriza normal al caer. Ojo: la ronda anterior encontramos un bug de one-way en una prueba más encadenada — confirmado ahora por LT jugando que funciona bien.
 - **`BREAKABLE`** usa un sensor (`StepSensor`, franja fina pegada al borde superior) para detectar "parado encima" y arrancar la cuenta de `break_delay`. Feedback de LT: con el valor por defecto (0,15 s) no da tiempo de reaccionar — **queda así a propósito**, es la plataforma-trampa: parece un buen camino pero desaparece apenas la pisás.
 - **`TIMED`** usa un segundo sensor (`FootprintSensor`, del tamaño completo) solo para revisar, antes de volverse sólida, si el jugador está en medio — si lo está, espera a que se libere en vez de empujarlo (bug encontrado y arreglado en el playtest de LT).
-- **`PULSE`** es una máquina de tres fases (segura → aviso parpadeante → letal → repite), igual que el viejo `PulseTrap`: mientras es segura, es sólida (se puede parar encima); al activarse, dejar de ser sólida y pasa a matar.
+- **`PULSE`** es una máquina de tres fases (segura → aviso parpadeante → letal → repite), igual que el viejo `PulseTrap`: mientras es segura **se puede atravesar** (decisión de LT); al activarse pasa a matar. Con `pulse_solid_when_safe = true` en la config vuelve el comportamiento anterior: sólida mientras es segura.
 - **`moves`** reutiliza el mismo cálculo de recorrido que el viejo `MovingObstacle` (velocidad, pausa en los extremos, suavizado, `start_delay`), pero como propiedad independiente del tipo: aplica iguales a `STATIC` (plataforma móvil pisable) que a `LETHAL` (bloque móvil letal).
 - **Diseño de nivel vs. tuning**: `size`, `platform_type`, `moves`, `travel` y `cause` son diseño de nivel (por instancia). Los tiempos (`break_delay`, `respawn_time`, `timed_on_duration`, `timed_off_duration`, `timed_start_on`, `one_way_margin`, `moving_*`, `pulse_*`) son tuning y viven en `PlatformConfig` (`resources/configs/platform_config.tres`). Para que una instancia tenga tiempos propios, duplicar el `.tres` o hacerlo único en el inspector.
 - **`@tool`**: en el editor se ve el color según el tipo/fase, el nombre del tipo arriba del bloque, y si `moves` es true, la trayectoria dibujada en rojo.
@@ -77,6 +77,7 @@ Detalle completo de `PROJECTILE` en `docs/mecanicas/plataforma-proyectil.md`.
 | Pulso | `pulse_off_time` | float | 1,5 | s | Tiempo segura por ciclo (incluye el aviso) |
 | Pulso | `pulse_warning_time` | float | 0,5 | s | Últimos segundos seguros en que parpadea |
 | Pulso | `pulse_initial_offset` | float | 0,0 | s | Desfase del ciclo al empezar |
+| Pulso | `pulse_solid_when_safe` | bool | false | — | true = sólida mientras es segura (comportamiento anterior); false = se atraviesa |
 | Proyectil | `projectile_speed` | float | 180 | px/s | Velocidad de vuelo |
 | Proyectil | `projectile_trigger_distance` | float | 160 | px | Radio de disparo del disparador `DISTANCE` |
 | Proyectil | `projectile_start_delay` | float | 0,0 | s | Espera entre el disparo y el inicio del movimiento |

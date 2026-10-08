@@ -53,6 +53,9 @@ extends Resource
 ## Desfase del ciclo al empezar. Con 0 arranca segura; con `pulse_off_time` arranca letal.
 ## Sirve para desincronizar varias instancias. Unidad: s.
 @export var pulse_initial_offset: float = 0.0
+## Si es true, mientras es segura (fase OFF y aviso) es sólida y se puede pisar, como antes.
+## Con false (por defecto) se atraviesa mientras es segura y solo importa cuando es letal.
+@export var pulse_solid_when_safe: bool = false
 
 @export_group("Proyectil (PROJECTILE)")
 ## Velocidad de vuelo una vez disparado. Unidad: px/s.

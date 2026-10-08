@@ -39,7 +39,7 @@ enum PlatformType {
 	BREAKABLE, ## Se rompe tras pisarla un rato y reaparece después. Ver `break_delay`/`respawn_time`.
 	TIMED,     ## Alterna sólida/ausente en un ciclo fijo. Ver `timed_on_duration`/`timed_off_duration`.
 	LETHAL,    ## Nunca sólida, siempre letal. Reemplaza a `Obstacle`.
-	PULSE,     ## Alterna segura y sólida / letal, con aviso. Reemplaza a `PulseTrap`.
+	PULSE,     ## Alterna segura (atravesable) / letal, con aviso. Reemplaza a `PulseTrap`.
 	PROJECTILE, ## Letal; quieta hasta su disparador, luego vuela en línea recta. Ver `projectile_*`.
 }
 ## Qué dispara el movimiento de un [PROJECTILE]. Solo uno por plataforma.
@@ -409,7 +409,10 @@ func _change_pulse_state(new_state: PulseState) -> void:
 	var was_on: bool = _pulse_state == PulseState.ON
 	_pulse_state = new_state
 	_lethal_area.set_deferred("monitoring", new_state == PulseState.ON)
-	_collision.set_deferred("disabled", new_state == PulseState.ON)
+	# Mientras es segura se puede atravesar (decisión de LT); `pulse_solid_when_safe` vuelve al
+	# comportamiento anterior (sólida mientras es segura).
+	var solid_when_safe: bool = config.pulse_solid_when_safe if config != null else false
+	_collision.set_deferred("disabled", new_state == PulseState.ON or not solid_when_safe)
 	_body.visible = true
 	_apply_pulse_visual()
 	if new_state == PulseState.ON and not was_on:
