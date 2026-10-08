@@ -1,7 +1,8 @@
 class_name LevelBuilder
 extends Node2D
-## Arma un nivel apilando segmentos ([LevelSegment]) hacia arriba: inicio, N segmentos
-## elegidos al azar del pool y final.
+## Arma un nivel apilando segmentos ([LevelSegment]) hacia arriba: inicio, segmentos
+## intermedios elegidos al azar y final. Con `LevelConfig.tiers` recorre los tiers en orden
+## (cada uno aporta `count_per_run` segmentos); sin tiers usa el `segment_pool` plano.
 ##
 ## Usa un [RandomNumberGenerator] propio con la seed (nunca el azar global), así la misma seed
 ## da siempre el mismo nivel. Los segmentos se agregan como hijos de este nodo, que debe estar
@@ -27,6 +28,8 @@ const MAX_RANDOM_SEED: int = 2147483647
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var _segments: Array[LevelSegment] = []
 var _sequence: PackedInt32Array = PackedInt32Array()
+## Tier (índice en `config.tiers`) de cada segmento intermedio; vacío en modo plano.
+var _tier_sequence: PackedInt32Array = PackedInt32Array()
 var _seed: int = 0
 var _spawn_local: Vector2 = Vector2.ZERO
 var _hatch_local: Vector2 = Vector2.ZERO
@@ -59,7 +62,19 @@ func build(seed_override: int = 0) -> int:
 			push_error("LevelBuilder: el segmento de inicio no tiene un Marker2D '%s'." % HATCH_MARKER_NAME)
 		bottom_y -= start.height
 
-	if config.segment_pool.is_empty():
+	if not config.tiers.is_empty():
+		for tier_index: int in config.tiers.size():
+			var tier: SegmentTier = config.tiers[tier_index]
+			if tier == null or tier.segments.is_empty():
+				push_warning("LevelBuilder: el tier %d no tiene segmentos: se saltea." % (tier_index + 1))
+				continue
+			for index: int in _draw_tier(tier):
+				_sequence.append(index)
+				_tier_sequence.append(tier_index)
+				var tier_segment: LevelSegment = _place(tier.segments[index], bottom_y)
+				if tier_segment != null:
+					bottom_y -= tier_segment.height
+	elif config.segment_pool.is_empty():
 		push_error("LevelBuilder: `segment_pool` está vacío.")
 	else:
 		for i: int in config.segment_count:
@@ -88,6 +103,7 @@ func clear() -> void:
 			segment.queue_free()
 	_segments.clear()
 	_sequence.clear()
+	_tier_sequence.clear()
 	_door = null
 	_spawn_local = Vector2.ZERO
 	_hatch_local = Vector2.ZERO
@@ -122,10 +138,18 @@ func get_seed() -> int:
 	return _seed
 
 
-## Devuelve los índices del `segment_pool` de los segmentos intermedios, en orden de abajo
-## hacia arriba. Sirve para comparar niveles y reportar "este nivel estuvo raro".
+## Devuelve los índices de los segmentos intermedios, en orden de abajo hacia arriba. En modo
+## plano son índices del `segment_pool`; con tiers, índices dentro de la lista del tier
+## correspondiente (ver [method get_tier_sequence]). Sirve para comparar niveles y reportar
+## "este nivel estuvo raro".
 func get_sequence() -> PackedInt32Array:
 	return _sequence
+
+
+## Devuelve, para cada segmento intermedio (mismo orden que [method get_sequence]), el índice
+## del tier del que salió (0 = tier 1). Vacío en modo plano, sin tiers.
+func get_tier_sequence() -> PackedInt32Array:
+	return _tier_sequence
 
 
 ## Devuelve todos los segmentos armados (inicio, intermedios, final) de abajo hacia arriba.
@@ -146,6 +170,31 @@ func _resolve_seed(seed_override: int) -> int:
 	var random: RandomNumberGenerator = RandomNumberGenerator.new()
 	random.randomize()
 	return random.randi_range(1, MAX_RANDOM_SEED)
+
+
+# Sortea los índices de `tier.count_per_run` segmentos del tier, sin repetir mientras alcance la
+# lista (baraja de Fisher-Yates con el RNG de la seed). Si hay menos candidatos que los pedidos,
+# vuelve a barajar y repite, cuidando que el primero de la baraja nueva no sea el último usado.
+func _draw_tier(tier: SegmentTier) -> PackedInt32Array:
+	var result: PackedInt32Array = PackedInt32Array()
+	var size: int = tier.segments.size()
+	var deck: Array[int] = []
+	while result.size() < tier.count_per_run:
+		if deck.is_empty():
+			for i: int in size:
+				deck.append(i)
+			for i: int in range(size - 1, 0, -1):
+				var j: int = _rng.randi_range(0, i)
+				var tmp: int = deck[i]
+				deck[i] = deck[j]
+				deck[j] = tmp
+			if size > 1 and not result.is_empty() and deck[deck.size() - 1] == result[result.size() - 1]:
+				var swap_with: int = _rng.randi_range(0, deck.size() - 2)
+				var last: int = deck[deck.size() - 1]
+				deck[deck.size() - 1] = deck[swap_with]
+				deck[swap_with] = last
+		result.append(deck.pop_back())
+	return result
 
 
 # Elige un índice del pool evitando los últimos `avoid_repeat_window` elegidos. Si no queda
