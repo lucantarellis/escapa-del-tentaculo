@@ -1,0 +1,20 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/pickups/speed_boost.gd" id="1_boost"]
+[ext_resource type="Resource" path="res://resources/configs/speed_boost_config.tres" id="2_config"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_boost"]
+radius = 10.0
+
+[node name="SpeedBoost" type="Area2D"]
+collision_layer = 32
+collision_mask = 2
+script = ExtResource("1_boost")
+config = ExtResource("2_config")
+
+[node name="Body" type="Polygon2D" parent="."]
+color = Color(0.3882, 0.8392, 0.7725, 1)
+polygon = PackedVector2Array(0, -10, 10, 0, 4, 0, 4, 10, -4, 10, -4, 0, -10, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_boost")

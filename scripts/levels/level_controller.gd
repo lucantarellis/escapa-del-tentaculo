@@ -189,7 +189,7 @@ func _enter_tier(tier_index: int) -> void:
 		_tentacle.apply_pursuer(tier.pursuer_config, tier.pursuer_color, tier.pursuer_reset_position)
 		if tier.pursuer_delay > 0.0 and not first:
 			_delay_pursuer(tier.pursuer_delay)
-		_player.set_physics_scales(tier.gravity_scale, tier.air_drag_scale)
+		_player.set_physics_scales(tier.gravity_scale, tier.air_drag_scale, tier.counter_thrust_scale)
 	tier_entered.emit(tier_index)
 
 

@@ -92,7 +92,8 @@ Los inicios tienen tres tanques (por su altura) y los finales uno.
 | Tier → Perseguidor | `pursuer_delay` | espacio: 1,5 | s | Segundos que tarda en aparecer el perseguidor al entrar al tier |
 | Tier → Perseguidor | `pursuer_reset_position` | true | — | Con `pursuer_config`: al entrar al tier, el perseguidor vuelve a su distancia inicial (uno nuevo que aparece) |
 | Tier → Jugador | `gravity_scale` | 1 | × | Multiplica la gravedad del jugador en el tier (ej.: 0,16 en el espacio) |
-| Tier → Jugador | `air_drag_scale` | 1 | × | Multiplica el frenado en el aire (`coasting_drag`): menos = más inercia |
+| Tier → Jugador | `air_drag_scale` | 1 (espacio 0,05) | × | Multiplica el frenado en el aire (`coasting_drag`): menos = más inercia |
+| Tier → Jugador | `counter_thrust_scale` | 1 (espacio 0,45) | × | Multiplica la propulsión en contra del movimiento: menos = frenar cuesta más tiempo y combustible |
 
 **Cambio de tier en la partida.** `LevelBuilder.get_tier_starts()` da la Y donde empieza cada tier. El segmento de inicio cuenta como parte del primer tier: su escenario se aplica desde el arranque. Para los siguientes, `LevelController` vigila al jugador y, al cruzar subiendo el borde de un tier, le aplica su escenario: `Tentacle.apply_pursuer(config, color, reset)` y `Player.set_physics_scales(gravedad, frenado)`, y emite `tier_entered(tier_index)` (`get_current_tier()` da el tier actual; -1 en el inicio). El tileset de paredes lo pone el `LevelBuilder` al armar. El HUD marca el inicio de cada tier (salvo el primero) en la línea de progreso.
 

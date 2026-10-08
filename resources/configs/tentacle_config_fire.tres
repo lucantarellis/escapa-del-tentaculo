@@ -7,4 +7,4 @@ script = ExtResource("1_cfg")
 visible_height = -150.0
 rise_speed = 60.0
 rise_acceleration = 25.0
-max_rise_speed = 240.0
+max_rise_speed = 280.0

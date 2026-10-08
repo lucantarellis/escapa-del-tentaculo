@@ -34,6 +34,9 @@
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd09.tscn" id="end_09"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd10.tscn" id="end_10"]
 [ext_resource type="Resource" path="res://resources/configs/tentacle_config_fire.tres" id="fire_cfg"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/ship/SegmentShipExit01.tscn" id="ship_exit_01"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/ship/SegmentShipExit02.tscn" id="ship_exit_02"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/ship/SegmentShipExit03.tscn" id="ship_exit_03"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpace01.tscn" id="space_01"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpace02.tscn" id="space_02"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpace03.tscn" id="space_03"]
@@ -58,18 +61,15 @@
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart08.tscn" id="start_08"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart09.tscn" id="start_09"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart10.tscn" id="start_10"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/ship/SegmentShipExit01.tscn" id="ship_exit_01"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/ship/SegmentShipExit02.tscn" id="ship_exit_02"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/ship/SegmentShipExit03.tscn" id="ship_exit_03"]
 
 [sub_resource type="Resource" id="Resource_tier1"]
 script = ExtResource("24_tier")
 segments = Array[PackedScene]([ExtResource("4_seg"), ExtResource("5_seg"), ExtResource("6_seg"), ExtResource("7_seg"), ExtResource("8_seg"), ExtResource("9_seg"), ExtResource("10_seg"), ExtResource("11_seg"), ExtResource("12_seg"), ExtResource("13_seg"), ExtResource("14_seg"), ExtResource("15_seg"), ExtResource("16_seg"), ExtResource("17_seg"), ExtResource("18_seg"), ExtResource("19_seg"), ExtResource("19_ewu3o"), ExtResource("20_km1sb"), ExtResource("20_7kxs2"), ExtResource("22_58vi7"), ExtResource("23_58vi7")])
 count_per_run = 5
 display_name = "La nave"
+exit_segments = Array[PackedScene]([ExtResource("ship_exit_01"), ExtResource("ship_exit_02"), ExtResource("ship_exit_03")])
 background_color = Color(0.0627, 0.0784, 0.1216, 1)
 pursuer_color = Color(0.54134405, 0.3044531, 0.93466634, 1)
-exit_segments = Array[PackedScene]([ExtResource("ship_exit_01"), ExtResource("ship_exit_02"), ExtResource("ship_exit_03")])
 
 [sub_resource type="Resource" id="Resource_tier2"]
 script = ExtResource("24_tier")
@@ -77,16 +77,17 @@ segments = Array[PackedScene]([ExtResource("space_01"), ExtResource("space_02"),
 count_per_run = 5
 display_name = "El espacio"
 entry_segments = Array[PackedScene]([ExtResource("space_entry_01"), ExtResource("space_entry_02"), ExtResource("space_entry_03")])
+platform_tint = Color(0.5412, 0.5882, 0.6588, 1)
+hazard_tint = Color(1, 0.3529, 0.1569, 1)
 walls_tileset = ExtResource("space_tiles")
 background_color = Color(0.0196, 0.0235, 0.0392, 1)
 background_stars = true
 pursuer_config = ExtResource("fire_cfg")
 pursuer_color = Color(1, 0.3529, 0.1569, 1)
-gravity_scale = 0.16
-air_drag_scale = 0.22
-platform_tint = Color(0.5412, 0.5882, 0.6588, 1)
-hazard_tint = Color(1, 0.3529, 0.1569, 1)
 pursuer_delay = 1.5
+gravity_scale = 0.16
+air_drag_scale = 0.05
+counter_thrust_scale = 0.45
 
 [sub_resource type="Resource" id="Resource_tier3"]
 script = ExtResource("24_tier")

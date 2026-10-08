@@ -26,6 +26,8 @@ signal died(cause: StringName)
 signal won
 
 ## Color del cuerpo con combustible (naranja de la paleta). Solo visual.
+## Tinte del jugador mientras dura un impulso de velocidad. Solo visual.
+const BOOST_MODULATE: Color = Color(0.7, 1.4, 1.35, 1.0)
 const COLOR_BODY_NORMAL: Color = Color("#FF6B32")
 ## Color del cuerpo sin combustible (rojo de la paleta). Solo visual.
 const COLOR_BODY_EMPTY: Color = Color("#D83232")
@@ -52,6 +54,10 @@ var _was_empty: bool = false
 ## Multiplicadores de la física del aire del tier actual (ver [method set_physics_scales]).
 var _gravity_scale: float = 1.0
 var _air_drag_scale: float = 1.0
+var _counter_thrust_scale: float = 1.0
+## Impulso de velocidad activo (ver [method apply_speed_boost]).
+var _boost_left: float = 0.0
+var _boost_multiplier: float = 1.0
 ## true mientras el jugador está congelado (ver [method set_frozen]).
 var _frozen: bool = false
 ## Tiempo que le queda al bloqueo del Input tras un lanzamiento (ver [method launch]). Unidad: s.
@@ -81,6 +87,10 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if _boost_left > 0.0:
+		_boost_left -= delta
+		# Tinte mientras dura el impulso (placeholder).
+		modulate = BOOST_MODULATE if _boost_left > 0.0 else Color.WHITE
 	if not _is_alive:
 		return
 	# Con el control bloqueado (tras un lanzamiento) no se lee el Input: solo actúan la inercia y la gravedad.
@@ -268,11 +278,25 @@ func is_frozen() -> bool:
 
 
 ## Escala la física del aire para el tier actual (ver [SegmentTier]): [param gravity] multiplica la
-## gravedad y [param air_drag] el frenado en el aire (`coasting_drag`). 1 = sin cambio. Así el
-## tier no duplica la config: todo lo demás sigue saliendo de `config`.
-func set_physics_scales(gravity: float, air_drag: float) -> void:
+## gravedad, [param air_drag] el frenado en el aire (`coasting_drag`) y [param counter_thrust] la
+## fuerza de la propulsión en contra del movimiento (frenar). 1 = sin cambio. Así el tier no
+## duplica la config: todo lo demás sigue saliendo de `config`.
+func set_physics_scales(gravity: float, air_drag: float, counter_thrust: float = 1.0) -> void:
 	_gravity_scale = maxf(gravity, 0.0)
 	_air_drag_scale = maxf(air_drag, 0.0)
+	_counter_thrust_scale = maxf(counter_thrust, 0.0)
+
+
+## Impulso de velocidad (pickup [SpeedBoost]): durante [param duration] s la propulsión y la
+## velocidad máxima se multiplican por [param multiplier]. Uno nuevo reinicia la duración.
+func apply_speed_boost(duration: float, multiplier: float) -> void:
+	_boost_left = maxf(duration, 0.0)
+	_boost_multiplier = maxf(multiplier, 1.0)
+
+
+## Devuelve true mientras dura un impulso de velocidad.
+func is_boosted() -> bool:
+	return _boost_left > 0.0
 
 
 ## Deja al jugador vivo en [param spawn_position] (coordenadas globales), quieto y con
@@ -288,6 +312,8 @@ func reset(spawn_position: Vector2) -> void:
 	_current_gravity = config.gravity_with_fuel
 	_dash_distance_left = 0.0
 	_dash_cooldown_left = 0.0
+	_boost_left = 0.0
+	modulate = Color.WHITE
 	_facing = 1.0
 	_set_thrusting(false)
 	_fuel = clampf(config.starting_fuel, 0.0, config.max_fuel)
@@ -356,15 +382,17 @@ func _update_cooldown_bar() -> void:
 
 func _apply_thrust(input: Vector2, delta: float) -> void:
 	var speed_before: float = velocity.length()
-	var accel: Vector2 = input * config.thrust_acceleration
+	var boost: float = _boost_multiplier if _boost_left > 0.0 else 1.0
+	var accel: Vector2 = input * config.thrust_acceleration * boost
 	# El multiplicador se aplica por eje: solo donde la entrada se opone a la velocidad.
+	var counter: float = config.counter_thrust_multiplier * _counter_thrust_scale
 	if input.x * velocity.x < 0.0:
-		accel.x *= config.counter_thrust_multiplier
+		accel.x *= counter
 	if input.y * velocity.y < 0.0:
-		accel.y *= config.counter_thrust_multiplier
+		accel.y *= counter
 	velocity += accel * delta
-	# Si ya iba más rápido que max_speed (caída, rebote) no se corta de golpe: decae con drag.
-	var speed_cap: float = maxf(config.max_speed, speed_before - config.coasting_drag * _air_drag_scale * delta)
+	# Si ya iba más rápido que max_speed (caída, rebote, impulso) no se corta de golpe: decae con drag.
+	var speed_cap: float = maxf(config.max_speed * boost, speed_before - config.coasting_drag * _air_drag_scale * delta)
 	velocity = velocity.limit_length(speed_cap)
 
 

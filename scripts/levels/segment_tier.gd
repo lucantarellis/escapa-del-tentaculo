@@ -32,8 +32,8 @@ extends Resource
 ## peligro (rojo o naranja).
 @export var hazard_tint: Color = Color(0.0, 0.0, 0.0, 0.0)
 ## TileSet de las paredes de los segmentos de este tier (metal, chatarra, carne). Vacío = el de
-## cada segmento. No se aplica a los segmentos de entrada: conservan el suyo (por ejemplo, el
-## casco de la nave en la entrada del espacio). Debe respetar las coordenadas de atlas de `walls_tileset.tres` (tile sólido en
+## cada segmento. Se aplica a todas las capas de tiles del segmento (paredes y asteroides),
+## incluidas la entrada y la salida del tier. Debe respetar las coordenadas de atlas de `walls_tileset.tres` (tile sólido en
 ## (0, 0) y diagonal en (1, 0) con alternativas 0–3) para que lo pintado se vea igual.
 @export var walls_tileset: TileSet
 
@@ -66,3 +66,6 @@ extends Resource
 ## Multiplica el frenado en el aire (`coasting_drag`) en este tier: menos = más inercia.
 ## 1 = el de `player_config.tres`.
 @export_range(0.0, 4.0, 0.01) var air_drag_scale: float = 1.0
+## Multiplica la fuerza de la propulsión en contra del movimiento (frenar o cambiar de dirección):
+## menos = frenar cuesta más tiempo y combustible. 1 = el de `player_config.tres`.
+@export_range(0.0, 4.0, 0.01) var counter_thrust_scale: float = 1.0

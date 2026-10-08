@@ -53,22 +53,24 @@ const EDITOR_LINE_COLOR: Color = Color(1.0, 0.42, 0.2, 0.8)
 @export var eject_control_lock: float = 0.3
 
 @export_group("Restos del casco")
-## Cantidad de fragmentos letales (0 = sin restos).
-@export var debris_count: int = 9
+## Fragmentos letales por oleada (0 = sin restos).
+@export var debris_count: int = 7
+## Cantidad de oleadas y tiempo entre una y otra. Unidad: s.
+@export var debris_waves: int = 3
+@export var debris_wave_interval: float = 0.7
 ## Velocidad mínima y máxima de los fragmentos. Unidad: px/s.
-@export var debris_speed_min: float = 110.0
-@export var debris_speed_max: float = 260.0
+@export var debris_speed_min: float = 220.0
+@export var debris_speed_max: float = 380.0
 ## Tamaño de los fragmentos. Unidad: px.
-@export var debris_size: float = 14.0
+@export var debris_size: float = 18.0
+## Si es true, los fragmentos apuntan hacia el jugador (con `debris_aim_spread` de desvío al
+## azar); si no, salen hacia arriba en direcciones al azar. Unidad del desvío: grados.
+@export var debris_aim_at_player: bool = true
+@export var debris_aim_spread: float = 35.0
 ## Distancia horizontal mínima al jugador donde puede aparecer un fragmento. Unidad: px.
-@export var debris_min_player_distance: float = 70.0
+@export var debris_min_player_distance: float = 60.0
 ## Tiempo inicial en que un fragmento todavía no mata. Unidad: s.
 @export var debris_grace_time: float = 0.25
-## Rango de ángulos de salida de los fragmentos (0° = derecha, −90° = arriba). Unidad: grados.
-@export var debris_angle_min: float = -165.0
-@export var debris_angle_max: float = -15.0
-## Ancho de la zona (centrada en el origen de la explosión) donde aparecen. Unidad: px.
-@export var debris_spawn_width: float = 340.0
 
 @export_group("Destello")
 ## Color del destello que cubre la pantalla.
@@ -198,28 +200,41 @@ func _play_explosion() -> void:
 		get_tree().create_timer(2.0).timeout.connect(fire.queue_free)
 
 
-# Fragmentos letales del casco: aparecen alrededor del origen de la explosión, lejos del jugador,
-# y salen en direcciones al azar dentro de `debris_angle_min`..`debris_angle_max`.
+# Restos letales de la nave: entran por el borde inferior de la pantalla (vienen de la
+# explosión, abajo) en `debris_waves` oleadas, apuntando al jugador con algo de desvío.
 func _spawn_debris(player: Player) -> void:
 	if debris_count <= 0:
 		return
-	var origin: Vector2 = global_position + explosion_offset
+	for wave: int in maxi(debris_waves, 1):
+		if wave > 0:
+			await get_tree().create_timer(debris_wave_interval).timeout
+			if not is_inside_tree():
+				return
+		_spawn_debris_wave(player)
+
+
+func _spawn_debris_wave(player: Player) -> void:
+	var camera: ScrollCamera = get_viewport().get_camera_2d() as ScrollCamera
+	var view: Rect2 = camera.get_visible_rect() if camera != null else Rect2(global_position + Vector2(0.0, -640.0), Vector2(360.0, 640.0))
+	var spawn_y: float = view.end.y + 16.0
 	var spawned: int = 0
 	var tries: int = 0
 	while spawned < debris_count and tries < debris_count * 10:
 		tries += 1
-		var x: float = randf_range(origin.x - debris_spawn_width * 0.5, origin.x + debris_spawn_width * 0.5)
+		var x: float = randf_range(view.position.x + 10.0, view.end.x - 10.0)
 		if player != null and absf(x - player.global_position.x) < debris_min_player_distance:
 			continue
+		var from: Vector2 = Vector2(x, spawn_y + randf_range(0.0, 30.0))
+		var direction: Vector2 = Vector2.UP.rotated(deg_to_rad(randf_range(-50.0, 50.0)))
+		if debris_aim_at_player and player != null and player.is_alive():
+			direction = (player.global_position - from).normalized().rotated(deg_to_rad(randf_range(-debris_aim_spread, debris_aim_spread)))
 		var debris: HullDebris = HullDebris.new()
-		var angle: float = deg_to_rad(randf_range(debris_angle_min, debris_angle_max))
-		debris.velocity = Vector2(cos(angle), sin(angle)) * randf_range(debris_speed_min, debris_speed_max)
+		debris.velocity = direction * randf_range(debris_speed_min, debris_speed_max)
 		debris.spin = randf_range(-6.0, 6.0)
 		debris.size = debris_size
 		debris.grace_time = debris_grace_time
-		debris.position = Vector2(x, origin.y + randf_range(-10.0, 10.0))
 		get_parent().add_child(debris)
-		debris.global_position = Vector2(x, origin.y + randf_range(-10.0, 10.0))
+		debris.global_position = from
 		spawned += 1
 
 

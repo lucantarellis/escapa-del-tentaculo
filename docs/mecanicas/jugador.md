@@ -77,7 +77,8 @@ Un astronauta que se mueve con un jetpack de combustible limitado. Es la mecáni
 | `win() -> void` | Desactiva el control, deja al jugador quieto y emite `won`. Se ignora si ya murió o ya ganó. Desde ahí `is_alive()` es `false`, así que ningún peligro lo afecta |
 | `has_won() -> bool` | true si ganó |
 | `reset(spawn_position: Vector2) -> void` | Vuelve a vivo, quieto y con combustible inicial. También lo descongela |
-| `set_physics_scales(gravity, air_drag) -> void` | Multiplicadores de gravedad y de frenado en el aire del tier actual (1 = sin cambio). Los pone `LevelController` al entrar a un tier |
+| `set_physics_scales(gravity, air_drag, counter_thrust) -> void` | Multiplicadores de gravedad, de frenado en el aire y de la propulsión para frenar del tier actual (1 = sin cambio). Los pone `LevelController` al entrar a un tier |
+| `apply_speed_boost(duration, multiplier) -> void` | Impulso: durante `duration` s la propulsión y la velocidad máxima se multiplican (lo usa `SpeedBoost`); el jugador se tiñe mientras dura. `is_boosted()` |
 | `launch(launch_velocity: Vector2, control_lock: float) -> void` | Descongela, asigna `velocity` y bloquea el Input (propulsión, caminata y salto) `control_lock` s; la inercia, la gravedad y las colisiones siguen. `reset()` anula el bloqueo. La usa la intro al romperse la escotilla |
 | `is_control_locked() -> bool` | true mientras dura el bloqueo del Input |
 | `set_frozen(frozen: bool) -> void` | `true`: oculta el cuerpo y el indicador de propulsión, detiene `_physics_process` y desactiva la colisión. `false`: lo revierte. La intro lo usa mientras el jugador está "detrás de la escotilla" |

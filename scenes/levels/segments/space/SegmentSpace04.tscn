@@ -3,13 +3,41 @@
 [ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
 [ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
 [ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/SpeedBoost.tscn" id="boost"]
 [ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
+[ext_resource type="Script" path="res://scripts/levels/asteroid.gd" id="asteroid"]
 
 [node name="SegmentSpace04" type="Node2D"]
 script = ExtResource("seg")
 
 [node name="Walls" parent="." instance=ExtResource("walls")]
-tile_map_data = PackedByteArray("AAABAPn/AAABAAAAAQABAPr/AAABAAAAAwACAPj/AAABAAAAAQACAPn/AAAAAAAAAAACAPr/AAAAAAAAAAACAPv/AAABAAAAAwADAPj/AAAAAAAAAAADAPn/AAAAAAAAAAADAPr/AAAAAAAAAAADAPv/AAAAAAAAAAAEANH/AAABAAAAAQAEANL/AAABAAAAAwAEAPj/AAAAAAAAAAAEAPn/AAAAAAAAAAAEAPr/AAAAAAAAAAAEAPv/AAAAAAAAAAAFAND/AAABAAAAAQAFANH/AAAAAAAAAAAFANL/AAAAAAAAAAAFANP/AAABAAAAAwAFAPj/AAABAAAAAAAFAPn/AAAAAAAAAAAFAPr/AAAAAAAAAAAFAPv/AAABAAAAAgAGAND/AAAAAAAAAAAGANH/AAAAAAAAAAAGANL/AAAAAAAAAAAGANP/AAAAAAAAAAAGAPn/AAABAAAAAAAGAPr/AAABAAAAAgAHAND/AAAAAAAAAAAHANH/AAAAAAAAAAAHANL/AAAAAAAAAAAHANP/AAAAAAAAAAAIAND/AAAAAAAAAAAIANH/AAAAAAAAAAAIANL/AAAAAAAAAAAIANP/AAAAAAAAAAAJAND/AAABAAAAAAAJANH/AAAAAAAAAAAJANL/AAAAAAAAAAAJANP/AAABAAAAAgAKANH/AAABAAAAAAAKANL/AAABAAAAAgAYANf/AAABAAAAAQAYANj/AAABAAAAAwAZANb/AAABAAAAAQAZANf/AAAAAAAAAAAZANj/AAAAAAAAAAAZANn/AAABAAAAAwAaANb/AAAAAAAAAAAaANf/AAAAAAAAAAAaANj/AAAAAAAAAAAaANn/AAAAAAAAAAAbANb/AAAAAAAAAAAbANf/AAAAAAAAAAAbANj/AAAAAAAAAAAbANn/AAAAAAAAAAAcANb/AAABAAAAAAAcANf/AAAAAAAAAAAcANj/AAAAAAAAAAAcANn/AAABAAAAAgAdANf/AAABAAAAAAAdANj/AAABAAAAAgA=")
+
+[node name="Asteroid1" parent="." instance=ExtResource("walls")]
+position = Vector2(48, -72)
+tile_map_data = PackedByteArray("AAD9////AAABAAAAAQD9/wAAAAABAAAAAwD+//7/AAABAAAAAQD+////AAAAAAAAAAD+/wAAAAAAAAAAAAD+/wEAAAABAAAAAwD///7/AAAAAAAAAAD/////AAAAAAAAAAD//wAAAAAAAAAAAAD//wEAAAAAAAAAAAAAAP7/AAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAP7/AAABAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAABAAEAAAABAAAAAgACAP//AAABAAAAAAACAAAAAAABAAAAAgA=")
+script = ExtResource("asteroid")
+drift = Vector2(15.7, 6.7)
+drift_period = 5.6
+drift_offset = 1.1
+spin_speed = 12.5
+
+[node name="Asteroid2" parent="." instance=ExtResource("walls")]
+position = Vector2(324, -480)
+tile_map_data = PackedByteArray("AAD9////AAABAAAAAQD9/wAAAAABAAAAAwD+//7/AAABAAAAAQD+////AAAAAAAAAAD+/wAAAAAAAAAAAAD+/wEAAAABAAAAAwD///7/AAAAAAAAAAD/////AAAAAAAAAAD//wAAAAAAAAAAAAD//wEAAAAAAAAAAAAAAP7/AAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAP7/AAABAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAABAAEAAAABAAAAAgACAP//AAABAAAAAAACAAAAAAABAAAAAgA=")
+script = ExtResource("asteroid")
+drift = Vector2(-10, 7.8)
+drift_period = 4.5
+drift_offset = 1.5
+spin_speed = -13
+
+[node name="Asteroid3" parent="." instance=ExtResource("walls")]
+position = Vector2(84, -552)
+tile_map_data = PackedByteArray("AAD9////AAABAAAAAQD9/wAAAAABAAAAAwD+//7/AAABAAAAAQD+////AAAAAAAAAAD+/wAAAAAAAAAAAAD+/wEAAAABAAAAAwD///7/AAAAAAAAAAD/////AAAAAAAAAAD//wAAAAAAAAAAAAD//wEAAAAAAAAAAAAAAP7/AAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAP7/AAAAAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAABAAEAAAAAAAAAAAACAP7/AAABAAAAAAACAP//AAAAAAAAAAACAAAAAAAAAAAAAAACAAEAAAABAAAAAgADAP//AAABAAAAAAADAAAAAAABAAAAAgA=")
+script = ExtResource("asteroid")
+drift = Vector2(-9, 11.6)
+drift_period = 3.1
+drift_offset = 2.1
+spin_speed = 13.6
 
 [node name="Debris1" parent="." instance=ExtResource("plat")]
 position = Vector2(150, -170)
@@ -37,3 +65,9 @@ position = Vector2(318, -522)
 
 [node name="FuelTank2" parent="." instance=ExtResource("tank")]
 position = Vector2(150, -194)
+
+[node name="SpeedBoost1" parent="." instance=ExtResource("boost")]
+position = Vector2(220, -440)
+
+[node name="SpeedBoost2" parent="." instance=ExtResource("boost")]
+position = Vector2(160, -120)

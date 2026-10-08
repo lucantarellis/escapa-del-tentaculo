@@ -10,7 +10,7 @@ Al final de la nave, el alien rompe un ventanal del techo con un tentáculo. La 
 
 1. **Salida de la nave (`SegmentShipExitNN`, último segmento del tier 1, `exit_segments`).** Arriba hay un techo de lado a lado con un hueco central (x 144–216) cerrado por un **vidrio** (`WindowBreach`, en y −582). Bajo el hueco queda un pasillo libre (x 132–228, y −300 a −564). Cuando el jugador llega a `trigger_distance` (260 px) bajo el vidrio, un tentáculo violeta lo rompe desde afuera (sacudida 14 px / 0,6 s y vidrios) y empieza la **descompresión**: el aire lo arrastra hacia el hueco (`pull_acceleration` 1500 px/s², hasta `pull_max_speed` 560 px/s, dentro de `pull_radius` 480 px, como mucho `pull_duration` 3 s). El jugador no pierde el control. Medido sin tocar nada: sale por el hueco en ~0,7 s y su impulso lo lleva más de 300 px dentro del espacio.
 2. **Entrada al espacio (`SegmentSpaceEntryNN`, `entry_segments` del tier 2).** Al cruzar su borde, `LevelController` cambia el fondo (negro con estrellas), la física y el perseguidor, que aparece recién `pursuer_delay` (1,5 s) después. Toda la entrada tiene un **pasillo libre (x 110–250)** de punta a punta: solo asteroides a los costados.
-3. **La explosión (`TierEvent`, en y −260 de la entrada).** Al cruzarlo, tras `explosion_delay` (0,5 s): cámara lenta (0,25 durante 0,35 s), destello, anillo de fuego y llamas desde la nave abajo (`explosion_offset` (180, 360): debajo de la pantalla), un empujón (`eject_speed` 220 px/s), sacudida, **restos letales** (`HullDebris`: 9 fragmentos que salen desde abajo hacia arriba en direcciones al azar entre −165° y −15°, nunca a menos de 70 px del jugador y sin matar los primeros 0,25 s; causa `&"debris"`) y la silueta del alien huyendo.
+3. **La explosión (`TierEvent`, en y −260 de la entrada).** Al cruzarlo, tras `explosion_delay` (0,5 s): cámara lenta (0,25 durante 0,35 s), destello, anillo de fuego y llamas desde la nave abajo (`explosion_offset` (180, 360): debajo de la pantalla), un empujón (`eject_speed` 220 px/s), sacudida, **restos letales** (`HullDebris`) y la silueta del alien huyendo. Los restos entran por el borde inferior de la pantalla en `debris_waves` 3 oleadas de `debris_count` 7, separadas `debris_wave_interval` 0,7 s, a 220–380 px/s y **apuntando al jugador** con un desvío al azar de ±35° (`debris_aim_spread`); miden 18 px, nunca aparecen a menos de 60 px del jugador en horizontal y no matan los primeros 0,25 s. Causa de muerte `&"debris"`.
 
 Cada parte se ajusta con los `@export` de `WindowBreach` y de `TierEvent` en cada segmento (inspector).
 
@@ -18,7 +18,8 @@ Cada parte se ajusta con los `@export` de `WindowBreach` y de `TierEvent` en cad
 
 | Elemento | Qué es | Cómo está hecho |
 |---|---|---|
-| Superficies | **Asteroides** de roca donde parar y recargar | Paredes (tiles) flotando, tileset de roca `#7A6A5A` |
+| Superficies | **Asteroides** de roca que flotan (van y vienen) y algunos giran; donde parar y recargar | Nodos `Asteroid` (`scripts/levels/asteroid.gd`): una capa de tiles por asteroide con `drift` (vaivén, 8–18 px), `drift_period` (3–6 s) y `spin_speed` (°/s; 0 en los grandes y en ~40 % de los chicos, si no 6–14 °/s). Usan cuerpos cinemáticos, así que te llevan si estás parado encima. Tileset de roca `#7A6A5A` |
+| Impulsos | Flechas cian: al tocarlas, 1 s de propulsión y velocidad máxima ×1,8; en el espacio casi no se frena, así que la velocidad ganada se conserva | `SpeedBoost` (`scenes/pickups/SpeedBoost.tscn`, config `speed_boost_config.tres`: `duration`, `multiplier`, `fuel_amount`). 2 por segmento del espacio y por entrada |
 | Restos a la deriva | Chapas de la nave que se mueven despacio y se pueden pisar | `Platform` STATIC con `moves`, teñidas de gris metálico (`platform_tint` del tier) |
 | Restos en llamas | Cruzan la pantalla; tocarlos mata | `Platform` LETHAL con `moves`, teñidas de naranja (`hazard_tint`) |
 | Meteoritos | Suben desde abajo o rebotan | `Platform` PROJECTILE (fin `DESTROY` o `BOUNCE`) |
@@ -31,8 +32,9 @@ PULSE, TIMED y BREAKABLE no aparecen en el espacio (son mecanismos de la nave).
 | Qué | Valor | Dónde |
 |---|---|---|
 | Gravedad | `gravity_scale` 0,16 (≈ 40 px/s²) | Tier 2 → Jugador |
-| Frenado en el aire | `air_drag_scale` 0,22 (≈ 20 px/s²): mucha inercia | Tier 2 → Jugador |
-| Fuego | Arranca 150 px bajo la pantalla a 60 px/s, acelera 25 px/s² hasta 240 px/s; aparece 1,5 s después de entrar | `tentacle_config_fire.tres`, `pursuer_delay` |
+| Frenado en el aire | `air_drag_scale` 0,05 (≈ 4,5 px/s²): casi no se frena solo (de 200 px/s queda 195 tras 1 s) | Tier 2 → Jugador |
+| Frenar propulsando | `counter_thrust_scale` 0,45: frenar de 250 px/s a 0 tarda 0,88 s y gasta el doble de combustible que en la nave (0,40 s) | Tier 2 → Jugador |
+| Fuego | Arranca 150 px bajo la pantalla a 60 px/s y acelera 25 px/s² hasta 280 px/s (cada vez más rápido: los impulsos permiten sacarle ventaja); aparece 1,5 s después de entrar | `tentacle_config_fire.tres`, `pursuer_delay` |
 
 Todos los valores son de prueba: el "se siente bien" es de LT.
 

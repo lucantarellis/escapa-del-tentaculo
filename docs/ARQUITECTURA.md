@@ -65,6 +65,8 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 | `RunRecords` | `scripts/managers/run_records.gd` | Récords guardados en `user://records.cfg` (mejor progreso). Funciones estáticas. Ver `docs/mecanicas/hud.md` |
 | `TierEvent` | `scripts/levels/tier_event.gd` | Momento de historia al entrar a un tier (sacudida, destello, silueta del alien), en los segmentos de entrada. Ver `docs/mecanicas/tier-espacio.md` |
 | `WindowBreach` | `scripts/levels/window_breach.gd` | Ventanal que rompe el alien en la salida de la nave; descompresión que saca al jugador. Ver `docs/mecanicas/tier-espacio.md` |
+| `Asteroid` | `scripts/levels/asteroid.gd` | Asteroide del espacio: capa de tiles propia que flota y gira (cuerpos cinemáticos) |
+| `SpeedBoost` | `scripts/pickups/speed_boost.gd` (+ `speed_boost_config.gd`) | Recogible de impulso de velocidad (tier 2) |
 | `HullDebris` | `scripts/levels/hull_debris.gd` | Fragmento letal despedido por un `TierEvent` (causa `&"debris"`) |
 | `LevelBackground` | `scripts/levels/level_background.gd` | Fondo del nivel (color y estrellas con parallax) por tier; nodo `Background` de `Level.tscn` |
 
