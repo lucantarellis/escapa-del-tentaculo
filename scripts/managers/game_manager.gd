@@ -74,8 +74,8 @@ func notify_goal_reached() -> void:
 
 
 ## Pasa a [constant State.READY] y emite [signal restart_requested]. Solo si nadie está
-## conectado a esa señal recarga la escena actual (así `Level.tscn` y el sandbox funcionan
-## solos). En ambos casos el nivel empieza otra partida al cargarse.
+## conectado a esa señal recarga la escena actual (así `Level.tscn` funciona
+## solo con F6). En ambos casos el nivel empieza otra partida al cargarse.
 func restart() -> void:
 	_set_state(State.READY)
 	restart_requested.emit()

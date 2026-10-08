@@ -16,7 +16,7 @@ Abrir la carpeta del proyecto desde Godot (Project Manager → Import → selecc
 
 ## Estado actual
 
-v0 — estructura inicial del proyecto. Sin lógica de gameplay implementada todavía (eso queda para iteraciones posteriores). Ya existe una escena de prueba (`scenes/levels/lvl1.tscn`) creada durante el setup inicial en el editor.
+Prototipo jugable con placeholders (polígonos): jugador con jetpack, plataformas, paredes con tiles, niveles armados por segmentos de 360 × 640 en tiers, intro de la escotilla, HUD y récord. El estado detallado está en `docs/ROADMAP.md`.
 
 `scenes/main/Main.tscn` es la escena principal (`run/main_scene`): muestra la pantalla de título (nombre del juego y un botón **JUGAR**) sobre el nivel ya armado y quieto (`scenes/levels/Level.tscn`). Al pulsar JUGAR el título se disuelve, una escotilla golpea tres veces (vibración de cámara y gas), se rompe, el jugador sale disparado hacia arriba, arranca el gameplay y poco después entra el tentáculo (ver `docs/mecanicas/intro-escotilla.md`); R reinicia directo al juego, repitiendo la intro (sin título). Ver `docs/mecanicas/pantalla-titulo.md`.
 
@@ -63,17 +63,15 @@ escapa-del-tentaculo/
 │   ├── camera/
 │   ├── main/                # escena principal (Main.tscn)
 │   ├── player/
-│   ├── obstacles/
 │   ├── goal/                # puerta de meta
 │   ├── pickups/
 │   ├── tentacle/
 │   ├── ui/                  # DebugOverlay, TitleMenu, Hud
-│   └── levels/               # niveles jugables: Level.tscn (por segmentos), sandbox.tscn, lvl1.tscn
+│   └── levels/               # niveles jugables: Level.tscn (por segmentos)
 │       └── segments/         # segmentos (piezas de nivel reutilizables)
 ├── scripts/
 │   ├── camera/
 │   ├── player/
-│   ├── obstacles/
 │   ├── goal/
 │   ├── pickups/
 │   ├── tentacle/
@@ -83,11 +81,8 @@ escapa-del-tentaculo/
 │   └── ui/                  # debug_overlay.gd, title_menu.gd, title_config.gd, hud.gd
 ├── resources/
 │   ├── configs/            # Resource de configuración (.tres) con los valores de gameplay
-│   ├── tilesets/
-│   └── themes/
-├── autoload/               # reservada para escenas autoload (el GameManager es un script en scripts/managers/)
+│   └── tilesets/
 ├── docs/                   # roadmap, convenciones, arquitectura, mecánicas y briefs
 │   ├── mecanicas/
 │   └── briefs/
-└── addons/
 ```

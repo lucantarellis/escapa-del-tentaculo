@@ -52,10 +52,10 @@ Quedan quietos la cámara (posición), el tentáculo (además oculto e inofensiv
 
 ## Cuándo NO se reproduce
 
-La intro corre cuando alguien llama a `LevelController.play_intro()`: `Main` al pulsar JUGAR y **también con cada R** (el nivel nuevo arranca en pausa y repite la intro, sin título). En `Level.tscn` y `sandbox.tscn` solos no hay nadie que la llame: el nivel arranca con `autostart = true` y sin intro:
+La intro corre cuando alguien llama a `LevelController.play_intro()`: `Main` al pulsar JUGAR y **también con cada R** (el nivel nuevo arranca en pausa y repite la intro, sin título). En `Level.tscn` solo (F6) no hay nadie que la llame: el nivel arranca con `autostart = true` y sin intro:
 
-- **`Level.tscn` con F6** y **`sandbox.tscn`** (F6 recarga la escena con R, igual que antes).
-- La escotilla queda ya **rota** (`set_broken(true)`), el tentáculo activo desde el primer frame y el jugador aparece en el `PlayerSpawn` como antes (no se lo lanza). `sandbox.tscn` no tiene escotilla.
+- **`Level.tscn` con F6** (R recarga la escena, igual que antes).
+- La escotilla queda ya **rota** (`set_broken(true)`), el tentáculo activo desde el primer frame y el jugador aparece en el `PlayerSpawn` como antes (no se lo lanza). 
 
 ## Configuración (`IntroConfig`, `resources/configs/intro_config.tres`)
 
@@ -129,7 +129,7 @@ Las señales del director suben hacia `LevelController`; el director llama hacia
 2. JUGAR: tras el fundido, tres vibraciones de cámara, cada una con una ráfaga de gas y más fuerte que la anterior. Durante la intro R no hace nada.
 3. Tercer golpe: la escotilla se rompe con vibración fuerte y una nube grande de gas; el jugador sale disparado hacia arriba, no responde ~0,5 s y después se puede controlar. Aparece el HUD y, ~1,5 s después, el tentáculo sube desde abajo.
 4. Si no mueves al jugador, cae y muere (por el tentáculo, o por caída si aún no entró).
-5. R en plena partida: repite la intro (escotilla cerrada, sin tentáculo ni jugador, tres golpes...). R durante la intro no hace nada. `Level.tscn` y `sandbox.tscn` con F6: sin intro (escotilla ya rota, jugador en el spawn, tentáculo desde el primer frame).
+5. R en plena partida: repite la intro (escotilla cerrada, sin tentáculo ni jugador, tres golpes...). R durante la intro no hace nada. `Level.tscn` con F6: sin intro (escotilla ya rota, jugador en el spawn, tentáculo desde el primer frame).
 
 ## Cómo ajustar el "feel"
 

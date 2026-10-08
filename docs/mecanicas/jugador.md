@@ -1,7 +1,7 @@
 # Mecánica: jugador con jetpack
 
 **Archivos:** `scripts/player/player.gd`, `scripts/player/player_config.gd`, `scripts/player/dash_cooldown_bar.gd`, `scenes/player/Player.tscn`, `resources/configs/player_config.tres`.
-**Escena de prueba:** `scenes/levels/sandbox.tscn` (F6 en el editor). **Overlay de debug:** `scenes/ui/DebugOverlay.tscn` (F3).
+**Escena de prueba:** `scenes/levels/Level.tscn` (F6 en el editor). **Overlay de debug:** `scenes/ui/DebugOverlay.tscn` (F3).
 
 ## Propósito
 
@@ -99,7 +99,7 @@ Player (CharacterBody2D, grupo "player", capa 2, máscara 1)
 
 ## Cómo probarlo
 
-1. Abrir `scenes/levels/sandbox.tscn` y ejecutar con F6.
+1. Abrir `scenes/levels/Level.tscn` y ejecutar con F6.
 2. Mover con WASD o flechas; F3 muestra u oculta el overlay con velocidad, combustible, gravedad y estado.
 3. Shift hace el dash (con W apretado, en diagonal hacia arriba): probar a la izquierda y a la derecha, en el aire y en el piso, contra una pared, con poco combustible (con menos de `dash_fuel_cost` no sale) y viendo la barrita durante 1 s.
 4. Editar `resources/configs/player_config.tres` en el inspector (con el juego cerrado) y volver a ejecutar. Los valores que se ajustan mientras se prueba son de prueba, no de balance: no se anotan en `docs/TUNING_LOG.md`.

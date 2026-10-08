@@ -1,6 +1,6 @@
 # Mecánica: plataforma proyectil (`PROJECTILE`)
 
-**Archivos:** `scripts/platforms/platform.gd` (tipo `PROJECTILE`), `platform_config.gd` (grupo "Proyectil"), escena `scenes/platforms/Platform.tscn` (nodos `TriggerArea` y `ExplosionArea`), config `resources/configs/platform_config.tres`. Prueba: `scenes/levels/segments/SegmentProyectilQA.tscn` + `resources/configs/level_config_projectile_qa.tres`. Relacionado: `scripts/levels/level_segment.gd` (`_get_child_rect` suma el recorrido del proyectil al chequeo de límites). Doc general de plataformas: `docs/mecanicas/plataformas.md`.
+**Archivos:** `scripts/platforms/platform.gd` (tipo `PROJECTILE`), `platform_config.gd` (grupo "Proyectil"), escena `scenes/platforms/Platform.tscn` (nodos `TriggerArea` y `ExplosionArea`), config `resources/configs/platform_config.tres`. Relacionado: `scripts/levels/level_segment.gd` (`_get_child_rect` suma el recorrido del proyectil al chequeo de límites). Doc general de plataformas: `docs/mecanicas/plataformas.md`.
 
 ## Propósito
 
@@ -72,7 +72,7 @@ Estos valores son compartidos por todas las plataformas que usen el mismo `.tres
 
 ## Cómo probarla
 
-1. Abrir `scenes/levels/LevelSegmentQA.tscn`, seleccionar el nodo `LevelBuilder` y en `Config` cargar `resources/configs/level_config_projectile_qa.tres` (no guardar la escena), y correr con F6.
+1. Abrir un segmento que tenga un `PROJECTILE` (por ejemplo `Segment21`) y ejecutarlo con F6.
 2. El segmento tiene seis proyectiles de 20×20, uno por combinación: `CamExplode`, `CamDestroy`, `CamBounce`, `DistExplode`, `DistDestroy`, `DistBounce`, cada uno junto a una plataforma fija para pararse. Los de `CAMERA` salen solos al entrar en pantalla; los de `DISTANCE` esperan a que te acerques.
 3. Con F3 se ve la posición del jugador. En el editor, cada proyectil dibuja su dirección, el radio de disparo y el radio de explosión.
 

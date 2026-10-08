@@ -13,7 +13,7 @@ Que al abrir el juego (F5) se vea el título con un botón grande de jugar **sob
 2. **Pulsar JUGAR** (clic, Enter o Espacio; el botón tiene el foco al abrir). El botón se deshabilita (no se puede pulsar dos veces), pasa `fade_delay`, y el menú baja su opacidad a 0 en `fade_duration`. Al terminar emite `faded_out`.
 3. **Arranque.** `Main` elimina el menú y llama a `LevelController.play_intro()`: se reproduce la intro de la escotilla (tres golpes de cámara con gas; el nivel sigue en pausa y el `GameManager` en `READY`). En la ruptura de la escotilla el propio nivel empieza la partida (el equivalente a `LevelController.begin()`, sin activar todavía el tentáculo, que entra unos segundos después): se reanuda (`PROCESS_MODE_INHERIT`) y se llama a `GameManager.start_run(seed)` (`PLAYING`). La cuenta de `start_delay` de la cámara empieza recién ahí. Ver `docs/mecanicas/intro-escotilla.md`.
 4. **Reinicio (R).** `GameManager.restart()` pasa a `READY` y emite `restart_requested`. `Main` está conectado: saca el nivel actual del árbol, lo libera e instancia uno nuevo con `autostart = false` (seed nueva si `level_config.seed` = 0) y llama de inmediato a `play_intro()`: el nivel **repite la intro de la escotilla**, sin menú ni fundido. R **no hace nada** mientras el estado es `READY` (título o intro, hasta la ruptura).
-5. **Sin `Main`.** `Level.tscn` (F6) y `sandbox.tscn` no tienen a nadie conectado a `restart_requested`: `restart()` recarga la escena como antes y arrancan solos (`autostart = true` por defecto).
+5. **Sin `Main`.** `Level.tscn` (F6) no tiene a nadie conectado a `restart_requested`: `restart()` recarga la escena como antes y arrancan solos (`autostart = true` por defecto).
 
 ## Árbol de nodos de `Main`
 
@@ -53,4 +53,4 @@ Los textos no son gameplay; se dejan editables desde el inspector. Colores, tama
 1. F5: se ve el título y el botón sobre el nivel; nada se mueve.
 2. Clic (o Enter/Espacio) en JUGAR: el menú se disuelve, la escotilla golpea tres veces con gas y luego la partida arranca y la cámara empieza a subir. Pulsar varias veces rápido no rompe nada.
 3. R durante la partida, tras ganar y tras perder: nivel nuevo con la intro de la escotilla, sin título. R en el título o durante la intro no hace nada.
-4. `Level.tscn` y `sandbox.tscn` con F6: arrancan solos y R los recarga.
+4. `Level.tscn` con F6: arranca solo y R lo recarga.

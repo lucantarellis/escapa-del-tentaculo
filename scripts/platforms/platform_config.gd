@@ -3,7 +3,7 @@ extends Resource
 ## Parámetros de tuning de una [Platform]: tiempos de rotura, reaparición y ciclo temporizado.
 ##
 ## Lo que es *diseño de nivel* (tamaño, tipo, posición) se edita en la instancia; esto es
-## *tuning* y vive en un `Resource`, igual que [MovingObstacleConfig] y [PulseTrapConfig].
+## *tuning* y vive en un `Resource`.
 ## Para que una instancia tenga tiempos propios, hacer el recurso único en el inspector
 ## ("Make Unique") o duplicar el `.tres`. Ver `docs/mecanicas/plataformas.md`.
 

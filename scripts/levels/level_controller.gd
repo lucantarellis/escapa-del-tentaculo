@@ -1,9 +1,9 @@
 class_name LevelController
 extends Node2D
-## Script raíz de los niveles jugables: `Level.tscn` (armado por segmentos) y `sandbox.tscn`.
+## Script raíz del nivel jugable (`Level.tscn`, armado por segmentos).
 ##
-## Si el nivel tiene un hijo [LevelBuilder], lo usa para armar el nivel, ubicar al jugador,
-## fijar el tope de la cámara y encontrar la puerta; si no (sandbox), usa un nodo `GoalDoor`.
+## Usa su hijo [LevelBuilder] para armar el nivel, ubicar al jugador, fijar el tope de la cámara
+## y encontrar la puerta.
 ## Conecta lo que pasa en el nivel con el [code]GameManager[/code] (autoload) y reacciona a
 ## su estado: en victoria llama a [method Player.win], detiene el scroll y muestra el mensaje;
 ## en derrota detiene el scroll y muestra el mensaje según la causa. El reinicio (R) lo
@@ -43,7 +43,7 @@ const WIN_TEXT: String = "ESCAPASTE — pulsá R para reiniciar"
 @onready var _camera: ScrollCamera = $ScrollCamera
 @onready var _player: Player = $Player
 @onready var _tentacle: Tentacle = $Tentacle
-@onready var _builder: LevelBuilder = get_node_or_null("LevelBuilder") as LevelBuilder
+@onready var _builder: LevelBuilder = $LevelBuilder
 @onready var _message_label: Label = $CaughtLayer/CaughtLabel
 @onready var _debug_overlay: Node = get_node_or_null("DebugOverlay")
 @onready var _hud: Hud = get_node_or_null("Hud") as Hud
@@ -62,14 +62,12 @@ var _current_tier: int = -1
 func _ready() -> void:
 	_message_label.visible = false
 	var run_seed: int = 0
-	var door: Door = get_node_or_null("GoalDoor") as Door
-	if _builder != null:
-		run_seed = _builder.build()
-		_player.reset(_builder.get_player_spawn())
-		_camera.set_stop_y(_builder.get_camera_stop_y())
-		if _hatch != null:
-			_hatch.global_position = _builder.get_hatch_position()
-		door = _builder.get_goal_door()
+	run_seed = _builder.build()
+	_player.reset(_builder.get_player_spawn())
+	_camera.set_stop_y(_builder.get_camera_stop_y())
+	if _hatch != null:
+		_hatch.global_position = _builder.get_hatch_position()
+	var door: Door = _builder.get_goal_door()
 	if door == null:
 		push_error("LevelController: el nivel no tiene puerta de meta.")
 	else:
@@ -78,8 +76,7 @@ func _ready() -> void:
 	if _hud != null and door != null:
 		# El progreso va de la Y del jugador en el spawn a la Y de la puerta.
 		_hud.set_progress_range(_player.global_position.y, door.global_position.y)
-	if _builder != null:
-		_tier_starts = _builder.get_tier_starts()
+	_tier_starts = _builder.get_tier_starts()
 	if _hud != null:
 		# Sin marca para el primer tier: el inicio ya es parte de él.
 		var ys: PackedFloat32Array = PackedFloat32Array()
@@ -182,7 +179,7 @@ func get_current_tier() -> int:
 # puso el LevelBuilder al armar.
 func _enter_tier(tier_index: int) -> void:
 	_current_tier = tier_index
-	var tier: SegmentTier = _builder.config.tiers[tier_index] if _builder != null else null
+	var tier: SegmentTier = _builder.config.tiers[tier_index]
 	if tier != null:
 		_tentacle.apply_pursuer(tier.pursuer_config, tier.pursuer_color, tier.pursuer_reset_position)
 		if tier.player_config != null:
@@ -217,10 +214,8 @@ func _show_message(text: String) -> void:
 
 
 # Registra el progreso de la partida en los récords y devuelve el texto a agregar al mensaje de fin
-# ("" si no es récord). Solo en el nivel armado por segmentos (no en el sandbox).
+# ("" si no es récord).
 func _record_suffix(progress: float) -> String:
-	if _builder == null:
-		return ""
 	if RunRecords.submit_progress(progress):
 		if _hud != null:
 			_hud.set_record(progress)

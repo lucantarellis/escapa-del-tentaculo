@@ -65,8 +65,8 @@ func has_fuel_tank() -> bool:
 	return _contains_tank(self)
 
 
-## Devuelve los hijos directos cuyo contenido sale del rectángulo del segmento. Para un
-## obstáculo se cuenta su bloque completo y, si es móvil, todo su recorrido; para las paredes
+## Devuelve los hijos directos cuyo contenido sale del rectángulo del segmento. Para una
+## plataforma se cuenta su bloque completo y, si es un proyectil, todo su recorrido; para las paredes
 ## (`TileMapLayer`), el rectángulo de todas las celdas pintadas.
 func get_out_of_bounds_children() -> Array[Node]:
 	var result: Array[Node] = []
@@ -89,12 +89,6 @@ func _contains_tank(node: Node) -> bool:
 
 # Rectángulo (en coordenadas del segmento) que ocupa un hijo directo.
 func _get_child_rect(child: Node) -> Rect2:
-	if child is Obstacle:
-		var obstacle: Obstacle = child as Obstacle
-		var rect: Rect2 = Rect2(obstacle.position - obstacle.size * 0.5, obstacle.size)
-		if child is MovingObstacle:
-			rect = rect.merge(Rect2(rect.position + (child as MovingObstacle).travel, rect.size))
-		return rect
 	if child is Door:
 		var door: Door = child as Door
 		return Rect2(door.position - door.size * 0.5, door.size)

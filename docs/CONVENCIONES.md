@@ -90,7 +90,7 @@ Las teclas están definidas con `physical_keycode` (posición física, independi
 
 Ningún número que afecte el gameplay va escrito en un script. Vive en un `Resource` de configuración editable desde el inspector y guardado como `.tres` en `resources/configs/`.
 
-Existentes (a medida que se implementen los pasos): `PlayerConfig`, `ScrollConfig`, `TentacleConfig`, `MovingObstacleConfig`, `PulseTrapConfig`, `FuelTankConfig`.
+Existentes (a medida que se implementen los pasos): `PlayerConfig`, `ScrollConfig`, `TentacleConfig`, `PlatformConfig`, `LevelConfig`, `IntroConfig`, `TitleConfig`, `FuelTankConfig`.
 
 ### Cómo agregar un parámetro nuevo
 
@@ -103,7 +103,7 @@ Existentes (a medida que se implementen los pasos): `PlayerConfig`, `ScrollConfi
 ## 6. Git
 
 - **Ramas:** una por brief, desde `main` (`feature/<tema>`). No se trabaja directo sobre `main`.
-- **Commits:** uno por paso del brief, con el formato `pasoN: descripción` (ej. `paso1: jugador con jetpack, combustible y sandbox`).
+- **Commits:** uno por paso del brief, con el formato `pasoN: descripción` (ej. `paso1: jugador con jetpack y combustible`).
 - **Sin `git push`, `gh pr create` ni cambios en GitHub sin confirmación explícita de LT**, mostrando antes el árbol de archivos y el resumen de cambios.
 - **Merge:** lo hace LT, avisando antes a su socio. Los `.tscn` dan conflictos fácilmente: coordinar quién toca cada escena.
 

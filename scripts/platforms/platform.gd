@@ -2,8 +2,8 @@
 class_name Platform
 extends AnimatableBody2D
 ## Plataforma modular: bloque reutilizable con varias tipologías, sólido o letal, quieto o
-## en movimiento — reemplaza tanto a las plataformas armadas a mano como a `Obstacle`,
-## `MovingObstacle` y `PulseTrap` (ver `docs/mecanicas/plataformas.md`).
+## en movimiento. Todo lo que se pisa, se esquiva o mata en un segmento es una `Platform`
+## (ver `docs/mecanicas/plataformas.md`).
 ##
 ## Es un [AnimatableBody2D] (capa 1 `world`, máscara 0): un [StaticBody2D] que, al mover su
 ## `position` en código, sincroniza la velocidad con la física para que un jugador parado
@@ -38,8 +38,8 @@ enum PlatformType {
 	ONE_WAY,   ## Sólida solo desde arriba: se puede saltar a través desde abajo o los costados.
 	BREAKABLE, ## Se rompe tras pisarla un rato y reaparece después. Ver `break_delay`/`respawn_time`.
 	TIMED,     ## Alterna sólida/ausente en un ciclo fijo. Ver `timed_on_duration`/`timed_off_duration`.
-	LETHAL,    ## Nunca sólida, siempre letal. Reemplaza a `Obstacle`.
-	PULSE,     ## Alterna segura (atravesable) / letal, con aviso. Reemplaza a `PulseTrap`.
+	LETHAL,    ## Nunca sólida, siempre letal.
+	PULSE,     ## Alterna segura (atravesable) / letal, con aviso.
 	PROJECTILE, ## Letal; quieta hasta su disparador, luego vuela en línea recta. Ver `projectile_*`.
 }
 ## Qué dispara el movimiento de un [PROJECTILE]. Solo uno por plataforma.
@@ -55,7 +55,7 @@ enum ProjectileEnd {
 }
 ## Estados internos de un [PROJECTILE].
 enum ProjectileState { IDLE, WAITING, FLYING, EXPLODING, GONE }
-## Estados internos de PULSE (además del tipo). Igual que el `PulseTrap` original.
+## Estados internos de PULSE (además del tipo).
 enum PulseState { OFF, WARNING, ON }
 
 ## Color placeholder por tipo (o por fase, en PULSE), para distinguirlos de un vistazo.
@@ -111,7 +111,7 @@ const DEFAULT_EXPLOSION_RADIUS: float = 48.0
 ## Si es true, la plataforma va y viene entre su posición inicial y `inicial + travel`. Ignorado
 ## por PROJECTILE.
 ## Independiente de `platform_type`: cualquier tipo puede moverse (por ejemplo una TIMED que
-## además se mueve, o el equivalente del viejo `MovingObstacle` con `platform_type = LETHAL`).
+## además se mueve).
 @export var moves: bool = false:
 	set(value):
 		moves = value
@@ -385,7 +385,7 @@ func _process_pulse(delta: float) -> void:
 		_hit_overlapping_lethal_bodies()
 
 
-# Fase actual de PULSE según el tiempo, igual que el PulseTrap original: [0, off_time) segura
+# Fase actual de PULSE según el tiempo: [0, off_time) segura
 # (con aviso al final), [off_time, off_time + on_time) letal.
 func _compute_pulse_state() -> PulseState:
 	if config == null:
@@ -441,7 +441,7 @@ func _hit_overlapping_lethal_bodies() -> void:
 		_try_hit(body)
 
 
-# Progreso del recorrido (`moves`), de 0 a 1, igual que el viejo MovingObstacle.
+# Progreso del recorrido (`moves`), de 0 a 1.
 func _get_move_progress() -> float:
 	if config == null:
 		return 0.0

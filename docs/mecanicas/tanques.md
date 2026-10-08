@@ -74,19 +74,9 @@ Cómo influye cada decisión:
 - **Espiral de muerte** (`ROADMAP.md`, sección 6): sin combustible lejos de una superficie, el jugador cae hacia el tentáculo. Regla práctica: poner un tanque antes de que el jugador pueda estar más lejos de una superficie de lo que un salto cubre, o dejar siempre una plataforma cerca de cada tanque.
 - **Scroll**: la cámara sube sola y ayuda a alcanzar tanques altos; con menos scroll, los mismos tanques quedan más "caros".
 
-### Los cuatro tanques del sandbox
-
-| Nodo | Posición | Qué prueba |
-|---|---|---|
-| `FuelTank1` | (150, 438) | En la ruta habitual, sobre `Platform1` y bajo `Obstacle1` |
-| `FuelTank2` | (335, 265) | Sobre `FuelLedge` (nueva plataforma en x 318–352, y 275, 45 px sobre `Platform2`). Sin combustible se alcanza saltando desde el sector derecho de `Platform2` (probado desde x ≈ 270–285; desde el borde mismo choca contra la plataforma) |
-| `FuelTank3` | (176, -290) | Junto a `PulseTrap2` (a 8 px de su borde): hay que acercarse a la trampa para recargar |
-| `FuelTank4` | (110, -700) | ≈ 410 px sobre `FuelTank3` (≈ 84 % de lo que rinde un tanque de 40 u): se llega yendo de tanque en tanque con poco margen |
-
 ## Cómo probarlo
 
-1. Abrir `scenes/levels/sandbox.tscn` (F6) con F3 activo: el overlay muestra el combustible.
-2. Tocar `FuelTank1`: el combustible sube 40 (hasta 100) y el tanque desaparece. R reinicia y vuelve a estar.
+1. Ejecutar `scenes/levels/Level.tscn` (F6) con F3 activo: el overlay muestra el combustible.
+2. Tocar un tanque: el combustible sube y el tanque desaparece. R reinicia y vuelve a estar.
 3. Vaciar el combustible propulsando y recoger un tanque: vuelve el color normal y se puede propulsar de nuevo.
-4. Sin combustible, subir a `Platform2`, caminar hasta su sector derecho y saltar hacia `FuelTank2`.
-5. En `fuel_tank_config.tres` (con el juego cerrado): probar `only_if_not_full` y `respawn_time` > 0.
+4. En `fuel_tank_config.tres` (con el juego cerrado): probar `only_if_not_full` y `respawn_time` > 0.

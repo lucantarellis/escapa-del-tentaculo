@@ -80,7 +80,7 @@ El puntaje se suma **en el manager, sin tocar el nivel**: agregar una variable `
 
 ## Cómo probarlo
 
-1. Ejecutar `scenes/levels/sandbox.tscn` (F6).
+1. Ejecutar `scenes/levels/Level.tscn` (F6).
 2. Perder por cada causa (tentáculo, caída, obstáculo, trampa) y comprobar el texto.
 3. Ganar en la puerta y dejar que el tentáculo alcance al jugador: sigue "ESCAPASTE".
 4. R reinicia en cualquier momento.

@@ -13,11 +13,9 @@ Que cada partida se sienta distinta. Un nivel no es una escena fija: se arma en 
 - Un nivel es una **torre**: abajo el segmento de **inicio**, encima los segmentos **intermedios** y arriba el segmento **final** con la puerta.
 - **Tiers.** Los intermedios se organizan en **tiers** (`LevelConfig.tiers`, una lista de [SegmentTier]). Cada partida recorre los tiers en orden: primero los segmentos del tier 1, después los del tier 2 y así hasta el último. Cada tier tiene su lista de candidatos (`segments`) y cuántos se usan por partida (`count_per_run`). Ejemplo previsto: 3 tiers de 30 candidatos y 10 por partida = 30 intermedios + inicio + final. Un tier sin segmentos se saltea con un aviso en la consola.
 - **Sorteo dentro de un tier:** sin repetir mientras alcancen los candidatos (baraja con la seed). Si el tier tiene menos candidatos que `count_per_run`, se vuelve a barajar y se repiten, nunca el mismo dos veces seguidas.
-- **Modo plano (respaldo):** con `tiers` vacío se usan `segment_pool` y `segment_count` como antes (un solo pool, con la regla de `avoid_repeat_window`).
 - Con los valores actuales (solo el tier 1 con contenido) una partida tiene 12 segmentos (inicio + 10 + final).
 - La **cámara** arranca mostrando el inicio y sube; al llegar al techo del segmento final se detiene con ese segmento completo a la vista.
 - **Seed:** el `LevelBuilder` usa un `RandomNumberGenerator` propio, nunca el azar global. La misma seed y la misma config dan siempre el mismo nivel. Con `seed` = 0 en la config se sortea una seed nueva en cada partida; con un valor distinto de 0 el nivel es siempre el mismo. La seed de la partida se ve en el overlay F3 (`seed: N`): sirve para reportar "este nivel estuvo raro" y reproducirlo (poniéndola en `level_config.tres`).
-- **Sin repeticiones cercanas:** un segmento no se repite dentro de los últimos `avoid_repeat_window` elegidos. Con un pool chico la regla se relaja sola: primero solo evita repetir el inmediato anterior, y con un pool de un solo segmento lo repite.
 - **R** recarga `Level.tscn`: con `seed` = 0 sale otro nivel.
 
 ## Contrato de un segmento
@@ -74,12 +72,9 @@ Los inicios tienen tres tanques (por su altura) y los finales uno.
 
 | Grupo | Variable | Valor inicial | Unidad | Efecto |
 |---|---|---|---|---|
-| Nivel | `segment_count` | 6 | — | Cantidad de segmentos intermedios por partida. Solo en modo plano (sin `tiers`) |
 | Nivel | `seed` | 0 | — | 0 = aleatoria en cada partida; distinto de 0 = fija (reproduce un nivel) |
-| Nivel | `avoid_repeat_window` | 3 | — | Un segmento no se repite dentro de los últimos N elegidos. Solo en modo plano |
 | Segmentos | `start_segments` | `SegmentStart01`–`SegmentStart10` | — | Candidatos de inicio; se sortea uno por partida con la seed |
 | Segmentos | `end_segments` | `SegmentEnd01`–`SegmentEnd10` | — | Candidatos de final; se sortea uno por partida con la seed |
-| Segmentos | `segment_pool` | los 21 intermedios (`Segment01`–`Segment21`) | — | Escenas candidatas del modo plano (`Array[PackedScene]`). Solo se usa si `tiers` está vacío |
 | Segmentos | `tiers` | 3 tiers (el 1 con los 21 segmentos, el 2 y el 3 vacíos) | — | Lista de [SegmentTier], en el orden en que se recorren de abajo hacia arriba |
 | Tier (`SegmentTier`) | `segments` | — | — | Escenas candidatas del tier |
 | Tier (`SegmentTier`) | `count_per_run` | 10 | segmentos | Cuántos segmentos de este tier se usan por partida |
@@ -110,7 +105,7 @@ Nodo `Node2D` (debe estar en el origen (0, 0)) con `@export var config: LevelCon
 | `get_seed() -> int`, `get_sequence() -> PackedInt32Array`, `get_segments() -> Array[LevelSegment]`, `get_goal_door() -> Door` | Consultas (índices elegidos, segmentos de abajo hacia arriba, puerta del final). Con tiers, `get_sequence()` da el índice dentro de la lista de su tier |
 | `get_start_index() -> int`, `get_end_index() -> int` | Índice del inicio y del final elegidos en `start_segments` / `end_segments` (-1 sin nivel). La misma seed repite los mismos |
 | `get_tier_starts() -> Array[Dictionary]` | Inicio de cada tier armado, de abajo hacia arriba: `{tier, y}` (índice en `tiers` e Y global del borde inferior de su primer segmento, entrada incluida). Los tiers salteados no aparecen |
-| `get_tier_sequence() -> PackedInt32Array` | Con tiers: el tier (0 = tier 1) de cada segmento intermedio, en el mismo orden que `get_sequence()`. Vacío en modo plano |
+| `get_tier_sequence() -> PackedInt32Array` | El tier (0 = tier 1) de cada segmento intermedio, en el mismo orden que `get_sequence()`. Vacío en modo plano |
 | señal `level_built(level_seed)` | Al terminar de armar el nivel |
 
 ## Estructura de `Level.tscn`
@@ -134,10 +129,10 @@ Al iniciar, `LevelController` hace: `LevelBuilder.build()` → `Player.reset(get
 1. **Escena nueva.** Crear una escena con raíz `Node2D`, guardarla en `scenes/levels/segments/` (`Segment07.tscn`) y adjuntarle el script `scripts/levels/level_segment.gd` (o "Nueva escena → Heredar" no hace falta: alcanza con el script).
 2. **Altura.** En el inspector, `Height` (por defecto 640). Recordá que el origen es la esquina inferior izquierda: todo va con Y negativa (de 0 a −Height) y X de 0 a 360. El editor dibuja el contorno blanco.
 3. **Apoyos.** Agregá plataformas (`StaticBody2D` en la capa 1 con un `Polygon2D` azul `#3A9BBF` y un `CollisionPolygon2D`; lo más fácil es duplicar una de otro segmento) en los primeros y en los últimos ≈ 120 px.
-4. **Contenido.** Instanciá (Ctrl+Shift+A) `Obstacle`, `MovingObstacle`, `PulseTrap` y `FuelTank` y ajustá `Size`, `Travel` y `Config` por instancia. Poné **al menos un tanque** (mejor dos, ver reglas). Mantené los obstáculos lejos de las uniones.
+4. **Contenido.** Instanciá (Ctrl+Shift+A) `Platform` y `FuelTank` y ajustá `Size`, `Platform Type`, `Travel` y `Config` por instancia. Poné **al menos un tanque** (mejor dos, ver reglas). Mantené los obstáculos lejos de las uniones.
 5. **Advertencias.** Si el árbol de escena muestra un icono amarillo en la raíz, pasá el cursor: dice si falta un tanque o si algo queda fuera del rectángulo.
 6. **Verlo aislado.** Abrí la escena del segmento y ejecutá con F6: como es la escena actual, `LevelSegment` agrega una cámara centrada que lo encuadra completo (con zoom si es más alto que la pantalla) y se ven los obstáculos moverse; no hay jugador. Para **jugarlo**: poné solo ese segmento en `segment_pool` de una copia de `level_config.tres` (con `segment_count` = 1), asignala al `LevelBuilder` de `Level.tscn` y ejecutá con F6; acordate de volver a la config original.
-7. **Agregarlo a un tier.** En `resources/configs/level_config.tres` (inspector, **Segmentos → Tiers → Tier N → Segments**), agregá la escena al final del arreglo del tier que corresponda. (En modo plano, sin tiers, va en **Segment Pool**.)
+7. **Agregarlo a un tier.** En `resources/configs/level_config.tres` (inspector, **Segmentos → Tiers → Tier N → Segments**), agregá la escena al final del arreglo del tier que corresponda. 
 8. **Reproducir un nivel.** Si un nivel salió raro, copiá la seed del F3 en **Nivel → Seed** de `level_config.tres` y ejecutá `Level.tscn`; volvé a 0 para tener niveles aleatorios.
 
 ## Cómo probarlo

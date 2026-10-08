@@ -11,7 +11,7 @@ Mostrar, de forma muy discreta, cuánto combustible queda y cuánto falta para l
 
 - **Barra de combustible** (borde izquierdo, vertical, 5 px de ancho, 200 px de alto, centrada): crece hacia arriba y representa `Player.get_fuel_ratio()`. Es **naranja `#FF6B32`** con combustible y **roja `#D83232`** cuando está vacío (mismos colores que el cuerpo del jugador). Se actualiza con `fuel_changed`; el color cambia con `fuel_depleted` / `fuel_refilled`.
 - **Progreso del nivel** (borde derecho, línea vertical de las mismas medidas): un marcador blanco azulado `#C8E7EA` sube desde abajo (0 %, el spawn) hasta arriba (100 %, la puerta), donde hay una marca naranja `#FF6B32`.
-- **Tentáculo** (misma línea de progreso): un marcador rojo `#D83232` con la altura del borde superior del tentáculo, calculado con la misma fórmula que el del jugador (por debajo del spawn queda en 0). El del jugador se dibuja encima. Se oculta mientras el tentáculo está inactivo (intro de la escotilla). Requiere asignar `tentacle` en la instancia del HUD (`Level.tscn` y `sandbox.tscn` ya lo tienen); si queda vacío, no se muestra.
+- **Tentáculo** (misma línea de progreso): un marcador rojo `#D83232` con la altura del borde superior del tentáculo, calculado con la misma fórmula que el del jugador (por debajo del spawn queda en 0). El del jugador se dibuja encima. Se oculta mientras el tentáculo está inactivo (intro de la escotilla). Requiere asignar `tentacle` en la instancia del HUD (`Level.tscn` ya lo tiene); si queda vacío, no se muestra.
 
 Todo con opacidad 0,7 (fondos de barra más tenues). Los valores son `const` visuales en `hud.gd`; no hay valores de gameplay, por eso no tiene `Resource` de configuración.
 
@@ -21,13 +21,13 @@ Todo con opacidad 0,7 (fondos de barra más tenues). Los valores son `const` vis
 progreso = clamp((start_y − player.global_position.y) / (start_y − end_y), 0, 1)
 ```
 
-`start_y` es la Y global del spawn y `end_y` la de la puerta (Y crece hacia abajo, así que subir reduce la Y). El `LevelController` lo fija tras armar el nivel con `Hud.set_progress_range(start_y, end_y)`: en `Level.tscn`, la Y del jugador en el spawn y la de la puerta del segmento final; en el sandbox, la Y inicial del jugador y la de `GoalDoor`. Bajo el spawn vale 0. Se recalcula en `_process`.
+`start_y` es la Y global del spawn y `end_y` la de la puerta (Y crece hacia abajo, así que subir reduce la Y). El `LevelController` lo fija tras armar el nivel con `Hud.set_progress_range(start_y, end_y)`: en `Level.tscn`, la Y del jugador en el spawn y la de la puerta del segmento final. Bajo el spawn vale 0. Se recalcula en `_process`.
 
 ## Cuándo se ve
 
 - **No** aparece en el título: con `autostart = false` el `LevelController` lo oculta y lo muestra en `begin()`.
 - Durante la partida está visible. Tras ganar o perder queda visible (congelado) por debajo del mensaje de fin (capa 90).
-- Con R (con `Main`) se reconstruye el nivel entero, así que el HUD arranca de cero (combustible según `starting_fuel`, progreso 0). En `Level.tscn` y `sandbox.tscn` también hay HUD.
+- Con R (con `Main`) se reconstruye el nivel entero, así que el HUD arranca de cero (combustible según `starting_fuel`, progreso 0). En `Level.tscn` (F6) también hay HUD.
 
 ## API pública
 
@@ -45,7 +45,7 @@ progreso = clamp((start_y − player.global_position.y) / (start_y − end_y), 0
 
 ## Récord y marcas de tier
 
-- **Récord:** una marca fina en cian `#63D6C5`, más ancha que el marcador, en el mejor progreso guardado. Lo guarda `RunRecords` (`scripts/managers/run_records.gd`) en `user://records.cfg` al terminar cada partida del nivel por segmentos (el sandbox no cuenta). Si la partida lo supera, el mensaje de fin agrega "NUEVO RÉCORD" y la marca se mueve. Como todo segmento mide 640 px, el progreso de partidas distintas es comparable. `RunRecords.clear()` lo borra (pruebas).
+- **Récord:** una marca fina en cian `#63D6C5`, más ancha que el marcador, en el mejor progreso guardado. Lo guarda `RunRecords` (`scripts/managers/run_records.gd`) en `user://records.cfg` al terminar cada partida. Si la partida lo supera, el mensaje de fin agrega "NUEVO RÉCORD" y la marca se mueve. Como todo segmento mide 640 px, el progreso de partidas distintas es comparable. `RunRecords.clear()` lo borra (pruebas).
 - **Tiers:** una marca corta y tenue (blanco azulado) en la Y donde empieza cada tier, salvo el primero (el inicio ya es parte de él).
 
 ## Cómo probarlo
@@ -54,4 +54,4 @@ progreso = clamp((start_y − player.global_position.y) / (start_y − end_y), 0
 2. Propulsar: la barra izquierda baja; al vaciarse se pone roja; al recoger un tanque vuelve a naranja y sube.
 3. Subir: el marcador de la derecha avanza y llega arriba al alcanzar la puerta.
 4. Ganar o perder: el HUD queda debajo del mensaje. R reinicia con la barra llena y el progreso en 0.
-5. F6 sobre `Level.tscn` y sobre `sandbox.tscn`: el HUD también aparece.
+5. F6 sobre `Level.tscn`: el HUD también aparece.

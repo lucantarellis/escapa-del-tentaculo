@@ -59,8 +59,6 @@ display_name = "Dentro del alien"
 
 [resource]
 script = ExtResource("1_cfg")
-avoid_repeat_window = 3
 start_segments = Array[PackedScene]([ExtResource("start_01"), ExtResource("start_02"), ExtResource("start_03"), ExtResource("start_04"), ExtResource("start_05"), ExtResource("start_06"), ExtResource("start_07"), ExtResource("start_08"), ExtResource("start_09"), ExtResource("start_10")])
 end_segments = Array[PackedScene]([ExtResource("end_01"), ExtResource("end_02"), ExtResource("end_03"), ExtResource("end_04"), ExtResource("end_05"), ExtResource("end_06"), ExtResource("end_07"), ExtResource("end_08"), ExtResource("end_09"), ExtResource("end_10")])
-segment_pool = Array[PackedScene]([ExtResource("4_seg"), ExtResource("5_seg"), ExtResource("6_seg"), ExtResource("7_seg"), ExtResource("8_seg"), ExtResource("9_seg"), ExtResource("10_seg"), ExtResource("11_seg"), ExtResource("12_seg"), ExtResource("13_seg"), ExtResource("14_seg"), ExtResource("15_seg"), ExtResource("16_seg"), ExtResource("17_seg"), ExtResource("18_seg"), ExtResource("19_seg"), ExtResource("19_ewu3o"), ExtResource("20_km1sb"), ExtResource("20_7kxs2"), ExtResource("22_58vi7"), ExtResource("23_58vi7")])
 tiers = Array[ExtResource("24_tier")]([SubResource("Resource_tier1"), SubResource("Resource_tier2"), SubResource("Resource_tier3")])

@@ -1,7 +1,7 @@
 # Mecánica: scroll y cámara
 
 **Archivos:** `scripts/camera/scroll_camera.gd`, `scripts/camera/scroll_config.gd`, `scenes/camera/ScrollCamera.tscn`, `resources/configs/scroll_config.tres`.
-**Escena de prueba:** `scenes/levels/sandbox.tscn` (columna alta con la cámara instanciada).
+**Escena de prueba:** `scenes/levels/Level.tscn` (F6).
 
 ## Propósito
 
@@ -82,7 +82,3 @@ ScrollCamera (Camera2D, process_callback = Physics, sin suavizado)
 2. Empujar al jugador contra los costados y hacia arriba: no debe poder salir.
 3. Para ver el modo anterior, poner `follow_player` en false en `scroll_config.tres`: la cámara sube sola a `scroll_speed`.
 4. Editar `scroll_config.tres` (por ejemplo `scroll_speed` o `scroll_acceleration`) y volver a ejecutar. Los valores que se ajustan mientras se prueba son de prueba, no de balance: no se anotan en `docs/TUNING_LOG.md`.
-
-## Sandbox en columna
-
-`sandbox.tscn` es ahora una columna de 360 px de ancho que va de Y = -1760 a Y = 640: suelo abajo, un techo de referencia arriba (Y = -1780) y plataformas cada 160 px. Las paredes laterales estáticas se quitaron: las reemplazan los límites de la cámara. La cámara arranca en (180, 320), es decir, mostrando Y de 0 a 640.

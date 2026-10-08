@@ -50,7 +50,7 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | Transición título → juego | `Main` instancia `Level.tscn` detrás del menú, en pausa; al pulsar JUGAR el menú se disuelve y la partida arranca. R reinicia directo al juego (nivel nuevo) sin volver al título | LT (brief 04) |
 | Intro de la escotilla | Al pulsar JUGAR la cámara vibra tres veces (golpes del tentáculo) con gas que escapa de una escotilla en la parte inferior del nivel; la escotilla se rompe, el jugador (que estaba detrás, no visible) sale disparado hacia arriba y al rato aparece el tentáculo como hoy. R repite la intro (decisión posterior de LT: antes la saltaba). Todo con polígonos placeholder | LT (post-QA del brief 04); se implementa en el brief 05 |
 | Intro: director y escena propia | La secuencia la orquesta `IntroDirector` (llama hacia abajo a `Hatch`, `ScrollCamera`, `Player` y `Tentacle`; emite `hit`, `broken`, `finished`). La escotilla es una escena propia (`Hatch.tscn`). Todos los tiempos y magnitudes viven en `IntroConfig` | Propuesta de Claude (brief 05), pendiente de validar jugando |
-| Intro: cuándo se reproduce | Al pulsar JUGAR y con cada R (`Main` reconstruye el nivel y llama a `LevelController.play_intro()`). `Level.tscn` (F6) y `sandbox.tscn` solos la saltan: escotilla ya rota, tentáculo activo desde el primer frame y jugador en el `PlayerSpawn` (sin lanzamiento). R durante la intro no hace nada (`GameManager` en `READY`) | Propuesta de Claude (brief 05) |
+| Intro: cuándo se reproduce | Al pulsar JUGAR y con cada R (`Main` reconstruye el nivel y llama a `LevelController.play_intro()`). `Level.tscn` (F6) solo la salta: escotilla ya rota, tentáculo activo desde el primer frame y jugador en el `PlayerSpawn` (sin lanzamiento). R durante la intro no hace nada (`GameManager` en `READY`) | Propuesta de Claude (brief 05) |
 | Intro: `start_delay` | Sin cambios: la cámara empieza a subir `start_delay` s después de la ruptura (inicio de la partida) | Propuesta de Claude (brief 05) |
 | Intro: escotilla centrada y vuelo | La escotilla va centrada. El segmento de inicio mide 640 px (como todos, desde la fase 0) con un pasillo central libre para el vuelo (~390 px de altura con `launch_speed` 520); durante el vuelo la cámara sube lo necesario para que el jugador nunca salga de la vista (`ScrollCamera.follow_up`) | LT (QA del paso 8e) |
 | Plataforma proyectil | Tipo `PROJECTILE` de `Platform`: letal desde que aparece, se dispara por cámara o por distancia (uno solo), vuela en línea recta y al final explota, desaparece o rebota contra las paredes de la pantalla N veces; al golpear al jugador explota. "Desaparecer" oculta y desactiva (no `queue_free`) para que `reset()` la reviva. Doc: `docs/mecanicas/plataforma-proyectil.md` | Socio (iteración en `main-g`) |
@@ -109,7 +109,7 @@ Configurar viewport y stretch, Input Map, nombres de capas de colisión, y crear
 **Hecho cuando:** el proyecto abre sin errores y las convenciones están escritas.
 
 ### Paso 1 — Jugador con jetpack
-Personaje con propulsión en 4 direcciones, inercia, combustible, gravedad dependiente del combustible y salto sin combustible. Escena de prueba `sandbox` y overlay de debug.
+Personaje con propulsión en 4 direcciones, inercia, combustible, gravedad dependiente del combustible y salto sin combustible. Overlay de debug.
 **Hecho cuando:** todos los valores son ajustables desde un `PlayerConfig` y el movimiento se puede jugar y calibrar.
 
 ### Paso 2 — Scroll y cámara
@@ -122,11 +122,11 @@ Placeholder anclado al borde inferior, con zona letal. Caer bajo la pantalla tam
 
 ### Paso 4 — Obstáculos
 Un bloque estático primero (valida colisión y muerte). Luego variantes móviles y trampas, cada una como escena reutilizable.
-**Hecho (brief 02):** `Obstacle`, `MovingObstacle` y `PulseTrap` con sus configs. Ver `docs/mecanicas/obstaculos.md`.
+**Hecho (brief 02):** `Obstacle`, `MovingObstacle` y `PulseTrap`, reemplazados después por los tipos de `Platform` y eliminados en la limpieza de la fase 2. Ver `docs/mecanicas/plataformas.md`.
 
 ### Paso 4b — Tanques de combustible
 Recogible que llama a `Player.add_fuel()`. Su ubicación (por ejemplo en plataformas elevadas, que solo se alcanzan saltando) es una herramienta de diseño de niveles.
-**Hecho (brief 02):** `FuelTank` con `FuelTankConfig`; 4 tanques en el sandbox. Ver `docs/mecanicas/tanques.md`.
+**Hecho (brief 02):** `FuelTank` con `FuelTankConfig`; tanques en los segmentos. Ver `docs/mecanicas/tanques.md`.
 
 ### Paso 5 — Puerta y victoria
 `Area2D` al final del nivel. Al entrar el jugador, se gana.
@@ -139,7 +139,7 @@ Cada partida arma un nivel distinto ensamblando segmentos (escenas escritas a ma
 
 ### Paso 8 — Pantalla de título y transición
 Pantalla de título en `Main.tscn` (escena principal): título del juego y un botón grande de jugar sobre `Level.tscn` ya armado y en pausa. Al pulsarlo el menú se disuelve hasta quedar transparente y arranca la partida. R reinicia directo al juego con un nivel nuevo (señal `restart_requested` del `GameManager`; `LevelController` gana `autostart` y `begin()`).
-**Hecho cuando:** F5 abre el título, JUGAR inicia la partida tras el fundido y R reinicia sin volver al título; `Level.tscn` y `sandbox.tscn` siguen funcionando solos con F6.
+**Hecho cuando:** F5 abre el título, JUGAR inicia la partida tras el fundido y R reinicia sin volver al título; `Level.tscn` sigue funcionando solos con F6.
 
 ### Paso 8b — HUD mínimo
 Barra de combustible (naranja, roja al vaciarse) y progreso del nivel (0 % en el spawn, 100 % en la puerta), muy discretos, de solo lectura, visibles solo durante la partida.
@@ -147,7 +147,7 @@ Barra de combustible (naranja, roja al vaciarse) y progreso del nivel (0 % en el
 
 ### Paso 8d — Intro de la escotilla: golpes y gas
 Al pulsar JUGAR se ve una escotilla abajo (sin tentáculo ni jugador); la cámara vibra tres veces y en cada golpe sale gas. Nuevos: `IntroConfig`, `Hatch`, `IntroDirector`, `ScrollCamera.shake`, `Player.set_frozen`, `Tentacle.set_active`, `LevelController.play_intro()`. Al terminar los golpes la partida arranca como hoy.
-**Hecho cuando:** la secuencia de golpes se ve y se siente bien, no se mueve nada más durante la intro y R, `Level.tscn` y `sandbox.tscn` siguen sin intro.
+**Hecho cuando:** la secuencia de golpes se ve y se siente bien, no se mueve nada más durante la intro y R, `Level.tscn` sigue sin intro.
 
 ### Paso 8e — Intro de la escotilla: ruptura y lanzamiento
 Tras el tercer golpe la escotilla se rompe, el jugador sale disparado hacia arriba (`Player.launch`, control bloqueado un instante), empieza la partida y, tras un retraso, el tentáculo entra desde abajo (`Tentacle.enter`). La red de seguridad de caída está activa desde el inicio de la partida.

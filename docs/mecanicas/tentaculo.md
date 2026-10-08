@@ -47,7 +47,7 @@ Es la amenaza: una masa roja que sube por su cuenta a una velocidad configurable
 | Función | Descripción |
 |---|---|
 | `set_rising(enabled: bool) -> void` | Activa o congela el ascenso (`rise_speed` con la cámara siguiendo al jugador; `extra_rise_speed` y `end_rise_speed` en el modo anterior). `LevelController` lo congela al ganar o perder |
-| `set_active(active: bool) -> void` | `false`: lo oculta, apaga `KillZone.monitoring`, el chequeo de caída (`_check_fell`) y la animación, y deja de seguir a la cámara. `true`: lo restaura y lo reubica. Estado inicial: activo (el sandbox no cambia). La intro lo apaga hasta empezar la partida |
+| `set_active(active: bool) -> void` | `false`: lo oculta, apaga `KillZone.monitoring`, el chequeo de caída (`_check_fell`) y la animación, y deja de seguir a la cámara. `true`: lo restaura y lo reubica. Estado inicial: activo. La intro lo apaga hasta empezar la partida |
 | `is_active() -> bool` | true si está activo |
 | `apply_pursuer(config, color, reset_position)` | Cambia el perseguidor al entrar a un tier: config nueva y color; con `reset_position` vuelve a su distancia inicial bajo la pantalla. Lo llama `LevelController` (ver `niveles-por-segmentos.md`) |
 | `set_fall_watch(watch: bool) -> void` | Con el tentáculo inactivo, sigue vigilando la caída: el jugador bajo el borde inferior de la pantalla muere con `&"fell"`. La intro lo enciende en la ruptura |
@@ -73,7 +73,3 @@ El tentáculo llama a `Player.die(cause)`. `Player.died(cause)` llega a `LevelCo
 
 1. Ejecutar `scenes/levels/Level.tscn` (F6) y quedarse quieto: tras unos 3 s el tentáculo llega y aparece el mensaje. Subir rápido: el tentáculo queda fuera de la pantalla, por debajo, y sigue subiendo; frenar y esperarlo debe matar igual.
 2. Con R se reinicia. Editar `tentacle_config.tres` y repetir. Los valores que se ajustan mientras se prueba son de prueba, no de balance: no se anotan en `docs/TUNING_LOG.md`.
-
-## Sandbox
-
-El jugador arranca ahora sobre una plataforma de inicio (`StartPlatform`, Y = 560), porque el suelo (Y = 620) queda bajo el tentáculo visible.

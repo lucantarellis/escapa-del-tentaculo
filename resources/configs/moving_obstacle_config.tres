@@ -1,6 +1,0 @@
-[gd_resource type="Resource" script_class="MovingObstacleConfig" format=3 uid="uid://cfd5brpd3ritp"]
-
-[ext_resource type="Script" uid="uid://cp65suojya358" path="res://scripts/obstacles/moving_obstacle_config.gd" id="1_cfg"]
-
-[resource]
-script = ExtResource("1_cfg")
