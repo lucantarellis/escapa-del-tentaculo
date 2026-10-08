@@ -161,6 +161,16 @@ LT reportó que sin combustible "caminar y saltar no se puede, solo salta en dir
 - **Exploración/descubrimiento de mecánicas (LT):** usar elementos existentes de forma que el jugador los descubra en juego. Se retoma cuando se trabaje el diseño de segmentos; no genera nivel nuevo ni arte nuevo.
 - **Redecidir tanques (`fuel_amount`, cantidad por segmento):** se hace en la ronda 2, una vez que LT confirme el layout piloto de `Segment01` (para no rediseñar la ubicación de tanques dos veces).
 
+## Iteración en `main-g`: tiers de segmentos
+
+Pedido de Guido: tres tiers de segmentos (1, 2 y 3); cada partida recorre los tres en orden y usa una cantidad fija de cada uno (por ejemplo, 30 candidatos por tier y 10 por partida). Más adelante se piensa en un segmento de boss y en un tentáculo distinto entre tiers (no incluido).
+
+| Iteración | Fecha | Parámetro | Antes | Después | Evidencia | Cómo se sintió |
+|---|---|---|---|---|---|---|
+| tiers | 2026-10-07 | `level_config.tres` → `tiers` (nuevo) | — (pool plano de 21 segmentos y `segment_count` 6) | 3 tiers de `count_per_run` 10; el tier 1 con los 21 segmentos actuales, tiers 2 y 3 vacíos (se saltean con un aviso) | Simulación headless: la config real arma 10 intermedios + inicio + final sin repetidos en 30 seeds; con 3 tiers de prueba arma 10+10+10 en orden (32 segmentos, 12480 px) en 8 seeds; mismo seed = mismo nivel | Pendiente de probar jugando |
+
+El pool plano (`segment_pool` y `segment_count`) se conserva como respaldo: solo se usa si `tiers` está vacío.
+
 ## Valores finales del MVP
 
 Se completa al cierre ("tuning cerrado").

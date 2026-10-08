@@ -6,7 +6,8 @@ extends Resource
 ## iniciales son de prueba. Ver `docs/mecanicas/niveles-por-segmentos.md`.
 
 @export_group("Nivel")
-## Cantidad de segmentos intermedios por partida (sin contar inicio y final).
+## Cantidad de segmentos intermedios por partida (sin contar inicio y final). Solo se usa si
+## `tiers` está vacío (modo plano: un único `segment_pool`).
 @export var segment_count: int = 6
 ## Seed del nivel. 0 = aleatoria en cada partida; distinto de 0 = fija (reproduce siempre el
 ## mismo nivel).
@@ -21,5 +22,10 @@ extends Resource
 @export var start_segment: PackedScene
 ## Escena del segmento final (debe contener una [Door]).
 @export var end_segment: PackedScene
-## Escenas candidatas para los segmentos intermedios.
+## Escenas candidatas para los segmentos intermedios. Solo se usa si `tiers` está vacío (modo
+## plano, con `segment_count` segmentos).
 @export var segment_pool: Array[PackedScene] = []
+## Tiers de segmentos, en el orden en que se recorren de abajo hacia arriba. Cada partida usa
+## `count_per_run` segmentos de cada tier. Si está vacío, se usan `segment_pool` y
+## `segment_count`.
+@export var tiers: Array[SegmentTier] = []
