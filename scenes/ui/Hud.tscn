@@ -18,5 +18,8 @@ mouse_filter = 2
 [node name="GoalMark" type="ColorRect" parent="."]
 mouse_filter = 2
 
+[node name="TentacleMarker" type="ColorRect" parent="."]
+mouse_filter = 2
+
 [node name="ProgressMarker" type="ColorRect" parent="."]
 mouse_filter = 2

@@ -8,6 +8,8 @@ extends CanvasLayer
 ## - **Progreso:** línea vertical fina pegada al borde derecho con un marcador que sube desde el
 ##   spawn (0 %) hasta la puerta (100 %, marca naranja arriba). Se calcula con la Y del jugador
 ##   entre [method set_progress_range]'s `start_y` y `end_y`, acotado a 0..1.
+## - **Tentáculo:** en la misma línea, un marcador rojo con la altura del borde superior del
+##   tentáculo, con el mismo cálculo. Se oculta mientras el tentáculo está inactivo (intro).
 ##
 ## No modifica el juego. Sin números ni etiquetas. Todos los valores son visuales.
 ## Ver `docs/mecanicas/hud.md`.
@@ -18,6 +20,8 @@ const FUEL_COLOR: Color = Color("FF6B32")
 const EMPTY_COLOR: Color = Color("D83232")
 ## Color del marcador de progreso (blanco azulado de detalles). Solo visual.
 const MARKER_COLOR: Color = Color("C8E7EA")
+## Color del marcador del tentáculo (rojo letal). Solo visual.
+const TENTACLE_COLOR: Color = Color("D83232")
 ## Color de la marca de la puerta (naranja de meta). Solo visual.
 const GOAL_COLOR: Color = Color("FF6B32")
 ## Color del fondo de las barras. Solo visual.
@@ -39,6 +43,9 @@ const VIEWPORT_SIZE: Vector2 = Vector2(360.0, 640.0)
 
 ## Jugador a observar. Se asigna desde la escena que instancia el HUD.
 @export var player: Player
+## Tentáculo a observar para su marcador en la línea de progreso. Opcional: si queda vacío, el
+## marcador no se muestra.
+@export var tentacle: Tentacle
 
 var _start_y: float = 0.0
 var _end_y: float = 0.0
@@ -50,6 +57,7 @@ var _fuel_ratio: float = 1.0
 @onready var _progress_track: ColorRect = $ProgressTrack
 @onready var _goal_mark: ColorRect = $GoalMark
 @onready var _marker: ColorRect = $ProgressMarker
+@onready var _tentacle_marker: ColorRect = $TentacleMarker
 
 
 func _ready() -> void:
@@ -68,6 +76,9 @@ func _ready() -> void:
 	_goal_mark.position = Vector2(center_x - MARKER_SIZE.x * 0.5, _top - MARKER_SIZE.y)
 	_marker.color = Color(MARKER_COLOR, HUD_ALPHA)
 	_marker.size = MARKER_SIZE
+	_tentacle_marker.color = Color(TENTACLE_COLOR, HUD_ALPHA)
+	_tentacle_marker.size = MARKER_SIZE
+	_tentacle_marker.visible = false
 	if player == null:
 		push_error("Hud: falta asignar 'player'.")
 		return
@@ -93,9 +104,17 @@ func set_progress_range(start_y: float, end_y: float) -> void:
 
 ## Devuelve el progreso actual (0..1) según la Y del jugador. 0 si el rango no es válido.
 func get_progress() -> float:
-	if player == null or _start_y - _end_y <= 0.0:
+	if player == null:
 		return 0.0
-	return clampf((_start_y - player.global_position.y) / (_start_y - _end_y), 0.0, 1.0)
+	return _ratio_for_y(player.global_position.y)
+
+
+## Devuelve la altura del borde superior del tentáculo en la línea de progreso (0..1), con el
+## mismo rango que [method get_progress]. 0 si no hay tentáculo o el rango no es válido.
+func get_tentacle_progress() -> float:
+	if tentacle == null:
+		return 0.0
+	return _ratio_for_y(tentacle.global_position.y)
 
 
 ## Devuelve la proporción de combustible mostrada (0..1).
@@ -129,3 +148,21 @@ func _refresh_fuel() -> void:
 func _refresh_progress() -> void:
 	var y: float = _top + BAR_HEIGHT * (1.0 - get_progress()) - MARKER_SIZE.y * 0.5
 	_marker.position = Vector2(_progress_track.position.x + BAR_WIDTH * 0.5 - MARKER_SIZE.x * 0.5, y)
+	_refresh_tentacle_marker()
+
+
+# Proporción 0..1 de una Y global dentro del rango spawn → puerta. 0 si el rango no es válido.
+func _ratio_for_y(y: float) -> float:
+	if _start_y - _end_y <= 0.0:
+		return 0.0
+	return clampf((_start_y - y) / (_start_y - _end_y), 0.0, 1.0)
+
+
+# Ubica el marcador del tentáculo; lo oculta si no hay tentáculo o está inactivo (intro).
+func _refresh_tentacle_marker() -> void:
+	if tentacle == null or not tentacle.is_active():
+		_tentacle_marker.visible = false
+		return
+	_tentacle_marker.visible = true
+	var y: float = _top + BAR_HEIGHT * (1.0 - get_tentacle_progress()) - MARKER_SIZE.y * 0.5
+	_tentacle_marker.position = Vector2(_progress_track.position.x + BAR_WIDTH * 0.5 - MARKER_SIZE.x * 0.5, y)

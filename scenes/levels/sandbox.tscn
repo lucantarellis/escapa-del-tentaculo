@@ -29,8 +29,9 @@ camera = NodePath("../ScrollCamera")
 [node name="DebugOverlay" parent="." node_paths=PackedStringArray("player") instance=ExtResource("2_overlay")]
 player = NodePath("../Player")
 
-[node name="Hud" parent="." node_paths=PackedStringArray("player") instance=ExtResource("20_hud")]
+[node name="Hud" parent="." node_paths=PackedStringArray("player", "tentacle") instance=ExtResource("20_hud")]
 player = NodePath("../Player")
+tentacle = NodePath("../Tentacle")
 
 [node name="CaughtLayer" type="CanvasLayer" parent="."]
 layer = 90

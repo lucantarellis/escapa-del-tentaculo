@@ -11,6 +11,7 @@ Mostrar, de forma muy discreta, cuánto combustible queda y cuánto falta para l
 
 - **Barra de combustible** (borde izquierdo, vertical, 5 px de ancho, 200 px de alto, centrada): crece hacia arriba y representa `Player.get_fuel_ratio()`. Es **naranja `#FF6B32`** con combustible y **roja `#D83232`** cuando está vacío (mismos colores que el cuerpo del jugador). Se actualiza con `fuel_changed`; el color cambia con `fuel_depleted` / `fuel_refilled`.
 - **Progreso del nivel** (borde derecho, línea vertical de las mismas medidas): un marcador blanco azulado `#C8E7EA` sube desde abajo (0 %, el spawn) hasta arriba (100 %, la puerta), donde hay una marca naranja `#FF6B32`.
+- **Tentáculo** (misma línea de progreso): un marcador rojo `#D83232` con la altura del borde superior del tentáculo, calculado con la misma fórmula que el del jugador (por debajo del spawn queda en 0). El del jugador se dibuja encima. Se oculta mientras el tentáculo está inactivo (intro de la escotilla). Requiere asignar `tentacle` en la instancia del HUD (`Level.tscn` y `sandbox.tscn` ya lo tienen); si queda vacío, no se muestra.
 
 Todo con opacidad 0,7 (fondos de barra más tenues). Los valores son `const` visuales en `hud.gd`; no hay valores de gameplay, por eso no tiene `Resource` de configuración.
 
@@ -34,7 +35,9 @@ progreso = clamp((start_y − player.global_position.y) / (start_y − end_y), 0
 |---|---|
 | `player` (`@export`) | Jugador a observar, asignado desde la escena que instancia el HUD |
 | `set_progress_range(start_y, end_y)` | Fija el rango del progreso (Y globales del spawn y de la puerta) |
+| `tentacle` (`@export`) | Tentáculo a observar para su marcador (opcional) |
 | `get_progress() -> float` | Progreso actual 0..1 |
+| `get_tentacle_progress() -> float` | Altura del tentáculo en la línea de progreso, 0..1 |
 | `get_fuel_ratio() -> float` | Proporción de combustible mostrada 0..1 |
 | `get_fuel_color() -> Color` | Color actual de la barra de combustible |
 
