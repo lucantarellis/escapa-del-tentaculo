@@ -33,7 +33,7 @@ y=0   O-----------------------+   <- origen (0, 0) = esquina INFERIOR izquierda
 - Ocupa **x ∈ [0, 360]** e **y ∈ [−640, 0]** en coordenadas locales: **todo segmento mide 360 × 640** (una pantalla), sin excepciones, para que cualquier combinación encaje y se diseñe viendo el segmento completo. El constructor coloca el origen en la Y del borde inferior.
 - La raíz es un nodo con el script `LevelSegment` (`@tool`). En el editor dibuja el contorno blanco y muestra **advertencias** (icono amarillo en el árbol) si no tiene ningún `FuelTank` o si un hijo directo queda fuera del rectángulo (para un obstáculo se cuenta su bloque entero y, si es móvil, todo su recorrido).
 - El alto es fijo (`LevelSegment.HEIGHT` = 640; la propiedad `height` es de solo lectura). `requires_fuel_tank` (por defecto activo) controla la advertencia del tanque.
-- **Carpetas:** `scenes/levels/segments/start/` (inicios), `ship/` (tier 1, la nave: `Segment01`–`21`), `space/` (tier 2, el espacio: `SegmentSpace01`–`10` y entradas `SegmentSpaceEntry01`–`03`; ver `tier-espacio.md`), `end/` (finales). El tier 3 irá en `alien/`.
+- **Carpetas:** `scenes/levels/segments/start/` (inicios), `ship/` (tier 1, la nave: `Segment01`–`21` y las salidas `SegmentShipExit01`–`03`), `space/` (tier 2, el espacio: `SegmentSpace01`–`10` y entradas `SegmentSpaceEntry01`–`03`; ver `tier-espacio.md`), `end/` (finales). El tier 3 irá en `alien/`.
 - **Inicio** (`SegmentStart01`–`SegmentStart10`, se sortea uno por partida entre `LevelConfig.start_segments`): miden 640 px como todos; el jugador sale volando de la escotilla y sube ~390 px (`launch_speed` = 520). Contrato de cada uno: suelo (`Floor`, y −20..0), un **pasillo central libre (x 132–228)** de punta a punta para el vuelo (ni plataformas ni paredes), tres tanques, un `Marker2D` **`PlayerSpawn`** sobre la plataforma más baja (solo se usa sin intro) y un `Marker2D` **`HatchAnchor`** en (180, −20) (centro del piso: ahí va la escotilla). Dificultad baja: solo `STATIC` y `ONE_WAY`, que se alternan a los costados del pasillo.
 - **Final** (`SegmentEnd01`–`SegmentEnd10`, se sortea uno entre `LevelConfig.end_segments`): 640 px, un desafío corto (`BREAKABLE`, `TIMED`, `PULSE`, `LETHAL` fijo o móvil, plataformas móviles) y una **`Door`** (`GoalDoor`) sobre la plataforma de arriba (`Goal`), con un tanque.
 - **Paredes** (todos los segmentos): dejan al menos 36 px libres arriba y abajo para que cualquier combinación de segmentos encaje; pueden estar pegadas a los costados o flotando. Ver `docs/mecanicas/paredes.md`.
@@ -81,12 +81,15 @@ Los inicios tienen tres tanques (por su altura) y los finales uno.
 | Tier (`SegmentTier`) | `count_per_run` | 10 | segmentos | Cuántos segmentos de este tier se usan por partida |
 | Tier → Escenario | `display_name` | "La nave" / "El espacio" / "Dentro del alien" | — | Nombre del tier (depuración y docs) |
 | Tier → Escenario | `entry_segments` | vacío | — | Segmentos de entrada (transición): se sortea uno y va antes de los segmentos del tier. Conservan su propio tileset. Vacío = sin transición |
+| Tier → Escenario | `exit_segments` | tier 1: `SegmentShipExit01`–`03` | — | Segmentos de salida: se sortea uno y va después de los segmentos del tier |
+| Tier → Escenario | `platform_tint` / `hazard_tint` | espacio: gris metálico / naranja | — | Color de las plataformas sólidas y de las letales del tier (alfa 0 = colores de cada tipo). Ver `Platform.set_tint()` |
 | Tier → Escenario | `walls_tileset` | vacío | — | TileSet de las paredes del tier (mismas coordenadas de atlas que `walls_tileset.tres`). Vacío = el de cada segmento |
 | Tier → Fondo | `background_color` | nave `#10141F`, espacio `#05060A` | — | Color de fondo del tier (alfa 0 = no cambia) |
 | Tier → Fondo | `background_stars` | espacio: sí | — | Estrellas con parallax |
 | Tier → Fondo | `background_fade` | 0,4 | s | Fundido al entrar al tier |
 | Tier → Perseguidor | `pursuer_config` | vacío | — | `TentacleConfig` del perseguidor del tier (tentáculo, fuego, ácido). Vacío = sigue el anterior |
 | Tier → Perseguidor | `pursuer_color` | rojo `#D83232` | — | Color placeholder del perseguidor; se aplica siempre al entrar al tier |
+| Tier → Perseguidor | `pursuer_delay` | espacio: 1,5 | s | Segundos que tarda en aparecer el perseguidor al entrar al tier |
 | Tier → Perseguidor | `pursuer_reset_position` | true | — | Con `pursuer_config`: al entrar al tier, el perseguidor vuelve a su distancia inicial (uno nuevo que aparece) |
 | Tier → Jugador | `gravity_scale` | 1 | × | Multiplica la gravedad del jugador en el tier (ej.: 0,16 en el espacio) |
 | Tier → Jugador | `air_drag_scale` | 1 | × | Multiplica el frenado en el aire (`coasting_drag`): menos = más inercia |

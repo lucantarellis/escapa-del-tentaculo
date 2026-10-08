@@ -39,6 +39,10 @@ Detalle completo de `PROJECTILE` en `docs/mecanicas/plataforma-proyectil.md`.
 - **Diseño de nivel vs. tuning**: `size`, `platform_type`, `moves`, `travel` y `cause` son diseño de nivel (por instancia). Los tiempos (`break_delay`, `respawn_time`, `timed_on_duration`, `timed_off_duration`, `timed_start_on`, `one_way_margin`, `moving_*`, `pulse_*`) son tuning y viven en `PlatformConfig` (`resources/configs/platform_config.tres`). Para que una instancia tenga tiempos propios, duplicar el `.tres` o hacerlo único en el inspector.
 - **`@tool`**: en el editor se ve el color según el tipo/fase, el nombre del tipo arriba del bloque, y si `moves` es true, la trayectoria dibujada en rojo.
 
+## Color por tier
+
+`Platform.set_tint(color)` reemplaza el color del tipo (no el de PULSE, que comunica su fase). Lo usa `LevelBuilder` con `platform_tint` / `hazard_tint` de cada tier para que, por ejemplo, en el espacio las plataformas sean restos metálicos grises y lo letal se vea naranja, sin duplicar escenas.
+
 ## Parámetros
 
 ### Por instancia (diseño de nivel)

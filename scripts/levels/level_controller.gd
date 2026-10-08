@@ -187,6 +187,8 @@ func _enter_tier(tier_index: int) -> void:
 		_background.apply_style(tier.background_color, tier.background_stars, 0.0 if first else tier.background_fade)
 	if tier != null:
 		_tentacle.apply_pursuer(tier.pursuer_config, tier.pursuer_color, tier.pursuer_reset_position)
+		if tier.pursuer_delay > 0.0 and not first:
+			_delay_pursuer(tier.pursuer_delay)
 		_player.set_physics_scales(tier.gravity_scale, tier.air_drag_scale)
 	tier_entered.emit(tier_index)
 
@@ -225,3 +227,15 @@ func _record_suffix(progress: float) -> String:
 			_hud.set_record(progress)
 		return "\n" + NEW_RECORD_TEXT
 	return ""
+
+
+# Saca de escena al perseguidor [param delay] s (vigilando la caída) y lo vuelve a activar desde
+# su distancia inicial bajo la pantalla.
+func _delay_pursuer(delay: float) -> void:
+	_tentacle.set_active(false)
+	_tentacle.set_fall_watch(true)
+	await get_tree().create_timer(delay).timeout
+	if not is_inside_tree() or GameManager.get_state() != GameManager.State.PLAYING:
+		return
+	_tentacle.set_fall_watch(false)
+	_tentacle.set_active(true)

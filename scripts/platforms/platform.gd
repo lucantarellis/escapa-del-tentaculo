@@ -168,6 +168,8 @@ var _break_timer: float = 0.0
 var _respawn_left: float = 0.0
 var _timed_elapsed: float = 0.0
 var _timed_on: bool = true
+## Color que reemplaza al del tipo (ver [method set_tint]). Alfa 0 = el color del tipo.
+var _tint: Color = Color(0.0, 0.0, 0.0, 0.0)
 var _pulse_state: PulseState = PulseState.OFF
 var _pulse_elapsed: float = 0.0
 var _origin: Vector2 = Vector2.ZERO
@@ -228,6 +230,15 @@ func _draw() -> void:
 		draw_rect(Rect2(travel - half, size), PATH_COLOR, false, 2.0)
 	if platform_type == PlatformType.PROJECTILE:
 		_draw_projectile_preview(half)
+
+
+## Cambia el color placeholder de la plataforma (no el de PULSE, que comunica su fase). Lo usa
+## [LevelBuilder] para que cada tier tenga su aspecto (ej.: restos metálicos en el espacio) sin
+## duplicar escenas. Alfa 0 = vuelve al color del tipo.
+func set_tint(color: Color) -> void:
+	_tint = color
+	if is_node_ready() and platform_type != PlatformType.PULSE:
+		_body.color = _tint if _tint.a > 0.0 else COLOR_BY_TYPE.get(platform_type, COLOR_BY_TYPE[PlatformType.STATIC])
 
 
 ## Vuelve al estado inicial: sólida (salvo LETHAL/PULSE en ON), sin romper, en el origen. Un
@@ -309,7 +320,7 @@ func _apply_type() -> void:
 	if platform_type == PlatformType.PULSE:
 		_apply_pulse_visual()
 	else:
-		_body.color = COLOR_BY_TYPE.get(platform_type, COLOR_BY_TYPE[PlatformType.STATIC])
+		_body.color = _tint if _tint.a > 0.0 else COLOR_BY_TYPE.get(platform_type, COLOR_BY_TYPE[PlatformType.STATIC])
 	if Engine.is_editor_hint():
 		return
 	_step_sensor.set_deferred("monitoring", platform_type == PlatformType.BREAKABLE)

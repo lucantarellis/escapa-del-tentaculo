@@ -1,36 +1,43 @@
 # Tier 2: el espacio
 
-**Archivos:** segmentos en `scenes/levels/segments/space/` (`SegmentSpace01`–`10` y las entradas `SegmentSpaceEntry01`–`03`); evento `scripts/levels/tier_event.gd` (`TierEvent`); config del fuego `resources/configs/tentacle_config_fire.tres`; tileset `resources/tilesets/walls_tileset_space.tres` (imagen `assets/sprites/environment/placeholders/walls_placeholder_space.png`). Todo se asigna al tier 2 en `resources/configs/level_config.tres`.
+**Archivos:** segmentos en `scenes/levels/segments/space/` (`SegmentSpace01`–`10` y las entradas `SegmentSpaceEntry01`–`03`) y salidas de la nave en `scenes/levels/segments/ship/` (`SegmentShipExit01`–`03`); scripts `scripts/levels/window_breach.gd` (`WindowBreach`), `tier_event.gd` (`TierEvent`), `hull_debris.gd` (`HullDebris`) y `level_background.gd` (`LevelBackground`); config del fuego `resources/configs/tentacle_config_fire.tres`; tileset de roca `resources/tilesets/walls_tileset_space.tres` (imagen `assets/sprites/environment/placeholders/walls_placeholder_space.png`). Todo se asigna en `resources/configs/level_config.tres`.
 
 ## Historia
 
-El jugador escapa de la nave al espacio y la nave explota detrás. Al entrar al tier se ve al alien huir hacia arriba a toda velocidad y, desde ahí, lo que persigue ya no es el tentáculo sino el **fuego** de la explosión.
+Al final de la nave, el alien rompe un ventanal del techo con un tentáculo. La descompresión arrastra al jugador afuera. Ya en el espacio, un instante después, la nave explota abajo: restos en llamas salen despedidos y el **fuego** de la explosión pasa a ser lo que persigue al jugador. El alien huye hacia arriba.
 
-## Qué cambia en este tier
+## Secuencia de la transición
 
-| Qué | Cómo | Dónde se ajusta |
+1. **Salida de la nave (`SegmentShipExitNN`, último segmento del tier 1, `exit_segments`).** Arriba hay un techo de lado a lado con un hueco central (x 144–216) cerrado por un **vidrio** (`WindowBreach`, en y −582). Bajo el hueco queda un pasillo libre (x 132–228, y −300 a −564). Cuando el jugador llega a `trigger_distance` (260 px) bajo el vidrio, un tentáculo violeta lo rompe desde afuera (sacudida 14 px / 0,6 s y vidrios) y empieza la **descompresión**: el aire lo arrastra hacia el hueco (`pull_acceleration` 1500 px/s², hasta `pull_max_speed` 560 px/s, dentro de `pull_radius` 480 px, como mucho `pull_duration` 3 s). El jugador no pierde el control. Medido sin tocar nada: sale por el hueco en ~0,7 s y su impulso lo lleva más de 300 px dentro del espacio.
+2. **Entrada al espacio (`SegmentSpaceEntryNN`, `entry_segments` del tier 2).** Al cruzar su borde, `LevelController` cambia el fondo (negro con estrellas), la física y el perseguidor, que aparece recién `pursuer_delay` (1,5 s) después. Toda la entrada tiene un **pasillo libre (x 110–250)** de punta a punta: solo asteroides a los costados.
+3. **La explosión (`TierEvent`, en y −260 de la entrada).** Al cruzarlo, tras `explosion_delay` (0,5 s): cámara lenta (0,25 durante 0,35 s), destello, anillo de fuego y llamas desde la nave abajo (`explosion_offset` (180, 360): debajo de la pantalla), un empujón (`eject_speed` 220 px/s), sacudida, **restos letales** (`HullDebris`: 9 fragmentos que salen desde abajo hacia arriba en direcciones al azar entre −165° y −15°, nunca a menos de 70 px del jugador y sin matar los primeros 0,25 s; causa `&"debris"`) y la silueta del alien huyendo.
+
+Cada parte se ajusta con los `@export` de `WindowBreach` y de `TierEvent` en cada segmento (inspector).
+
+## Qué hay en el espacio
+
+| Elemento | Qué es | Cómo está hecho |
 |---|---|---|
-| Física | Gravedad casi nula y mucha inercia: `gravity_scale` 0,16 (≈ 40 px/s² con la gravedad actual de 250) y `air_drag_scale` 0,22 (≈ 20 px/s² de frenado en el aire, contra 90). Frenar también cuesta combustible | `level_config.tres` → Tiers → tier 2 → Jugador |
-| Perseguidor | El fuego: arranca 150 px bajo la pantalla (`visible_height` −150) a 60 px/s, acelera 25 px/s² hasta 240 px/s. Color naranja rojizo `#FF5A28` | `tentacle_config_fire.tres` y `pursuer_color` del tier 2 |
-| Paredes | Restos del casco: pocas, chicas y casi siempre flotando, en gris metálico | `walls_tileset_space.tres` (mismas coordenadas de atlas que el tileset de la nave) |
-| Peligros | Escombros que se mueven (`moves`), metralla que sube desde abajo (`PROJECTILE` disparado al entrar en cámara, recorrido (0, −600), desaparece al final), metralla que rebota (`BOUNCE`), compuertas de fuego (`PULSE`) | Cada segmento |
+| Superficies | **Asteroides** de roca donde parar y recargar | Paredes (tiles) flotando, tileset de roca `#7A6A5A` |
+| Restos a la deriva | Chapas de la nave que se mueven despacio y se pueden pisar | `Platform` STATIC con `moves`, teñidas de gris metálico (`platform_tint` del tier) |
+| Restos en llamas | Cruzan la pantalla; tocarlos mata | `Platform` LETHAL con `moves`, teñidas de naranja (`hazard_tint`) |
+| Meteoritos | Suben desde abajo o rebotan | `Platform` PROJECTILE (fin `DESTROY` o `BOUNCE`) |
+| Tanques | Cápsulas de la nave flotando sobre los asteroides | `FuelTank` |
 
-Todos los valores son de prueba: el "se siente bien" de la física y del fuego es de LT.
+PULSE, TIMED y BREAKABLE no aparecen en el espacio (son mecanismos de la nave).
 
-## Transición (entrada del tier)
+## Física y perseguidor
 
-Cada `SegmentSpaceEntryNN` empieza con el **casco exterior de la nave**: una franja de pared de lado a lado (y −36 a −72, con el tileset de la nave: las entradas conservan sus paredes) con una abertura en el centro (x ≈ 144–216) por donde sale el jugador. Justo encima (y −84) está el nodo **`TierEvent`** (en el editor, una línea naranja). Cuando el jugador lo cruza subiendo:
+| Qué | Valor | Dónde |
+|---|---|---|
+| Gravedad | `gravity_scale` 0,16 (≈ 40 px/s²) | Tier 2 → Jugador |
+| Frenado en el aire | `air_drag_scale` 0,22 (≈ 20 px/s²): mucha inercia | Tier 2 → Jugador |
+| Fuego | Arranca 150 px bajo la pantalla a 60 px/s, acelera 25 px/s² hasta 240 px/s; aparece 1,5 s después de entrar | `tentacle_config_fire.tres`, `pursuer_delay` |
 
-1. **Cámara lenta** un instante (`slow_motion_scale` 0,25 durante `slow_motion_duration` 0,35 s reales) y **destello** (`flash_alpha` 0,8, `flash_duration` 0,5 s).
-2. **Explosión** desde el casco (`explosion_offset`): anillo naranja que se expande hasta `explosion_radius` 560 px en `explosion_duration` 0,8 s y `fire_particles` 70 partículas de fuego hacia arriba.
-3. **Eyección:** el jugador recibe `eject_speed` 450 px/s hacia arriba y `eject_control_lock` 0,3 s sin control.
-4. **Restos del casco letales** (`HullDebris`, `scripts/levels/hull_debris.gd`): `debris_count` 9 fragmentos rojos que aparecen a lo largo del casco (nunca a menos de `debris_min_player_distance` 70 px del jugador) y salen girando en direcciones al azar a 110–260 px/s. Durante `debris_grace_time` 0,25 s no matan; después, tocarlos mata con la causa `&"debris"`. Se borran al salir de la vista.
-5. **Sacudida** fuerte (`shake_amplitude` 28 px, `shake_duration` 1,2 s) y la **silueta del alien** (escala 2, 0,8 s) huyendo hacia arriba por el fondo.
-
-Al cruzar el borde del tier (el borde inferior de la entrada), `LevelController` cambia el **fondo** (del interior azul oscuro de la nave al negro del espacio con estrellas, fundido de 0,4 s; ver `LevelBackground`, `scripts/levels/level_background.gd`), el perseguidor (el fuego) y la física. Todos los valores del evento son `@export` del nodo `TierEvent` (inspector, por instancia); cada parte se apaga con su valor en 0 o su casilla. `TierEvent` sirve para cualquier tier.
+Todos los valores son de prueba: el "se siente bien" es de LT.
 
 ## Cómo probarlo
 
-1. F5 → JUGAR y subir hasta pasar los 5 segmentos de la nave: al entrar al espacio hay sacudida, destello y la silueta sube; el perseguidor pasa a ser naranja y el jugador flota.
+1. F5 → JUGAR y subir hasta la salida de la nave: el alien rompe el ventanal, la descompresión te saca, la nave explota abajo, aparecen los restos y, un poco después, el fuego.
 2. Abrir un `SegmentSpaceNN` y ejecutarlo con F6 para verlo aislado (con la física normal: la del espacio se aplica solo dentro del nivel).
 3. Ajustar `gravity_scale` / `air_drag_scale` del tier 2 y `tentacle_config_fire.tres` hasta que se sienta bien.

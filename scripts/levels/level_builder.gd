@@ -3,7 +3,7 @@ extends Node2D
 ## Arma un nivel apilando segmentos ([LevelSegment]) hacia arriba: inicio (sorteado entre
 ## `LevelConfig.start_segments`), segmentos intermedios elegidos al azar y final (sorteado entre
 ## `LevelConfig.end_segments`). Recorre `LevelConfig.tiers` en orden (cada uno aporta
-## su segmento de entrada, si tiene, y `count_per_run` segmentos).
+## su segmento de entrada, `count_per_run` segmentos y su segmento de salida, si los tiene).
 ##
 ## Usa un [RandomNumberGenerator] propio con la seed (nunca el azar global), así la misma seed
 ## da siempre el mismo nivel. Los segmentos se agregan como hijos de este nodo, que debe estar
@@ -86,7 +86,8 @@ func build(seed_override: int = 0) -> int:
 		if entry_index >= 0:
 			var entry: LevelSegment = _place(tier.entry_segments[entry_index], bottom_y)
 			if entry != null:
-				# La entrada conserva sus paredes (ej.: el casco de la nave al salir al espacio).
+				# La entrada conserva sus paredes (ej.: asteroides propios de la transición).
+				_apply_tier_tints(entry, tier)
 				bottom_y -= entry.height
 		for index: int in _draw_tier(tier):
 			_sequence.append(index)
@@ -94,7 +95,15 @@ func build(seed_override: int = 0) -> int:
 			var tier_segment: LevelSegment = _place(tier.segments[index], bottom_y)
 			if tier_segment != null:
 				_apply_tier_tileset(tier_segment, tier)
+				_apply_tier_tints(tier_segment, tier)
 				bottom_y -= tier_segment.height
+		var exit_index: int = _pick_from(tier.exit_segments)
+		if exit_index >= 0:
+			var exit: LevelSegment = _place(tier.exit_segments[exit_index], bottom_y)
+			if exit != null:
+				_apply_tier_tileset(exit, tier)
+				_apply_tier_tints(exit, tier)
+				bottom_y -= exit.height
 
 	_end_index = _pick_from(config.end_segments)
 	var end: LevelSegment = null
@@ -275,3 +284,17 @@ func _apply_tier_tileset(segment: LevelSegment, tier: SegmentTier) -> void:
 	for child: Node in segment.get_children():
 		if child is TileMapLayer:
 			(child as TileMapLayer).tile_set = tier.walls_tileset
+
+
+# Aplica los colores del tier a las plataformas del segmento (sólidas y letales por separado).
+func _apply_tier_tints(segment: LevelSegment, tier: SegmentTier) -> void:
+	if tier.platform_tint.a <= 0.0 and tier.hazard_tint.a <= 0.0:
+		return
+	for child: Node in segment.get_children():
+		var platform: Platform = child as Platform
+		if platform == null:
+			continue
+		var lethal: bool = platform.platform_type == Platform.PlatformType.LETHAL or platform.platform_type == Platform.PlatformType.PROJECTILE
+		var tint: Color = tier.hazard_tint if lethal else tier.platform_tint
+		if tint.a > 0.0:
+			platform.set_tint(tint)

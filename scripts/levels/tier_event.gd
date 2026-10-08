@@ -32,6 +32,9 @@ const EDITOR_LINE_COLOR: Color = Color(1.0, 0.42, 0.2, 0.8)
 @export_group("Explosión")
 ## Si es true, un anillo de fuego se expande desde abajo (desde el centro de `explosion_offset`).
 @export var explosion_enabled: bool = true
+## Espera desde que el jugador cruza este nodo hasta la explosión (y todo lo que la acompaña:
+## cámara lenta, destello, empuje, restos). Unidad: s.
+@export var explosion_delay: float = 0.0
 ## Origen de la explosión respecto de este nodo (por defecto, el centro del casco). Unidad: px.
 @export var explosion_offset: Vector2 = Vector2(180.0, 40.0)
 ## Color del anillo y del fuego.
@@ -61,6 +64,11 @@ const EDITOR_LINE_COLOR: Color = Color(1.0, 0.42, 0.2, 0.8)
 @export var debris_min_player_distance: float = 70.0
 ## Tiempo inicial en que un fragmento todavía no mata. Unidad: s.
 @export var debris_grace_time: float = 0.25
+## Rango de ángulos de salida de los fragmentos (0° = derecha, −90° = arriba). Unidad: grados.
+@export var debris_angle_min: float = -165.0
+@export var debris_angle_max: float = -15.0
+## Ancho de la zona (centrada en el origen de la explosión) donde aparecen. Unidad: px.
+@export var debris_spawn_width: float = 340.0
 
 @export_group("Destello")
 ## Color del destello que cubre la pantalla.
@@ -110,6 +118,10 @@ func fire(player: Player = null) -> void:
 		return
 	_fired = true
 	set_physics_process(false)
+	if explosion_delay > 0.0:
+		await get_tree().create_timer(explosion_delay).timeout
+		if not is_inside_tree():
+			return
 	var camera: ScrollCamera = get_viewport().get_camera_2d() as ScrollCamera
 	if camera != null:
 		camera.shake(shake_amplitude, shake_duration)
@@ -186,8 +198,8 @@ func _play_explosion() -> void:
 		get_tree().create_timer(2.0).timeout.connect(fire.queue_free)
 
 
-# Fragmentos letales del casco: aparecen a lo largo del casco, lejos del jugador, y salen en
-# direcciones al azar.
+# Fragmentos letales del casco: aparecen alrededor del origen de la explosión, lejos del jugador,
+# y salen en direcciones al azar dentro de `debris_angle_min`..`debris_angle_max`.
 func _spawn_debris(player: Player) -> void:
 	if debris_count <= 0:
 		return
@@ -196,11 +208,11 @@ func _spawn_debris(player: Player) -> void:
 	var tries: int = 0
 	while spawned < debris_count and tries < debris_count * 10:
 		tries += 1
-		var x: float = randf_range(origin.x - 170.0, origin.x + 170.0)
+		var x: float = randf_range(origin.x - debris_spawn_width * 0.5, origin.x + debris_spawn_width * 0.5)
 		if player != null and absf(x - player.global_position.x) < debris_min_player_distance:
 			continue
 		var debris: HullDebris = HullDebris.new()
-		var angle: float = randf_range(0.0, TAU)
+		var angle: float = deg_to_rad(randf_range(debris_angle_min, debris_angle_max))
 		debris.velocity = Vector2(cos(angle), sin(angle)) * randf_range(debris_speed_min, debris_speed_max)
 		debris.spin = randf_range(-6.0, 6.0)
 		debris.size = debris_size

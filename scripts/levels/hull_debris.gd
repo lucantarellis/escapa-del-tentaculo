@@ -48,7 +48,8 @@ func _physics_process(delta: float) -> void:
 	if _age >= grace_time:
 		for body: Node2D in get_overlapping_bodies():
 			_on_body_entered(body)
-	if _age > lifetime or _is_far_off_screen():
+	# Pueden nacer fuera de la vista (bajo la pantalla): se borran recién tras 1,5 s afuera.
+	if _age > lifetime or (_age > 1.5 and _is_far_off_screen()):
 		queue_free()
 
 

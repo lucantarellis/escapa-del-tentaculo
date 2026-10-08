@@ -22,6 +22,15 @@ extends Resource
 ## Segmentos de entrada (transición) del tier: se sortea uno por partida y va antes de los
 ## segmentos del tier (ej.: la nave explota, la extremidad del alien). Vacío = sin transición.
 @export var entry_segments: Array[PackedScene] = []
+## Segmentos de salida del tier: se sortea uno por partida y va después de los segmentos del tier
+## (ej.: el ventanal que rompe el alien al final de la nave). Vacío = sin salida.
+@export var exit_segments: Array[PackedScene] = []
+## Color de las plataformas sólidas del tier (STATIC, ONE_WAY, BREAKABLE, TIMED). Alfa 0 = el
+## color de cada tipo. Ej.: restos metálicos grises en el espacio.
+@export var platform_tint: Color = Color(0.0, 0.0, 0.0, 0.0)
+## Color de lo letal del tier (LETHAL, PROJECTILE). Alfa 0 = rojo. Debe seguir leyéndose como
+## peligro (rojo o naranja).
+@export var hazard_tint: Color = Color(0.0, 0.0, 0.0, 0.0)
 ## TileSet de las paredes de los segmentos de este tier (metal, chatarra, carne). Vacío = el de
 ## cada segmento. No se aplica a los segmentos de entrada: conservan el suyo (por ejemplo, el
 ## casco de la nave en la entrada del espacio). Debe respetar las coordenadas de atlas de `walls_tileset.tres` (tile sólido en
@@ -46,6 +55,9 @@ extends Resource
 ## (otro perseguidor que recién aparece). Si es false, sigue desde donde estaba. Solo con
 ## `pursuer_config`.
 @export var pursuer_reset_position: bool = true
+## Segundos que tarda en aparecer el perseguidor del tier al entrar (ej.: el fuego llega después
+## de la explosión). Mientras tanto no hay perseguidor, pero caer bajo la pantalla igual mata.
+@export var pursuer_delay: float = 0.0
 
 @export_group("Jugador")
 ## Multiplica la gravedad del jugador en este tier (ej.: 0,16 en el espacio). 1 = la de
