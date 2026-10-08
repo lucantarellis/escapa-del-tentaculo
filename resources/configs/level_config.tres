@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dbdoqvh8sch15" path="res://scripts/levels/level_config.gd" id="1_cfg"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentStart.tscn" id="2_start"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentEnd.tscn" id="3_end"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment01.tscn" id="4_seg"]
+[ext_resource type="PackedScene" uid="uid://lbossgjwtsey" path="res://scenes/levels/segments/Segment01.tscn" id="4_seg"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment02.tscn" id="5_seg"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment03.tscn" id="6_seg"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment04.tscn" id="7_seg"]
@@ -24,6 +24,17 @@
 [ext_resource type="PackedScene" uid="uid://b0vg1xr7m352g" path="res://scenes/levels/segments/Segment18.tscn" id="20_km1sb"]
 [ext_resource type="PackedScene" uid="uid://coclxd7tgsw60" path="res://scenes/levels/segments/Segment20.tscn" id="22_58vi7"]
 [ext_resource type="PackedScene" uid="uid://0sutmev6yb84" path="res://scenes/levels/segments/Segment21.tscn" id="23_58vi7"]
+[ext_resource type="Script" uid="uid://b8hobj738gq54" path="res://scripts/levels/segment_tier.gd" id="24_tier"]
+
+[sub_resource type="Resource" id="Resource_tier1"]
+script = ExtResource("24_tier")
+segments = Array[PackedScene]([ExtResource("4_seg"), ExtResource("5_seg"), ExtResource("6_seg"), ExtResource("7_seg"), ExtResource("8_seg"), ExtResource("9_seg"), ExtResource("10_seg"), ExtResource("11_seg"), ExtResource("12_seg"), ExtResource("13_seg"), ExtResource("14_seg"), ExtResource("15_seg"), ExtResource("16_seg"), ExtResource("17_seg"), ExtResource("18_seg"), ExtResource("19_seg"), ExtResource("19_ewu3o"), ExtResource("20_km1sb"), ExtResource("20_7kxs2"), ExtResource("22_58vi7"), ExtResource("23_58vi7")])
+
+[sub_resource type="Resource" id="Resource_tier2"]
+script = ExtResource("24_tier")
+
+[sub_resource type="Resource" id="Resource_tier3"]
+script = ExtResource("24_tier")
 
 [resource]
 script = ExtResource("1_cfg")
@@ -31,3 +42,4 @@ avoid_repeat_window = 3
 start_segment = ExtResource("2_start")
 end_segment = ExtResource("3_end")
 segment_pool = Array[PackedScene]([ExtResource("4_seg"), ExtResource("5_seg"), ExtResource("6_seg"), ExtResource("7_seg"), ExtResource("8_seg"), ExtResource("9_seg"), ExtResource("10_seg"), ExtResource("11_seg"), ExtResource("12_seg"), ExtResource("13_seg"), ExtResource("14_seg"), ExtResource("15_seg"), ExtResource("16_seg"), ExtResource("17_seg"), ExtResource("18_seg"), ExtResource("19_seg"), ExtResource("19_ewu3o"), ExtResource("20_km1sb"), ExtResource("20_7kxs2"), ExtResource("22_58vi7"), ExtResource("23_58vi7")])
+tiers = Array[ExtResource("24_tier")]([SubResource("Resource_tier1"), SubResource("Resource_tier2"), SubResource("Resource_tier3")])
