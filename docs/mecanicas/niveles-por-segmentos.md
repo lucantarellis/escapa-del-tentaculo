@@ -83,6 +83,15 @@ Los inicios tienen tres tanques (por su altura) y los finales uno.
 | Segmentos | `tiers` | 3 tiers (el 1 con los 21 segmentos, el 2 y el 3 vacíos) | — | Lista de [SegmentTier], en el orden en que se recorren de abajo hacia arriba |
 | Tier (`SegmentTier`) | `segments` | — | — | Escenas candidatas del tier |
 | Tier (`SegmentTier`) | `count_per_run` | 10 | segmentos | Cuántos segmentos de este tier se usan por partida |
+| Tier → Escenario | `display_name` | "La nave" / "El espacio" / "Dentro del alien" | — | Nombre del tier (depuración y docs) |
+| Tier → Escenario | `entry_segments` | vacío | — | Segmentos de entrada (transición): se sortea uno y va antes de los segmentos del tier. Vacío = sin transición |
+| Tier → Escenario | `walls_tileset` | vacío | — | TileSet de las paredes del tier (mismas coordenadas de atlas que `walls_tileset.tres`). Vacío = el de cada segmento |
+| Tier → Perseguidor | `pursuer_config` | vacío | — | `TentacleConfig` del perseguidor del tier (tentáculo, fuego, ácido). Vacío = sigue el anterior |
+| Tier → Perseguidor | `pursuer_color` | rojo `#D83232` | — | Color placeholder del perseguidor (solo con `pursuer_config`) |
+| Tier → Perseguidor | `pursuer_reset_position` | true | — | Al entrar al tier, el perseguidor vuelve a su distancia inicial (uno nuevo que aparece) |
+| Tier → Jugador | `player_config` | vacío | — | `PlayerConfig` del tier (ej.: gravedad del espacio). Vacío = sigue la anterior; el combustible se conserva |
+
+**Cambio de tier en la partida.** `LevelBuilder.get_tier_starts()` da la Y donde empieza cada tier. `LevelController` vigila al jugador y, al cruzar subiendo el borde de un tier, le aplica su escenario: `Tentacle.apply_pursuer(config, color, reset)` y `Player.apply_config(config)`, y emite `tier_entered(tier_index)` (`get_current_tier()` da el tier actual; -1 en el inicio). El tileset de paredes lo pone el `LevelBuilder` al armar. El HUD marca el inicio de cada tier en la línea de progreso.
 
 Los valores son de prueba: el balance se hace con el MVP completo.
 
@@ -100,6 +109,7 @@ Nodo `Node2D` (debe estar en el origen (0, 0)) con `@export var config: LevelCon
 | `get_segment_count() -> int` | Segmentos intermedios armados |
 | `get_seed() -> int`, `get_sequence() -> PackedInt32Array`, `get_segments() -> Array[LevelSegment]`, `get_goal_door() -> Door` | Consultas (índices elegidos, segmentos de abajo hacia arriba, puerta del final). Con tiers, `get_sequence()` da el índice dentro de la lista de su tier |
 | `get_start_index() -> int`, `get_end_index() -> int` | Índice del inicio y del final elegidos en `start_segments` / `end_segments` (-1 sin nivel). La misma seed repite los mismos |
+| `get_tier_starts() -> Array[Dictionary]` | Inicio de cada tier armado, de abajo hacia arriba: `{tier, y}` (índice en `tiers` e Y global del borde inferior de su primer segmento, entrada incluida). Los tiers salteados no aparecen |
 | `get_tier_sequence() -> PackedInt32Array` | Con tiers: el tier (0 = tier 1) de cada segmento intermedio, en el mismo orden que `get_sequence()`. Vacío en modo plano |
 | señal `level_built(level_seed)` | Al terminar de armar el nivel |
 

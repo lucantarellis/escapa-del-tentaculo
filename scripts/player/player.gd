@@ -264,6 +264,17 @@ func is_frozen() -> bool:
 	return _frozen
 
 
+## Cambia la config del jugador en plena partida (al entrar a un tier, ver [SegmentTier]). El
+## combustible actual se conserva, recortado al máximo de la config nueva.
+func apply_config(new_config: PlayerConfig) -> void:
+	if new_config == null:
+		return
+	config = new_config
+	_fuel = clampf(_fuel, 0.0, config.max_fuel)
+	_was_empty = is_fuel_empty()
+	fuel_changed.emit(_fuel, config.max_fuel)
+
+
 ## Deja al jugador vivo en [param spawn_position] (coordenadas globales), quieto y con
 ## el combustible inicial.
 func reset(spawn_position: Vector2) -> void:

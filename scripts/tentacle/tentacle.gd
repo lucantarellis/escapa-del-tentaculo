@@ -94,6 +94,25 @@ func _process(delta: float) -> void:
 	_update_body_polygon()
 
 
+## Cambia el perseguidor al entrar a un tier (ver [SegmentTier]): nueva [param new_config] y
+## color placeholder [param color]. Con [param reset_position] vuelve a su distancia inicial bajo
+## la pantalla, como un perseguidor que recién aparece; si no, sigue desde donde estaba (con la
+## velocidad de ascenso inicial de la config nueva).
+func apply_pursuer(new_config: TentacleConfig, color: Color, reset_position: bool) -> void:
+	if new_config == null:
+		return
+	config = new_config
+	_body.color = color
+	if reset_position and camera != null:
+		_reset_free_rise()
+	else:
+		_rise_speed = config.rise_speed
+	if camera != null and _active:
+		_follow_camera()
+		_update_kill_zone()
+		_update_body_polygon()
+
+
 ## Activa o congela el ascenso (`extra_rise_speed` y `end_rise_speed`). El nivel lo congela al
 ## terminar la partida (victoria o derrota). El tentáculo sigue anclado a la cámara.
 func set_rising(enabled: bool) -> void:

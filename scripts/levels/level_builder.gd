@@ -38,6 +38,9 @@ var _camera_stop_local_y: float = 0.0
 var _door: Door
 ## Índice del inicio y del final elegidos en `start_segments` / `end_segments` (-1 sin armar).
 var _start_index: int = -1
+## Inicio de cada tier armado: {tier = índice en `config.tiers`, y = Y local del borde inferior
+## de su primer segmento (entrada incluida)}. En orden de abajo hacia arriba.
+var _tier_starts: Array[Dictionary] = []
 var _end_index: int = -1
 
 
@@ -77,11 +80,19 @@ func build(seed_override: int = 0) -> int:
 			if tier == null or tier.segments.is_empty():
 				push_warning("LevelBuilder: el tier %d no tiene segmentos: se saltea." % (tier_index + 1))
 				continue
+			_tier_starts.append({"tier": tier_index, "y": bottom_y})
+			var entry_index: int = _pick_from(tier.entry_segments)
+			if entry_index >= 0:
+				var entry: LevelSegment = _place(tier.entry_segments[entry_index], bottom_y)
+				if entry != null:
+					_apply_tier_tileset(entry, tier)
+					bottom_y -= entry.height
 			for index: int in _draw_tier(tier):
 				_sequence.append(index)
 				_tier_sequence.append(tier_index)
 				var tier_segment: LevelSegment = _place(tier.segments[index], bottom_y)
 				if tier_segment != null:
+					_apply_tier_tileset(tier_segment, tier)
 					bottom_y -= tier_segment.height
 	elif config.segment_pool.is_empty():
 		push_error("LevelBuilder: `segment_pool` está vacío.")
@@ -120,6 +131,7 @@ func clear() -> void:
 	_tier_sequence.clear()
 	_start_index = -1
 	_end_index = -1
+	_tier_starts.clear()
 	_door = null
 	_spawn_local = Vector2.ZERO
 	_hatch_local = Vector2.ZERO
@@ -150,6 +162,16 @@ func get_segment_count() -> int:
 
 
 ## Devuelve la seed del último nivel armado.
+## Devuelve dónde empieza cada tier armado, de abajo hacia arriba: una lista de
+## {tier = índice en `LevelConfig.tiers`, y = Y global del borde inferior de su primer segmento}.
+## Los tiers vacíos (salteados) no aparecen. Vacía en modo plano.
+func get_tier_starts() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for entry: Dictionary in _tier_starts:
+		result.append({"tier": entry["tier"], "y": to_global(Vector2(0.0, entry["y"])).y})
+	return result
+
+
 ## Devuelve el índice en `LevelConfig.start_segments` del inicio elegido (-1 si no hay nivel).
 func get_start_index() -> int:
 	return _start_index
@@ -277,3 +299,12 @@ func _pick_from(scenes: Array[PackedScene]) -> int:
 	if scenes.is_empty():
 		return -1
 	return _rng.randi_range(0, scenes.size() - 1)
+
+
+# Si el tier define un tileset de paredes, se lo pone a las capas de paredes del segmento.
+func _apply_tier_tileset(segment: LevelSegment, tier: SegmentTier) -> void:
+	if tier.walls_tileset == null:
+		return
+	for child: Node in segment.get_children():
+		if child is TileMapLayer:
+			(child as TileMapLayer).tile_set = tier.walls_tileset

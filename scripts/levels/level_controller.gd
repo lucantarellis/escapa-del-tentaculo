@@ -13,6 +13,13 @@ extends Node2D
 ## de cámara con gas antes de empezar) o a [method begin] (empezar directo). Ver
 ## `docs/mecanicas/intro-escotilla.md`.
 
+## Se emite cuando el jugador cruza el borde inferior de un tier (ver [SegmentTier]).
+## [param tier_index] es el índice en `LevelConfig.tiers`.
+signal tier_entered(tier_index: int)
+
+## Texto que se agrega al mensaje de fin cuando la partida supera el récord. Solo visual.
+const NEW_RECORD_TEXT: String = "NUEVO RÉCORD"
+
 ## Texto de derrota por causa de muerte. Solo visual. Las causas no listadas usan
 ## [constant DEFAULT_DEATH_TEXT].
 const DEATH_TEXTS: Dictionary = {
@@ -46,6 +53,10 @@ var _run_seed: int = 0
 var _started: bool = false
 var _intro_started: bool = false
 var _intro_director: IntroDirector
+## Inicio de cada tier (de [method LevelBuilder.get_tier_starts]) y el próximo a cruzar.
+var _tier_starts: Array[Dictionary] = []
+var _next_tier: int = 0
+var _current_tier: int = -1
 
 
 func _ready() -> void:
@@ -67,6 +78,14 @@ func _ready() -> void:
 	if _hud != null and door != null:
 		# El progreso va de la Y del jugador en el spawn a la Y de la puerta.
 		_hud.set_progress_range(_player.global_position.y, door.global_position.y)
+	if _builder != null:
+		_tier_starts = _builder.get_tier_starts()
+	if _hud != null:
+		var ys: PackedFloat32Array = PackedFloat32Array()
+		for entry: Dictionary in _tier_starts:
+			ys.append(entry["y"])
+		_hud.set_tier_marks(ys)
+		_hud.set_record(RunRecords.get_best_progress())
 	GameManager.state_changed.connect(_on_state_changed)
 	_run_seed = run_seed
 	if _hatch != null:
@@ -139,6 +158,34 @@ func _on_intro_broken() -> void:
 	_begin(false)
 
 
+func _physics_process(_delta: float) -> void:
+	if not _started or GameManager.get_state() != GameManager.State.PLAYING:
+		return
+	# El jugador entra a un tier al cruzar (subiendo) el borde inferior de su primer segmento.
+	while _next_tier < _tier_starts.size() and _player.global_position.y <= float(_tier_starts[_next_tier]["y"]):
+		_enter_tier(int(_tier_starts[_next_tier]["tier"]))
+		_next_tier += 1
+
+
+## Devuelve el índice (en `LevelConfig.tiers`) del tier en el que está el jugador; -1 si todavía
+## no entró a ninguno (segmento de inicio) o no hay tiers.
+func get_current_tier() -> int:
+	return _current_tier
+
+
+# Aplica el escenario del tier: perseguidor y física del jugador. El tileset de paredes ya lo
+# puso el LevelBuilder al armar.
+func _enter_tier(tier_index: int) -> void:
+	_current_tier = tier_index
+	var tier: SegmentTier = _builder.config.tiers[tier_index] if _builder != null else null
+	if tier != null:
+		if tier.pursuer_config != null:
+			_tentacle.apply_pursuer(tier.pursuer_config, tier.pursuer_color, tier.pursuer_reset_position)
+		if tier.player_config != null:
+			_player.apply_config(tier.player_config)
+	tier_entered.emit(tier_index)
+
+
 
 func _exit_tree() -> void:
 	# El autoload sobrevive a la escena: hay que soltar la conexión al descargarla.
@@ -152,13 +199,26 @@ func _on_state_changed(new_state: GameManager.State, _old_state: GameManager.Sta
 			_player.win()
 			_camera.set_scrolling(false)
 			_tentacle.set_rising(false)
-			_show_message(WIN_TEXT)
+			_show_message(WIN_TEXT + _record_suffix(1.0))
 		GameManager.State.LOST:
 			_camera.set_scrolling(false)
 			_tentacle.set_rising(false)
-			_show_message(DEATH_TEXTS.get(GameManager.get_last_death_cause(), DEFAULT_DEATH_TEXT))
+			var progress: float = _hud.get_progress() if _hud != null else 0.0
+			_show_message(DEATH_TEXTS.get(GameManager.get_last_death_cause(), DEFAULT_DEATH_TEXT) + _record_suffix(progress))
 
 
 func _show_message(text: String) -> void:
 	_message_label.text = text
 	_message_label.visible = true
+
+
+# Registra el progreso de la partida en los récords y devuelve el texto a agregar al mensaje de fin
+# ("" si no es récord). Solo en el nivel armado por segmentos (no en el sandbox).
+func _record_suffix(progress: float) -> String:
+	if _builder == null:
+		return ""
+	if RunRecords.submit_progress(progress):
+		if _hud != null:
+			_hud.set_record(progress)
+		return "\n" + NEW_RECORD_TEXT
+	return ""

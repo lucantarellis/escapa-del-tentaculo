@@ -40,6 +40,13 @@ progreso = clamp((start_y − player.global_position.y) / (start_y − end_y), 0
 | `get_tentacle_progress() -> float` | Altura del tentáculo en la línea de progreso, 0..1 |
 | `get_fuel_ratio() -> float` | Proporción de combustible mostrada 0..1 |
 | `get_fuel_color() -> Color` | Color actual de la barra de combustible |
+| `set_record(progress)` | Muestra la marca del récord (0..1; 0 = sin récord) |
+| `set_tier_marks(ys)` | Marcas cortas donde empieza cada tier (Y globales de `LevelBuilder.get_tier_starts()`) |
+
+## Récord y marcas de tier
+
+- **Récord:** una marca fina y más ancha que el marcador, blanco azulado tenue, en el mejor progreso guardado. Lo guarda `RunRecords` (`scripts/managers/run_records.gd`) en `user://records.cfg` al terminar cada partida del nivel por segmentos (el sandbox no cuenta). Si la partida lo supera, el mensaje de fin agrega "NUEVO RÉCORD" y la marca se mueve. Como todo segmento mide 640 px, el progreso de partidas distintas es comparable. `RunRecords.clear()` lo borra (pruebas).
+- **Tiers:** una marca corta y tenue en la Y donde empieza cada tier.
 
 ## Cómo probarlo
 
