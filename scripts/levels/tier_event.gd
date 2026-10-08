@@ -35,6 +35,11 @@ const EDITOR_LINE_COLOR: Color = Color(1.0, 0.42, 0.2, 0.8)
 ## Espera desde que el jugador cruza este nodo hasta la explosión (y todo lo que la acompaña:
 ## cámara lenta, destello, empuje, restos). Unidad: s.
 @export var explosion_delay: float = 0.0
+## Cantidad de explosiones en cadena. La primera trae cámara lenta, destello, empuje y la
+## silueta; las siguientes, desde el borde inferior de la pantalla, solo sacudida, anillo y restos.
+@export var explosion_waves: int = 3
+## Tiempo entre una explosión y la siguiente. Unidad: s.
+@export var explosion_wave_interval: float = 2.2
 ## Origen de la explosión respecto de este nodo (por defecto, el centro del casco). Unidad: px.
 @export var explosion_offset: Vector2 = Vector2(180.0, 40.0)
 ## Color del anillo y del fuego.
@@ -53,20 +58,19 @@ const EDITOR_LINE_COLOR: Color = Color(1.0, 0.42, 0.2, 0.8)
 @export var eject_control_lock: float = 0.3
 
 @export_group("Restos del casco")
-## Fragmentos letales por oleada (0 = sin restos).
-@export var debris_count: int = 7
-## Cantidad de oleadas y tiempo entre una y otra. Unidad: s.
-@export var debris_waves: int = 3
-@export var debris_wave_interval: float = 0.7
+## Fragmentos letales por explosión (0 = sin restos).
+@export var debris_count: int = 8
 ## Velocidad mínima y máxima de los fragmentos. Unidad: px/s.
 @export var debris_speed_min: float = 220.0
 @export var debris_speed_max: float = 380.0
 ## Tamaño de los fragmentos. Unidad: px.
 @export var debris_size: float = 18.0
-## Si es true, los fragmentos apuntan hacia el jugador (con `debris_aim_spread` de desvío al
-## azar); si no, salen hacia arriba en direcciones al azar. Unidad del desvío: grados.
+## Si es true, los fragmentos apuntan hacia adelante del jugador: a donde va a estar dentro de
+## `debris_lead` s según su velocidad (con `debris_aim_spread` de desvío al azar); si no, salen
+## hacia arriba en direcciones al azar. Unidades: s y grados.
 @export var debris_aim_at_player: bool = true
-@export var debris_aim_spread: float = 35.0
+@export var debris_lead: float = 0.5
+@export var debris_aim_spread: float = 30.0
 ## Distancia horizontal mínima al jugador donde puede aparecer un fragmento. Unidad: px.
 @export var debris_min_player_distance: float = 60.0
 ## Tiempo inicial en que un fragmento todavía no mata. Unidad: s.
@@ -124,19 +128,36 @@ func fire(player: Player = null) -> void:
 		await get_tree().create_timer(explosion_delay).timeout
 		if not is_inside_tree():
 			return
+	for wave: int in maxi(explosion_waves, 1):
+		if wave > 0:
+			await get_tree().create_timer(explosion_wave_interval).timeout
+			if not is_inside_tree():
+				return
+		_explode(player, wave == 0)
+		if wave == 0:
+			triggered.emit()
+
+
+# Una explosión de la cadena. La primera sale de `explosion_offset` (la nave) con todo el
+# espectáculo; las siguientes, desde debajo de la pantalla.
+func _explode(player: Player, first: bool) -> void:
 	var camera: ScrollCamera = get_viewport().get_camera_2d() as ScrollCamera
 	if camera != null:
-		camera.shake(shake_amplitude, shake_duration)
-	_play_slow_motion()
-	_play_flash()
+		camera.shake(shake_amplitude if first else shake_amplitude * 0.6, shake_duration if first else shake_duration * 0.7)
+	var origin: Vector2 = global_position + explosion_offset
+	if not first and camera != null:
+		var view: Rect2 = camera.get_visible_rect()
+		origin = Vector2(view.get_center().x, view.end.y + 60.0)
+	if first:
+		_play_slow_motion()
+		_play_flash()
+		if player != null and player.is_alive() and eject_speed > 0.0:
+			player.launch(Vector2(player.velocity.x * 0.5, -eject_speed), eject_control_lock)
+		if show_silhouette:
+			_play_silhouette()
 	if explosion_enabled:
-		_play_explosion()
-	if player != null and eject_speed > 0.0:
-		player.launch(Vector2(player.velocity.x * 0.5, -eject_speed), eject_control_lock)
-	_spawn_debris(player)
-	if show_silhouette:
-		_play_silhouette()
-	triggered.emit()
+		_play_explosion(origin)
+	_spawn_debris_wave(player)
 
 
 # Cámara lenta medida en tiempo real (el temporizador ignora la escala de tiempo).
@@ -154,9 +175,8 @@ func _exit_tree() -> void:
 		Engine.time_scale = 1.0
 
 
-# Anillo que se expande desde el casco y partículas de fuego.
-func _play_explosion() -> void:
-	var origin: Vector2 = global_position + explosion_offset
+# Anillo que se expande desde [param origin] y partículas de fuego.
+func _play_explosion(origin: Vector2) -> void:
 	var ring: Node2D = Node2D.new()
 	ring.global_position = origin
 	ring.z_index = 5
@@ -200,20 +220,11 @@ func _play_explosion() -> void:
 		get_tree().create_timer(2.0).timeout.connect(fire.queue_free)
 
 
-# Restos letales de la nave: entran por el borde inferior de la pantalla (vienen de la
-# explosión, abajo) en `debris_waves` oleadas, apuntando al jugador con algo de desvío.
-func _spawn_debris(player: Player) -> void:
+# Restos letales de una explosión: entran por el borde inferior de la pantalla (vienen de la
+# explosión, abajo) y apuntan hacia adelante del jugador, con algo de desvío.
+func _spawn_debris_wave(player: Player) -> void:
 	if debris_count <= 0:
 		return
-	for wave: int in maxi(debris_waves, 1):
-		if wave > 0:
-			await get_tree().create_timer(debris_wave_interval).timeout
-			if not is_inside_tree():
-				return
-		_spawn_debris_wave(player)
-
-
-func _spawn_debris_wave(player: Player) -> void:
 	var camera: ScrollCamera = get_viewport().get_camera_2d() as ScrollCamera
 	var view: Rect2 = camera.get_visible_rect() if camera != null else Rect2(global_position + Vector2(0.0, -640.0), Vector2(360.0, 640.0))
 	var spawn_y: float = view.end.y + 16.0
@@ -227,7 +238,8 @@ func _spawn_debris_wave(player: Player) -> void:
 		var from: Vector2 = Vector2(x, spawn_y + randf_range(0.0, 30.0))
 		var direction: Vector2 = Vector2.UP.rotated(deg_to_rad(randf_range(-50.0, 50.0)))
 		if debris_aim_at_player and player != null and player.is_alive():
-			direction = (player.global_position - from).normalized().rotated(deg_to_rad(randf_range(-debris_aim_spread, debris_aim_spread)))
+			var target: Vector2 = player.global_position + player.velocity * debris_lead
+			direction = (target - from).normalized().rotated(deg_to_rad(randf_range(-debris_aim_spread, debris_aim_spread)))
 		var debris: HullDebris = HullDebris.new()
 		debris.velocity = direction * randf_range(debris_speed_min, debris_speed_max)
 		debris.spin = randf_range(-6.0, 6.0)

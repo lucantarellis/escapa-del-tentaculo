@@ -3,7 +3,8 @@ extends Area2D
 ## Fragmento letal del casco despedido por una explosión ([TierEvent]): vuela en línea recta
 ## girando y mata al jugador al tocarlo (`Player.die(&"debris")`). Tras `grace_time` s recién
 ## es letal, para no matar en el mismo instante en que aparece. Se borra al salir de la vista
-## (o tras `lifetime` s). Lo crea [TierEvent]; no se instancia a mano.
+## (o tras `lifetime` s). Si choca contra algo sólido del mundo (asteroides, paredes, restos
+## metálicos) se rompe en pedazos. Lo crea [TierEvent]; no se instancia a mano.
 
 ## Rojo letal de la paleta. Solo visual.
 const COLOR: Color = Color("D83232")
@@ -24,7 +25,8 @@ var _age: float = 0.0
 
 func _ready() -> void:
 	collision_layer = 0
-	collision_mask = 2
+	# 2 = jugador (mata), 1 = mundo (se rompe).
+	collision_mask = 2 | 1
 	monitoring = true
 	var points: PackedVector2Array = PackedVector2Array()
 	# Polígono irregular de 5 puntos.
@@ -45,20 +47,46 @@ func _physics_process(delta: float) -> void:
 	_age += delta
 	position += velocity * delta
 	rotation += spin * delta
-	if _age >= grace_time:
-		for body: Node2D in get_overlapping_bodies():
-			_on_body_entered(body)
+	for body: Node2D in get_overlapping_bodies():
+		_on_body_entered(body)
 	# Pueden nacer fuera de la vista (bajo la pantalla): se borran recién tras 1,5 s afuera.
 	if _age > lifetime or (_age > 1.5 and _is_far_off_screen()):
 		queue_free()
 
 
 func _on_body_entered(body: Node2D) -> void:
+	var player: Player = body as Player
+	if player == null:
+		# Algo sólido del mundo: se rompe (también durante la gracia).
+		_shatter()
+		return
 	if _age < grace_time:
 		return
-	var player: Player = body as Player
-	if player != null and player.is_alive():
+	if player.is_alive():
 		player.die(&"debris")
+
+
+# Se rompe en pedazos (solo visual) y desaparece.
+func _shatter() -> void:
+	if is_queued_for_deletion():
+		return
+	var bits: CPUParticles2D = CPUParticles2D.new()
+	bits.one_shot = true
+	bits.explosiveness = 1.0
+	bits.amount = 10
+	bits.lifetime = 0.5
+	bits.spread = 180.0
+	bits.initial_velocity_min = 60.0
+	bits.initial_velocity_max = 160.0
+	bits.gravity = Vector2.ZERO
+	bits.scale_amount_min = 2.0
+	bits.scale_amount_max = 4.0
+	bits.color = COLOR
+	get_parent().add_child(bits)
+	bits.global_position = global_position
+	bits.emitting = true
+	get_tree().create_timer(0.8).timeout.connect(bits.queue_free)
+	queue_free()
 
 
 func _is_far_off_screen() -> bool:

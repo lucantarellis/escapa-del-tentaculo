@@ -63,11 +63,10 @@ extends Resource
 @export var jump_requires_floor: bool = true
 
 @export_group("Dash")
-## Distancia que recorre un dash si no choca con nada. Unidad: px.
-@export var dash_distance: float = 90.0
-## Distancia total que recorre el dash en diagonal hacia arriba (mantener arriba + dash), en línea
-## recta a 45°, si no choca con nada. Unidad: px.
-@export var dash_diagonal_distance: float = 90.0
+## Distancia que recorre un dash recto (horizontal o vertical) si no choca con nada. Unidad: px.
+@export var dash_distance: float = 130.0
+## Distancia que recorre un dash en diagonal (cualquiera de las 4) si no choca con nada. Unidad: px.
+@export var dash_diagonal_distance: float = 130.0
 ## Duración del dash: define qué tan seco se siente (velocidad = distancia / duración).
 ## Se usa como mínimo 0,01 s. Unidad: s.
 @export var dash_duration: float = 0.15

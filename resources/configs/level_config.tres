@@ -74,7 +74,7 @@ pursuer_color = Color(0.54134405, 0.3044531, 0.93466634, 1)
 [sub_resource type="Resource" id="Resource_tier2"]
 script = ExtResource("24_tier")
 segments = Array[PackedScene]([ExtResource("space_01"), ExtResource("space_02"), ExtResource("space_03"), ExtResource("space_04"), ExtResource("space_05"), ExtResource("space_06"), ExtResource("space_07"), ExtResource("space_08"), ExtResource("space_09"), ExtResource("space_10")])
-count_per_run = 5
+count_per_run = 8
 display_name = "El espacio"
 entry_segments = Array[PackedScene]([ExtResource("space_entry_01"), ExtResource("space_entry_02"), ExtResource("space_entry_03")])
 platform_tint = Color(0.5412, 0.5882, 0.6588, 1)

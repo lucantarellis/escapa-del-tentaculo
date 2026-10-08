@@ -80,7 +80,7 @@ El código usa siempre **acciones**, nunca teclas, para poder agregar controles 
 | `move_up` | W, ↑ | Propulsar hacia arriba |
 | `move_down` | S, ↓ | Propulsar hacia abajo |
 | `jump` | Espacio | Saltar (sin combustible) |
-| `dash` | Shift | Dash lateral (hacia el lado que se mantiene, o el último pulsado) |
+| `dash` | Shift | Dash en la dirección que se mantiene (8 direcciones; sin dirección, hacia el último lado) |
 | `restart` | R | Reiniciar (temporal) |
 | `debug_toggle` | F3 | Mostrar u ocultar el overlay de debug |
 

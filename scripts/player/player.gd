@@ -4,8 +4,9 @@ extends CharacterBody2D
 ##
 ## Propulsa en 4 direcciones (combinables) con inercia, gasta combustible al propulsar y
 ## tiene gravedad casi nula mientras queda combustible. Sin combustible la gravedad sube y
-## puede saltar desde una superficie. Con la acción `dash` se lanza hacia un costado (o en
-## diagonal hacia arriba si se mantiene arriba) una distancia fija, a cambio de un poco de combustible y con un tiempo de espera (cooldown).
+## puede saltar desde una superficie. Con la acción `dash` se lanza en la dirección que se mantiene
+## (8 direcciones; sin dirección, hacia el último lado) una distancia fija, a cambio de un poco
+## de combustible y con un tiempo de espera (cooldown).
 ## Todos los valores salen de [PlayerConfig]. Ver `docs/mecanicas/jugador.md`.
 
 ## Se emite cada vez que cambia el combustible.
@@ -62,7 +63,7 @@ var _boost_multiplier: float = 1.0
 var _frozen: bool = false
 ## Tiempo que le queda al bloqueo del Input tras un lanzamiento (ver [method launch]). Unidad: s.
 var _control_lock_left: float = 0.0
-## Dirección (vector unitario) del dash en curso: horizontal o diagonal hacia arriba. Solo vale mientras hay un dash.
+## Dirección (vector unitario, 8 direcciones) del dash en curso. Solo vale mientras hay un dash.
 var _dash_direction: Vector2 = Vector2.RIGHT
 ## Velocidad del dash en curso (distancia / duración). Solo vale mientras hay un dash. Unidad: px/s.
 var _dash_speed: float = 0.0
@@ -100,10 +101,11 @@ func _physics_process(delta: float) -> void:
 	_tick_dash_cooldown(delta)
 	if input.x != 0.0:
 		_facing = signf(input.x)
-	# Con "arriba" mantenido el dash sale en diagonal hacia arriba; si no, es lateral.
-	var dash_up: bool = input.y < 0.0
-	if _dash_distance_left <= 0.0 and Input.is_action_just_pressed("dash") and can_dash() and _get_dash_distance(dash_up) > 0.0:
-		_start_dash(dash_up)
+	# El dash sale hacia la dirección que se mantiene (8 direcciones); sin dirección, hacia el
+	# último lado al que se apretó.
+	var dash_dir: Vector2 = _snap_dash_direction(input)
+	if _dash_distance_left <= 0.0 and Input.is_action_just_pressed("dash") and can_dash() and _get_dash_distance(dash_dir) > 0.0:
+		_start_dash(dash_dir)
 	# Un dash en curso (o uno que arranca ahora) reemplaza al movimiento normal: sin propulsión,
 	# sin caminar, sin gravedad y sin salto hasta que termina.
 	if _dash_distance_left > 0.0:
@@ -323,11 +325,20 @@ func reset(spawn_position: Vector2) -> void:
 	_update_cooldown_bar()
 
 
-# Empieza un dash hacia `_facing` (en diagonal hacia arriba si `up`): gasta el combustible y
-# arranca el cooldown. Hay que comprobar `can_dash()` antes.
-func _start_dash(up: bool) -> void:
-	_dash_direction = Vector2(_facing, -1.0).normalized() if up else Vector2(_facing, 0.0)
-	_dash_distance_left = _get_dash_distance(up)
+# Dirección del dash a partir de la entrada, redondeada a 8 direcciones (unitaria). Sin entrada,
+# horizontal hacia `_facing`.
+func _snap_dash_direction(input: Vector2) -> Vector2:
+	if input.length() < 0.2:
+		return Vector2(_facing, 0.0)
+	var angle: float = snappedf(input.angle(), PI / 4.0)
+	return Vector2.RIGHT.rotated(angle)
+
+
+# Empieza un dash en `direction` (unitaria, 8 direcciones): gasta el combustible y arranca el
+# cooldown. Hay que comprobar `can_dash()` antes.
+func _start_dash(direction: Vector2) -> void:
+	_dash_direction = direction
+	_dash_distance_left = _get_dash_distance(direction)
 	_dash_speed = _dash_distance_left / maxf(config.dash_duration, 0.01)
 	_dash_cooldown_left = maxf(config.dash_cooldown, 0.0)
 	_set_fuel(_fuel - config.dash_fuel_cost)
@@ -344,7 +355,7 @@ func _process_dash(delta: float) -> void:
 	move_and_slide()
 	_dash_distance_left -= step
 	# `is_zero_approx` evita un frame extra por la sobra mínima del redondeo de decimales.
-	if _dash_distance_left <= 0.0 or is_zero_approx(_dash_distance_left) or is_on_wall() or is_on_ceiling():
+	if _dash_distance_left <= 0.0 or is_zero_approx(_dash_distance_left) or is_on_wall() or is_on_ceiling() or (_dash_direction.y > 0.0 and is_on_floor()):
 		_end_dash()
 	_update_fuel(false, delta)
 	_set_thrusting(false)
@@ -358,9 +369,10 @@ func _end_dash() -> void:
 	velocity = Vector2.ZERO
 
 
-# Distancia del dash según el tipo: lateral o diagonal hacia arriba.
-func _get_dash_distance(up: bool) -> float:
-	return config.dash_diagonal_distance if up else config.dash_distance
+# Distancia del dash según la dirección: recta (horizontal o vertical) o diagonal.
+func _get_dash_distance(direction: Vector2) -> float:
+	var diagonal: bool = absf(direction.x) > 0.1 and absf(direction.y) > 0.1
+	return config.dash_diagonal_distance if diagonal else config.dash_distance
 
 
 func _tick_dash_cooldown(delta: float) -> void:
