@@ -96,7 +96,9 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | 8h | Paredes pintadas con tiles (sólido + diagonal) | Hecho en la rama `main-l`; paredes en los 21 segmentos (salvo Segment21) | — |
 | 8i | 10 inicios y 10 finales sorteados por partida, con paredes | Hecho en la rama `main-l` | — |
 | F0 | Segmentos de tamaño fijo 360 × 640 (intermedios completados arriba, inicios compactados, `launch_speed` 520) | Local en `main-l`, probado por LT | — |
-| F1 | Escenario por tier (entrada, perseguidor, física, tileset), cambio de tier en partida, récord y marcas de tier en el HUD | Local en `main-l`, pendiente de probar | — |
+| F1 | Escenario por tier (entrada, perseguidor, física, tileset), cambio de tier en partida, récord y marcas de tier en el HUD | Local en `main-l`, probado por LT | — |
+| — | Limpieza: fuera QA, sandbox, `lvl1`, obstáculos viejos, modo plano del `LevelBuilder`, `.gitkeep` y carpetas vacías; segmentos en carpetas por tier | Local en `main-l` | — |
+| F2 | Tier 2, el espacio: física (multiplicadores por tier), fuego, `TierEvent`, 3 entradas y 10 segmentos; 5 segmentos por tier | Local en `main-l`, pendiente de probar | — |
 | 8c | Controles táctiles | Pendiente (al final, tras arte y balance) | — |
 | 9 | Arte final, audio y pulido | Pendiente | — |
 

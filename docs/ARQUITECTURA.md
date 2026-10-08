@@ -62,6 +62,7 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 |---|---|---|
 | `GameManager` | `scripts/managers/game_manager.gd` | Estado de la partida (`READY`, `PLAYING`, `WON`, `LOST`), seed y causa de derrota; señales de fin de partida; reinicio con R. No conoce nodos de la escena. Ver `docs/mecanicas/game-manager.md` |
 | `RunRecords` | `scripts/managers/run_records.gd` | Récords guardados en `user://records.cfg` (mejor progreso). Funciones estáticas. Ver `docs/mecanicas/hud.md` |
+| `TierEvent` | `scripts/levels/tier_event.gd` | Momento de historia al entrar a un tier (sacudida, destello, silueta del alien), en los segmentos de entrada. Ver `docs/mecanicas/tier-espacio.md` |
 
 ## Flujo de una partida
 

@@ -1,0 +1,40 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
+[ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
+[ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
+[ext_resource type="Script" path="res://scripts/levels/tier_event.gd" id="event"]
+
+[node name="SegmentSpaceEntry03" type="Node2D"]
+script = ExtResource("seg")
+
+[node name="Walls" parent="." instance=ExtResource("walls")]
+tile_map_data = PackedByteArray("AAAAAM7/AAAAAAAAAAAAAM//AAAAAAAAAAAAAND/AAAAAAAAAAABAM7/AAAAAAAAAAABAM//AAAAAAAAAAABAND/AAAAAAAAAAACAM7/AAABAAAAAAACAM//AAAAAAAAAAACAND/AAABAAAAAgAEAOH/AAABAAAAAQAEAOL/AAAAAAAAAAAEAOP/AAABAAAAAwAFAOH/AAABAAAAAAAFAOL/AAAAAAAAAAAFAOP/AAABAAAAAgAFAPf/AAABAAAAAQAFAPj/AAABAAAAAwAGAPb/AAABAAAAAQAGAPf/AAAAAAAAAAAGAPj/AAAAAAAAAAAGAPn/AAABAAAAAwAHAPb/AAAAAAAAAAAHAPf/AAAAAAAAAAAHAPj/AAAAAAAAAAAHAPn/AAAAAAAAAAAIAPb/AAAAAAAAAAAIAPf/AAAAAAAAAAAIAPj/AAAAAAAAAAAIAPn/AAAAAAAAAAAJAPb/AAABAAAAAAAJAPf/AAAAAAAAAAAJAPj/AAAAAAAAAAAJAPn/AAABAAAAAgAKAPf/AAABAAAAAAAKAPj/AAABAAAAAgA=")
+
+[node name="Start" parent="." instance=ExtResource("plat")]
+position = Vector2(260, -60)
+size = Vector2(120, 12)
+platform_type = 0
+
+[node name="OneWay" parent="." instance=ExtResource("plat")]
+position = Vector2(90, -240)
+size = Vector2(80, 12)
+platform_type = 1
+
+[node name="Static" parent="." instance=ExtResource("plat")]
+position = Vector2(270, -400)
+size = Vector2(70, 12)
+platform_type = 0
+
+[node name="Goal" parent="." instance=ExtResource("plat")]
+position = Vector2(150, -560)
+size = Vector2(110, 12)
+platform_type = 0
+
+[node name="FuelTank1" parent="." instance=ExtResource("tank")]
+position = Vector2(90, -264)
+
+[node name="TierEvent" type="Node2D" parent="."]
+position = Vector2(0, -40)
+script = ExtResource("event")

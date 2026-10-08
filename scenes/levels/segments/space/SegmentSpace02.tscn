@@ -1,0 +1,66 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
+[ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
+[ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
+
+[node name="SegmentSpace02" type="Node2D"]
+script = ExtResource("seg")
+
+[node name="Walls" parent="." instance=ExtResource("walls")]
+tile_map_data = PackedByteArray("AAAIAOz/AAABAAAAAQAIAO3/AAAAAAAAAAAIAO7/AAAAAAAAAAAIAO//AAABAAAAAwAJANL/AAABAAAAAQAJANP/AAAAAAAAAAAJANT/AAAAAAAAAAAJANX/AAAAAAAAAAAJANb/AAABAAAAAwAJAOz/AAAAAAAAAAAJAO3/AAAAAAAAAAAJAO7/AAAAAAAAAAAJAO//AAAAAAAAAAAKANL/AAAAAAAAAAAKANP/AAAAAAAAAAAKANT/AAAAAAAAAAAKANX/AAAAAAAAAAAKANb/AAAAAAAAAAAKAOz/AAABAAAAAAAKAO3/AAAAAAAAAAAKAO7/AAAAAAAAAAAKAO//AAABAAAAAgALANL/AAAAAAAAAAALANP/AAAAAAAAAAALANT/AAAAAAAAAAALANX/AAAAAAAAAAALANb/AAAAAAAAAAAMANL/AAABAAAAAAAMANP/AAAAAAAAAAAMANT/AAAAAAAAAAAMANX/AAAAAAAAAAAMANb/AAABAAAAAgAMAPP/AAABAAAAAQAMAPT/AAAAAAAAAAAMAPX/AAAAAAAAAAAMAPb/AAAAAAAAAAAMAPf/AAABAAAAAwANAPP/AAAAAAAAAAANAPT/AAAAAAAAAAANAPX/AAAAAAAAAAANAPb/AAAAAAAAAAANAPf/AAAAAAAAAAAOAPP/AAABAAAAAAAOAPT/AAAAAAAAAAAOAPX/AAAAAAAAAAAOAPb/AAAAAAAAAAAOAPf/AAABAAAAAgA=")
+
+[node name="Start" parent="." instance=ExtResource("plat")]
+position = Vector2(100, -40)
+size = Vector2(100, 12)
+platform_type = 0
+
+[node name="Static" parent="." instance=ExtResource("plat")]
+position = Vector2(260, -160)
+size = Vector2(50, 12)
+platform_type = 0
+
+[node name="StaticMover" parent="." instance=ExtResource("plat")]
+position = Vector2(60, -300)
+size = Vector2(50, 12)
+platform_type = 0
+moves = true
+travel = Vector2(0, -120)
+
+[node name="OneWay" parent="." instance=ExtResource("plat")]
+position = Vector2(300, -390)
+size = Vector2(50, 12)
+platform_type = 1
+
+[node name="Lethal" parent="." instance=ExtResource("plat")]
+position = Vector2(180, -300)
+size = Vector2(80, 12)
+platform_type = 4
+
+[node name="Shrapnel" parent="." instance=ExtResource("plat")]
+position = Vector2(20, -15)
+size = Vector2(10, 10)
+platform_type = 6
+travel = Vector2(0, -600)
+projectile_trigger = 0
+projectile_end = 1
+
+[node name="Shrapnel2" parent="." instance=ExtResource("plat")]
+position = Vector2(340, -15)
+size = Vector2(10, 10)
+platform_type = 6
+travel = Vector2(0, -600)
+projectile_trigger = 0
+projectile_end = 1
+
+[node name="Goal" parent="." instance=ExtResource("plat")]
+position = Vector2(160, -600)
+size = Vector2(120, 12)
+platform_type = 0
+
+[node name="FuelTank1" parent="." instance=ExtResource("tank")]
+position = Vector2(260, -184)
+
+[node name="FuelTank2" parent="." instance=ExtResource("tank")]
+position = Vector2(300, -414)

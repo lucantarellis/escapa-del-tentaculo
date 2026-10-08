@@ -49,6 +49,9 @@ var _is_thrusting: bool = false
 var _is_alive: bool = true
 var _has_won: bool = false
 var _was_empty: bool = false
+## Multiplicadores de la física del aire del tier actual (ver [method set_physics_scales]).
+var _gravity_scale: float = 1.0
+var _air_drag_scale: float = 1.0
 ## true mientras el jugador está congelado (ver [method set_frozen]).
 var _frozen: bool = false
 ## Tiempo que le queda al bloqueo del Input tras un lanzamiento (ver [method launch]). Unidad: s.
@@ -109,7 +112,7 @@ func _physics_process(delta: float) -> void:
 	elif not walking:
 		# Apoyado y sin propulsar se frena con ground_friction (más fuerte que el aire),
 		# para no deslizarse con los pies en el piso; en el aire se usa coasting_drag.
-		var stop_drag: float = config.ground_friction if on_floor else config.coasting_drag
+		var stop_drag: float = config.ground_friction if on_floor else config.coasting_drag * _air_drag_scale
 		velocity = velocity.move_toward(Vector2.ZERO, stop_drag * delta)
 	_apply_gravity(delta)
 	if not locked:
@@ -264,15 +267,12 @@ func is_frozen() -> bool:
 	return _frozen
 
 
-## Cambia la config del jugador en plena partida (al entrar a un tier, ver [SegmentTier]). El
-## combustible actual se conserva, recortado al máximo de la config nueva.
-func apply_config(new_config: PlayerConfig) -> void:
-	if new_config == null:
-		return
-	config = new_config
-	_fuel = clampf(_fuel, 0.0, config.max_fuel)
-	_was_empty = is_fuel_empty()
-	fuel_changed.emit(_fuel, config.max_fuel)
+## Escala la física del aire para el tier actual (ver [SegmentTier]): [param gravity] multiplica la
+## gravedad y [param air_drag] el frenado en el aire (`coasting_drag`). 1 = sin cambio. Así el
+## tier no duplica la config: todo lo demás sigue saliendo de `config`.
+func set_physics_scales(gravity: float, air_drag: float) -> void:
+	_gravity_scale = maxf(gravity, 0.0)
+	_air_drag_scale = maxf(air_drag, 0.0)
 
 
 ## Deja al jugador vivo en [param spawn_position] (coordenadas globales), quieto y con
@@ -364,7 +364,7 @@ func _apply_thrust(input: Vector2, delta: float) -> void:
 		accel.y *= config.counter_thrust_multiplier
 	velocity += accel * delta
 	# Si ya iba más rápido que max_speed (caída, rebote) no se corta de golpe: decae con drag.
-	var speed_cap: float = maxf(config.max_speed, speed_before - config.coasting_drag * delta)
+	var speed_cap: float = maxf(config.max_speed, speed_before - config.coasting_drag * _air_drag_scale * delta)
 	velocity = velocity.limit_length(speed_cap)
 
 
@@ -373,7 +373,7 @@ func _apply_walk(direction: float, delta: float) -> void:
 	if direction * velocity.x < 0.0:
 		accel *= config.counter_thrust_multiplier
 	# Si ya iba más rápido que walk_max_speed (aterrizó con impulso) decae con drag.
-	var speed_cap: float = maxf(config.walk_max_speed, absf(velocity.x) - config.coasting_drag * delta)
+	var speed_cap: float = maxf(config.walk_max_speed, absf(velocity.x) - config.coasting_drag * _air_drag_scale * delta)
 	velocity.x = clampf(velocity.x + direction * accel * delta, -speed_cap, speed_cap)
 
 
@@ -386,7 +386,7 @@ func _apply_gravity(delta: float) -> void:
 	_current_gravity = lerpf(config.gravity_with_fuel, config.gravity_without_fuel, _gravity_blend)
 	# No frena una caída que ya supera el máximo: solo evita acelerar más.
 	if velocity.y < config.max_fall_speed:
-		velocity.y = minf(velocity.y + _current_gravity * delta, config.max_fall_speed)
+		velocity.y = minf(velocity.y + _current_gravity * _gravity_scale * delta, config.max_fall_speed)
 
 
 func _try_jump() -> void:

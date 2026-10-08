@@ -1,0 +1,40 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
+[ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
+[ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
+[ext_resource type="Script" path="res://scripts/levels/tier_event.gd" id="event"]
+
+[node name="SegmentSpaceEntry01" type="Node2D"]
+script = ExtResource("seg")
+
+[node name="Walls" parent="." instance=ExtResource("walls")]
+tile_map_data = PackedByteArray("AAALANv/AAABAAAAAQALANz/AAABAAAAAwAMANr/AAABAAAAAQAMANv/AAAAAAAAAAAMANz/AAAAAAAAAAAMAN3/AAABAAAAAwANANr/AAAAAAAAAAANANv/AAAAAAAAAAANANz/AAAAAAAAAAANAN3/AAAAAAAAAAAOANr/AAAAAAAAAAAOANv/AAAAAAAAAAAOANz/AAAAAAAAAAAOAN3/AAAAAAAAAAAPANr/AAABAAAAAAAPANv/AAAAAAAAAAAPANz/AAAAAAAAAAAPAN3/AAABAAAAAgAQANv/AAABAAAAAAAQANz/AAABAAAAAgAaAOP/AAABAAAAAQAaAOT/AAAAAAAAAAAaAOX/AAABAAAAAwAbANT/AAABAAAAAQAbANX/AAAAAAAAAAAbANb/AAAAAAAAAAAbANf/AAAAAAAAAAAbANj/AAABAAAAAwAbAOP/AAAAAAAAAAAbAOT/AAAAAAAAAAAbAOX/AAAAAAAAAAAcANT/AAAAAAAAAAAcANX/AAAAAAAAAAAcANb/AAAAAAAAAAAcANf/AAAAAAAAAAAcANj/AAAAAAAAAAAcAOP/AAAAAAAAAAAcAOT/AAAAAAAAAAAcAOX/AAAAAAAAAAAdANT/AAAAAAAAAAAdANX/AAAAAAAAAAAdANb/AAAAAAAAAAAdANf/AAAAAAAAAAAdANj/AAAAAAAAAAAdAOP/AAAAAAAAAAAdAOT/AAAAAAAAAAAdAOX/AAAAAAAAAAA=")
+
+[node name="Start" parent="." instance=ExtResource("plat")]
+position = Vector2(180, -60)
+size = Vector2(160, 12)
+platform_type = 0
+
+[node name="Static" parent="." instance=ExtResource("plat")]
+position = Vector2(80, -260)
+size = Vector2(70, 12)
+platform_type = 0
+
+[node name="Static2" parent="." instance=ExtResource("plat")]
+position = Vector2(280, -380)
+size = Vector2(70, 12)
+platform_type = 0
+
+[node name="Goal" parent="." instance=ExtResource("plat")]
+position = Vector2(180, -560)
+size = Vector2(120, 12)
+platform_type = 0
+
+[node name="FuelTank1" parent="." instance=ExtResource("tank")]
+position = Vector2(80, -284)
+
+[node name="TierEvent" type="Node2D" parent="."]
+position = Vector2(0, -40)
+script = ExtResource("event")

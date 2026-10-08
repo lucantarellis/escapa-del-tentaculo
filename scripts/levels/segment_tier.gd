@@ -39,6 +39,9 @@ extends Resource
 @export var pursuer_reset_position: bool = true
 
 @export_group("Jugador")
-## Config del jugador en este tier (ej.: gravedad casi nula en el espacio). Vacío = sigue la de
-## antes. El combustible actual se conserva (recortado al máximo nuevo).
-@export var player_config: PlayerConfig
+## Multiplica la gravedad del jugador en este tier (ej.: 0,16 en el espacio). 1 = la de
+## `player_config.tres`. Se usa un multiplicador y no otra config para no duplicar valores.
+@export_range(0.0, 4.0, 0.01) var gravity_scale: float = 1.0
+## Multiplica el frenado en el aire (`coasting_drag`) en este tier: menos = más inercia.
+## 1 = el de `player_config.tres`.
+@export_range(0.0, 4.0, 0.01) var air_drag_scale: float = 1.0

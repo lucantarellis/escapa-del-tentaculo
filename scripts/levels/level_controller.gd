@@ -182,8 +182,7 @@ func _enter_tier(tier_index: int) -> void:
 	var tier: SegmentTier = _builder.config.tiers[tier_index]
 	if tier != null:
 		_tentacle.apply_pursuer(tier.pursuer_config, tier.pursuer_color, tier.pursuer_reset_position)
-		if tier.player_config != null:
-			_player.apply_config(tier.player_config)
+		_player.set_physics_scales(tier.gravity_scale, tier.air_drag_scale)
 	tier_entered.emit(tier_index)
 
 

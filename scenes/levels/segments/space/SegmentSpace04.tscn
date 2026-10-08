@@ -1,0 +1,49 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
+[ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
+[ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
+
+[node name="SegmentSpace04" type="Node2D"]
+script = ExtResource("seg")
+
+[node name="Walls" parent="." instance=ExtResource("walls")]
+tile_map_data = PackedByteArray("AAAAAOT/AAAAAAAAAAAAAOX/AAAAAAAAAAAAAOb/AAAAAAAAAAAAAOf/AAAAAAAAAAAAAOj/AAAAAAAAAAAAAOn/AAAAAAAAAAABAOT/AAAAAAAAAAABAOX/AAAAAAAAAAABAOb/AAAAAAAAAAABAOf/AAAAAAAAAAABAOj/AAAAAAAAAAABAOn/AAAAAAAAAAACAOT/AAAAAAAAAAACAOX/AAAAAAAAAAACAOb/AAAAAAAAAAACAOf/AAAAAAAAAAACAOj/AAAAAAAAAAACAOn/AAAAAAAAAAADAOT/AAABAAAAAAADAOX/AAAAAAAAAAADAOb/AAAAAAAAAAADAOf/AAAAAAAAAAADAOj/AAAAAAAAAAADAOn/AAABAAAAAgAcANr/AAABAAAAAQAcANv/AAAAAAAAAAAcANz/AAAAAAAAAAAcAN3/AAAAAAAAAAAcAN7/AAAAAAAAAAAcAN//AAAAAAAAAAAcAOD/AAABAAAAAwAcAPj/AAABAAAAAQAcAPn/AAAAAAAAAAAcAPr/AAABAAAAAwAdANr/AAAAAAAAAAAdANv/AAAAAAAAAAAdANz/AAAAAAAAAAAdAN3/AAAAAAAAAAAdAN7/AAAAAAAAAAAdAN//AAAAAAAAAAAdAOD/AAAAAAAAAAAdAPj/AAAAAAAAAAAdAPn/AAAAAAAAAAAdAPr/AAAAAAAAAAA=")
+
+[node name="Start" parent="." instance=ExtResource("plat")]
+position = Vector2(80, -40)
+size = Vector2(100, 12)
+platform_type = 0
+
+[node name="StaticMover" parent="." instance=ExtResource("plat")]
+position = Vector2(140, -170)
+size = Vector2(60, 12)
+platform_type = 0
+moves = true
+travel = Vector2(160, -40)
+
+[node name="StaticMover2" parent="." instance=ExtResource("plat")]
+position = Vector2(260, -330)
+size = Vector2(60, 12)
+platform_type = 0
+moves = true
+travel = Vector2(-160, -40)
+
+[node name="StaticMover3" parent="." instance=ExtResource("plat")]
+position = Vector2(120, -480)
+size = Vector2(60, 12)
+platform_type = 0
+moves = true
+travel = Vector2(140, 0)
+
+[node name="Goal" parent="." instance=ExtResource("plat")]
+position = Vector2(260, -600)
+size = Vector2(100, 12)
+platform_type = 0
+
+[node name="FuelTank1" parent="." instance=ExtResource("tank")]
+position = Vector2(80, -64)
+
+[node name="FuelTank2" parent="." instance=ExtResource("tank")]
+position = Vector2(260, -624)

@@ -1,61 +1,87 @@
 [gd_resource type="Resource" script_class="LevelConfig" format=3 uid="uid://citfkytx86ll2"]
 
 [ext_resource type="Script" uid="uid://dbdoqvh8sch15" path="res://scripts/levels/level_config.gd" id="1_cfg"]
-[ext_resource type="PackedScene" uid="uid://lbossgjwtsey" path="res://scenes/levels/segments/Segment01.tscn" id="4_seg"]
-[ext_resource type="PackedScene" uid="uid://chubofsb7j4v" path="res://scenes/levels/segments/Segment02.tscn" id="5_seg"]
-[ext_resource type="PackedScene" uid="uid://bgfar8136lnre" path="res://scenes/levels/segments/Segment03.tscn" id="6_seg"]
-[ext_resource type="PackedScene" uid="uid://dxnhqm6u12u2k" path="res://scenes/levels/segments/Segment04.tscn" id="7_seg"]
-[ext_resource type="PackedScene" uid="uid://gcmyn7egg54e" path="res://scenes/levels/segments/Segment05.tscn" id="8_seg"]
-[ext_resource type="PackedScene" uid="uid://ct3n2jt0twyhf" path="res://scenes/levels/segments/Segment06.tscn" id="9_seg"]
-[ext_resource type="PackedScene" uid="uid://20yd2rhtyv5f" path="res://scenes/levels/segments/Segment07.tscn" id="10_seg"]
-[ext_resource type="PackedScene" uid="uid://bfqegvrhywi5f" path="res://scenes/levels/segments/Segment08.tscn" id="11_seg"]
-[ext_resource type="PackedScene" uid="uid://pfi7offsx24a" path="res://scenes/levels/segments/Segment09.tscn" id="12_seg"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment10.tscn" id="13_seg"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment11.tscn" id="14_seg"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment12.tscn" id="15_seg"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment13.tscn" id="16_seg"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment14.tscn" id="17_seg"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment15.tscn" id="18_seg"]
-[ext_resource type="PackedScene" uid="uid://dkc2t72l81xyc" path="res://scenes/levels/segments/Segment17.tscn" id="19_ewu3o"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/Segment16.tscn" id="19_seg"]
-[ext_resource type="PackedScene" uid="uid://cypiirxlyabo3" path="res://scenes/levels/segments/Segment19.tscn" id="20_7kxs2"]
-[ext_resource type="PackedScene" uid="uid://b0vg1xr7m352g" path="res://scenes/levels/segments/Segment18.tscn" id="20_km1sb"]
-[ext_resource type="PackedScene" uid="uid://coclxd7tgsw60" path="res://scenes/levels/segments/Segment20.tscn" id="22_58vi7"]
-[ext_resource type="PackedScene" uid="uid://0sutmev6yb84" path="res://scenes/levels/segments/Segment21.tscn" id="23_58vi7"]
+[ext_resource type="PackedScene" uid="uid://lbossgjwtsey" path="res://scenes/levels/segments/ship/Segment01.tscn" id="4_seg"]
+[ext_resource type="PackedScene" uid="uid://chubofsb7j4v" path="res://scenes/levels/segments/ship/Segment02.tscn" id="5_seg"]
+[ext_resource type="PackedScene" uid="uid://bgfar8136lnre" path="res://scenes/levels/segments/ship/Segment03.tscn" id="6_seg"]
+[ext_resource type="PackedScene" uid="uid://dxnhqm6u12u2k" path="res://scenes/levels/segments/ship/Segment04.tscn" id="7_seg"]
+[ext_resource type="PackedScene" uid="uid://gcmyn7egg54e" path="res://scenes/levels/segments/ship/Segment05.tscn" id="8_seg"]
+[ext_resource type="PackedScene" uid="uid://ct3n2jt0twyhf" path="res://scenes/levels/segments/ship/Segment06.tscn" id="9_seg"]
+[ext_resource type="PackedScene" uid="uid://20yd2rhtyv5f" path="res://scenes/levels/segments/ship/Segment07.tscn" id="10_seg"]
+[ext_resource type="PackedScene" uid="uid://bfqegvrhywi5f" path="res://scenes/levels/segments/ship/Segment08.tscn" id="11_seg"]
+[ext_resource type="PackedScene" uid="uid://pfi7offsx24a" path="res://scenes/levels/segments/ship/Segment09.tscn" id="12_seg"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/ship/Segment10.tscn" id="13_seg"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/ship/Segment11.tscn" id="14_seg"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/ship/Segment12.tscn" id="15_seg"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/ship/Segment13.tscn" id="16_seg"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/ship/Segment14.tscn" id="17_seg"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/ship/Segment15.tscn" id="18_seg"]
+[ext_resource type="PackedScene" uid="uid://dkc2t72l81xyc" path="res://scenes/levels/segments/ship/Segment17.tscn" id="19_ewu3o"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/ship/Segment16.tscn" id="19_seg"]
+[ext_resource type="PackedScene" uid="uid://cypiirxlyabo3" path="res://scenes/levels/segments/ship/Segment19.tscn" id="20_7kxs2"]
+[ext_resource type="PackedScene" uid="uid://b0vg1xr7m352g" path="res://scenes/levels/segments/ship/Segment18.tscn" id="20_km1sb"]
+[ext_resource type="PackedScene" uid="uid://coclxd7tgsw60" path="res://scenes/levels/segments/ship/Segment20.tscn" id="22_58vi7"]
+[ext_resource type="PackedScene" uid="uid://0sutmev6yb84" path="res://scenes/levels/segments/ship/Segment21.tscn" id="23_58vi7"]
 [ext_resource type="Script" uid="uid://b8hobj738gq54" path="res://scripts/levels/segment_tier.gd" id="24_tier"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentStart01.tscn" id="start_01"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentStart02.tscn" id="start_02"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentStart03.tscn" id="start_03"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentStart04.tscn" id="start_04"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentStart05.tscn" id="start_05"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentStart06.tscn" id="start_06"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentStart07.tscn" id="start_07"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentStart08.tscn" id="start_08"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentStart09.tscn" id="start_09"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentStart10.tscn" id="start_10"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentEnd01.tscn" id="end_01"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentEnd02.tscn" id="end_02"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentEnd03.tscn" id="end_03"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentEnd04.tscn" id="end_04"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentEnd05.tscn" id="end_05"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentEnd06.tscn" id="end_06"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentEnd07.tscn" id="end_07"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentEnd08.tscn" id="end_08"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentEnd09.tscn" id="end_09"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentEnd10.tscn" id="end_10"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd01.tscn" id="end_01"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd02.tscn" id="end_02"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd03.tscn" id="end_03"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd04.tscn" id="end_04"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd05.tscn" id="end_05"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd06.tscn" id="end_06"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd07.tscn" id="end_07"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd08.tscn" id="end_08"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd09.tscn" id="end_09"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentEnd10.tscn" id="end_10"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart01.tscn" id="start_01"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart02.tscn" id="start_02"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart03.tscn" id="start_03"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart04.tscn" id="start_04"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart05.tscn" id="start_05"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart06.tscn" id="start_06"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart07.tscn" id="start_07"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart08.tscn" id="start_08"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart09.tscn" id="start_09"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart10.tscn" id="start_10"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpace01.tscn" id="space_01"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpace02.tscn" id="space_02"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpace03.tscn" id="space_03"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpace04.tscn" id="space_04"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpace05.tscn" id="space_05"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpace06.tscn" id="space_06"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpace07.tscn" id="space_07"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpace08.tscn" id="space_08"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpace09.tscn" id="space_09"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpace10.tscn" id="space_10"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpaceEntry01.tscn" id="space_entry_01"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpaceEntry02.tscn" id="space_entry_02"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpaceEntry03.tscn" id="space_entry_03"]
+[ext_resource type="Resource" path="res://resources/configs/tentacle_config_fire.tres" id="fire_cfg"]
+[ext_resource type="TileSet" path="res://resources/tilesets/walls_tileset_space.tres" id="space_tiles"]
 
 [sub_resource type="Resource" id="Resource_tier1"]
 script = ExtResource("24_tier")
-display_name = "La nave"
 segments = Array[PackedScene]([ExtResource("4_seg"), ExtResource("5_seg"), ExtResource("6_seg"), ExtResource("7_seg"), ExtResource("8_seg"), ExtResource("9_seg"), ExtResource("10_seg"), ExtResource("11_seg"), ExtResource("12_seg"), ExtResource("13_seg"), ExtResource("14_seg"), ExtResource("15_seg"), ExtResource("16_seg"), ExtResource("17_seg"), ExtResource("18_seg"), ExtResource("19_seg"), ExtResource("19_ewu3o"), ExtResource("20_km1sb"), ExtResource("20_7kxs2"), ExtResource("22_58vi7"), ExtResource("23_58vi7")])
+display_name = "La nave"
+pursuer_color = Color(0.54134405, 0.3044531, 0.93466634, 1)
+count_per_run = 5
 
 [sub_resource type="Resource" id="Resource_tier2"]
 script = ExtResource("24_tier")
 display_name = "El espacio"
+segments = Array[PackedScene]([ExtResource("space_01"), ExtResource("space_02"), ExtResource("space_03"), ExtResource("space_04"), ExtResource("space_05"), ExtResource("space_06"), ExtResource("space_07"), ExtResource("space_08"), ExtResource("space_09"), ExtResource("space_10")])
+count_per_run = 5
+entry_segments = Array[PackedScene]([ExtResource("space_entry_01"), ExtResource("space_entry_02"), ExtResource("space_entry_03")])
+walls_tileset = ExtResource("space_tiles")
+pursuer_config = ExtResource("fire_cfg")
+pursuer_color = Color(1, 0.3529, 0.1569, 1)
+gravity_scale = 0.16
+air_drag_scale = 0.22
 
 [sub_resource type="Resource" id="Resource_tier3"]
 script = ExtResource("24_tier")
 display_name = "Dentro del alien"
+count_per_run = 5
 
 [resource]
 script = ExtResource("1_cfg")
