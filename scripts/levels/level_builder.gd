@@ -1,7 +1,8 @@
 class_name LevelBuilder
 extends Node2D
-## Arma un nivel apilando segmentos ([LevelSegment]) hacia arriba: inicio, segmentos
-## intermedios elegidos al azar y final. Con `LevelConfig.tiers` recorre los tiers en orden
+## Arma un nivel apilando segmentos ([LevelSegment]) hacia arriba: inicio (sorteado entre
+## `LevelConfig.start_segments`), segmentos intermedios elegidos al azar y final (sorteado entre
+## `LevelConfig.end_segments`). Con `LevelConfig.tiers` recorre los tiers en orden
 ## (cada uno aporta `count_per_run` segmentos); sin tiers usa el `segment_pool` plano.
 ##
 ## Usa un [RandomNumberGenerator] propio con la seed (nunca el azar global), así la misma seed
@@ -35,6 +36,9 @@ var _spawn_local: Vector2 = Vector2.ZERO
 var _hatch_local: Vector2 = Vector2.ZERO
 var _camera_stop_local_y: float = 0.0
 var _door: Door
+## Índice del inicio y del final elegidos en `start_segments` / `end_segments` (-1 sin armar).
+var _start_index: int = -1
+var _end_index: int = -1
 
 
 ## Arma el nivel y devuelve la seed usada. Limpia el anterior si lo hay. Con
@@ -48,7 +52,12 @@ func build(seed_override: int = 0) -> int:
 	_rng.seed = _seed
 	var bottom_y: float = START_BOTTOM_Y
 
-	var start: LevelSegment = _place(config.start_segment, bottom_y)
+	_start_index = _pick_from(config.start_segments)
+	var start: LevelSegment = null
+	if _start_index < 0:
+		push_error("LevelBuilder: `start_segments` está vacío.")
+	else:
+		start = _place(config.start_segments[_start_index], bottom_y)
 	if start != null:
 		var marker: Marker2D = start.get_node_or_null(SPAWN_MARKER_NAME) as Marker2D
 		if marker != null:
@@ -84,7 +93,12 @@ func build(seed_override: int = 0) -> int:
 			if segment != null:
 				bottom_y -= segment.height
 
-	var end: LevelSegment = _place(config.end_segment, bottom_y)
+	_end_index = _pick_from(config.end_segments)
+	var end: LevelSegment = null
+	if _end_index < 0:
+		push_error("LevelBuilder: `end_segments` está vacío.")
+	else:
+		end = _place(config.end_segments[_end_index], bottom_y)
 	if end != null:
 		bottom_y -= end.height
 		_door = _find_door(end)
@@ -104,6 +118,8 @@ func clear() -> void:
 	_segments.clear()
 	_sequence.clear()
 	_tier_sequence.clear()
+	_start_index = -1
+	_end_index = -1
 	_door = null
 	_spawn_local = Vector2.ZERO
 	_hatch_local = Vector2.ZERO
@@ -134,6 +150,16 @@ func get_segment_count() -> int:
 
 
 ## Devuelve la seed del último nivel armado.
+## Devuelve el índice en `LevelConfig.start_segments` del inicio elegido (-1 si no hay nivel).
+func get_start_index() -> int:
+	return _start_index
+
+
+## Devuelve el índice en `LevelConfig.end_segments` del final elegido (-1 si no hay nivel).
+func get_end_index() -> int:
+	return _end_index
+
+
 func get_seed() -> int:
 	return _seed
 
@@ -244,3 +270,10 @@ func _find_door(node: Node) -> Door:
 		if found != null:
 			return found
 	return null
+
+
+# Sortea un índice de [param scenes] con el RNG de la seed. -1 si la lista está vacía.
+func _pick_from(scenes: Array[PackedScene]) -> int:
+	if scenes.is_empty():
+		return -1
+	return _rng.randi_range(0, scenes.size() - 1)

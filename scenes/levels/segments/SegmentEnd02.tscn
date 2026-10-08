@@ -1,0 +1,50 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
+[ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
+[ext_resource type="PackedScene" path="res://scenes/goal/Door.tscn" id="door"]
+[ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
+
+[node name="SegmentEnd02" type="Node2D"]
+script = ExtResource("seg")
+height = 640
+
+[node name="Walls" parent="." instance=ExtResource("walls")]
+tile_map_data = PackedByteArray("AAAAANn/AAAAAAAAAAAAANr/AAAAAAAAAAAAANv/AAAAAAAAAAAAANz/AAAAAAAAAAAAAN3/AAAAAAAAAAAAAN7/AAAAAAAAAAAAAN//AAAAAAAAAAAAAOD/AAAAAAAAAAAAAOH/AAAAAAAAAAAAAOL/AAAAAAAAAAAAAOP/AAAAAAAAAAAAAOT/AAAAAAAAAAABANn/AAABAAAAAAABANr/AAAAAAAAAAABANv/AAAAAAAAAAABANz/AAAAAAAAAAABAN3/AAAAAAAAAAABAN7/AAAAAAAAAAABAN//AAAAAAAAAAABAOD/AAAAAAAAAAABAOH/AAAAAAAAAAABAOL/AAAAAAAAAAABAOP/AAAAAAAAAAABAOT/AAABAAAAAgACANr/AAABAAAAAAACANv/AAAAAAAAAAACANz/AAAAAAAAAAACAN3/AAAAAAAAAAACAN7/AAAAAAAAAAACAN//AAAAAAAAAAACAOD/AAAAAAAAAAACAOH/AAAAAAAAAAACAOL/AAAAAAAAAAACAOP/AAABAAAAAgAYANj/AAABAAAAAQAYANn/AAABAAAAAwAZANf/AAABAAAAAQAZANj/AAAAAAAAAAAZANn/AAAAAAAAAAAZANr/AAABAAAAAwAaANb/AAABAAAAAQAaANf/AAAAAAAAAAAaANj/AAAAAAAAAAAaANn/AAAAAAAAAAAaANr/AAAAAAAAAAAaANv/AAABAAAAAwAbANb/AAAAAAAAAAAbANf/AAAAAAAAAAAbANj/AAAAAAAAAAAbANn/AAAAAAAAAAAbANr/AAAAAAAAAAAbANv/AAAAAAAAAAAbAPb/AAABAAAAAQAbAPf/AAABAAAAAwAcANb/AAAAAAAAAAAcANf/AAAAAAAAAAAcANj/AAAAAAAAAAAcANn/AAAAAAAAAAAcANr/AAAAAAAAAAAcANv/AAAAAAAAAAAcAPX/AAABAAAAAQAcAPb/AAAAAAAAAAAcAPf/AAAAAAAAAAAcAPj/AAABAAAAAwAdANb/AAAAAAAAAAAdANf/AAAAAAAAAAAdANj/AAAAAAAAAAAdANn/AAAAAAAAAAAdANr/AAAAAAAAAAAdANv/AAAAAAAAAAAdAPX/AAAAAAAAAAAdAPb/AAAAAAAAAAAdAPf/AAAAAAAAAAAdAPj/AAAAAAAAAAA=")
+
+[node name="Start" parent="." instance=ExtResource("plat")]
+position = Vector2(100, -40)
+size = Vector2(140, 12)
+platform_type = 0
+
+[node name="Pulse" parent="." instance=ExtResource("plat")]
+position = Vector2(240, -150)
+size = Vector2(90, 12)
+platform_type = 5
+
+[node name="Static" parent="." instance=ExtResource("plat")]
+position = Vector2(300, -260)
+size = Vector2(80, 12)
+platform_type = 0
+
+[node name="Lethal" parent="." instance=ExtResource("plat")]
+position = Vector2(200, -330)
+size = Vector2(16, 60)
+platform_type = 4
+
+[node name="Timed" parent="." instance=ExtResource("plat")]
+position = Vector2(100, -390)
+size = Vector2(90, 12)
+platform_type = 3
+
+[node name="Goal" parent="." instance=ExtResource("plat")]
+position = Vector2(220, -520)
+size = Vector2(120, 12)
+platform_type = 0
+
+[node name="FuelTank1" parent="." instance=ExtResource("tank")]
+position = Vector2(300, -284)
+
+[node name="GoalDoor" parent="." instance=ExtResource("door")]
+position = Vector2(220, -562)

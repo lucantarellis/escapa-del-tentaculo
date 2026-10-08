@@ -30,7 +30,7 @@ Con los valores de prueba actuales de `player_config.tres` (gravedad con combust
 
 ### El segmento de inicio (pasillo del vuelo)
 
-La escotilla está **centrada** (x = 180). Para que el jugador pueda volar sin chocar, `SegmentStart.tscn` mide 1100 px de alto (en vez de 640) y tiene un **pasillo central libre de x ≈ 150 a 210 de punta a punta**: las plataformas alternan a los costados (izquierda x 20–150, derecha x 210–340) y hay un tanque en tres de ellas. El `PlayerSpawn` (usado solo cuando no hay intro, por ejemplo `Level.tscn` con F6) está sobre la plataforma inicial de la izquierda, en (85, 548). Si se rediseña este segmento hay que mantener el pasillo libre por encima de la escotilla.
+La escotilla está **centrada** (x = 180). Para que el jugador pueda volar sin chocar, cada segmento de inicio (`SegmentStart01`–`SegmentStart10`, se sortea uno por partida) mide 1100 px de alto (en vez de 640) y tiene un **pasillo central libre de x 132 a 228 de punta a punta**, sin plataformas ni paredes: las plataformas alternan a los costados y hay un tanque en tres de ellas. El `PlayerSpawn` (usado solo cuando no hay intro, por ejemplo `Level.tscn` con F6) está sobre la plataforma más baja. Si se crea o rediseña un inicio hay que mantener el pasillo libre por encima de la escotilla.
 
 ### La cámara sigue al jugador durante el vuelo
 
@@ -97,7 +97,7 @@ Hatch (Node2D, ALWAYS)           origen = centro del borde superior del piso
 └── GasParticles (CPUParticles2D)  una sola ráfaga (one_shot), sin textura, blanco azulado con alfa
 ```
 
-Se ubica en el `HatchAnchor` (Marker2D) del segmento de inicio (`SegmentStart.tscn`, centro del borde superior del piso: (180, −20) local, o sea (180, 620) en el nivel) mediante `LevelBuilder.get_hatch_position()`. En `Level.tscn` está entre la cámara y el jugador: se dibuja sobre el piso y bajo el jugador. Todos los colores y medidas visuales son `const` en `hatch.gd`.
+Se ubica en el `HatchAnchor` (Marker2D) del segmento de inicio (`SegmentStartNN.tscn`, centro del borde superior del piso: (180, −20) local, o sea (180, 620) en el nivel) mediante `LevelBuilder.get_hatch_position()`. En `Level.tscn` está entre la cámara y el jugador: se dibuja sobre el piso y bajo el jugador. Todos los colores y medidas visuales son `const` en `hatch.gd`.
 
 ## API
 

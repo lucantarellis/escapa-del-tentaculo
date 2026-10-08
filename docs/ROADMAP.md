@@ -93,7 +93,8 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | 8e | Intro de la escotilla: ruptura, lanzamiento del jugador y entrada del tentáculo | Hecho | brief-05 |
 | 8f | Balance del MVP (rondas de tuning) | En curso | brief-06 |
 | 8g | Plataforma proyectil (`PROJECTILE`) | Hecho en la rama `main-g`, pendiente de prueba jugando | — |
-| 8h | Paredes pintadas con tiles (sólido + diagonal) | Hecho en la rama `main-l`, pendiente de pintar y probar jugando | — |
+| 8h | Paredes pintadas con tiles (sólido + diagonal) | Hecho en la rama `main-l`; paredes en los 21 segmentos (salvo Segment21) | — |
+| 8i | 10 inicios y 10 finales sorteados por partida, con paredes | Hecho en la rama `main-l`, pendiente de probar jugando | — |
 | 8c | Controles táctiles | Pendiente (al final, tras arte y balance) | — |
 | 9 | Arte final, audio y pulido | Pendiente | — |
 

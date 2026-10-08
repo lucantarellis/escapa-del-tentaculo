@@ -1,14 +1,32 @@
 [gd_resource type="Resource" script_class="LevelConfig" format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/level_config.gd" id="1_cfg"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentStart.tscn" id="2_start"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentEnd.tscn" id="3_end"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentProyectilQA.tscn" id="4_seg"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentStart01.tscn" id="start_01"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentStart02.tscn" id="start_02"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentStart03.tscn" id="start_03"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentStart04.tscn" id="start_04"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentStart05.tscn" id="start_05"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentStart06.tscn" id="start_06"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentStart07.tscn" id="start_07"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentStart08.tscn" id="start_08"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentStart09.tscn" id="start_09"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentStart10.tscn" id="start_10"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentEnd01.tscn" id="end_01"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentEnd02.tscn" id="end_02"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentEnd03.tscn" id="end_03"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentEnd04.tscn" id="end_04"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentEnd05.tscn" id="end_05"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentEnd06.tscn" id="end_06"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentEnd07.tscn" id="end_07"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentEnd08.tscn" id="end_08"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentEnd09.tscn" id="end_09"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/SegmentEnd10.tscn" id="end_10"]
 
 [resource]
 script = ExtResource("1_cfg")
 segment_count = 1
 avoid_repeat_window = 0
-start_segment = ExtResource("2_start")
-end_segment = ExtResource("3_end")
+start_segments = Array[PackedScene]([ExtResource("start_01"), ExtResource("start_02"), ExtResource("start_03"), ExtResource("start_04"), ExtResource("start_05"), ExtResource("start_06"), ExtResource("start_07"), ExtResource("start_08"), ExtResource("start_09"), ExtResource("start_10")])
+end_segments = Array[PackedScene]([ExtResource("end_01"), ExtResource("end_02"), ExtResource("end_03"), ExtResource("end_04"), ExtResource("end_05"), ExtResource("end_06"), ExtResource("end_07"), ExtResource("end_08"), ExtResource("end_09"), ExtResource("end_10")])
 segment_pool = Array[PackedScene]([ExtResource("4_seg")])

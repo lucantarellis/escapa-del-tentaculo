@@ -35,8 +35,9 @@ y=0   O-----------------------+   <- origen (0, 0) = esquina INFERIOR izquierda
 - Ocupa **x ∈ [0, 360]** e **y ∈ [−height, 0]** en coordenadas locales. El constructor coloca el origen en la Y del borde inferior.
 - La raíz es un nodo con el script `LevelSegment` (`@tool`). En el editor dibuja el contorno blanco y muestra **advertencias** (icono amarillo en el árbol) si no tiene ningún `FuelTank` o si un hijo directo queda fuera del rectángulo (para un obstáculo se cuenta su bloque entero y, si es móvil, todo su recorrido).
 - `height` (px) es diseño de nivel. `requires_fuel_tank` (por defecto activo) controla la advertencia del tanque.
-- **Inicio** (`SegmentStart.tscn`): mide **1100 px** de alto (más que una pantalla) porque el jugador sale volando de la escotilla y sube ~650 px. Tiene suelo, plataformas alternadas a los costados (izquierda x 20–150, derecha x 210–340) y un **pasillo central libre (x ≈ 150–210)** de punta a punta para el vuelo, tres tanques, un `Marker2D` **`PlayerSpawn`** (en (85, −92), sobre la plataforma inicial de la izquierda: solo se usa sin intro) y un `Marker2D` **`HatchAnchor`** (en (180, −20), centro del piso: ahí va la escotilla).
-- **Final** (`SegmentEnd.tscn`): plataformas y una **`Door`** cerca de la parte superior. Sin tentáculo ni requisitos extra.
+- **Inicio** (`SegmentStart01`–`SegmentStart10`, se sortea uno por partida entre `LevelConfig.start_segments`): miden **1100 px** de alto (más que una pantalla) porque el jugador sale volando de la escotilla y sube ~650 px. Contrato de cada uno: suelo (`Floor`, y −20..0), un **pasillo central libre (x 132–228)** de punta a punta para el vuelo (ni plataformas ni paredes), tres tanques, un `Marker2D` **`PlayerSpawn`** sobre la plataforma más baja (solo se usa sin intro) y un `Marker2D` **`HatchAnchor`** en (180, −20) (centro del piso: ahí va la escotilla). Dificultad baja: solo `STATIC` y `ONE_WAY`, que se alternan a los costados del pasillo.
+- **Final** (`SegmentEnd01`–`SegmentEnd10`, se sortea uno entre `LevelConfig.end_segments`): 640 px, un desafío corto (`BREAKABLE`, `TIMED`, `PULSE`, `LETHAL` fijo o móvil, plataformas móviles) y una **`Door`** (`GoalDoor`) sobre la plataforma de arriba (`Goal`), con un tanque.
+- **Paredes** (todos los segmentos): dejan al menos 36 px libres arriba y abajo para que cualquier combinación de segmentos encaje; pueden estar pegadas a los costados o flotando. Ver `docs/mecanicas/paredes.md`.
 
 ### Reglas de diseño (criterio del autor; no se validan)
 
@@ -67,7 +68,7 @@ y=0   O-----------------------+   <- origen (0, 0) = esquina INFERIOR izquierda
 | `Segment15` | `LETHAL` móvil con recorrido **vertical** (`travel` en Y) en vez del habitual horizontal |
 | `Segment16` | Compuerta `PULSE`, puente `ONE_WAY` móvil, `LETHAL` fijo y una `BREAKABLE` de bonus |
 
-`SegmentStart` (tres tanques, por su altura) y `SegmentEnd` (uno).
+Los inicios tienen tres tanques (por su altura) y los finales uno.
 
 ## Parámetros (`LevelConfig`, `resources/configs/level_config.tres`)
 
@@ -76,7 +77,8 @@ y=0   O-----------------------+   <- origen (0, 0) = esquina INFERIOR izquierda
 | Nivel | `segment_count` | 6 | — | Cantidad de segmentos intermedios por partida. Solo en modo plano (sin `tiers`) |
 | Nivel | `seed` | 0 | — | 0 = aleatoria en cada partida; distinto de 0 = fija (reproduce un nivel) |
 | Nivel | `avoid_repeat_window` | 3 | — | Un segmento no se repite dentro de los últimos N elegidos. Solo en modo plano |
-| Segmentos | `start_segment` / `end_segment` | `SegmentStart` / `SegmentEnd` | — | Escenas fijas de inicio y final |
+| Segmentos | `start_segments` | `SegmentStart01`–`SegmentStart10` | — | Candidatos de inicio; se sortea uno por partida con la seed |
+| Segmentos | `end_segments` | `SegmentEnd01`–`SegmentEnd10` | — | Candidatos de final; se sortea uno por partida con la seed |
 | Segmentos | `segment_pool` | los 21 intermedios (`Segment01`–`Segment21`) | — | Escenas candidatas del modo plano (`Array[PackedScene]`). Solo se usa si `tiers` está vacío |
 | Segmentos | `tiers` | 3 tiers (el 1 con los 21 segmentos, el 2 y el 3 vacíos) | — | Lista de [SegmentTier], en el orden en que se recorren de abajo hacia arriba |
 | Tier (`SegmentTier`) | `segments` | — | — | Escenas candidatas del tier |
@@ -97,6 +99,7 @@ Nodo `Node2D` (debe estar en el origen (0, 0)) con `@export var config: LevelCon
 | `get_camera_stop_y() -> float` | Y global del centro de la cámara para que el segmento final quede completo a la vista (se pasa a `ScrollCamera.set_stop_y`) |
 | `get_segment_count() -> int` | Segmentos intermedios armados |
 | `get_seed() -> int`, `get_sequence() -> PackedInt32Array`, `get_segments() -> Array[LevelSegment]`, `get_goal_door() -> Door` | Consultas (índices elegidos, segmentos de abajo hacia arriba, puerta del final). Con tiers, `get_sequence()` da el índice dentro de la lista de su tier |
+| `get_start_index() -> int`, `get_end_index() -> int` | Índice del inicio y del final elegidos en `start_segments` / `end_segments` (-1 sin nivel). La misma seed repite los mismos |
 | `get_tier_sequence() -> PackedInt32Array` | Con tiers: el tier (0 = tier 1) de cada segmento intermedio, en el mismo orden que `get_sequence()`. Vacío en modo plano |
 | señal `level_built(level_seed)` | Al terminar de armar el nivel |
 

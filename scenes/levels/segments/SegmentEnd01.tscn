@@ -1,0 +1,55 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
+[ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
+[ext_resource type="PackedScene" path="res://scenes/goal/Door.tscn" id="door"]
+[ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
+
+[node name="SegmentEnd01" type="Node2D"]
+script = ExtResource("seg")
+height = 640
+
+[node name="Walls" parent="." instance=ExtResource("walls")]
+tile_map_data = PackedByteArray("AAACAOr/AAABAAAAAQACAOv/AAAAAAAAAAACAOz/AAAAAAAAAAACAO3/AAABAAAAAwADAOr/AAAAAAAAAAADAOv/AAAAAAAAAAADAOz/AAAAAAAAAAADAO3/AAAAAAAAAAAEAOr/AAAAAAAAAAAEAOv/AAAAAAAAAAAEAOz/AAAAAAAAAAAEAO3/AAAAAAAAAAAFAOr/AAAAAAAAAAAFAOv/AAAAAAAAAAAFAOz/AAAAAAAAAAAFAO3/AAAAAAAAAAAGAOr/AAAAAAAAAAAGAOv/AAAAAAAAAAAGAOz/AAAAAAAAAAAGAO3/AAAAAAAAAAAHAOr/AAAAAAAAAAAHAOv/AAAAAAAAAAAHAOz/AAAAAAAAAAAHAO3/AAAAAAAAAAAIAOr/AAAAAAAAAAAIAOv/AAAAAAAAAAAIAOz/AAAAAAAAAAAIAO3/AAAAAAAAAAAJAOr/AAABAAAAAAAJAOv/AAAAAAAAAAAJAOz/AAAAAAAAAAAJAO3/AAABAAAAAgAKAN//AAABAAAAAQAKAOD/AAAAAAAAAAAKAOH/AAAAAAAAAAAKAOL/AAABAAAAAwALAN//AAAAAAAAAAALAOD/AAAAAAAAAAALAOH/AAAAAAAAAAALAOL/AAAAAAAAAAAMAN//AAAAAAAAAAAMAOD/AAAAAAAAAAAMAOH/AAAAAAAAAAAMAOL/AAAAAAAAAAANAN//AAAAAAAAAAANAOD/AAAAAAAAAAANAOH/AAAAAAAAAAANAOL/AAAAAAAAAAAOAN//AAAAAAAAAAAOAOD/AAAAAAAAAAAOAOH/AAAAAAAAAAAOAOL/AAAAAAAAAAAPAN//AAABAAAAAAAPAOD/AAAAAAAAAAAPAOH/AAAAAAAAAAAPAOL/AAABAAAAAgAbANr/AAABAAAAAQAbANv/AAAAAAAAAAAbANz/AAAAAAAAAAAbAN3/AAAAAAAAAAAbAN7/AAAAAAAAAAAbAN//AAAAAAAAAAAbAOD/AAAAAAAAAAAbAOH/AAAAAAAAAAAbAOL/AAAAAAAAAAAbAOP/AAABAAAAAwAcANr/AAAAAAAAAAAcANv/AAAAAAAAAAAcANz/AAAAAAAAAAAcAN3/AAAAAAAAAAAcAN7/AAAAAAAAAAAcAN//AAAAAAAAAAAcAOD/AAAAAAAAAAAcAOH/AAAAAAAAAAAcAOL/AAAAAAAAAAAcAOP/AAAAAAAAAAAdANr/AAAAAAAAAAAdANv/AAAAAAAAAAAdANz/AAAAAAAAAAAdAN3/AAAAAAAAAAAdAN7/AAAAAAAAAAAdAN//AAAAAAAAAAAdAOD/AAAAAAAAAAAdAOH/AAAAAAAAAAAdAOL/AAAAAAAAAAAdAOP/AAAAAAAAAAA=")
+
+[node name="Start" parent="." instance=ExtResource("plat")]
+position = Vector2(180, -40)
+size = Vector2(140, 12)
+platform_type = 0
+
+[node name="Crumble" parent="." instance=ExtResource("plat")]
+position = Vector2(90, -160)
+size = Vector2(70, 12)
+platform_type = 2
+
+[node name="Crumble2" parent="." instance=ExtResource("plat")]
+position = Vector2(270, -160)
+size = Vector2(70, 12)
+platform_type = 2
+
+[node name="Timed" parent="." instance=ExtResource("plat")]
+position = Vector2(180, -280)
+size = Vector2(80, 12)
+platform_type = 3
+
+[node name="OneWay" parent="." instance=ExtResource("plat")]
+position = Vector2(270, -400)
+size = Vector2(80, 12)
+platform_type = 1
+
+[node name="Lethal" parent="." instance=ExtResource("plat")]
+position = Vector2(70, -400)
+size = Vector2(60, 12)
+platform_type = 4
+
+[node name="Goal" parent="." instance=ExtResource("plat")]
+position = Vector2(180, -520)
+size = Vector2(140, 12)
+platform_type = 0
+
+[node name="FuelTank1" parent="." instance=ExtResource("tank")]
+position = Vector2(270, -424)
+
+[node name="GoalDoor" parent="." instance=ExtResource("door")]
+position = Vector2(180, -562)

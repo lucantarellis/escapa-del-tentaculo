@@ -1,0 +1,89 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
+[ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
+[ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
+
+[node name="SegmentStart03" type="Node2D"]
+script = ExtResource("seg")
+height = 1100
+
+[node name="Floor" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Polygon2D" type="Polygon2D" parent="Floor"]
+color = Color(0.2275, 0.6078, 0.749, 1)
+polygon = PackedVector2Array(0, -20, 360, -20, 360, 0, 0, 0)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Floor"]
+polygon = PackedVector2Array(0, -20, 360, -20, 360, 0, 0, 0)
+
+[node name="Walls" parent="." instance=ExtResource("walls")]
+tile_map_data = PackedByteArray("AAAAALf/AAAAAAAAAAAAALj/AAAAAAAAAAAAALn/AAAAAAAAAAAAALr/AAAAAAAAAAAAALv/AAAAAAAAAAAAALz/AAAAAAAAAAAAANf/AAAAAAAAAAAAANj/AAAAAAAAAAAAANn/AAAAAAAAAAAAANr/AAAAAAAAAAAAANv/AAAAAAAAAAAAANz/AAAAAAAAAAAAAN3/AAAAAAAAAAAAAN7/AAAAAAAAAAABALf/AAAAAAAAAAABALj/AAAAAAAAAAABALn/AAAAAAAAAAABALr/AAAAAAAAAAABALv/AAAAAAAAAAABALz/AAAAAAAAAAABANf/AAAAAAAAAAABANj/AAAAAAAAAAABANn/AAAAAAAAAAABANr/AAAAAAAAAAABANv/AAAAAAAAAAABANz/AAAAAAAAAAABAN3/AAAAAAAAAAABAN7/AAAAAAAAAAACALf/AAAAAAAAAAACALj/AAAAAAAAAAACALn/AAAAAAAAAAACALr/AAAAAAAAAAACALv/AAAAAAAAAAACALz/AAAAAAAAAAACANf/AAAAAAAAAAACANj/AAAAAAAAAAACANn/AAAAAAAAAAACANr/AAAAAAAAAAACANv/AAAAAAAAAAACANz/AAAAAAAAAAACAN3/AAAAAAAAAAACAN7/AAAAAAAAAAADALf/AAAAAAAAAAADALj/AAAAAAAAAAADALn/AAAAAAAAAAADALr/AAAAAAAAAAADALv/AAAAAAAAAAADALz/AAAAAAAAAAADAMn/AAABAAAAAQADAMr/AAAAAAAAAAADAMv/AAAAAAAAAAADAMz/AAABAAAAAwADANf/AAABAAAAAAADANj/AAAAAAAAAAADANn/AAAAAAAAAAADANr/AAAAAAAAAAADANv/AAAAAAAAAAADANz/AAAAAAAAAAADAN3/AAAAAAAAAAADAN7/AAABAAAAAgAEALf/AAAAAAAAAAAEALj/AAAAAAAAAAAEALn/AAAAAAAAAAAEALr/AAAAAAAAAAAEALv/AAAAAAAAAAAEALz/AAAAAAAAAAAEAMj/AAABAAAAAQAEAMn/AAAAAAAAAAAEAMr/AAAAAAAAAAAEAMv/AAAAAAAAAAAEAMz/AAAAAAAAAAAEAM3/AAABAAAAAwAEANj/AAABAAAAAAAEANn/AAAAAAAAAAAEANr/AAAAAAAAAAAEANv/AAAAAAAAAAAEANz/AAAAAAAAAAAEAN3/AAABAAAAAgAFALf/AAAAAAAAAAAFALj/AAAAAAAAAAAFALn/AAAAAAAAAAAFALr/AAAAAAAAAAAFALv/AAAAAAAAAAAFALz/AAAAAAAAAAAFAMj/AAAAAAAAAAAFAMn/AAAAAAAAAAAFAMr/AAAAAAAAAAAFAMv/AAAAAAAAAAAFAMz/AAAAAAAAAAAFAM3/AAAAAAAAAAAFANn/AAABAAAAAAAFANr/AAAAAAAAAAAFANv/AAAAAAAAAAAFANz/AAABAAAAAgAGALf/AAABAAAAAAAGALj/AAAAAAAAAAAGALn/AAAAAAAAAAAGALr/AAAAAAAAAAAGALv/AAAAAAAAAAAGALz/AAABAAAAAgAGAMj/AAAAAAAAAAAGAMn/AAAAAAAAAAAGAMr/AAAAAAAAAAAGAMv/AAAAAAAAAAAGAMz/AAAAAAAAAAAGAM3/AAAAAAAAAAAHALj/AAABAAAAAAAHALn/AAAAAAAAAAAHALr/AAAAAAAAAAAHALv/AAABAAAAAgAHAMj/AAABAAAAAAAHAMn/AAAAAAAAAAAHAMr/AAAAAAAAAAAHAMv/AAAAAAAAAAAHAMz/AAAAAAAAAAAHAM3/AAABAAAAAgAIAMn/AAABAAAAAAAIAMr/AAAAAAAAAAAIAMv/AAAAAAAAAAAIAMz/AAABAAAAAgAaAMb/AAABAAAAAQAaAMf/AAAAAAAAAAAaAMj/AAABAAAAAwAbALP/AAABAAAAAQAbALT/AAAAAAAAAAAbALX/AAAAAAAAAAAbALb/AAAAAAAAAAAbALf/AAAAAAAAAAAbALj/AAAAAAAAAAAbALn/AAABAAAAAwAbAMX/AAABAAAAAQAbAMb/AAAAAAAAAAAbAMf/AAAAAAAAAAAbAMj/AAAAAAAAAAAbAMn/AAABAAAAAwAcALP/AAAAAAAAAAAcALT/AAAAAAAAAAAcALX/AAAAAAAAAAAcALb/AAAAAAAAAAAcALf/AAAAAAAAAAAcALj/AAAAAAAAAAAcALn/AAAAAAAAAAAcAMT/AAABAAAAAQAcAMX/AAAAAAAAAAAcAMb/AAAAAAAAAAAcAMf/AAAAAAAAAAAcAMj/AAAAAAAAAAAcAMn/AAAAAAAAAAAcAMr/AAABAAAAAwAdALP/AAAAAAAAAAAdALT/AAAAAAAAAAAdALX/AAAAAAAAAAAdALb/AAAAAAAAAAAdALf/AAAAAAAAAAAdALj/AAAAAAAAAAAdALn/AAAAAAAAAAAdAMT/AAAAAAAAAAAdAMX/AAAAAAAAAAAdAMb/AAAAAAAAAAAdAMf/AAAAAAAAAAAdAMj/AAAAAAAAAAAdAMn/AAAAAAAAAAAdAMr/AAAAAAAAAAA=")
+
+[node name="Start" parent="." instance=ExtResource("plat")]
+position = Vector2(75, -90)
+size = Vector2(120, 12)
+platform_type = 0
+
+[node name="Static" parent="." instance=ExtResource("plat")]
+position = Vector2(285, -90)
+size = Vector2(120, 12)
+platform_type = 0
+
+[node name="OneWay" parent="." instance=ExtResource("plat")]
+position = Vector2(70, -300)
+size = Vector2(100, 12)
+platform_type = 1
+
+[node name="OneWay2" parent="." instance=ExtResource("plat")]
+position = Vector2(290, -300)
+size = Vector2(100, 12)
+platform_type = 1
+
+[node name="Static2" parent="." instance=ExtResource("plat")]
+position = Vector2(75, -520)
+size = Vector2(110, 12)
+platform_type = 0
+
+[node name="Static3" parent="." instance=ExtResource("plat")]
+position = Vector2(285, -520)
+size = Vector2(110, 12)
+platform_type = 0
+
+[node name="OneWay3" parent="." instance=ExtResource("plat")]
+position = Vector2(70, -740)
+size = Vector2(100, 12)
+platform_type = 1
+
+[node name="OneWay4" parent="." instance=ExtResource("plat")]
+position = Vector2(290, -740)
+size = Vector2(100, 12)
+platform_type = 1
+
+[node name="Static4" parent="." instance=ExtResource("plat")]
+position = Vector2(75, -960)
+size = Vector2(110, 12)
+platform_type = 0
+
+[node name="Static5" parent="." instance=ExtResource("plat")]
+position = Vector2(285, -960)
+size = Vector2(110, 12)
+platform_type = 0
+
+[node name="FuelTank1" parent="." instance=ExtResource("tank")]
+position = Vector2(70, -324)
+
+[node name="FuelTank2" parent="." instance=ExtResource("tank")]
+position = Vector2(285, -544)
+
+[node name="FuelTank3" parent="." instance=ExtResource("tank")]
+position = Vector2(70, -764)
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(75, -108)
+
+[node name="HatchAnchor" type="Marker2D" parent="."]
+position = Vector2(180, -20)

@@ -18,10 +18,13 @@ extends Resource
 @export var avoid_repeat_window: int = 1
 
 @export_group("Segmentos")
-## Escena del segmento de inicio (debe tener un nodo `PlayerSpawn`).
-@export var start_segment: PackedScene
-## Escena del segmento final (debe contener una [Door]).
-@export var end_segment: PackedScene
+## Candidatos para el segmento de inicio: se sortea uno por partida con la seed. Cada uno debe
+## tener los Marker2D `PlayerSpawn` y `HatchAnchor`, y el pasillo central libre para el vuelo
+## de la escotilla (ver `docs/mecanicas/niveles-por-segmentos.md`).
+@export var start_segments: Array[PackedScene] = []
+## Candidatos para el segmento final: se sortea uno por partida con la seed. Cada uno debe
+## contener una [Door].
+@export var end_segments: Array[PackedScene] = []
 ## Escenas candidatas para los segmentos intermedios. Solo se usa si `tiers` está vacío (modo
 ## plano, con `segment_count` segmentos).
 @export var segment_pool: Array[PackedScene] = []

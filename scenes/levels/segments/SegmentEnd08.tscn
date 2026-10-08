@@ -1,0 +1,64 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
+[ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
+[ext_resource type="PackedScene" path="res://scenes/goal/Door.tscn" id="door"]
+[ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
+
+[node name="SegmentEnd08" type="Node2D"]
+script = ExtResource("seg")
+height = 640
+
+[node name="Walls" parent="." instance=ExtResource("walls")]
+tile_map_data = PackedByteArray("AAAAAOf/AAAAAAAAAAAAAOj/AAAAAAAAAAAAAOn/AAAAAAAAAAAAAOr/AAAAAAAAAAAAAOv/AAAAAAAAAAAAAOz/AAAAAAAAAAAAAO3/AAAAAAAAAAAAAPj/AAAAAAAAAAAAAPn/AAAAAAAAAAAAAPr/AAAAAAAAAAAAAPv/AAAAAAAAAAABAOf/AAAAAAAAAAABAOj/AAAAAAAAAAABAOn/AAAAAAAAAAABAOr/AAAAAAAAAAABAOv/AAAAAAAAAAABAOz/AAAAAAAAAAABAO3/AAAAAAAAAAABAPj/AAAAAAAAAAABAPn/AAAAAAAAAAABAPr/AAAAAAAAAAABAPv/AAAAAAAAAAACAOf/AAABAAAAAAACAOj/AAAAAAAAAAACAOn/AAAAAAAAAAACAOr/AAAAAAAAAAACAOv/AAAAAAAAAAACAOz/AAAAAAAAAAACAO3/AAABAAAAAgACAPj/AAAAAAAAAAACAPn/AAAAAAAAAAACAPr/AAAAAAAAAAACAPv/AAAAAAAAAAADAPj/AAAAAAAAAAADAPn/AAAAAAAAAAADAPr/AAAAAAAAAAADAPv/AAAAAAAAAAAEAPj/AAABAAAAAAAEAPn/AAAAAAAAAAAEAPr/AAAAAAAAAAAEAPv/AAABAAAAAgAFAPn/AAABAAAAAAAFAPr/AAABAAAAAgAaANn/AAABAAAAAQAaANr/AAAAAAAAAAAaANv/AAAAAAAAAAAaANz/AAAAAAAAAAAaAN3/AAAAAAAAAAAaAN7/AAABAAAAAwAbANj/AAABAAAAAQAbANn/AAAAAAAAAAAbANr/AAAAAAAAAAAbANv/AAAAAAAAAAAbANz/AAAAAAAAAAAbAN3/AAAAAAAAAAAbAN7/AAAAAAAAAAAbAN//AAABAAAAAwAcANj/AAAAAAAAAAAcANn/AAAAAAAAAAAcANr/AAAAAAAAAAAcANv/AAAAAAAAAAAcANz/AAAAAAAAAAAcAN3/AAAAAAAAAAAcAN7/AAAAAAAAAAAcAN//AAAAAAAAAAAdANj/AAAAAAAAAAAdANn/AAAAAAAAAAAdANr/AAAAAAAAAAAdANv/AAAAAAAAAAAdANz/AAAAAAAAAAAdAN3/AAAAAAAAAAAdAN7/AAAAAAAAAAAdAN//AAAAAAAAAAA=")
+
+[node name="Start" parent="." instance=ExtResource("plat")]
+position = Vector2(180, -40)
+size = Vector2(140, 12)
+platform_type = 0
+
+[node name="LethalMover" parent="." instance=ExtResource("plat")]
+position = Vector2(40, -140)
+size = Vector2(30, 16)
+platform_type = 4
+moves = true
+travel = Vector2(280, 0)
+
+[node name="OneWay" parent="." instance=ExtResource("plat")]
+position = Vector2(90, -230)
+size = Vector2(80, 12)
+platform_type = 1
+
+[node name="OneWay2" parent="." instance=ExtResource("plat")]
+position = Vector2(270, -230)
+size = Vector2(80, 12)
+platform_type = 1
+
+[node name="LethalMover2" parent="." instance=ExtResource("plat")]
+position = Vector2(320, -320)
+size = Vector2(30, 16)
+platform_type = 4
+moves = true
+travel = Vector2(-280, 0)
+
+[node name="Static" parent="." instance=ExtResource("plat")]
+position = Vector2(180, -410)
+size = Vector2(100, 12)
+platform_type = 0
+
+[node name="Crumble" parent="." instance=ExtResource("plat")]
+position = Vector2(90, -470)
+size = Vector2(60, 12)
+platform_type = 2
+
+[node name="Goal" parent="." instance=ExtResource("plat")]
+position = Vector2(230, -520)
+size = Vector2(140, 12)
+platform_type = 0
+
+[node name="FuelTank1" parent="." instance=ExtResource("tank")]
+position = Vector2(270, -254)
+
+[node name="GoalDoor" parent="." instance=ExtResource("door")]
+position = Vector2(230, -562)
