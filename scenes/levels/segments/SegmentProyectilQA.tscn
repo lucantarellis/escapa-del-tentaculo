@@ -7,7 +7,6 @@
 
 [node name="SegmentProyectilQA" type="Node2D"]
 script = ExtResource("seg")
-height = 640
 
 [node name="Ledge1" parent="." instance=ExtResource("plat")]
 position = Vector2(100, -50)

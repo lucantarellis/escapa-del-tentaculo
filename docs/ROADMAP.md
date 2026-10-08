@@ -52,7 +52,7 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | Intro: director y escena propia | La secuencia la orquesta `IntroDirector` (llama hacia abajo a `Hatch`, `ScrollCamera`, `Player` y `Tentacle`; emite `hit`, `broken`, `finished`). La escotilla es una escena propia (`Hatch.tscn`). Todos los tiempos y magnitudes viven en `IntroConfig` | Propuesta de Claude (brief 05), pendiente de validar jugando |
 | Intro: cuándo se reproduce | Al pulsar JUGAR y con cada R (`Main` reconstruye el nivel y llama a `LevelController.play_intro()`). `Level.tscn` (F6) y `sandbox.tscn` solos la saltan: escotilla ya rota, tentáculo activo desde el primer frame y jugador en el `PlayerSpawn` (sin lanzamiento). R durante la intro no hace nada (`GameManager` en `READY`) | Propuesta de Claude (brief 05) |
 | Intro: `start_delay` | Sin cambios: la cámara empieza a subir `start_delay` s después de la ruptura (inicio de la partida) | Propuesta de Claude (brief 05) |
-| Intro: escotilla centrada y vuelo | La escotilla va centrada. El segmento de inicio mide 1100 px con un pasillo central libre para el vuelo (~640 px de altura); durante el vuelo la cámara sube lo necesario para que el jugador nunca salga de la vista (`ScrollCamera.follow_up`) | LT (QA del paso 8e) |
+| Intro: escotilla centrada y vuelo | La escotilla va centrada. El segmento de inicio mide 640 px (como todos, desde la fase 0) con un pasillo central libre para el vuelo (~390 px de altura con `launch_speed` 520); durante el vuelo la cámara sube lo necesario para que el jugador nunca salga de la vista (`ScrollCamera.follow_up`) | LT (QA del paso 8e) |
 | Plataforma proyectil | Tipo `PROJECTILE` de `Platform`: letal desde que aparece, se dispara por cámara o por distancia (uno solo), vuela en línea recta y al final explota, desaparece o rebota contra las paredes de la pantalla N veces; al golpear al jugador explota. "Desaparecer" oculta y desactiva (no `queue_free`) para que `reset()` la reviva. Doc: `docs/mecanicas/plataforma-proyectil.md` | Socio (iteración en `main-g`) |
 | Controles táctiles | Se implementan al final (paso 8c), cuando lo demás esté cerrado. Mientras tanto, solo teclado | LT (brief 04) |
 | Escena principal | `run/main_scene` seguirá siendo `Main.tscn`, que será la pantalla de título: título del juego y un botón grande de "jugar". Al pulsarlo el menú se disuelve hasta quedar transparente e inicia el juego sobre la escena de juego correspondiente (`Level.tscn`). `Level.tscn` no es la escena principal | LT (brief 03, cierre); se implementa en el paso 8 |
@@ -94,7 +94,8 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | 8f | Balance del MVP (rondas de tuning) | En curso | brief-06 |
 | 8g | Plataforma proyectil (`PROJECTILE`) | Hecho en la rama `main-g`, pendiente de prueba jugando | — |
 | 8h | Paredes pintadas con tiles (sólido + diagonal) | Hecho en la rama `main-l`; paredes en los 21 segmentos (salvo Segment21) | — |
-| 8i | 10 inicios y 10 finales sorteados por partida, con paredes | Hecho en la rama `main-l`, pendiente de probar jugando | — |
+| 8i | 10 inicios y 10 finales sorteados por partida, con paredes | Hecho en la rama `main-l` | — |
+| F0 | Segmentos de tamaño fijo 360 × 640 (intermedios completados arriba, inicios compactados, `launch_speed` 520) | Local en `main-l`, pendiente de probar | — |
 | 8c | Controles táctiles | Pendiente (al final, tras arte y balance) | — |
 | 9 | Arte final, audio y pulido | Pendiente | — |
 

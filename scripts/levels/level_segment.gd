@@ -14,13 +14,14 @@ const WIDTH: float = 360.0
 ## Color del contorno que se dibuja solo en el editor. Solo visual.
 const OUTLINE_COLOR: Color = Color(1.0, 1.0, 1.0, 0.6)
 
-@export_group("Forma")
-## Alto del segmento. Es diseño de nivel, no tuning. Unidad: px.
-@export var height: float = 640.0:
-	set(value):
-		height = maxf(value, 1.0)
-		queue_redraw()
-		update_configuration_warnings()
+## Alto de todo segmento (una pantalla). Fijo para que cualquier combinación encaje y se
+## diseñe viendo el segmento completo. Estructural. Unidad: px.
+const HEIGHT: float = 640.0
+## Alto del segmento: siempre [constant HEIGHT]. Solo lectura (se mantiene como propiedad para
+## no cambiar el código que lo consulta).
+var height: float:
+	get:
+		return HEIGHT
 
 @export_group("Contrato")
 ## Si es true, el segmento debe contener al menos un [FuelTank] (los segmentos intermedios lo

@@ -13,7 +13,6 @@ metadata/_custom_type_script = "uid://cphk3uui2un6l"
 
 [node name="Segment21" type="Node2D" unique_id=975552168]
 script = ExtResource("1_mcuby")
-height = 340.0
 
 [node name="Start" parent="." unique_id=1021958743 instance=ExtResource("2_13t3b")]
 position = Vector2(297, -363)
@@ -70,3 +69,33 @@ config = SubResource("Resource_vbomv")
 position = Vector2(285, -55)
 
 [node name="Walls" parent="." instance=ExtResource("walls")]
+
+[node name="Up1" parent="." instance=ExtResource("2_13t3b")]
+position = Vector2(180, -430)
+size = Vector2(80, 12)
+platform_type = 0
+
+[node name="Up2" parent="." instance=ExtResource("2_13t3b")]
+position = Vector2(-50, -470)
+size = Vector2(15, 15)
+platform_type = 4
+moves = true
+travel = Vector2(460, -100)
+
+[node name="Up3" parent="." instance=ExtResource("2_13t3b")]
+position = Vector2(60, -520)
+size = Vector2(70, 12)
+platform_type = 0
+
+[node name="Up4" parent="." instance=ExtResource("2_13t3b")]
+position = Vector2(290, -540)
+size = Vector2(70, 12)
+platform_type = 0
+
+[node name="Up5" parent="." instance=ExtResource("2_13t3b")]
+position = Vector2(180, -612)
+size = Vector2(140, 12)
+platform_type = 0
+
+[node name="UpFuelTank" parent="." instance=ExtResource("3_w40ed")]
+position = Vector2(180, -454)

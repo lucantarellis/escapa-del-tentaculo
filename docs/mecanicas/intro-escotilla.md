@@ -26,11 +26,11 @@ Fórmulas: golpe *i* (desde 0) en `first_hit_delay + i × hit_interval`; fuerza 
 
 ### El vuelo del jugador
 
-Con los valores de prueba actuales de `player_config.tres` (gravedad con combustible 150 px/s², `coasting_drag` 90 px/s²), medido por simulación: sin tocar nada el jugador sube ~256 px hasta recuperar el control (a 0,5 s, con `vy` ≈ −436 px/s) y su inercia lo lleva a un máximo de ~645 px sobre la escotilla (unos 37 px por encima de la pantalla inicial); después cae. La cámara subió como máximo ~290 px. La altura teórica es `launch_speed² / (2 × (drag + gravedad))`. Al recuperar el control colisiona y se mueve como siempre. Si cambian la gravedad o el drag, cambian estas distancias: recalibrar `launch_speed` / `control_lock_time`.
+Medido por simulación con los valores de prueba actuales de `player_config.tres` y `launch_speed` = 520 px/s: el jugador sube ~393 px sobre la escotilla antes de empezar a caer (con 560 subía ~456 px). Se bajó de 560 a 520 al pasar el inicio a 640 px de alto (fase 0), para que el vuelo termine dentro del segmento de inicio. La altura teórica es `launch_speed² / (2 × (drag + gravedad))`. Al recuperar el control colisiona y se mueve como siempre. Si cambian la gravedad o el drag, cambian estas distancias: recalibrar `launch_speed` / `control_lock_time`.
 
 ### El segmento de inicio (pasillo del vuelo)
 
-La escotilla está **centrada** (x = 180). Para que el jugador pueda volar sin chocar, cada segmento de inicio (`SegmentStart01`–`SegmentStart10`, se sortea uno por partida) mide 1100 px de alto (en vez de 640) y tiene un **pasillo central libre de x 132 a 228 de punta a punta**, sin plataformas ni paredes: las plataformas alternan a los costados y hay un tanque en tres de ellas. El `PlayerSpawn` (usado solo cuando no hay intro, por ejemplo `Level.tscn` con F6) está sobre la plataforma más baja. Si se crea o rediseña un inicio hay que mantener el pasillo libre por encima de la escotilla.
+La escotilla está **centrada** (x = 180). Para que el jugador pueda volar sin chocar, cada segmento de inicio (`SegmentStart01`–`SegmentStart10`, se sortea uno por partida) mide 640 px de alto, como todo segmento, y tiene un **pasillo central libre de x 132 a 228 de punta a punta**, sin plataformas ni paredes: las plataformas alternan a los costados y hay un tanque en tres de ellas. El `PlayerSpawn` (usado solo cuando no hay intro, por ejemplo `Level.tscn` con F6) está sobre la plataforma más baja. Si se crea o rediseña un inicio hay que mantener el pasillo libre por encima de la escotilla.
 
 ### La cámara sigue al jugador durante el vuelo
 
@@ -76,7 +76,7 @@ La intro corre cuando alguien llama a `LevelController.play_intro()`: `Main` al 
 | Ruptura | `break_gas_amount` | 80 | partículas | Partículas de la ráfaga grande |
 | Ruptura | `break_duration` | 0.35 | s | Duración de la apertura de las hojas |
 | Ruptura | `break_debris_count` | 6 | — | Fragmentos que salen despedidos |
-| Lanzamiento | `launch_speed` | 560.0 | px/s | Velocidad vertical inicial (hacia arriba) |
+| Lanzamiento | `launch_speed` | 520.0 | px/s | Velocidad vertical inicial (hacia arriba) |
 | Lanzamiento | `control_lock_time` | 0.5 | s | Tiempo sin control tras el lanzamiento |
 | Cámara | `camera_follow_margin` | 120.0 | px | Distancia mínima entre el jugador y el borde superior de la pantalla durante el vuelo |
 | Cámara | `camera_follow_max_time` | 3.0 | s | Tiempo máximo de seguimiento tras el lanzamiento |
