@@ -54,6 +54,7 @@ Detalle completo de `PROJECTILE` en `docs/mecanicas/plataforma-proyectil.md`.
 | `projectile_trigger` | enum | `CAMERA` | — | Solo `PROJECTILE`: qué lo dispara (`CAMERA` o `DISTANCE`) |
 | `projectile_end` | enum | `EXPLODE` | — | Solo `PROJECTILE`: qué hace al final del recorrido (`EXPLODE`, `DESTROY` o `BOUNCE`) |
 | `config` | PlatformConfig | `platform_config.tres` | — | Tiempos (ver abajo) |
+| `show_detection_areas` | bool | false | — | Solo editor: muestra los círculos de detección del proyectil (`TriggerArea` y `ExplosionArea`). No cambia el comportamiento; en el juego siempre se ven con "Formas de colisión visibles" |
 
 `travel` también es la dirección y el recorrido de un `PROJECTILE`.
 

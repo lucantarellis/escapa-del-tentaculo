@@ -140,6 +140,15 @@ const DEFAULT_EXPLOSION_RADIUS: float = 48.0
 ## Tiempos de cada tipo y del movimiento (ver [PlatformConfig]).
 @export var config: PlatformConfig
 
+@export_group("Editor")
+## Muestra en el editor los círculos de detección del proyectil (`TriggerArea`, radio de
+## disparo, y `ExplosionArea`, radio de explosión). Solo visual: no cambia la detección ni la
+## explosión, y en el juego no tiene efecto. Apagado por defecto para no tapar el segmento.
+@export var show_detection_areas: bool = false:
+	set(value):
+		show_detection_areas = value
+		_apply_detection_areas_visibility()
+
 @onready var _body: Polygon2D = $Body
 @onready var _collision: CollisionShape2D = $CollisionShape2D
 @onready var _step_sensor: Area2D = $StepSensor
@@ -172,6 +181,7 @@ var _proj_velocity: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
 	_update_shape()
+	_apply_detection_areas_visibility()
 	if Engine.is_editor_hint():
 		_apply_type()
 		return
@@ -275,6 +285,17 @@ func _update_shape() -> void:
 	if not _explosion_shape.shape is CircleShape2D:
 		_explosion_shape.shape = CircleShape2D.new()
 	(_explosion_shape.shape as CircleShape2D).radius = _get_explosion_radius()
+
+
+# Muestra u oculta en el editor los círculos de detección del proyectil según
+# `show_detection_areas`. En el juego quedan siempre visibles, así "Formas de colisión
+# visibles" (menú Depurar) los sigue mostrando.
+func _apply_detection_areas_visibility() -> void:
+	if not is_node_ready():
+		return
+	var areas_visible: bool = show_detection_areas or not Engine.is_editor_hint()
+	_trigger_shape.visible = areas_visible
+	_explosion_shape.visible = areas_visible
 
 
 # Aplica lo que depende del tipo: color, colisión de un sentido, sensores activos y estado
