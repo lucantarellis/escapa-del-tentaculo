@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/pickups/SpeedBoost.tscn" id="boost"]
 [ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
 [ext_resource type="Script" path="res://scripts/levels/asteroid.gd" id="asteroid"]
+[ext_resource type="PackedScene" path="res://scenes/hazards/Meteor.tscn" id="meteor"]
 
 [node name="SegmentSpace01" type="Node2D"]
 script = ExtResource("seg")
@@ -48,27 +49,27 @@ drift_period = 3.7
 drift_offset = 0.7
 spin_speed = 0
 
-[node name="Burning1" parent="." instance=ExtResource("plat")]
-position = Vector2(30, -300)
-size = Vector2(24, 24)
-platform_type = 4
-moves = true
-travel = Vector2(300, 0)
-
-[node name="Meteor1" parent="." instance=ExtResource("plat")]
-position = Vector2(150, -15)
-size = Vector2(10, 10)
-platform_type = 6
-travel = Vector2(0, -600)
-projectile_trigger = 0
-projectile_end = 1
-
 [node name="Debris1" parent="." instance=ExtResource("plat")]
 position = Vector2(150, -440)
 size = Vector2(60, 12)
 platform_type = 0
 moves = true
 travel = Vector2(80, 0)
+
+[node name="Meteor1" parent="." instance=ExtResource("meteor")]
+position = Vector2(-24, -200)
+travel = Vector2(420, 80)
+speed = 170
+size = 16
+repeat_interval = 5
+
+[node name="Meteor2" parent="." instance=ExtResource("meteor")]
+position = Vector2(384, -470)
+travel = Vector2(-420, -60)
+speed = 190
+size = 18
+repeat_interval = 5
+initial_delay = 2.5
 
 [node name="FuelTank1" parent="." instance=ExtResource("tank")]
 position = Vector2(283.5, -294)

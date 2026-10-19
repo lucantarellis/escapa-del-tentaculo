@@ -21,8 +21,7 @@ Cada parte se ajusta con los `@export` de `WindowBreach` y de `TierEvent` en cad
 | Superficies | **Asteroides** de roca de 4 tamaños (chico 48 × 48 px, mediano 96 × 48, grande 120 × 72 y gigante 144 × 96, este último solo en `SegmentSpace05`) y formas irregulares; flotan (van y vienen) y algunos giran; donde parar y recargar. Cada segmento mezcla tamaños (`SegmentSpace04` y `09` tienen solo chicos: su espacio libre es justo) | Nodos `Asteroid` (`scripts/levels/asteroid.gd`): una capa de tiles por asteroide con `drift` (vaivén, 8–18 px), `drift_period` (3–6 s) y `spin_speed` (°/s; 0 en los grandes y en ~40 % de los chicos, si no 6–14 °/s). Usan cuerpos cinemáticos, así que te llevan si estás parado encima. Tileset de roca `#7A6A5A` |
 | Impulsos | Flechas cian: al tocarlas, 1 s de propulsión y velocidad máxima ×1,8; en el espacio casi no se frena, así que la velocidad ganada se conserva | `SpeedBoost` (`scenes/pickups/SpeedBoost.tscn`, config `speed_boost_config.tres`: `duration`, `multiplier`, `fuel_amount`). 2 por segmento del espacio y por entrada |
 | Restos a la deriva | Chapas de la nave que se mueven despacio y se pueden pisar | `Platform` STATIC con `moves`, teñidas de gris metálico (`platform_tint` del tier) |
-| Restos en llamas | Cruzan la pantalla; tocarlos mata | `Platform` LETHAL con `moves`, teñidas de naranja (`hazard_tint`) |
-| Meteoritos | Suben desde abajo o rebotan | `Platform` PROJECTILE (fin `DESTROY` o `BOUNCE`) |
+| Meteoros y cometas | Cruzan la pantalla avisando antes (marca en el borde; el cometa, además, la línea de su recorrido); tocarlos mata. El meteoro se rompe contra los asteroides | `SpaceProjectile` (`Meteor.tscn`, `Comet.tscn`). Ver `obstaculos-espacio.md` |
 | Tanques | Cápsulas de la nave flotando sobre los asteroides | `FuelTank` |
 
 PULSE, TIMED y BREAKABLE no aparecen en el espacio (son mecanismos de la nave).

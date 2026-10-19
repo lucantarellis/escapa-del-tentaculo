@@ -68,6 +68,7 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 | `Asteroid` | `scripts/levels/asteroid.gd` | Asteroide del espacio: capa de tiles propia que flota y gira (cuerpos cinemáticos) |
 | `SpeedBoost` | `scripts/pickups/speed_boost.gd` (+ `speed_boost_config.gd`) | Recogible de impulso de velocidad (tier 2) |
 | `HullDebris` | `scripts/levels/hull_debris.gd` | Fragmento letal despedido por un `TierEvent` (causa `&"debris"`) |
+| `SpaceProjectile` | `scripts/hazards/space_projectile.gd` | Meteoro o cometa del tier 2: avisa, cruza la pantalla y mata (causas `&"meteor"`, `&"comet"`). Ver `docs/mecanicas/obstaculos-espacio.md` |
 | `LevelBackground` | `scripts/levels/level_background.gd` | Fondo del nivel (color y estrellas con parallax) por tier; nodo `Background` de `Level.tscn` |
 
 ## Flujo de una partida

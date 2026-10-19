@@ -60,13 +60,6 @@ platform_type = 0
 moves = true
 travel = Vector2(140, 0)
 
-[node name="Burning1" parent="." instance=ExtResource("plat")]
-position = Vector2(330, -360)
-size = Vector2(20, 20)
-platform_type = 4
-moves = true
-travel = Vector2(-300, 0)
-
 [node name="FuelTank1" parent="." instance=ExtResource("tank")]
 position = Vector2(36, -474)
 

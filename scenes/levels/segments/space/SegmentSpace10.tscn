@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/pickups/SpeedBoost.tscn" id="boost"]
 [ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
 [ext_resource type="Script" path="res://scripts/levels/asteroid.gd" id="asteroid"]
+[ext_resource type="PackedScene" path="res://scenes/hazards/Comet.tscn" id="comet"]
 
 [node name="SegmentSpace10" type="Node2D"]
 script = ExtResource("seg")
@@ -53,13 +54,18 @@ platform_type = 0
 moves = true
 travel = Vector2(-240, 0)
 
-[node name="Meteor1" parent="." instance=ExtResource("plat")]
-position = Vector2(345, -15)
-size = Vector2(10, 10)
-platform_type = 6
-travel = Vector2(0, -600)
-projectile_trigger = 0
-projectile_end = 1
+[node name="Comet1" parent="." instance=ExtResource("comet")]
+position = Vector2(-40, -540)
+travel = Vector2(460, 330)
+speed = 330
+repeat_interval = 7
+
+[node name="Comet2" parent="." instance=ExtResource("comet")]
+position = Vector2(400, -200)
+travel = Vector2(-460, -160)
+speed = 340
+repeat_interval = 7
+initial_delay = 3.5
 
 [node name="FuelTank1" parent="." instance=ExtResource("tank")]
 position = Vector2(294, -294)

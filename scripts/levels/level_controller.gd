@@ -28,6 +28,8 @@ const DEATH_TEXTS: Dictionary = {
 	&"obstacle": "GOLPEADO — pulsá R para reiniciar",
 	&"trap": "GOLPEADO — pulsá R para reiniciar",
 	&"debris": "GOLPEADO — pulsá R para reiniciar",
+	&"meteor": "GOLPEADO — pulsá R para reiniciar",
+	&"comet": "GOLPEADO — pulsá R para reiniciar",
 }
 ## Texto para una causa de muerte desconocida. Solo visual.
 const DEFAULT_DEATH_TEXT: String = "PERDISTE — pulsá R para reiniciar"
