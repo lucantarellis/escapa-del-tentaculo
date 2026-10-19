@@ -13,6 +13,9 @@ extends Node2D
 
 ## Se emite cuando el evento se dispara.
 signal triggered
+## Se emite al empezar el aviso previo de CADA explosión ([param lead] = segundos que faltan
+## para que explote). Punto de enganche para el sonido de aviso (paso de audio).
+signal warning_started(lead: float)
 
 ## Color de la silueta del alien (violeta oscuro de la paleta del tentáculo). Solo visual.
 const SILHOUETTE_COLOR: Color = Color("3A1B5E")
@@ -24,6 +27,10 @@ const EDITOR_LINE_COLOR: Color = Color(1.0, 0.42, 0.2, 0.8)
 @export var shake_amplitude: float = 28.0
 ## Duración de la sacudida. Unidad: s.
 @export var shake_duration: float = 1.2
+## Fuerza de la sacudida de la 2.ª y 3.ª explosión respecto de la primera (1 = igual).
+@export var wave_shake_scale: float = 1.0
+## Duración de la sacudida de la 2.ª y 3.ª explosión respecto de la primera (1 = igual).
+@export var wave_shake_duration_scale: float = 1.0
 ## Escala de tiempo durante la cámara lenta (1 = sin cámara lenta).
 @export_range(0.05, 1.0, 0.05) var slow_motion_scale: float = 0.25
 ## Duración de la cámara lenta, en tiempo real. Unidad: s.
@@ -51,6 +58,20 @@ const EDITOR_LINE_COLOR: Color = Color(1.0, 0.42, 0.2, 0.8)
 ## Cantidad de partículas de fuego.
 @export var fire_particles: int = 70
 
+@export_group("Aviso previo")
+## Segundos antes de cada explosión en que empieza el aviso: el borde inferior de la pantalla
+## parpadea y la cámara tiembla apenas (0 = sin aviso). Si falta menos tiempo hasta la
+## explosión (por ejemplo `explosion_delay`), el aviso dura lo que falte. Unidad: s.
+@export var warning_time: float = 0.7
+## Cantidad de parpadeos del borde inferior durante el aviso.
+@export var warning_blinks: int = 3
+## Color del parpadeo (el alfa es la opacidad máxima).
+@export var warning_color: Color = Color(1.0, 0.42, 0.2, 0.55)
+## Alto de la franja que parpadea, medido desde el borde inferior de la pantalla. Unidad: px.
+@export var warning_height: float = 110.0
+## Fuerza del temblor leve durante el aviso. Unidad: px.
+@export var warning_shake_amplitude: float = 3.0
+
 @export_group("Eyección")
 ## Velocidad hacia arriba que recibe el jugador (0 = sin eyección). Unidad: px/s.
 @export var eject_speed: float = 450.0
@@ -67,8 +88,9 @@ const EDITOR_LINE_COLOR: Color = Color(1.0, 0.42, 0.2, 0.8)
 @export var debris_size: float = 18.0
 ## Si es true, los fragmentos apuntan hacia adelante del jugador: a donde va a estar dentro de
 ## `debris_lead` s según su velocidad (con `debris_aim_spread` de desvío al azar); si no, salen
-## hacia arriba en direcciones al azar. Unidades: s y grados.
+## hacia arriba en direcciones al azar, dentro de ±`debris_random_angle`. Unidades: s y grados.
 @export var debris_aim_at_player: bool = true
+@export var debris_random_angle: float = 55.0
 @export var debris_lead: float = 0.5
 @export var debris_aim_spread: float = 30.0
 ## Distancia horizontal mínima al jugador donde puede aparecer un fragmento. Unidad: px.
@@ -124,13 +146,17 @@ func fire(player: Player = null) -> void:
 		return
 	_fired = true
 	set_physics_process(false)
-	if explosion_delay > 0.0:
-		await get_tree().create_timer(explosion_delay).timeout
-		if not is_inside_tree():
-			return
 	for wave: int in maxi(explosion_waves, 1):
-		if wave > 0:
-			await get_tree().create_timer(explosion_wave_interval).timeout
+		# Espera hasta la explosión; el aviso previo ocupa los últimos `warning_time` s.
+		var wait: float = explosion_delay if wave == 0 else explosion_wave_interval
+		var lead: float = minf(maxf(warning_time, 0.0), wait)
+		if wait > lead:
+			await get_tree().create_timer(wait - lead).timeout
+			if not is_inside_tree():
+				return
+		if lead > 0.0:
+			_play_warning(lead)
+			await get_tree().create_timer(lead).timeout
 			if not is_inside_tree():
 				return
 		_explode(player, wave == 0)
@@ -143,7 +169,7 @@ func fire(player: Player = null) -> void:
 func _explode(player: Player, first: bool) -> void:
 	var camera: ScrollCamera = get_viewport().get_camera_2d() as ScrollCamera
 	if camera != null:
-		camera.shake(shake_amplitude if first else shake_amplitude * 0.6, shake_duration if first else shake_duration * 0.7)
+		camera.shake(shake_amplitude if first else shake_amplitude * wave_shake_scale, shake_duration if first else shake_duration * wave_shake_duration_scale)
 	var origin: Vector2 = global_position + explosion_offset
 	if not first and camera != null:
 		var view: Rect2 = camera.get_visible_rect()
@@ -158,6 +184,36 @@ func _explode(player: Player, first: bool) -> void:
 	if explosion_enabled:
 		_play_explosion(origin)
 	_spawn_debris_wave(player)
+
+
+# Aviso previo de una explosión: la franja inferior de la pantalla parpadea, la cámara tiembla
+# apenas y se emite `warning_started` (para el sonido, cuando haya audio).
+func _play_warning(lead: float) -> void:
+	warning_started.emit(lead)
+	var camera: ScrollCamera = get_viewport().get_camera_2d() as ScrollCamera
+	if camera != null and warning_shake_amplitude > 0.0:
+		camera.shake(warning_shake_amplitude, lead)
+	if warning_blinks <= 0 or warning_color.a <= 0.0 or warning_height <= 0.0:
+		return
+	var view: Vector2 = get_viewport_rect().size
+	var layer: CanvasLayer = CanvasLayer.new()
+	layer.layer = 84
+	add_child(layer)
+	var strip: Polygon2D = Polygon2D.new()
+	strip.polygon = PackedVector2Array([
+		Vector2(0.0, view.y - warning_height), Vector2(view.x, view.y - warning_height),
+		Vector2(view.x, view.y), Vector2(0.0, view.y),
+	])
+	var clear: Color = Color(warning_color, 0.0)
+	strip.vertex_colors = PackedColorArray([clear, clear, warning_color, warning_color])
+	strip.modulate.a = 0.0
+	layer.add_child(strip)
+	var half_blink: float = lead / (2.0 * float(warning_blinks))
+	var tween: Tween = create_tween()
+	for i: int in warning_blinks:
+		tween.tween_property(strip, "modulate:a", 1.0, half_blink)
+		tween.tween_property(strip, "modulate:a", 0.0, half_blink)
+	tween.tween_callback(layer.queue_free)
 
 
 # Cámara lenta medida en tiempo real (el temporizador ignora la escala de tiempo).
@@ -236,7 +292,7 @@ func _spawn_debris_wave(player: Player) -> void:
 		if player != null and absf(x - player.global_position.x) < debris_min_player_distance:
 			continue
 		var from: Vector2 = Vector2(x, spawn_y + randf_range(0.0, 30.0))
-		var direction: Vector2 = Vector2.UP.rotated(deg_to_rad(randf_range(-50.0, 50.0)))
+		var direction: Vector2 = Vector2.UP.rotated(deg_to_rad(randf_range(-debris_random_angle, debris_random_angle)))
 		if debris_aim_at_player and player != null and player.is_alive():
 			var target: Vector2 = player.global_position + player.velocity * debris_lead
 			direction = (target - from).normalized().rotated(deg_to_rad(randf_range(-debris_aim_spread, debris_aim_spread)))

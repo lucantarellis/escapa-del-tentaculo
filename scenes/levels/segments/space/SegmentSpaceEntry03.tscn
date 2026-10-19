@@ -43,6 +43,7 @@ position = Vector2(160, -100)
 [node name="TierEvent" type="Node2D" parent="."]
 position = Vector2(0, -260)
 script = ExtResource("event")
+debris_aim_at_player = false
 explosion_delay = 0.5
 explosion_offset = Vector2(180, 360)
 eject_speed = 220.0
