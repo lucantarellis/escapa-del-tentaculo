@@ -36,6 +36,8 @@ var _spawn_local: Vector2 = Vector2.ZERO
 var _hatch_local: Vector2 = Vector2.ZERO
 var _camera_stop_local_y: float = 0.0
 var _door: Door
+## Segmento final armado (null sin nivel).
+var _end_segment: LevelSegment
 ## Índice del inicio y del final elegidos en `start_segments` / `end_segments` (-1 sin armar).
 var _start_index: int = -1
 ## Inicio de cada tier armado: {tier = índice en `config.tiers`, y = Y local del borde inferior
@@ -76,11 +78,13 @@ func build(seed_override: int = 0) -> int:
 
 	if config.tiers.is_empty():
 		push_error("LevelBuilder: `tiers` está vacío.")
+	var last_tier: SegmentTier = null
 	for tier_index: int in config.tiers.size():
 		var tier: SegmentTier = config.tiers[tier_index]
 		if tier == null or tier.segments.is_empty():
 			push_warning("LevelBuilder: el tier %d no tiene segmentos: se saltea." % (tier_index + 1))
 			continue
+		last_tier = tier
 		_tier_starts.append({"tier": tier_index, "y": bottom_y})
 		var entry_index: int = _pick_from(tier.entry_segments)
 		if entry_index >= 0:
@@ -112,7 +116,12 @@ func build(seed_override: int = 0) -> int:
 	else:
 		end = _place(config.end_segments[_end_index], bottom_y)
 	if end != null:
+		# El final pertenece al escenario del último tier: tileset y colores.
+		if last_tier != null:
+			_apply_tier_tileset(end, last_tier)
+			_apply_tier_tints(end, last_tier)
 		bottom_y -= end.height
+		_end_segment = end
 		_door = _find_door(end)
 	# La cámara se detiene cuando su borde superior alcanza el techo del segmento final.
 	var view_height: float = float(ProjectSettings.get_setting("display/window/size/viewport_height"))
@@ -134,6 +143,7 @@ func clear() -> void:
 	_end_index = -1
 	_tier_starts.clear()
 	_door = null
+	_end_segment = null
 	_spawn_local = Vector2.ZERO
 	_hatch_local = Vector2.ZERO
 	_camera_stop_local_y = 0.0
@@ -203,6 +213,11 @@ func get_tier_sequence() -> PackedInt32Array:
 ## Devuelve todos los segmentos armados (inicio, intermedios, final) de abajo hacia arriba.
 func get_segments() -> Array[LevelSegment]:
 	return _segments
+
+
+## Devuelve el segmento final armado (null si no hay nivel).
+func get_end_segment() -> LevelSegment:
+	return _end_segment
 
 
 ## Devuelve la puerta del segmento final (null si no hay).

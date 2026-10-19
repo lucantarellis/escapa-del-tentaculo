@@ -70,6 +70,10 @@ ScrollCamera (Camera2D, process_callback = Physics, sin suavizado)
     └── TopShape (CollisionShape2D)
 ```
 
+## Pared superior abierta (`set_top_wall_enabled`)
+
+`set_top_wall_enabled(enabled: bool) -> void` abre (`false`) o cierra (`true`) la pared invisible superior de la pantalla. Con ella abierta el jugador puede salir por arriba. Solo cierra la pared si `top_wall_enabled` del `ScrollConfig` también está activo. Lo usa `LevelController` cuando el segmento final tiene `opens_top` (ver `niveles-por-segmentos.md`).
+
 ## Tope por instancia (`set_stop_y`)
 
 `set_stop_y(y: float) -> void` activa un tope de scroll en la Y `y` (Y mundo del **centro** de la cámara) solo para esa instancia, sin tocar el `ScrollConfig` compartido; pisa a `stop_at_enabled` / `stop_at_y`. Lo usa `LevelController` con `LevelBuilder.get_camera_stop_y()` para que el segmento final quede completo a la vista. Ver `niveles-por-segmentos.md`.

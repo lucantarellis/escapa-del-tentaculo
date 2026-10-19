@@ -67,6 +67,9 @@ func _ready() -> void:
 	run_seed = _builder.build()
 	_player.reset(_builder.get_player_spawn())
 	_camera.set_stop_y(_builder.get_camera_stop_y())
+	# Un final con abertura en el techo deja salir al jugador por arriba de la pantalla.
+	var end_segment: LevelSegment = _builder.get_end_segment()
+	_camera.set_top_wall_enabled(end_segment == null or not end_segment.opens_top)
 	if _hatch != null:
 		_hatch.global_position = _builder.get_hatch_position()
 	var door: Door = _builder.get_goal_door()

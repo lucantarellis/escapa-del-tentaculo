@@ -24,6 +24,10 @@ var height: float:
 		return HEIGHT
 
 @export_group("Contrato")
+## Si es true, el segmento deja salir al jugador por arriba de la pantalla (una abertura en el
+## techo): el [LevelController] apaga la pared invisible superior de la cámara. Lo usa el
+## segmento final, donde el jugador gana al salir por la abertura.
+@export var opens_top: bool = false
 ## Si es true, el segmento debe contener al menos un [FuelTank] (los segmentos intermedios lo
 ## exigen; el de inicio y el final lo desactivan).
 @export var requires_fuel_tank: bool = true:

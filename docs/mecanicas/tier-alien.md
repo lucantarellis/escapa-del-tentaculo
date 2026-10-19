@@ -25,7 +25,7 @@ El color de lo letal sigue siendo rojo (convención). El perseguidor, el **ácid
 
 ## Final: la abertura en el techo (`SegmentFinal01`, final de la partida)
 
-El jefe (el cerebro con puntos débiles) **se eliminó**. El final es un segmento normal cuyo techo tiene una **abertura central** (x 144–216, arriba de la pantalla): al atravesarla el jugador gana ("ESCAPASTE"). Una `Door` invisible (72 × 44 px) cubre el hueco, así que no hay puerta visible; solo un resplandor tenue provisional (`OpeningLight`).
+El jefe (el cerebro con puntos débiles) **se eliminó**. El final es un segmento normal cuyo techo tiene una **abertura central** (x 144–216, arriba de la pantalla): al atravesarla el jugador gana ("ESCAPASTE"). `opens_top` apaga la pared superior de la cámara y una `Door` invisible (72 × 44 px) está justo encima del borde de la pantalla: se gana recién cuando el jugador sale entero. Usa el tileset del tier 3. No hay puerta visible; solo un haz de luz provisional (`OpeningLight`).
 
 - Pendiente (ronda A, paso 6): que la salida sea lo único luminoso del tier, con una corriente de partículas y venas que laten hacia ella (sin flechas ni texto), y que el camino hasta ella sea **desafiante** (es el clímax) usando las amenazas nuevas del tier 3.
 - Objetivo a futuro: 10 finales distintos. Por ahora hay 1.

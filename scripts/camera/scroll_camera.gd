@@ -33,6 +33,8 @@ var _speed: float = 0.0
 ## Tope de scroll propio de esta instancia (lo fija [method set_stop_y]); pisa al de la config.
 var _stop_override_enabled: bool = false
 var _stop_override_y: float = 0.0
+# true = la pared superior está abierta por pedido del nivel (ver set_top_wall_enabled).
+var _top_wall_open: bool = false
 ## Vibración en curso (null si no hay). Ver [method shake].
 var _shake_tween: Tween
 ## Nodo que la cámara debe mantener a la vista (ver [method follow_up]); null si no hay.
@@ -100,6 +102,14 @@ func set_scrolling(enabled: bool) -> void:
 func set_stop_y(y: float) -> void:
 	_stop_override_enabled = true
 	_stop_override_y = y
+
+
+## Abre o cierra la pared invisible superior de la pantalla. Con [param enabled] = false el
+## jugador puede salir por arriba (lo usa el segmento final con abertura en el techo). Solo
+## cierra la pared si `config.top_wall_enabled` también está activo.
+func set_top_wall_enabled(enabled: bool) -> void:
+	_top_wall_open = not enabled
+	_top_shape.set_deferred("disabled", _top_wall_open or not config.top_wall_enabled)
 
 
 ## Devuelve true si la cámara llegó a su tope de scroll (`stop_at_y` o [method set_stop_y]).
@@ -257,7 +267,7 @@ func _build_bounds() -> void:
 	top.size = top_size
 	_top_shape.shape = top
 	_top_shape.position = Vector2(0.0, -half.y - WALL_THICKNESS * 0.5 + config.top_wall_margin)
-	_top_shape.disabled = not config.top_wall_enabled
+	_top_shape.disabled = _top_wall_open or not config.top_wall_enabled
 
 
 func _set_moving(value: bool) -> void:
