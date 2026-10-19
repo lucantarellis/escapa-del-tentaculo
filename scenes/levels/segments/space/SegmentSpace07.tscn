@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
 [ext_resource type="Script" path="res://scripts/levels/asteroid.gd" id="asteroid"]
 [ext_resource type="PackedScene" path="res://scenes/hazards/Comet.tscn" id="comet"]
+[ext_resource type="PackedScene" path="res://scenes/hazards/DebrisField.tscn" id="field"]
 
 [node name="SegmentSpace07" type="Node2D"]
 script = ExtResource("seg")
@@ -53,6 +54,12 @@ position = Vector2(-40, -200)
 travel = Vector2(460, -260)
 speed = 330
 repeat_interval = 7
+
+[node name="Field1" parent="." instance=ExtResource("field")]
+position = Vector2(100, -280)
+orbit_radius = 70.0
+chunk_count = 5
+angular_speed = -50.0
 
 [node name="FuelTank1" parent="." instance=ExtResource("tank")]
 position = Vector2(294, -306)

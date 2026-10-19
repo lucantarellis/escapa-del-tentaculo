@@ -22,6 +22,8 @@ Cada parte se ajusta con los `@export` de `WindowBreach` y de `TierEvent` en cad
 | Impulsos | Flechas cian: al tocarlas, 1 s de propulsión y velocidad máxima ×1,8; en el espacio casi no se frena, así que la velocidad ganada se conserva | `SpeedBoost` (`scenes/pickups/SpeedBoost.tscn`, config `speed_boost_config.tres`: `duration`, `multiplier`, `fuel_amount`). 2 por segmento del espacio y por entrada |
 | Restos a la deriva | Chapas de la nave que se mueven despacio y se pueden pisar | `Platform` STATIC con `moves`, teñidas de gris metálico (`platform_tint` del tier) |
 | Meteoros y cometas | Cruzan la pantalla avisando antes (marca en el borde; el cometa, además, la línea de su recorrido); tocarlos mata. El meteoro se rompe contra los asteroides | `SpaceProjectile` (`Meteor.tscn`, `Comet.tscn`). Ver `obstaculos-espacio.md` |
+| Campo de escombros | Trozos que orbitan un punto; tocarlos mata | `DebrisField`. Ver `obstaculos-espacio.md` |
+| Satélite láser | Apunta, fija y dispara un haz; solo mata al disparar | `SatelliteLaser`. Ver `obstaculos-espacio.md` |
 | Tanques | Cápsulas de la nave flotando sobre los asteroides | `FuelTank` |
 
 PULSE, TIMED y BREAKABLE no aparecen en el espacio (son mecanismos de la nave).

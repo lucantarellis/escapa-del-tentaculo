@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" path="res://scenes/pickups/SpeedBoost.tscn" id="boost"]
 [ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
 [ext_resource type="Script" path="res://scripts/levels/asteroid.gd" id="asteroid"]
+[ext_resource type="PackedScene" path="res://scenes/hazards/SatelliteLaser.tscn" id="laser"]
 
 [node name="SegmentSpace03" type="Node2D"]
 script = ExtResource("seg")
@@ -37,6 +38,11 @@ drift = Vector2(8.2, 5.3)
 drift_period = 5.7
 drift_offset = 0
 spin_speed = -11.5
+
+[node name="Laser1" parent="." instance=ExtResource("laser")]
+position = Vector2(344, -240)
+angle_from = 150.0
+angle_to = 205.0
 
 [node name="FuelTank1" parent="." instance=ExtResource("tank")]
 position = Vector2(66, -210)

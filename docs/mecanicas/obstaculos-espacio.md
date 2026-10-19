@@ -57,9 +57,36 @@ Las paredes invisibles de la cámara no lo rompen (los proyectiles nacen fuera d
 | `SegmentSpace07` | 1 cometa en diagonal |
 | `SegmentSpace08` | 3 meteoros chicos y rápidos, escalonados |
 | `SegmentSpace10` | 2 cometas cruzados, desfasados 3,5 s |
-| `SegmentSpace03`, `04`, `09` | Sin obstáculos nuevos por ahora (los esperan el láser y el campo de escombros) |
+| `SegmentSpace03` | Satélite láser en el lado derecho |
+| `SegmentSpace04` | Campo de escombros (radio 55, más chico por el espacio libre) |
+| `SegmentSpace06` | Satélite láser en el lado izquierdo |
+| `SegmentSpace07`, `10` | Campo de escombros (giro en sentidos opuestos) |
+| `SegmentSpace09` | 2 satélites láser en lados opuestos (el segundo con `initial_delay` 2 s) |
 
 Se quitaron de todos los segmentos del espacio las plataformas letales "en llamas" y los proyectiles `Platform` PROJECTILE de la nave.
+
+## Campo de escombros (`DebrisField`)
+
+Trozos rojos que orbitan un punto fijo; tocar uno mata (`debris_field`). El anillo de la órbita se dibuja tenue para que se lea el peligro.
+
+| Propiedad | Defecto | Descripción |
+|---|---|---|
+| `orbit_radius` | 70 | Radio de la órbita. Unidad: px |
+| `chunk_count` | 5 | Cantidad de trozos |
+| `angular_speed` | 55 | Giro. Unidad: °/s; negativo = antihorario |
+| `chunk_size` | 18 | Tamaño de cada trozo. Unidad: px |
+| `show_orbit` | true | Dibuja el anillo |
+
+## Satélite láser (`SatelliteLaser`)
+
+Solo actúa con el satélite dentro de la vista. Ciclo: APUNTA (línea tenue que barre de `angle_from` a `angle_to`) → FIJA (parpadeo) → DISPARA (haz letal, `laser`) → ENFRÍA, y vuelve a empezar (con `ping_pong` invierte el barrido). Solo mata durante DISPARA.
+
+| Propiedad | Defecto | Descripción |
+|---|---|---|
+| `angle_from` / `angle_to` | 160 / 210 | Barrido. Unidad: ° |
+| `beam_length` / `beam_width` | 700 / 14 | Tamaño del haz. Unidad: px |
+| `aim_time` / `lock_time` / `fire_time` / `cooldown_time` | 1,4 / 0,4 / 0,5 / 2,0 | Tiempos. Unidad: s |
+| `initial_delay` | 0 | Desfase. Unidad: s |
 
 ## Cómo probarlo
 

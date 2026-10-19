@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/pickups/SpeedBoost.tscn" id="boost"]
 [ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
 [ext_resource type="Script" path="res://scripts/levels/asteroid.gd" id="asteroid"]
+[ext_resource type="PackedScene" path="res://scenes/hazards/DebrisField.tscn" id="field"]
 
 [node name="SegmentSpace04" type="Node2D"]
 script = ExtResource("seg")
@@ -59,6 +60,12 @@ size = Vector2(60, 12)
 platform_type = 0
 moves = true
 travel = Vector2(130, 0)
+
+[node name="Field1" parent="." instance=ExtResource("field")]
+position = Vector2(100, -260)
+orbit_radius = 55.0
+chunk_count = 5
+angular_speed = 55.0
 
 [node name="FuelTank1" parent="." instance=ExtResource("tank")]
 position = Vector2(318, -522)

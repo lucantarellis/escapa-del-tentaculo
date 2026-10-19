@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/pickups/SpeedBoost.tscn" id="boost"]
 [ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
 [ext_resource type="Script" path="res://scripts/levels/asteroid.gd" id="asteroid"]
+[ext_resource type="PackedScene" path="res://scenes/hazards/SatelliteLaser.tscn" id="laser"]
 
 [node name="SegmentSpace09" type="Node2D"]
 script = ExtResource("seg")
@@ -59,6 +60,17 @@ size = Vector2(60, 12)
 platform_type = 0
 moves = true
 travel = Vector2(140, 0)
+
+[node name="Laser1" parent="." instance=ExtResource("laser")]
+position = Vector2(344, -200)
+angle_from = 155.0
+angle_to = 205.0
+
+[node name="Laser2" parent="." instance=ExtResource("laser")]
+position = Vector2(16, -350)
+angle_from = -30.0
+angle_to = 25.0
+initial_delay = 2.0
 
 [node name="FuelTank1" parent="." instance=ExtResource("tank")]
 position = Vector2(36, -474)

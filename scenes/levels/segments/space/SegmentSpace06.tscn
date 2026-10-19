@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
 [ext_resource type="Script" path="res://scripts/levels/asteroid.gd" id="asteroid"]
 [ext_resource type="PackedScene" path="res://scenes/hazards/Meteor.tscn" id="meteor"]
+[ext_resource type="PackedScene" path="res://scenes/hazards/SatelliteLaser.tscn" id="laser"]
 
 [node name="SegmentSpace06" type="Node2D"]
 script = ExtResource("seg")
@@ -45,6 +46,11 @@ travel = Vector2(-420, 90)
 speed = 190
 size = 24
 repeat_interval = 5
+
+[node name="Laser1" parent="." instance=ExtResource("laser")]
+position = Vector2(16, -300)
+angle_from = -35.0
+angle_to = 20.0
 
 [node name="FuelTank1" parent="." instance=ExtResource("tank")]
 position = Vector2(60, -246)
