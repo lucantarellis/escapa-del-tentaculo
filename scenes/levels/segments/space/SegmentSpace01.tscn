@@ -60,14 +60,14 @@ travel = Vector2(80, 0)
 position = Vector2(-24, -200)
 travel = Vector2(420, 80)
 speed = 170
-size = 16
+size = 22
 repeat_interval = 5
 
 [node name="Meteor2" parent="." instance=ExtResource("meteor")]
 position = Vector2(384, -470)
 travel = Vector2(-420, -60)
 speed = 190
-size = 18
+size = 24
 repeat_interval = 5
 initial_delay = 2.5
 

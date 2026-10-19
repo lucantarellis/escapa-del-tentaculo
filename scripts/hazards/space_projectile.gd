@@ -17,12 +17,18 @@ extends Area2D
 const HEAD_COLOR: Color = Color("D83232")
 ## Naranja de la estela. Solo visual.
 const TRAIL_COLOR: Color = Color("FF6B32")
-## Color del aviso. Solo visual.
-const WARNING_COLOR: Color = Color("D83232")
+## Color del aviso (un rojo más claro que el de lo letal, para que se vea sobre el fondo oscuro). Solo visual.
+const WARNING_COLOR: Color = Color("FF5040")
 ## Color del trazo de la trayectoria en el editor. Solo visual.
 const EDITOR_COLOR: Color = Color(1.0, 0.42, 0.2, 0.8)
 ## Parpadeos por segundo del aviso. Solo visual.
 const BLINK_RATE: float = 2.5
+## Largo del trazo del aviso del meteoro. Solo visual. Unidad: px.
+const ARROW_SHAFT: float = 70.0
+## Largo de la punta de flecha del aviso. Solo visual. Unidad: px.
+const ARROW_HEAD: float = 22.0
+## Color del núcleo caliente de la cabeza. Solo visual.
+const CORE_COLOR: Color = Color("FFB199")
 
 enum State { WAITING, WARNING, FLYING, COOLDOWN, GONE }
 
@@ -40,7 +46,7 @@ enum State { WAITING, WARNING, FLYING, COOLDOWN, GONE }
 ## Tamaño de la cabeza. Unidad: px.
 @export var size: float = 16.0
 ## Largo de la estela. Unidad: px.
-@export var trail_length: float = 40.0
+@export var trail_length: float = 90.0
 ## Si es true, la estela también mata (el cometa); si no, es solo visual.
 @export var trail_lethal: bool = false
 ## Si es true, se rompe al chocar contra algo sólido del mundo (el meteoro).
@@ -263,7 +269,10 @@ func _clip(a: Vector2, b: Vector2, rect: Rect2) -> PackedVector2Array:
 	return PackedVector2Array([a + d * t0, a + d * t1])
 
 
-# Aviso: marca (triángulo) en el punto de entrada y trazo de la trayectoria.
+# Aviso: trazo de la trayectoria con la punta de flecha ADELANTE (la punta marca hacia dónde
+# va; si el trazo saliera de la punta se leería como una estela y la flecha parecería ir al
+# revés). Meteoro: trazo corto desde el borde por donde entra. Cometa: trazo punteado de todo el
+# recorrido visible, con un punto en el borde de entrada y la punta al final.
 func _draw_telegraph() -> void:
 	if _state != State.WARNING:
 		return
@@ -275,20 +284,32 @@ func _draw_telegraph() -> void:
 	var side: Vector2 = dir.orthogonal()
 	var blink: float = 0.55 + 0.45 * sin(_t * TAU * BLINK_RATE)
 	var line_len: float = entry.distance_to(clip[1])
+	var color: Color = Color(WARNING_COLOR, blink)
+	var tip: Vector2
 	if show_path:
 		var pos: float = 0.0
 		while pos < line_len:
 			_telegraph.draw_line(entry + dir * pos, entry + dir * minf(pos + 10.0, line_len), Color(WARNING_COLOR, 0.3 + 0.3 * blink), 2.0)
 			pos += 18.0
+		_telegraph.draw_circle(entry + dir * 3.0, 4.0, color)
+		tip = entry + dir * maxf(line_len - 3.0, 0.0)
 	else:
-		_telegraph.draw_line(entry, entry + dir * minf(80.0, line_len), Color(WARNING_COLOR, 0.3 * blink), 2.0)
-	var tip: Vector2 = entry + dir * 24.0
-	var base_a: Vector2 = entry + dir * 4.0 + side * 9.0
-	var base_b: Vector2 = entry + dir * 4.0 - side * 9.0
-	_telegraph.draw_colored_polygon(PackedVector2Array([tip, base_a, base_b]), Color(WARNING_COLOR, blink))
+		var shaft: float = minf(ARROW_SHAFT, maxf(line_len - ARROW_HEAD, 0.0))
+		_telegraph.draw_line(entry, entry + dir * shaft, Color(WARNING_COLOR, 0.35 + 0.4 * blink), 3.0)
+		tip = entry + dir * (shaft + ARROW_HEAD)
+	var base: Vector2 = tip - dir * ARROW_HEAD
+	_telegraph.draw_colored_polygon(PackedVector2Array([tip, base + side * 9.0, base - side * 9.0]), color)
 
 
-# Cabeza irregular, estela con degradado y forma de colisión.
+# Copia de [param points] escalada respecto del origen.
+func _scaled(points: PackedVector2Array, factor: float) -> PackedVector2Array:
+	var out: PackedVector2Array = PackedVector2Array()
+	for point: Vector2 in points:
+		out.append(point * factor)
+	return out
+
+
+# Cabeza irregular (con halo y núcleo), estela con degradado y forma de colisión.
 func _build_visuals() -> void:
 	var points: PackedVector2Array = PackedVector2Array()
 	for i: int in 7:
@@ -296,12 +317,21 @@ func _build_visuals() -> void:
 		points.append(Vector2(cos(a), sin(a)) * size * randf_range(0.42, 0.55))
 	_trail = Polygon2D.new()
 	_trail.polygon = PackedVector2Array([Vector2(0.0, -size * 0.45), Vector2(-trail_length, 0.0), Vector2(0.0, size * 0.45)])
-	_trail.vertex_colors = PackedColorArray([Color(TRAIL_COLOR, 0.85), Color(TRAIL_COLOR, 0.0), Color(TRAIL_COLOR, 0.85)])
+	_trail.vertex_colors = PackedColorArray([Color(TRAIL_COLOR, 0.95), Color(TRAIL_COLOR, 0.0), Color(TRAIL_COLOR, 0.95)])
 	add_child(_trail)
 	_head = Polygon2D.new()
 	_head.color = HEAD_COLOR
 	_head.polygon = points
 	add_child(_head)
+	var halo: Polygon2D = Polygon2D.new()
+	halo.color = Color(TRAIL_COLOR, 0.28)
+	halo.polygon = _scaled(points, 1.7)
+	_head.add_child(halo)
+	halo.show_behind_parent = true
+	var core: Polygon2D = Polygon2D.new()
+	core.color = CORE_COLOR
+	core.polygon = _scaled(points, 0.45)
+	_head.add_child(core)
 	_spin = randf_range(-5.0, 5.0)
 	var shape: CollisionShape2D = CollisionShape2D.new()
 	if trail_lethal:

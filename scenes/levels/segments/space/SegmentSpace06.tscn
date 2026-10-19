@@ -43,7 +43,7 @@ spin_speed = 0
 position = Vector2(384, -380)
 travel = Vector2(-420, 90)
 speed = 190
-size = 18
+size = 24
 repeat_interval = 5
 
 [node name="FuelTank1" parent="." instance=ExtResource("tank")]

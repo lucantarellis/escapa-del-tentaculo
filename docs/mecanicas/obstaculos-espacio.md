@@ -12,13 +12,13 @@ El tier 2 no repite los obstáculos de la nave (compuertas, trampas, plataformas
 
 Un solo script con dos escenas preconfiguradas.
 
-- **Meteoro** (`Meteor.tscn`): roca chica y rápida con estela corta (solo visual). **Se rompe** contra lo sólido (asteroides, paredes): un asteroide sirve de escudo.
+- **Meteoro** (`Meteor.tscn`): roca rápida con halo, núcleo caliente y estela de 90 px (solo visual). **Se rompe** contra lo sólido (asteroides, paredes): un asteroide sirve de escudo.
 - **Cometa** (`Comet.tscn`): cabeza grande y estela larga (150 px) que **también mata**; atraviesa todo.
 
 Ciclo:
 
 1. **Espera** fuera de la pantalla, en el punto de partida (la posición del nodo).
-2. Cuando su recorrido entra en la vista de la cámara (y pasó `initial_delay`), **avisa** `warning_time` s: un triángulo rojo parpadeante marca el borde por donde va a entrar. El cometa dibuja además la línea punteada de todo el recorrido visible. Si el recorrido sale de la vista, el aviso se cancela.
+2. Cuando su recorrido entra en la vista de la cámara (y pasó `initial_delay`), **avisa** `warning_time` s: una **flecha** parpadeante (trazo corto desde el borde por donde entra y la punta **adelante**, hacia donde va; si el trazo saliera de la punta se leería como una estela y parecería ir al revés). El cometa dibuja la línea punteada de todo el recorrido visible, con un punto en el borde de entrada y la punta de flecha al final. Si el recorrido sale de la vista, el aviso se cancela.
 3. **Cruza** en línea recta a `speed` px/s. Si toca al jugador vivo, lo mata (`Player.die(cause)`).
 4. Si `repeat_interval` > 0 espera ese tiempo y vuelve a avisar mientras su recorrido siga a la vista; con 0 pasa una sola vez.
 
@@ -30,8 +30,8 @@ Las paredes invisibles de la cámara no lo rompen (los proyectiles nacen fuera d
 |---|---|---|---|---|
 | Trayectoria | `travel` | por instancia | por instancia | Vector del punto de partida al final. Unidad: px |
 | Trayectoria | `speed` | 180 (rápidos: 250–270) | 320–340 | Unidad: px/s |
-| Forma | `size` | 16 (chicos: 12) | 24 | Tamaño de la cabeza. Unidad: px |
-| Forma | `trail_length` | 40 | 150 | Largo de la estela. Unidad: px |
+| Forma | `size` | 22–24 (chicos: 16) | 24 | Tamaño de la cabeza. Unidad: px |
+| Forma | `trail_length` | 90 | 150 | Largo de la estela. Unidad: px |
 | Forma | `trail_lethal` | no | sí | La estela mata |
 | Forma | `breaks_on_solid` | sí | no | Se rompe contra lo sólido |
 | Aviso | `warning_time` | 1,0 | 1,3 | Unidad: s |
