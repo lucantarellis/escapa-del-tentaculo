@@ -46,3 +46,15 @@ Todos los valores son de prueba: el "se siente bien" es de LT.
 1. F5 → JUGAR y subir hasta la salida de la nave: el alien rompe el ventanal, la descompresión te saca, la nave explota abajo, aparecen los restos y, un poco después, el fuego.
 2. Abrir un `SegmentSpaceNN` y ejecutarlo con F6 para verlo aislado (con la física normal: la del espacio se aplica solo dentro del nivel).
 3. Ajustar `gravity_scale` / `air_drag_scale` del tier 2 y `tentacle_config_fire.tres` hasta que se sienta bien.
+
+## Decorado de fondo
+
+Dibujado por `LevelBackground` (con las estrellas del tier) y parametrizado en `SpaceDecorConfig` (se asigna en la propiedad `decor` del nodo `Background`; vacío = valores por defecto). Es solo visual, sin colisión.
+
+| Capa | Parallax | Descripción |
+|---|---|---|
+| Nebulosa | 0,05 | 3 manchas suaves de poca opacidad |
+| Planeta lejano | 0,10 | Planeta con anillo; reaparece cada `planet_loop` px |
+| Estrellas lejanas / cercanas | 0,08 / 0,25 | Las cercanas titilan |
+| Estrella fugaz | — | Cada 6–10 s, en los costados y muy tenue |
+| Frente desenfocado | 1,4 | Rocas y chatarra borrosas (capa 5, delante del jugador); solo se ven hacia los costados y se apagan hacia el centro (`foreground_clear_radius`) para no tapar el juego |
