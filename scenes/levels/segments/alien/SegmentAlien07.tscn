@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://babh65w3a025g" path="res://scripts/levels/level_segment.gd" id="seg"]
 [ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
 [ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
+[ext_resource type="PackedScene" path="res://scenes/hazards/BileWall.tscn" id="bile"]
 
 [node name="SegmentAlien07" type="Node2D" unique_id=534044951]
 script = ExtResource("seg")
@@ -35,6 +36,11 @@ platform_type = 5
 
 [node name="Goal" parent="." unique_id=537389171 instance=ExtResource("plat")]
 position = Vector2(180, -605)
+
+[node name="BileWall1" parent="." instance=ExtResource("bile")]
+position = Vector2(324, -222)
+angle = 180.0
+initial_delay = 1.0
 
 [node name="FuelTank1" parent="." unique_id=2044953729 instance=ExtResource("tank")]
 position = Vector2(70, -304)

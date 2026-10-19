@@ -23,6 +23,10 @@ Cada `SegmentAlienEntryNN` empieza con la **piel de la extremidad**: una franja 
 
 El color de lo letal sigue siendo rojo (convención). El perseguidor, el **ácido**, es verde amarillento `#B5D33A`: arranca 80 px bajo la pantalla a 50 px/s y acelera 6 px/s² hasta 150 px/s (más lento que el fuego: los pasillos son estrechos).
 
+## Amenazas propias del tier
+
+Paredes que escupen bilis y anticuerpos (ver `amenazas-alien.md`); los cilios y los tentáculos menores llegan en el siguiente paso.
+
 ## Confinamiento y viñeta
 
 Los 10 `SegmentAlienNN` son túneles continuos (ver "Paredes"). Se comprobó que en todos hay camino libre desde la entrada inferior hasta la salida superior y que todas las plataformas y tanques son alcanzables. El tier 3 tiene además una **viñeta** (`background_vignette` 0,6 en el tier): los bordes de la pantalla se oscurecen en rojo muy oscuro y laten despacio. Se configura por tier en `SegmentTier` (grupo "Fondo"); 0 = sin viñeta.

@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://babh65w3a025g" path="res://scripts/levels/level_segment.gd" id="seg"]
 [ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
 [ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
+[ext_resource type="PackedScene" path="res://scenes/hazards/Antibody.tscn" id="anti"]
 
 [node name="SegmentAlien04" type="Node2D" unique_id=691852348]
 script = ExtResource("seg")
@@ -42,6 +43,10 @@ platform_type = 4
 [node name="Goal" parent="." unique_id=814290040 instance=ExtResource("plat")]
 position = Vector2(180, -605)
 size = Vector2(90, 12)
+
+[node name="Antibody1" parent="." instance=ExtResource("anti")]
+position = Vector2(126, -558)
+travel = Vector2(108, 0)
 
 [node name="FuelTank1" parent="." unique_id=407471630 instance=ExtResource("tank")]
 position = Vector2(180, -224)
