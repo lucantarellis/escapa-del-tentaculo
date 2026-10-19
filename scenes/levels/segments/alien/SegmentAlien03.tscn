@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
 [ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
 [ext_resource type="PackedScene" path="res://scenes/hazards/BileWall.tscn" id="bile"]
+[ext_resource type="PackedScene" path="res://scenes/hazards/MinorTentacle.tscn" id="ten"]
 
 [node name="SegmentAlien03" type="Node2D" unique_id=568838131]
 script = ExtResource("seg")
@@ -43,6 +44,12 @@ size = Vector2(72, 12)
 position = Vector2(336, -342)
 angle = 180.0
 initial_delay = 1.0
+
+[node name="MinorTentacle1" parent="." instance=ExtResource("ten")]
+position = Vector2(36, -438)
+angle_from = -50.0
+angle_to = 50.0
+tentacle_length = 150
 
 [node name="FuelTank1" parent="." unique_id=1547117710 instance=ExtResource("tank")]
 position = Vector2(250, -534)

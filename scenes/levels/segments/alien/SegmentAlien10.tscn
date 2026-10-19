@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
 [ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
 [ext_resource type="PackedScene" path="res://scenes/hazards/Antibody.tscn" id="anti"]
+[ext_resource type="PackedScene" path="res://scenes/hazards/MinorTentacle.tscn" id="ten"]
 
 [node name="SegmentAlien10" type="Node2D"]
 script = ExtResource("seg")
@@ -50,6 +51,12 @@ platform_type = 0
 [node name="Antibody1" parent="." instance=ExtResource("anti")]
 position = Vector2(125, -366)
 travel = Vector2(110, 0)
+
+[node name="MinorTentacle1" parent="." instance=ExtResource("ten")]
+position = Vector2(24, -210)
+angle_from = -50.0
+angle_to = 50.0
+tentacle_length = 150
 
 [node name="FuelTank1" parent="." instance=ExtResource("tank")]
 position = Vector2(90, -184)

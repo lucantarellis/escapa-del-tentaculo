@@ -35,19 +35,49 @@ Nunca sale del tramo (no atraviesa paredes). Mata al tocarlo salvo agotado. Caus
 | `tired_time` | 2,2 | Agotado e inofensivo. Unidad: s |
 | `body_radius` | 11 | Radio. Unidad: px |
 
+## Cilios (`CiliaStrip`)
+
+Hilera de filamentos que crecen de la pared hacia el túnel. Ciclo: **reposo** (cortos, pegados a la pared, rosados e inofensivos) → **aviso** (`warning_time`: tiemblan y se ponen rojizos) → **activos** (`active_time`: se estiran, rojos y letales) → reposo. Cada filamento arranca `wave_delay` s después del anterior, así la ola recorre la hilera y se aprende el ritmo. Solo mata con el filamento estirado (≥ 55 %). Causa: `cilia`.
+
+| Propiedad | Defecto | Descripción |
+|---|---|---|
+| `angle` | 0 | Hacia dónde crecen (0 derecha, 180 izquierda). Unidad: ° |
+| `strip_length` | 90 | Largo de la hilera, hacia abajo desde el origen. Unidad: px |
+| `count` | 6 | Filamentos |
+| `filament_length` | 38 | Largo estirado. Unidad: px |
+| `rest_time` / `warning_time` / `active_time` | 1,6 / 0,7 / 1,0 | Fases. Unidad: s |
+| `wave_delay` | 0,1 | Retraso entre filamentos. Unidad: s |
+
+## Tentáculo menor (`MinorTentacle`)
+
+Un tentáculo pequeño que brota de la pared. Ciclo: **escondido** → **aviso** (`warning_time`: asoma un poco, tiembla y se marca con una cuña tenue el sector que va a barrer; todavía inofensivo) → **barrido** (`sweep_time`: gira de `angle_from` a `angle_to` estirado, letal) → **retracción** → descanso. Causa: `minor_tentacle`.
+
+| Propiedad | Defecto | Descripción |
+|---|---|---|
+| `angle_from` / `angle_to` | 150 / 210 | Arco del barrido. Unidad: ° |
+| `tentacle_length` | 150 | Largo estirado. Unidad: px |
+| `warning_time` / `sweep_time` / `retract_time` / `cooldown_time` | 0,9 / 0,9 / 0,5 / 1,8 | Fases. Unidad: s |
+| `initial_delay` | 1,0 | Espera inicial. Unidad: s |
+
 ## Colocación
 
 | Segmento | Amenaza |
 |---|---|
-| `SegmentAlien01`, `03`, `07`, `09` | Pared de bilis (01 y 09 desde la izquierda, 03 y 07 desde la derecha) |
-| `SegmentAlien08` | Pared de bilis (cerca del techo del segmento) |
+| `SegmentAlien01`, `03`, `07`, `08`, `09` | Pared de bilis |
 | `SegmentAlien02`, `04`, `05`, `10` | Anticuerpo |
-| `SegmentAlien06` | Sin amenazas nuevas por ahora (esperan cilios o tentáculos menores) |
+| `SegmentAlien02`, `05`, `08`, `09` | Hilera de cilios |
+| `SegmentAlien03`, `06`, `10` | Tentáculo menor |
+| `SegmentAlien06` | Solo el tentáculo menor |
 
 Las posiciones se calcularon con un script a partir del túnel y las plataformas (lejos de ellas y fuera de los primeros y últimos 150 px del segmento). Se pueden mover a mano.
 
+## Pendiente
+
+- Afinar el anticuerpo: mientras fija queda quieto, y con la embestida esquivable y la fase agotada resulta fácil (feedback del paso 5b).
+- El final (paso 6) usará estas amenazas.
+
 ## Cómo probarlo
 
-1. Abrir un `SegmentAlienNN` con F6 y esperar el aviso del orificio, o dejar que el anticuerpo patrulle.
+1. Abrir un `SegmentAlienNN` con F6 y esperar el aviso de cada amenaza.
 2. Acercarse al anticuerpo (menos de 110 px): fija, embiste al punto fijado y se agota (gris, inofensivo).
 3. Ajustar los tiempos y velocidades en el inspector de cada instancia.
