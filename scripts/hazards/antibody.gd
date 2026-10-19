@@ -2,20 +2,27 @@
 class_name Antibody
 extends Node2D
 ## Anticuerpo del tier 3: una defensa del cuerpo que patrulla un tramo recto del túnel (del origen
-## del nodo a origen + `travel`). Si el jugador pasa a menos de `detect_radius` px, **se lanza** a
-## `chase_speed` hacia el punto de su tramo más cercano al jugador durante `chase_time` s (nunca sale
-## del tramo, así no atraviesa paredes); después se agota y descansa `recover_time` s sin detectar.
-## Tocarlo mata. Solo actúa con el nodo a la vista. Placeholders con polígonos. Ver
-## `docs/mecanicas/amenazas-alien.md`.
+## del nodo a origen + `travel`), despacio. Ciclo de ataque, siempre legible:
+## 1. **FIJA** (`lock_time`): si el jugador pasa a menos de `detect_radius`, se frena, tiembla, se
+##    pone rojo claro, el ojo gira hacia el jugador y una línea punteada lo une a él. Al terminar,
+##    **congela** el punto objetivo (el punto de su tramo más cercano al jugador en ese momento).
+## 2. **EMBISTE**: se lanza en línea recta a `lunge_speed` hasta ese punto, sin seguir al jugador.
+##    Se esquiva yéndose del punto (o dejándolo pasar).
+## 3. **AGOTADO** (`tired_time`): gris, con los brazos caídos y quieto, y es **inofensivo**: es la
+##    ventana para pasar. Después vuelve a patrullar.
+## Nunca sale del tramo (no atraviesa paredes). Mata al tocarlo salvo agotado. Solo actúa con el nodo
+## a la vista. Placeholders con polígonos. Ver `docs/mecanicas/amenazas-alien.md`.
 
 ## Rojo letal de la paleta. Solo visual.
 const BODY_COLOR: Color = Color("D83232")
-## Color del cuerpo al lanzarse. Solo visual.
+## Color del cuerpo al fijar y embestir. Solo visual.
 const ALERT_COLOR: Color = Color("FF6B5A")
+## Gris del anticuerpo agotado (inofensivo). Solo visual.
+const TIRED_COLOR: Color = Color("7C828C")
 ## Radio aproximado del cuerpo del jugador. Unidad: px.
 const PLAYER_RADIUS: float = 9.0
 
-enum State { PATROL, CHASE, RECOVER }
+enum State { PATROL, LOCK, LUNGE, TIRED }
 
 @export_group("Recorrido")
 ## Vector del recorrido de patrulla, desde la posición del nodo. Unidad: px.
@@ -24,17 +31,17 @@ enum State { PATROL, CHASE, RECOVER }
 		travel = value
 		queue_redraw()
 ## Velocidad de patrulla. Unidad: px/s.
-@export var patrol_speed: float = 40.0
-## Velocidad al lanzarse. Unidad: px/s.
-@export var chase_speed: float = 120.0
+@export var patrol_speed: float = 35.0
+## Velocidad de la embestida. Unidad: px/s.
+@export var lunge_speed: float = 150.0
 
-@export_group("Detección")
+@export_group("Ataque")
 ## Distancia a la que detecta al jugador. Unidad: px.
-@export var detect_radius: float = 140.0
-## Duración de la embestida. Unidad: s.
-@export var chase_time: float = 1.8
-## Descanso tras la embestida, sin detectar. Unidad: s.
-@export var recover_time: float = 1.5
+@export var detect_radius: float = 110.0
+## Tiempo que fija al jugador antes de embestir (el aviso). Unidad: s.
+@export var lock_time: float = 0.8
+## Tiempo agotado e inofensivo tras la embestida. Unidad: s.
+@export var tired_time: float = 2.2
 
 @export_group("Forma")
 ## Radio del cuerpo. Unidad: px.
@@ -47,8 +54,10 @@ enum State { PATROL, CHASE, RECOVER }
 var _state: State = State.PATROL
 var _t: float = 0.0
 var _u: float = 0.0
+var _u_target: float = 0.0
 var _dir_sign: float = 1.0
 var _clock: float = 0.0
+var _look: Vector2 = Vector2.DOWN
 
 
 func _ready() -> void:
@@ -64,32 +73,34 @@ func _physics_process(delta: float) -> void:
 	_clock += delta
 	var length: float = maxf(travel.length(), 1.0)
 	var player: Player = _player()
+	if player != null:
+		_look = (player.global_position - _body_pos()).normalized()
 	match _state:
 		State.PATROL:
 			_u += _dir_sign * patrol_speed * delta / length
 			if _u >= 1.0 or _u <= 0.0:
 				_u = clampf(_u, 0.0, 1.0)
 				_dir_sign = -_dir_sign
-			if player != null and global_position.distance_to(player.global_position) <= detect_radius + length * 0.5 and _body_pos().distance_to(player.global_position) <= detect_radius:
-				_state = State.CHASE
+			if player != null and player.is_alive() and _body_pos().distance_to(player.global_position) <= detect_radius:
+				_state = State.LOCK
 				_t = 0.0
-		State.CHASE:
+		State.LOCK:
 			_t += delta
 			if player != null:
-				var target: float = _project(player.global_position)
-				_u = move_toward(_u, target, chase_speed * delta / length)
-			if _t >= chase_time:
-				_state = State.RECOVER
+				_u_target = _project(player.global_position)
+			if _t >= lock_time:
+				_state = State.LUNGE
 				_t = 0.0
-		State.RECOVER:
+		State.LUNGE:
+			_u = move_toward(_u, _u_target, lunge_speed * delta / length)
+			if is_equal_approx(_u, _u_target):
+				_state = State.TIRED
+				_t = 0.0
+		State.TIRED:
 			_t += delta
-			_u += _dir_sign * patrol_speed * delta / length
-			if _u >= 1.0 or _u <= 0.0:
-				_u = clampf(_u, 0.0, 1.0)
-				_dir_sign = -_dir_sign
-			if _t >= recover_time:
+			if _t >= tired_time:
 				_state = State.PATROL
-	if player != null and player.is_alive() and _body_pos().distance_to(player.global_position) <= body_radius + PLAYER_RADIUS:
+	if _state != State.TIRED and player != null and player.is_alive() and _body_pos().distance_to(player.global_position) <= body_radius + PLAYER_RADIUS:
 		player.die(cause)
 	queue_redraw()
 
@@ -131,16 +142,34 @@ func _draw() -> void:
 	if Engine.is_editor_hint():
 		draw_line(Vector2.ZERO, travel, Color(1, 1, 1, 0.4), 1.0)
 	var at: Vector2 = travel * _u
-	var alert: bool = _state == State.CHASE
-	var tired: bool = _state == State.RECOVER
-	var col: Color = ALERT_COLOR if alert else BODY_COLOR
-	if tired:
-		col = Color(BODY_COLOR, 0.7)
-	var wob: float = sin(_clock * (14.0 if alert else 5.0))
-	var r: float = body_radius * (1.0 + 0.08 * wob)
-	# Brazos en Y.
-	for a: float in [-2.4, -0.74, 1.57]:
-		var d: Vector2 = Vector2.RIGHT.rotated(a + 0.15 * wob)
-		draw_line(at + d * r * 0.6, at + d * r * 1.7, col, 3.0)
+	var col: Color = BODY_COLOR
+	var r: float = body_radius
+	var arm_angles: Array[float] = [-2.4, -0.74, 1.57]
+	var eye: Color = Color("7A1A1A")
+	match _state:
+		State.PATROL:
+			r *= 1.0 + 0.06 * sin(_clock * 5.0)
+		State.LOCK:
+			var k: float = _t / maxf(lock_time, 0.001)
+			# Tiembla cada vez más, parpadea y apunta con el ojo; línea punteada al jugador.
+			at += Vector2(sin(_clock * 70.0), cos(_clock * 83.0)) * (0.8 + 2.2 * k)
+			col = ALERT_COLOR if int(_clock * 14.0) % 2 == 0 else BODY_COLOR
+			r *= 1.0 + 0.25 * k
+			eye = Color("FFE0D6")
+			draw_dashed_line(at, at + _look * minf(detect_radius, 90.0), Color(ALERT_COLOR, 0.35 + 0.4 * k), 2.0, 5.0)
+			arm_angles = [-2.7, -0.44, 1.57]
+		State.LUNGE:
+			col = ALERT_COLOR
+			eye = Color("FFE0D6")
+			r *= 1.1
+		State.TIRED:
+			col = TIRED_COLOR
+			r *= 0.9 + 0.04 * sin(_clock * 2.0)
+			eye = Color("4A4F58")
+			arm_angles = [2.3, 0.84, 1.57]
+	for a: float in arm_angles:
+		var d: Vector2 = Vector2.RIGHT.rotated(a)
+		draw_line(at + d * r * 0.6, at + d * r * (1.7 if _state != State.TIRED else 1.35), col, 3.0)
 	draw_circle(at, r, col)
-	draw_circle(at, r * 0.45, Color("FFB199") if alert else Color("7A1A1A"))
+	draw_circle(at, r * 0.5, Color(0.12, 0.12, 0.14) if _state == State.TIRED else Color("5A1010"))
+	draw_circle(at + _look * r * 0.18, r * 0.28, eye)

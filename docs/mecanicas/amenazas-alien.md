@@ -1,6 +1,6 @@
 # Amenazas del tier 3 (dentro del alien)
 
-**Archivos:** `scripts/hazards/bile_wall.gd`, `scripts/hazards/antibody.gd`; escenas `scenes/hazards/BileWall.tscn` y `Antibody.tscn`. Se colocan en los `SegmentAlienNN`. Todas son rojas (letal) y avisan antes de actuar. Solo actúan con el nodo a la vista. Placeholders con polígonos.
+**Archivos:** `scripts/hazards/bile_wall.gd`, `scripts/hazards/antibody.gd`; escenas `scenes/hazards/BileWall.tscn` y `Antibody.tscn`. Se colocan en los `SegmentAlienNN`. Avisan antes de actuar. La bilis es verde (con borde rojo oscuro) por decisión de diseño: se lee como bilis y se distingue del ácido perseguidor (amarillo); el anticuerpo es rojo (letal) y se pone gris cuando es inofensivo. Solo actúan con el nodo a la vista. Placeholders con polígonos.
 
 ## Pared que escupe bilis (`BileWall`)
 
@@ -18,14 +18,21 @@ Un orificio en la cara de la pared del túnel. Cada `interval` s se hincha `warn
 
 ## Anticuerpo (`Antibody`)
 
-Patrulla un tramo recto (de su posición a posición + `travel`). Si el jugador pasa a menos de `detect_radius`, se lanza durante `chase_time` s a `chase_speed` hacia el punto de su tramo más cercano al jugador (nunca sale del tramo, así no atraviesa paredes); luego descansa `recover_time` s sin detectar. Se pone rojo claro al lanzarse. Tocarlo mata. Causa: `antibody`.
+Patrulla despacio un tramo recto (de su posición a posición + `travel`). Ciclo de ataque:
+
+1. **Fija** (`lock_time`): si el jugador está a menos de `detect_radius`, se frena, tiembla cada vez más, parpadea en rojo claro, crece, el ojo gira hacia el jugador y una línea punteada los une. Al terminar **congela** el punto objetivo (el punto de su tramo más cercano al jugador en ese instante).
+2. **Embiste**: se lanza en línea recta a `lunge_speed` hasta ese punto, sin seguir al jugador. Se esquiva yéndose del punto.
+3. **Agotado** (`tired_time`): gris, brazos caídos, quieto e **inofensivo**. Es la ventana para pasar. Después vuelve a patrullar.
+
+Nunca sale del tramo (no atraviesa paredes). Mata al tocarlo salvo agotado. Causa: `antibody`.
 
 | Propiedad | Defecto | Descripción |
 |---|---|---|
 | `travel` | (100, 0) | Recorrido de patrulla. Unidad: px |
-| `patrol_speed` / `chase_speed` | 40 / 120 | Velocidades. Unidad: px/s |
-| `detect_radius` | 140 | Detección. Unidad: px |
-| `chase_time` / `recover_time` | 1,8 / 1,5 | Embestida y descanso. Unidad: s |
+| `patrol_speed` / `lunge_speed` | 35 / 150 | Velocidades. Unidad: px/s |
+| `detect_radius` | 110 | Detección. Unidad: px |
+| `lock_time` | 0,8 | Aviso (fijando). Unidad: s |
+| `tired_time` | 2,2 | Agotado e inofensivo. Unidad: s |
 | `body_radius` | 11 | Radio. Unidad: px |
 
 ## Colocación
@@ -42,5 +49,5 @@ Las posiciones se calcularon con un script a partir del túnel y las plataformas
 ## Cómo probarlo
 
 1. Abrir un `SegmentAlienNN` con F6 y esperar el aviso del orificio, o dejar que el anticuerpo patrulle.
-2. Acercarse al anticuerpo (menos de 140 px): se lanza durante 1,8 s y después se agota.
+2. Acercarse al anticuerpo (menos de 110 px): fija, embiste al punto fijado y se agota (gris, inofensivo).
 3. Ajustar los tiempos y velocidades en el inspector de cada instancia.

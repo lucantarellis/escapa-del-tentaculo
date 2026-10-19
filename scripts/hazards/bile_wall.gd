@@ -8,10 +8,12 @@ extends Node2D
 ## con el orificio dentro de la vista. Colocarlo en la cara de la pared, mirando hacia el túnel.
 ## Placeholders con polígonos. Ver `docs/mecanicas/amenazas-alien.md`.
 
-## Rojo letal de la paleta. Solo visual.
-const BILE_COLOR: Color = Color("D83232")
+## Verde de la bilis (distinto del amarillo del ácido perseguidor). Solo visual.
+const BILE_COLOR: Color = Color("5FCB3C")
 ## Núcleo claro del proyectil y del aviso. Solo visual.
-const CORE_COLOR: Color = Color("FFB199")
+const CORE_COLOR: Color = Color("D8FF9E")
+## Borde rojo oscuro del proyectil (sigue leyéndose como peligro). Solo visual.
+const OUTLINE_COLOR: Color = Color("B02828")
 ## Color de la carne del orificio. Solo visual.
 const FLESH_COLOR: Color = Color("3A1220")
 ## Radio aproximado del cuerpo del jugador. Unidad: px.
@@ -149,5 +151,6 @@ func _draw() -> void:
 		var at: Vector2 = to_local(shot["pos"])
 		var back: Vector2 = -(shot["dir"] as Vector2)
 		draw_line(at, at + back * 16.0, Color(BILE_COLOR, 0.5), bile_size * 0.6)
+		draw_circle(at, bile_size * 0.5 + 1.5, OUTLINE_COLOR)
 		draw_circle(at, bile_size * 0.5, BILE_COLOR)
 		draw_circle(at, bile_size * 0.25, CORE_COLOR)
