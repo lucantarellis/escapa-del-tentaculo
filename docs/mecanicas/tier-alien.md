@@ -14,7 +14,7 @@ Cada `SegmentAlienEntryNN` empieza con la **piel de la extremidad**: una franja 
 
 | Elemento | Qué es | Cómo está hecho |
 |---|---|---|
-| Paredes | Tejido: dominan la pantalla y forman pasillos que serpentean | Paredes (tiles) de carne `#6E2A3A`, unas 8 masas por segmento pegadas a los costados o flotando |
+| Paredes | Un solo macizo de tejido, sin masas sueltas, con un **túnel continuo** que serpentea de abajo (centro) a arriba (centro) y se ensancha en cámaras alrededor de las plataformas y tanques. Libre ≈ 50–60 % de la pantalla; ancho del túnel ≈ 136–148 px | Paredes (tiles) de carne `#6E2A3A`, generadas con un script a partir de la posición de las plataformas (las uniones entre segmentos son siempre en x = 180) |
 | Contracciones | El tejido se contrae: atravesable cuando está seguro, letal cuando se activa | `Platform` PULSE |
 | Esfínteres | Se abren y se cierran | `Platform` TIMED |
 | Membranas | Ceden al pisarlas | `Platform` BREAKABLE |
@@ -22,6 +22,10 @@ Cada `SegmentAlienEntryNN` empieza con la **piel de la extremidad**: una franja 
 | Superficies | Tejido firme | `Platform` STATIC / ONE_WAY, teñidas de rosa carne (`platform_tint`) |
 
 El color de lo letal sigue siendo rojo (convención). El perseguidor, el **ácido**, es verde amarillento `#B5D33A`: arranca 80 px bajo la pantalla a 50 px/s y acelera 6 px/s² hasta 150 px/s (más lento que el fuego: los pasillos son estrechos).
+
+## Confinamiento y viñeta
+
+Los 10 `SegmentAlienNN` son túneles continuos (ver "Paredes"). Se comprobó que en todos hay camino libre desde la entrada inferior hasta la salida superior y que todas las plataformas y tanques son alcanzables. El tier 3 tiene además una **viñeta** (`background_vignette` 0,6 en el tier): los bordes de la pantalla se oscurecen en rojo muy oscuro y laten despacio. Se configura por tier en `SegmentTier` (grupo "Fondo"); 0 = sin viñeta.
 
 ## Final: la abertura en el techo (`SegmentFinal01`, final de la partida)
 

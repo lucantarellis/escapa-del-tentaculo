@@ -191,7 +191,7 @@ func _enter_tier(tier_index: int) -> void:
 	_current_tier = tier_index
 	var tier: SegmentTier = _builder.config.tiers[tier_index]
 	if tier != null and _background != null and tier.background_color.a > 0.0:
-		_background.apply_style(tier.background_color, tier.background_stars, 0.0 if first else tier.background_fade)
+		_background.apply_style(tier.background_color, tier.background_stars, 0.0 if first else tier.background_fade, tier.background_vignette)
 	if tier != null:
 		_tentacle.apply_pursuer(tier.pursuer_config, tier.pursuer_color, tier.pursuer_reset_position)
 		if tier.pursuer_delay > 0.0 and not first:

@@ -44,6 +44,9 @@ extends Resource
 @export var background_stars: bool = false
 ## Duración del fundido al nuevo fondo al entrar al tier. Unidad: s.
 @export var background_fade: float = 0.4
+## Intensidad de la viñeta (oscurecimiento de los bordes con un latido leve), para dar sensación de
+## encierro. 0 = sin viñeta.
+@export_range(0.0, 1.0, 0.05) var background_vignette: float = 0.0
 
 @export_group("Perseguidor")
 ## Config del perseguidor en este tier (el tentáculo, el fuego, el ácido). Vacío = sigue el de

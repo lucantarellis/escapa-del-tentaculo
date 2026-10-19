@@ -7,6 +7,16 @@ extends CanvasLayer
 ## Decorado del espacio (capas, planeta, frente desenfocado). Vacío = valores por defecto de
 ## [SpaceDecorConfig]. Se muestra con las estrellas (tier del espacio).
 @export var decor: SpaceDecorConfig
+## Shader de la viñeta: oscurece los bordes (rojo muy oscuro) y late despacio. `strength` 0–1.
+const VIGNETTE_SHADER: String = "shader_type canvas_item;
+uniform float strength = 0.0;
+uniform float pulse_time = 0.0;
+void fragment() {
+	float d = distance(UV, vec2(0.5, 0.5)) * 1.6;
+	float edge = smoothstep(0.55, 1.15, d);
+	float beat = 0.5 + 0.5 * sin(pulse_time * 2.2);
+	COLOR = vec4(0.09, 0.0, 0.03, edge * strength * (0.78 + 0.22 * beat));
+}"
 ## Viewport lógico del juego (px). Estructural: coincide con `project.godot` (360×640).
 const VIEWPORT_SIZE: Vector2 = Vector2(360.0, 640.0)
 
@@ -14,6 +24,9 @@ var _rect: ColorRect
 var _stars: Node2D
 var _front_layer: CanvasLayer
 var _front: Node2D
+var _vignette_rect: ColorRect
+var _vignette_mat: ShaderMaterial
+var _vignette_strength: float = 0.0
 var _far: PackedVector3Array = PackedVector3Array()
 var _near: PackedVector3Array = PackedVector3Array()
 var _nebulae: Array[Vector3] = []
@@ -47,6 +60,20 @@ func _ready() -> void:
 	_front = Node2D.new()
 	_front.draw.connect(_draw_front)
 	_front_layer.add_child(_front)
+	# Viñeta: capa propia sobre el mundo y bajo el HUD.
+	var vignette_layer: CanvasLayer = CanvasLayer.new()
+	vignette_layer.layer = 6
+	add_child(vignette_layer)
+	var shader: Shader = Shader.new()
+	shader.code = VIGNETTE_SHADER
+	_vignette_mat = ShaderMaterial.new()
+	_vignette_mat.shader = shader
+	_vignette_rect = ColorRect.new()
+	_vignette_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_vignette_rect.size = VIEWPORT_SIZE
+	_vignette_rect.material = _vignette_mat
+	_vignette_rect.visible = false
+	vignette_layer.add_child(_vignette_rect)
 	_rng.seed = 1234
 	for i: int in decor.far_star_count:
 		_far.append(Vector3(_rng.randf() * VIEWPORT_SIZE.x, _rng.randf() * VIEWPORT_SIZE.y, _rng.randf_range(0.25, 0.6)))
@@ -68,6 +95,8 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	if _vignette_strength > 0.0:
+		_vignette_mat.set_shader_parameter("pulse_time", Time.get_ticks_msec() / 1000.0)
 	if _stars_alpha <= 0.0:
 		return
 	_time += delta
@@ -76,20 +105,24 @@ func _process(delta: float) -> void:
 	_front.queue_redraw()
 
 
-## Cambia el fondo a [param color], con o sin estrellas, con un fundido de [param fade] s (0 = ya).
-func apply_style(color: Color, stars: bool, fade: float) -> void:
+## Cambia el fondo a [param color], con o sin estrellas y con viñeta de intensidad [param vignette], con un fundido de [param fade] s (0 = ya).
+func apply_style(color: Color, stars: bool, fade: float, vignette: float = 0.0) -> void:
 	if _tween != null:
 		_tween.kill()
+	_vignette_rect.visible = true
+	_vignette_strength = vignette
 	var target_alpha: float = 1.0 if stars else 0.0
 	if fade <= 0.0:
 		_rect.color = color
 		_stars_alpha = target_alpha
+		_vignette_mat.set_shader_parameter("strength", vignette)
 		_stars.queue_redraw()
 		_front.queue_redraw()
 		return
 	_tween = create_tween().set_parallel(true)
 	_tween.tween_property(_rect, "color", color, fade)
 	_tween.tween_property(self, "_stars_alpha", target_alpha, fade)
+	_tween.tween_property(_vignette_mat, "shader_parameter/strength", vignette, fade)
 
 
 func _camera_y() -> float:
