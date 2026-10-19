@@ -38,9 +38,7 @@
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlienEntry02.tscn" id="alien_entry_02"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlienEntry03.tscn" id="alien_entry_03"]
 [ext_resource type="TileSet" uid="uid://dhbiu0oqu8hfv" path="res://resources/tilesets/walls_tileset_alien.tres" id="alien_tiles"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentBrain01.tscn" id="brain_01"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentBrain02.tscn" id="brain_02"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentBrain03.tscn" id="brain_03"]
+[ext_resource type="PackedScene" path="res://scenes/levels/segments/end/SegmentFinal01.tscn" id="final_01"]
 [ext_resource type="Resource" uid="uid://c6admthqm34nd" path="res://resources/configs/tentacle_config_fire.tres" id="fire_cfg"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/ship/SegmentShipExit01.tscn" id="ship_exit_01"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/ship/SegmentShipExit02.tscn" id="ship_exit_02"]
@@ -113,5 +111,5 @@ pursuer_delay = 1.0
 [resource]
 script = ExtResource("1_cfg")
 start_segments = Array[PackedScene]([ExtResource("start_01"), ExtResource("start_02"), ExtResource("start_03"), ExtResource("start_04"), ExtResource("start_05"), ExtResource("start_06"), ExtResource("start_07"), ExtResource("start_08"), ExtResource("start_09"), ExtResource("start_10")])
-end_segments = Array[PackedScene]([ExtResource("brain_01"), ExtResource("brain_02"), ExtResource("brain_03")])
+end_segments = Array[PackedScene]([ExtResource("final_01")])
 tiers = Array[ExtResource("24_tier")]([SubResource("Resource_tier1"), SubResource("Resource_tier2"), SubResource("Resource_tier3")])

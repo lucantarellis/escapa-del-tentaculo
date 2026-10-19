@@ -1,10 +1,10 @@
 # Tier 3: dentro del alien
 
-**Archivos:** segmentos en `scenes/levels/segments/alien/` (`SegmentAlien01`–`10` y las entradas `SegmentAlienEntry01`–`03`); finales con el jefe en `scenes/levels/segments/end/` (`SegmentBrain01`–`03`); scripts `scripts/boss/boss_brain.gd` (`BossBrain`) y `brain_node.gd` (`BrainNode`); config del ácido `resources/configs/tentacle_config_acid.tres`; tileset de carne `resources/tilesets/walls_tileset_alien.tres` (imagen `walls_placeholder_alien.png`). Todo se asigna en `resources/configs/level_config.tres` (tier 3 y `end_segments`).
+**Archivos:** segmentos en `scenes/levels/segments/alien/` (`SegmentAlien01`–`10` y las entradas `SegmentAlienEntry01`–`03`); final en `scenes/levels/segments/end/` (`SegmentFinal01`); config del ácido `resources/configs/tentacle_config_acid.tres`; tileset de carne `resources/tilesets/walls_tileset_alien.tres` (imagen `walls_placeholder_alien.png`). Todo se asigna en `resources/configs/level_config.tres` (tier 3 y `end_segments`).
 
 ## Historia
 
-El alien estira una de sus extremidades para atrapar al jugador, pero este la atraviesa y queda **dentro de su carne**. Sube por los tejidos perseguido por el **ácido** hasta el **cerebro**, lo destruye y sale por el **ojo**.
+El alien estira una de sus extremidades para atrapar al jugador, pero este la atraviesa y queda **dentro de su carne**. Sube por los tejidos perseguido por el **ácido** hasta una **abertura** por la que sale.
 
 ## Transición (entrada del tier)
 
@@ -23,17 +23,15 @@ Cada `SegmentAlienEntryNN` empieza con la **piel de la extremidad**: una franja 
 
 El color de lo letal sigue siendo rojo (convención). El perseguidor, el **ácido**, es verde amarillento `#B5D33A`: arranca 80 px bajo la pantalla a 50 px/s y acelera 6 px/s² hasta 150 px/s (más lento que el fuego: los pasillos son estrechos).
 
-## Jefe: el cerebro (`SegmentBrainNN`, finales de la partida)
+## Final: la abertura en el techo (`SegmentFinal01`, final de la partida)
 
-- **`BossBrain`**: el cerebro dibujado detrás (dos lóbulos) con 3 o 4 **puntos débiles** (`BrainNode`, hijos del nodo) que laten.
-- **Se destruyen embistiéndolos con el dash.** Tocarlos sin dash no hace nada. Cada uno que cae sacude un poco la cámara.
-- **El ojo** es la `Door` del segmento (`eye_path`): está cerrado (translúcido y sin detectar) hasta destruir el último punto débil. Entonces el cerebro muere (sacudida fuerte y se apaga) y el ojo se abre: tocarlo gana la partida ("ESCAPASTE").
-- Alrededor hay contracciones, esfínteres y membranas para llegar a cada punto débil.
+El jefe (el cerebro con puntos débiles) **se eliminó**. El final es un segmento normal cuyo techo tiene una **abertura central** (x 144–216, arriba de la pantalla): al atravesarla el jugador gana ("ESCAPASTE"). Una `Door` invisible (72 × 44 px) cubre el hueco, así que no hay puerta visible; solo un resplandor tenue provisional (`OpeningLight`).
 
-`end_segments` ahora sortea entre los 3 cerebros. Los 10 finales anteriores (`SegmentEnd01`–`10`) quedaron fuera del sorteo (sus archivos siguen en `segments/end/` hasta decidir si se borran o se reutilizan).
+- Pendiente (ronda A, paso 6): que la salida sea lo único luminoso del tier, con una corriente de partículas y venas que laten hacia ella (sin flechas ni texto), y que el camino hasta ella sea **desafiante** (es el clímax) usando las amenazas nuevas del tier 3.
+- Objetivo a futuro: 10 finales distintos. Por ahora hay 1.
 
 ## Cómo probarlo
 
 1. F5 → JUGAR y llegar al tier 3 (o bajar `count_per_run` de los tiers 1 y 2 en `level_config.tres` para llegar antes): se entra por la piel, cambia el fondo y aparece el ácido.
-2. Abrir un `SegmentAlienNN` o `SegmentBrainNN` y ejecutarlo con F6 para verlo aislado.
-3. En el cerebro: tocar un punto débil sin dash no hace nada; con dash se destruye; al caer el último se abre el ojo.
+2. Abrir un `SegmentAlienNN` o `SegmentFinal01` y ejecutarlo con F6 para verlo aislado.
+3. En el final: subir hasta la abertura del techo y atravesarla; debe aparecer "ESCAPASTE".

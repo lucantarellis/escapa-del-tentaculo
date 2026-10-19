@@ -15,6 +15,10 @@ Es el objetivo del juego: llegar a la puerta antes de que el tentáculo atrape a
 - **Estado "ganó" del jugador.** `Player.win()` desactiva el control, deja al jugador quieto y hace que `is_alive()` devuelva `false`. Como el tentáculo, los obstáculos y los tanques ya ignoran a un jugador no vivo, nada puede matarlo después de ganar ni hace falta tocar esos scripts. Ojo: `is_alive()` significa "la partida sigue en curso para el jugador", no solo "no murió"; para saber si ganó usar `Player.has_won()`.
 - **`@tool`.** El tamaño se ve y se ajusta en el editor.
 
+## Variante: abertura de salida
+
+La puerta no tiene por qué verse como una puerta. En el final de la partida (`SegmentFinal01`) la `Door` va **invisible** (se oculta su nodo `Body`) cubriendo una abertura en el techo: el jugador gana al atravesar el hueco.
+
 ## Color (placeholder)
 
 Cuerpo naranja `#FF6B32` (convención: naranja = objetivo/meta) con un picaporte blanco azulado `#C8E7EA`.
