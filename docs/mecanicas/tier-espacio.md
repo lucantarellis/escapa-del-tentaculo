@@ -61,20 +61,19 @@ Dibujado por `LevelBackground` (con las estrellas del tier) y parametrizado en `
 
 ## Salida del tier: el tentáculo del alien (`SegmentSpaceExit01`)
 
-Último segmento del espacio (`exit_segments` del tier 2; por ahora 1 variante, el objetivo son 10). Hace el papel del "ventanal" del tier 1: la transición al tier 3 es **atravesar un tentáculo del alien**.
+Último segmento del espacio (`exit_segments` del tier 2; por ahora 1 variante, el objetivo son 10). Hace el papel del "ventanal" del tier 1: la transición al tier 3 es **entrar por la punta de un tentáculo del alien**.
 
-- **El tentáculo (`FleshMembrane`, y −560):** un tentáculo de carne (con anillos y ventosas, latiendo y ondulando) atraviesa la pantalla de lado a lado: su raíz sale de un costado (**izquierda o derecha, sorteado por partida**) y la punta se clava en el otro. Crece desde la raíz mientras la cámara se acerca (aparece al asomar por el borde superior y termina de cruzar al subir unos 160 px). Hay que pasar por él: no hay otro camino.
-- **Romperlo:** con solo tocarlo (sin habilidad extra) estalla en pedazos con un **estallido de sangre**: instante congelado de 0,06 s, cámara lenta (0,3 durante 0,3 s), sacudida de 16 px por 0,6 s, destello rojo, un anillo de sangre que se expande, 70 gotas y 6 trozos de tentáculo que salen despedidos. El jugador conserva su velocidad y sigue hacia la piel del tier 3 (`SegmentAlienEntryNN`), donde cambian el fondo, la física y el perseguidor.
+- **El tentáculo (`FleshMembrane`, punta en y −400):** un tentáculo de carne **vertical** (anillos, ventosas, late y ondula) que baja desde arriba con la **punta redondeada hacia el jugador** y tapa el único hueco de una masa de carne (capa `Limb`, desde y −470 hacia arriba, con el tileset del tier 3 vía el grupo `keep_tileset`). El hueco mide 110 px de ancho y se cierra a 72 px arriba, donde empalma con la abertura de la piel del tier 3. Baja mientras la cámara se acerca (empieza al asomar por el borde superior y termina de bajar al subir unos 160 px). No hay otro camino que entrar por la punta.
+- **Romperlo:** al tocar la punta (sin habilidad extra) estalla con un **estallido de sangre**: instante congelado de 0,06 s, cámara lenta (0,3 durante 0,3 s), sacudida de 16 px por 0,6 s, destello rojo, un anillo de sangre que se expande, 70 gotas y 6 trozos de la punta que salen despedidos. Queda abierto el interior del tentáculo (más oscuro, con el borde desgarrado), por donde el jugador sigue con su velocidad hacia la piel del tier 3 (`SegmentAlienEntryNN`), donde cambian el fondo, la física y el perseguidor.
 - **Ganchos de sonido:** señales `membrane_hit` (golpe) y `broken` (rotura) para el paso de audio.
 - Un `TierEvent` en y −110 avisa con un temblor (1,6 s, 8 px) y una franja violeta-rojiza; sin explosión ni restos. Hay 2 tanques de combustible.
 
 | Propiedad de `FleshMembrane` | Defecto | Descripción |
 |---|---|---|
-| `length` | 390 | Largo (cubre el ancho de la pantalla). Unidad: px |
-| `width_root` / `width_tip` | 84 / 48 | Ancho en la raíz y en la punta. Unidad: px |
-| `tilt_degrees` | 4 | Inclinación (el signo se sortea con el costado). Unidad: ° |
-| `approach_distance` / `grow_span` | 330 / 160 | Cuándo empieza a crecer y cuánto tarda. Unidad: px |
-| `random_side` / `side` | true / 1 | Sorteo del costado (o fijo: −1 izquierda, 1 derecha) |
+| `length` | 250 | Largo del cuerpo desde la punta hacia arriba. Unidad: px |
+| `half_width_tip` / `half_width_top` | 55 / 36 | Semiancho cerca de la punta y arriba del todo. Unidad: px |
+| `cap_length` | 70 | Largo de la punta redondeada. Unidad: px |
+| `approach_distance` / `grow_span` / `drop_distance` | 330 / 160 / 300 | Cuándo baja, cuánto tarda y cuánto recorre. Unidad: px |
 | `freeze_time` / `slow_scale` / `slow_time` | 0,06 / 0,3 / 0,3 | Instante congelado y cámara lenta (tiempo real). Unidad: s |
 | `shake_amplitude` / `shake_duration` | 16 / 0,6 | Sacudida de cámara |
 | `flash_color` / `flash_alpha` | rojo / 0,55 | Destello |
