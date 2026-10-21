@@ -151,3 +151,7 @@ Al iniciar, `LevelController` hace: `LevelBuilder.build()` → `Player.reset(get
 3. Poner `seed` ≠ 0 en `level_config.tres`: el nivel se repite igual en cada reinicio y F3 muestra esa seed.
 4. Llegar a la puerta: "ESCAPASTE" y la cámara se detiene con el segmento final completo a la vista.
 5. Validación automática: un script headless (fuera del repo) arma 200 seeds y comprueba orden, apilado, ausencia de repeticiones consecutivas y reproducibilidad, y revisa cada segmento del pool (tanque, límites, sin advertencias).
+
+## Capas que conservan su tileset
+
+Una capa de tiles del segmento (hija directa) que esté en el grupo `keep_tileset` no recibe el tileset del tier al armar el nivel (ej.: la capa `Limb` de `SegmentSpaceExit01`, que muestra carne dentro del tier del espacio).

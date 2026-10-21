@@ -58,3 +58,7 @@ Dibujado por `LevelBackground` (con las estrellas del tier) y parametrizado en `
 | Estrellas lejanas / cercanas | 0,08 / 0,25 | Las cercanas titilan |
 | Estrella fugaz | — | Cada 6–10 s, en los costados y muy tenue |
 | Frente desenfocado | 1,4 | Rocas y chatarra borrosas (capa 5, delante del jugador); solo se ven hacia los costados y se apagan hacia el centro (`foreground_clear_radius`) para no tapar el juego |
+
+## Salida del tier: la extremidad del alien (`SegmentSpaceExit01`)
+
+Último segmento del espacio (`exit_segments` del tier 2; por ahora 1 variante, el objetivo son 10). El alien extiende una **extremidad** de carne (capa `Limb`, con el tileset del tier 3 vía el grupo `keep_tileset`, que `LevelBuilder` respeta) que se cierra en **embudo**: abierta de lado a lado abajo y de 72 px arriba, justo donde empieza la piel de `SegmentAlienEntryNN` (abertura x 144–216). Un `TierEvent` en y −110 avisa con un temblor (1,6 s, 8 px) y una franja violeta-rojiza; sin explosión ni restos. Hay 2 tanques de combustible (uno abajo y uno dentro del embudo). Las físicas del espacio se mantienen hasta cruzar al tier 3.

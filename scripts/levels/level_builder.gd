@@ -292,12 +292,14 @@ func _pick_from(scenes: Array[PackedScene]) -> int:
 	return _rng.randi_range(0, scenes.size() - 1)
 
 
-# Si el tier define un tileset de paredes, se lo pone a las capas de paredes del segmento.
+# Si el tier define un tileset de paredes, se lo pone a las capas de paredes del segmento (salvo las
+# del grupo "keep_tileset", que conservan el suyo: ej. la extremidad del alien en la salida del
+# espacio).
 func _apply_tier_tileset(segment: LevelSegment, tier: SegmentTier) -> void:
 	if tier.walls_tileset == null:
 		return
 	for child: Node in segment.get_children():
-		if child is TileMapLayer:
+		if child is TileMapLayer and not child.is_in_group(&"keep_tileset"):
 			(child as TileMapLayer).tile_set = tier.walls_tileset
 
 
