@@ -24,15 +24,15 @@
 [ext_resource type="PackedScene" uid="uid://0sutmev6yb84" path="res://scenes/levels/segments/ship/Segment21.tscn" id="23_58vi7"]
 [ext_resource type="Script" uid="uid://b8hobj738gq54" path="res://scripts/levels/segment_tier.gd" id="24_tier"]
 [ext_resource type="Resource" path="res://resources/configs/tentacle_config_acid.tres" id="acid_cfg"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlien01.tscn" id="alien_01"]
+[ext_resource type="PackedScene" uid="uid://dotybk5323do" path="res://scenes/levels/segments/alien/SegmentAlien01.tscn" id="alien_01"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlien02.tscn" id="alien_02"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlien03.tscn" id="alien_03"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlien04.tscn" id="alien_04"]
+[ext_resource type="PackedScene" uid="uid://dwr5jyc1xx3dh" path="res://scenes/levels/segments/alien/SegmentAlien03.tscn" id="alien_03"]
+[ext_resource type="PackedScene" uid="uid://44idf6ii7mal" path="res://scenes/levels/segments/alien/SegmentAlien04.tscn" id="alien_04"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlien05.tscn" id="alien_05"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlien06.tscn" id="alien_06"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlien07.tscn" id="alien_07"]
+[ext_resource type="PackedScene" uid="uid://33f1mq85i02" path="res://scenes/levels/segments/alien/SegmentAlien06.tscn" id="alien_06"]
+[ext_resource type="PackedScene" uid="uid://c4mphy1f2v4o5" path="res://scenes/levels/segments/alien/SegmentAlien07.tscn" id="alien_07"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlien08.tscn" id="alien_08"]
-[ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlien09.tscn" id="alien_09"]
+[ext_resource type="PackedScene" uid="uid://ql3juok8wtjo" path="res://scenes/levels/segments/alien/SegmentAlien09.tscn" id="alien_09"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlien10.tscn" id="alien_10"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlienEntry01.tscn" id="alien_entry_01"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/alien/SegmentAlienEntry02.tscn" id="alien_entry_02"]
@@ -72,7 +72,7 @@
 [sub_resource type="Resource" id="Resource_tier1"]
 script = ExtResource("24_tier")
 segments = Array[PackedScene]([ExtResource("4_seg"), ExtResource("5_seg"), ExtResource("6_seg"), ExtResource("7_seg"), ExtResource("8_seg"), ExtResource("9_seg"), ExtResource("10_seg"), ExtResource("11_seg"), ExtResource("12_seg"), ExtResource("13_seg"), ExtResource("14_seg"), ExtResource("15_seg"), ExtResource("16_seg"), ExtResource("17_seg"), ExtResource("18_seg"), ExtResource("19_seg"), ExtResource("19_ewu3o"), ExtResource("20_km1sb"), ExtResource("20_7kxs2"), ExtResource("22_58vi7"), ExtResource("23_58vi7")])
-count_per_run = 5
+count_per_run = 1
 display_name = "La nave"
 exit_segments = Array[PackedScene]([ExtResource("ship_exit_01"), ExtResource("ship_exit_02"), ExtResource("ship_exit_03")])
 background_color = Color(0.0627, 0.0784, 0.1216, 1)
@@ -81,7 +81,7 @@ pursuer_color = Color(0.54134405, 0.3044531, 0.93466634, 1)
 [sub_resource type="Resource" id="Resource_tier2"]
 script = ExtResource("24_tier")
 segments = Array[PackedScene]([ExtResource("space_01"), ExtResource("space_02"), ExtResource("space_03"), ExtResource("space_04"), ExtResource("space_05"), ExtResource("space_06"), ExtResource("space_07"), ExtResource("space_08"), ExtResource("space_09"), ExtResource("space_10")])
-count_per_run = 5
+count_per_run = 1
 display_name = "El espacio"
 entry_segments = Array[PackedScene]([ExtResource("space_entry_01"), ExtResource("space_entry_02"), ExtResource("space_entry_03")])
 exit_segments = Array[PackedScene]([ExtResource("space_exit_01")])
@@ -100,7 +100,7 @@ counter_thrust_scale = 0.45
 [sub_resource type="Resource" id="Resource_tier3"]
 script = ExtResource("24_tier")
 segments = Array[PackedScene]([ExtResource("alien_01"), ExtResource("alien_02"), ExtResource("alien_03"), ExtResource("alien_04"), ExtResource("alien_05"), ExtResource("alien_06"), ExtResource("alien_07"), ExtResource("alien_08"), ExtResource("alien_09"), ExtResource("alien_10")])
-count_per_run = 5
+count_per_run = 3
 display_name = "Dentro del alien"
 entry_segments = Array[PackedScene]([ExtResource("alien_entry_01"), ExtResource("alien_entry_02"), ExtResource("alien_entry_03")])
 platform_tint = Color(0.7686, 0.4157, 0.4784, 1)
