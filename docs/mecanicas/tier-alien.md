@@ -33,9 +33,26 @@ Los 10 `SegmentAlienNN` son túneles continuos (ver "Paredes"). Se comprobó que
 
 ## Final: la abertura en el techo (`SegmentFinal01`, final de la partida)
 
-El jefe (el cerebro con puntos débiles) **se eliminó**. El final es un segmento normal cuyo techo tiene una **abertura central** (x 144–216, arriba de la pantalla): al atravesarla el jugador gana ("ESCAPASTE"). `opens_top` apaga la pared superior de la cámara y una `Door` invisible (72 × 44 px) está justo encima del borde de la pantalla: se gana recién cuando el jugador sale entero. Usa el tileset del tier 3. No hay puerta visible; solo un haz de luz provisional (`OpeningLight`).
+El jefe (el cerebro con puntos débiles) **se eliminó**. El final es un túnel como los otros, pero que se cierra en **embudo** hacia una **abertura** central en el techo (x 144–216, 72 px): al atravesarla el jugador gana ("ESCAPASTE"). `opens_top` apaga la pared superior de la cámara y una `Door` invisible (72 × 44 px) está justo encima del borde de la pantalla: se gana recién cuando el jugador sale entero. Usa el tileset del tier 3. No hay puerta visible.
 
-- Pendiente (ronda A, paso 6): que la salida sea lo único luminoso del tier, con una corriente de partículas y venas que laten hacia ella (sin flechas ni texto), y que el camino hasta ella sea **desafiante** (es el clímax) usando las amenazas nuevas del tier 3.
+**Recorrido (de abajo hacia arriba):** es el clímax y usa las amenazas del tier.
+
+| Zona | Altura (y) | Qué hay |
+|---|---|---|
+| Entrada | −40 a −260 | Dos tentáculos menores en paredes opuestas, desfasados (0,5 s y 1,9 s), más una plataforma de contracción |
+| Cruce | −280 a −450 | Dos paredes de bilis enfrentadas (a distinta altura) y un tanque de combustible sobre una plataforma de un solo sentido |
+| Embudo | −460 a −640 | Un anticuerpo patrullando, un tanque, una pared de bilis y un tentáculo menor justo antes de la boca |
+
+**La salida es lo único luminoso del tier** (`ExitBeacon`, sin flechas ni texto): un haz de luz blanco-celeste que baja desde la abertura y late con la viñeta (`OpeningLight`), motas de luz que suben por el haz y se escapan por la abertura, y venas finas sobre la pared, pegadas al borde del túnel y convergiendo hacia la abertura, con un pulso de luz que corre hacia arriba. Las venas se calculan a partir de las celdas de la capa `Walls` del segmento. Solo se dibuja con el tramo a la vista.
+
+| Propiedad de `ExitBeacon` | Defecto | Descripción |
+|---|---|---|
+| `light_color` | `#C8E7EA` | Color de la luz |
+| `opening_left` / `opening_right` | 144 / 216 | Borde de la abertura. Unidad: px |
+| `particle_count` / `particle_start_y` / `particle_speed` | 26 / −300 / 38 | Motas: cantidad, altura de inicio (y local) y velocidad (px/s) |
+| `vein_start_y` / `pulse_speed` / `vein_alpha` | −260 / 150 / 0,16 | Venas: altura de inicio, velocidad del pulso (px/s) y opacidad en reposo |
+
+- Pendiente: afinar el anticuerpo (ver `amenazas-alien.md`) y la dificultad del final tras probarlo.
 - Objetivo a futuro: 10 finales distintos. Por ahora hay 1.
 
 ## Cómo probarlo
