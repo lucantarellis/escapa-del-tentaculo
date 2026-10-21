@@ -34,7 +34,6 @@ const DEATH_TEXTS: Dictionary = {
 	&"laser": "GOLPEADO — pulsá R para reiniciar",
 	&"bile": "GOLPEADO — pulsá R para reiniciar",
 	&"antibody": "GOLPEADO — pulsá R para reiniciar",
-	&"cilia": "GOLPEADO — pulsá R para reiniciar",
 	&"minor_tentacle": "CAPTURADO — pulsá R para reiniciar",
 }
 ## Texto para una causa de muerte desconocida. Solo visual.

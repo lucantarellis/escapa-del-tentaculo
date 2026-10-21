@@ -5,7 +5,6 @@
 [ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
 [ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
 [ext_resource type="PackedScene" path="res://scenes/hazards/BileWall.tscn" id="bile"]
-[ext_resource type="PackedScene" path="res://scenes/hazards/CiliaStrip.tscn" id="cil"]
 
 [node name="SegmentAlien08" type="Node2D"]
 script = ExtResource("seg")
@@ -52,11 +51,6 @@ platform_type = 0
 position = Vector2(48, -558)
 angle = 0.0
 initial_delay = 1.0
-
-[node name="CiliaStrip1" parent="." instance=ExtResource("cil")]
-position = Vector2(336, -462)
-angle = 180.0
-initial_delay = 0.5
 
 [node name="FuelTank1" parent="." instance=ExtResource("tank")]
 position = Vector2(250, -184)

@@ -35,19 +35,6 @@ Nunca sale del tramo (no atraviesa paredes). Mata al tocarlo salvo agotado. Caus
 | `tired_time` | 2,2 | Agotado e inofensivo. Unidad: s |
 | `body_radius` | 11 | Radio. Unidad: px |
 
-## Cilios (`CiliaStrip`)
-
-Hilera de filamentos que crecen de la pared hacia el túnel. Ciclo: **reposo** (cortos, pegados a la pared, rosados e inofensivos) → **aviso** (`warning_time`: tiemblan y se ponen rojizos) → **activos** (`active_time`: se estiran, rojos y letales) → reposo. Cada filamento arranca `wave_delay` s después del anterior, así la ola recorre la hilera y se aprende el ritmo. Solo mata con el filamento estirado (≥ 55 %). Causa: `cilia`.
-
-| Propiedad | Defecto | Descripción |
-|---|---|---|
-| `angle` | 0 | Hacia dónde crecen (0 derecha, 180 izquierda). Unidad: ° |
-| `strip_length` | 90 | Largo de la hilera, hacia abajo desde el origen. Unidad: px |
-| `count` | 6 | Filamentos |
-| `filament_length` | 38 | Largo estirado. Unidad: px |
-| `rest_time` / `warning_time` / `active_time` | 1,6 / 0,7 / 1,0 | Fases. Unidad: s |
-| `wave_delay` | 0,1 | Retraso entre filamentos. Unidad: s |
-
 ## Tentáculo menor (`MinorTentacle`)
 
 Un tentáculo pequeño que brota de la pared. Ciclo: **escondido** → **aviso** (`warning_time`: asoma un poco, tiembla y se marca con una cuña tenue el sector que va a barrer; todavía inofensivo) → **barrido** (`sweep_time`: gira de `angle_from` a `angle_to` estirado, letal) → **retracción** → descanso. Causa: `minor_tentacle`.
@@ -65,9 +52,9 @@ Un tentáculo pequeño que brota de la pared. Ciclo: **escondido** → **aviso**
 |---|---|
 | `SegmentAlien01`, `03`, `07`, `08`, `09` | Pared de bilis |
 | `SegmentAlien02`, `04`, `05`, `10` | Anticuerpo |
-| `SegmentAlien02`, `05`, `08`, `09` | Hilera de cilios |
 | `SegmentAlien03`, `06`, `10` | Tentáculo menor |
-| `SegmentAlien06` | Solo el tentáculo menor |
+
+Los cilios (filamentos que se estiran en ola) se probaron y se descartaron por decisión de diseño.
 
 Las posiciones se calcularon con un script a partir del túnel y las plataformas (lejos de ellas y fuera de los primeros y últimos 150 px del segmento). Se pueden mover a mano.
 

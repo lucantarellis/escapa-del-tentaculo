@@ -25,7 +25,7 @@ El color de lo letal sigue siendo rojo (convención). El perseguidor, el **ácid
 
 ## Amenazas propias del tier
 
-Paredes que escupen bilis, anticuerpos, cilios y tentáculos menores (ver `amenazas-alien.md`).
+Paredes que escupen bilis, anticuerpos y tentáculos menores (ver `amenazas-alien.md`).
 
 ## Confinamiento y viñeta
 
