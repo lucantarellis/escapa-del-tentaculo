@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
 [ext_resource type="TileSet" path="res://resources/tilesets/walls_tileset_alien.tres" id="alien_tiles"]
 [ext_resource type="Script" path="res://scripts/levels/tier_event.gd" id="event"]
+[ext_resource type="PackedScene" path="res://scenes/levels/FleshMembrane.tscn" id="membrane"]
 
 [node name="SegmentSpaceExit01" type="Node2D"]
 script = ExtResource("seg")
@@ -20,6 +21,9 @@ position = Vector2(90, -140)
 
 [node name="FuelTank2" parent="." instance=ExtResource("tank")]
 position = Vector2(185, -430)
+
+[node name="FleshMembrane" parent="." instance=ExtResource("membrane")]
+position = Vector2(180, -540)
 
 [node name="TierEvent" type="Node2D" parent="."]
 position = Vector2(0, -110)

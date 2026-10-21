@@ -59,6 +59,23 @@ Dibujado por `LevelBackground` (con las estrellas del tier) y parametrizado en `
 | Estrella fugaz | — | Cada 6–10 s, en los costados y muy tenue |
 | Frente desenfocado | 1,4 | Rocas y chatarra borrosas (capa 5, delante del jugador); solo se ven hacia los costados y se apagan hacia el centro (`foreground_clear_radius`) para no tapar el juego |
 
-## Salida del tier: la extremidad del alien (`SegmentSpaceExit01`)
+## Salida del tier: el tentáculo del alien (`SegmentSpaceExit01`)
 
-Último segmento del espacio (`exit_segments` del tier 2; por ahora 1 variante, el objetivo son 10). El alien extiende una **extremidad** de carne (capa `Limb`, con el tileset del tier 3 vía el grupo `keep_tileset`, que `LevelBuilder` respeta) que se cierra en **embudo**: abierta de lado a lado abajo y de 72 px arriba, justo donde empieza la piel de `SegmentAlienEntryNN` (abertura x 144–216). Un `TierEvent` en y −110 avisa con un temblor (1,6 s, 8 px) y una franja violeta-rojiza; sin explosión ni restos. Hay 2 tanques de combustible (uno abajo y uno dentro del embudo). Las físicas del espacio se mantienen hasta cruzar al tier 3.
+Último segmento del espacio (`exit_segments` del tier 2; por ahora 1 variante, el objetivo son 10). La transición al tier 3 es **entrar rompiendo la carne de un tentáculo del alien**.
+
+- **Cuerpo:** la capa `Limb` (carne, con el tileset del tier 3 vía el grupo `keep_tileset`, que `LevelBuilder` respeta) forma el cuerpo del tentáculo en **embudo**: abierto de lado a lado abajo y cerrándose hacia arriba. La punta es la membrana.
+- **Anticipo:** a 1100 px antes de la membrana, un tentáculo gigante (dibujado con polígonos, sin colisión ni daño, detrás del jugador) entra por un costado (**izquierda o derecha, sorteado por partida**), sube más rápido que la cámara, se adelanta al jugador y se posa sobre la membrana.
+- **Membrana (`FleshMembrane`, y= −540):** domo de carne que late, con venas. Tocarla basta para romperla (sin habilidad extra): instante congelado de 0,06 s, cámara lenta (0,3 durante 0,3 s), sacudida de 16 px por 0,6 s, destello rojizo, cuatro colgajos que salen despedidos y 28 trozos de carne. El jugador conserva su velocidad y sigue hacia la piel del tier 3 (`SegmentAlienEntryNN`), donde cambian el fondo, la física y el perseguidor.
+- **Ganchos de sonido:** señales `membrane_hit` (golpe) y `broken` (desgarro) para el paso de audio.
+- Un `TierEvent` en y −110 avisa con un temblor (1,6 s, 8 px) y una franja violeta-rojiza; sin explosión ni restos. Hay 2 tanques de combustible.
+
+| Propiedad de `FleshMembrane` | Defecto | Descripción |
+|---|---|---|
+| `approach_distance` | 1100 | Distancia desde la que entra el tentáculo. Unidad: px |
+| `random_side` / `side` | true / 1 | Sorteo del costado (o fijo: −1 izquierda, 1 derecha) |
+| `width_base` / `width_tip` | 120 / 96 | Ancho del tentáculo. Unidad: px |
+| `membrane_width` / `membrane_bulge` | 132 / 46 | Tamaño de la membrana. Unidad: px |
+| `freeze_time` / `slow_scale` / `slow_time` | 0,06 / 0,3 / 0,3 | Instante congelado y cámara lenta (tiempo real). Unidad: s |
+| `shake_amplitude` / `shake_duration` | 16 / 0,6 | Sacudida de cámara |
+| `flash_color` / `flash_alpha` | rojizo / 0,5 | Destello |
+| `splatter_count` | 28 | Trozos de carne |
