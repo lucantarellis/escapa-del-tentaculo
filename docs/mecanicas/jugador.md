@@ -109,7 +109,7 @@ Player (CharacterBody2D, grupo "player", capa 2, máscara 1)
 
 ## Puntos de golpe y reaparición
 
-Con las mejoras Vidas del mercado el jugador aguanta golpes (`hit_points_changed`, `hit_taken`) y puede reaparecer una vez por partida (`respawned`). Los perseguidores y la caída (`instakill_causes`) siempre matan. `hit_sprites` (grupo Visual) permite poner un sprite por cada estado de golpes. Detalle en `progreso-mercado.md`.
+Con las mejoras Vidas del mercado el jugador aguanta golpes (`hit_points_changed`, `hit_taken`) y puede reaparecer una vez por partida (`respawned`). Los perseguidores (tentáculo, fuego y ácido, causa `tentacle`) y la caída (`instakill_causes`) siempre matan, aunque tengas vidas de más. Contra los perseguidores **Reaparecer tampoco salva** (`no_respawn_causes`): es una muerte real y la partida se reinicia; la caída (`fell`) sí se puede reaparecer. Los tentaculitos de la fase 3 (`minor_tentacle`) son un golpe común: quitan 1 vida y el dash invulnerable los esquiva. `hit_sprites` (grupo Visual) permite poner un sprite por cada estado de golpes. Detalle en `progreso-mercado.md`.
 
 ## Sprites del astronauta
 

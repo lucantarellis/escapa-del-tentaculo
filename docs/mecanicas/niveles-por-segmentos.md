@@ -155,3 +155,7 @@ Al iniciar, `LevelController` hace: `LevelBuilder.build()` → `Player.reset(get
 ## Capas que conservan su tileset
 
 Una capa de tiles del segmento (hija directa) que esté en el grupo `keep_tileset` no recibe el tileset del tier al armar el nivel (ej.: la capa `Limb` de `SegmentSpaceExit01`, que muestra carne dentro del tier del espacio).
+
+## Plataformas rompibles por tier
+
+`SegmentTier.force_breakable` (por defecto apagado; encendido en el tier 2, el espacio) hace que el `LevelBuilder` vuelva `BREAKABLE` las plataformas sólidas (`STATIC`, `ONE_WAY`, `TIMED`) de los segmentos intermedios de ese tier. No toca la entrada ni la salida del tier. Ver `plataformas.md`.

@@ -171,6 +171,14 @@ Pedido de Guido: tres tiers de segmentos (1, 2 y 3); cada partida recorre los tr
 
 El pool plano (`segment_pool` y `segment_count`) se conserva como respaldo: solo se usa si `tiers` está vacío.
 
+## Iteración en `main-g`: fase 2 rompible y perseguidores letales
+
+| Iteración | Fecha | Parámetro | Antes | Después | Evidencia | Cómo se sintió |
+|---|---|---|---|---|---|---|
+| fase 2 rompible | 2026-10-28 | `level_config.tres` → tier 2 `force_breakable` (nuevo) | — (apagado) | encendido | Simulación en 40 seeds: 39/39 plataformas sólidas de los segmentos del espacio son BREAKABLE (antes 0/39); entrada y salida: 0 rompibles forzadas; fases 1 y 3 sin cambios (177 rompibles propias en ambos casos) | Pendiente de probar jugando |
+| perseguidores | 2026-10-28 | `progress_config` → `no_respawn_causes` (nuevo) | — (Reaparecer salvaba del perseguidor) | `[tentacle]`: Reaparecer no salva | Sim: con 3 vidas y Reaparecer, `die(tentacle)` mata; `die(fell)` sí reaparece; obstáculo quita 1 vida | Pendiente de probar jugando |
+| tentaculitos | 2026-10-28 | `progress_config` → `dash_unblockable_causes` | `[tentacle, fell, minor_tentacle]` | `[tentacle, fell]` | Sim: el dash invulnerable ahora frena a `minor_tentacle` | Pendiente de probar jugando |
+
 ## Valores finales del MVP
 
 Se completa al cierre ("tuning cerrado").
