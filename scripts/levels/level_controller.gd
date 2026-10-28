@@ -38,6 +38,9 @@ const DEATH_TEXTS: Dictionary = {
 }
 ## Texto para una causa de muerte desconocida. Solo visual.
 const DEFAULT_DEATH_TEXT: String = "PERDISTE — pulsá R para reiniciar"
+## Línea que se agrega al mensaje de fin cuando el nivel lo instancia [Main] (ver
+## [member show_menu_hint]). Solo visual.
+const MENU_HINT_TEXT: String = "\nEscape: volver al menú"
 ## Texto de victoria. Solo visual.
 const WIN_TEXT: String = "ESCAPASTE — pulsá R para reiniciar"
 
@@ -45,6 +48,10 @@ const WIN_TEXT: String = "ESCAPASTE — pulsá R para reiniciar"
 ## arma pero queda en pausa hasta que alguien llame a [method begin] (lo usa [Main] para mostrar
 ## el título con el nivel de fondo). Debe asignarse antes de agregar el nodo al árbol.
 @export var autostart: bool = true
+## Si es `true`, el mensaje de fin avisa que con Escape se vuelve al menú. Lo activa [Main] (el único
+## que maneja esa tecla); con `Level.tscn` solo (F6) queda en `false`. Debe asignarse antes de
+## agregar el nodo al árbol.
+@export var show_menu_hint: bool = false
 ## Parámetros de la intro de la escotilla (ver [method play_intro]). Se comparte con el [Hatch].
 @export var intro_config: IntroConfig
 
@@ -216,17 +223,22 @@ func _on_state_changed(new_state: GameManager.State, _old_state: GameManager.Sta
 			_player.win()
 			_camera.set_scrolling(false)
 			_tentacle.set_rising(false)
-			_show_message(WIN_TEXT + _record_suffix(1.0))
+			_show_message(WIN_TEXT + _record_suffix(1.0) + _menu_hint())
 		GameManager.State.LOST:
 			_camera.set_scrolling(false)
 			_tentacle.set_rising(false)
 			var progress: float = _hud.get_progress() if _hud != null else 0.0
-			_show_message(DEATH_TEXTS.get(GameManager.get_last_death_cause(), DEFAULT_DEATH_TEXT) + _record_suffix(progress))
+			_show_message(DEATH_TEXTS.get(GameManager.get_last_death_cause(), DEFAULT_DEATH_TEXT) + _record_suffix(progress) + _menu_hint())
 
 
 func _show_message(text: String) -> void:
 	_message_label.text = text
 	_message_label.visible = true
+
+
+# Línea extra del mensaje de fin ("" si el nivel no la muestra).
+func _menu_hint() -> String:
+	return MENU_HINT_TEXT if show_menu_hint else ""
 
 
 # Registra el progreso de la partida en los récords y devuelve el texto a agregar al mensaje de fin

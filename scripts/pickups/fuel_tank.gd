@@ -3,7 +3,8 @@ extends Area2D
 ## Tanque de combustible: recogible que recarga el combustible del [Player].
 ##
 ## Es un [Area2D] (capa 6 `pickups`, máscara 2 `player`): no colisiona físicamente. Al
-## tocarlo un jugador vivo se le suma `fuel_amount` con [method Player.add_fuel]. Después se
+## tocarlo un jugador vivo se le suma `fuel_amount` (o más, con la mejora de tanques del
+## mercado) con [method Player.add_fuel]. Después se
 ## oculta y, si `respawn_time` > 0, reaparece. Ver `docs/mecanicas/tanques.md`.
 
 ## Un jugador recogió el tanque. [param amount] es la cantidad ofrecida (`fuel_amount`); el
@@ -77,8 +78,10 @@ func _try_collect(body: Node2D) -> void:
 		return
 	if config.only_if_not_full and player.get_fuel() >= player.config.max_fuel - FULL_TOLERANCE:
 		return
-	player.add_fuel(config.fuel_amount)
-	collected.emit(config.fuel_amount)
+	# La mejora "Tanques grandes" del mercado sube lo que da cada tanque (ver [PlayerProgress]).
+	var amount: float = PlayerProgress.get_tank_amount(config.fuel_amount)
+	player.add_fuel(amount)
+	collected.emit(amount)
 	_respawn_left = maxf(config.respawn_time, 0.0)
 	_set_available(false)
 

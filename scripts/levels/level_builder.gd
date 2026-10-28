@@ -21,6 +21,11 @@ const SPAWN_MARKER_NAME: String = "PlayerSpawn"
 const HATCH_MARKER_NAME: String = "HatchAnchor"
 ## Seed máxima al sortear una aleatoria. Estructural.
 const MAX_RANDOM_SEED: int = 2147483647
+## Se suma a la seed del nivel para el azar de las monedas: así no altera los sorteos de los
+## segmentos y la misma seed da las mismas monedas. Estructural.
+const COIN_SEED_OFFSET: int = 1000003
+## Escena de la moneda que se reparte en los segmentos intermedios. Estructural.
+const COIN_SCENE: PackedScene = preload("res://scenes/pickups/Coin.tscn")
 
 ## Parámetros de la generación. Si queda vacío se usan los valores por defecto de [LevelConfig]
 ## (sin escenas, así que no arma nada).
@@ -44,6 +49,9 @@ var _start_index: int = -1
 ## de su primer segmento (entrada incluida)}. En orden de abajo hacia arriba.
 var _tier_starts: Array[Dictionary] = []
 var _end_index: int = -1
+## Segmentos intermedios armados, donde se reparten las monedas.
+var _coin_segments: Array[LevelSegment] = []
+var _coin_count: int = 0
 
 
 ## Arma el nivel y devuelve la seed usada. Limpia el anterior si lo hay. Con
@@ -98,6 +106,7 @@ func build(seed_override: int = 0) -> int:
 			_tier_sequence.append(tier_index)
 			var tier_segment: LevelSegment = _place(tier.segments[index], bottom_y)
 			if tier_segment != null:
+				_coin_segments.append(tier_segment)
 				_apply_tier_tileset(tier_segment, tier)
 				_apply_tier_tints(tier_segment, tier)
 				bottom_y -= tier_segment.height
@@ -126,6 +135,7 @@ func build(seed_override: int = 0) -> int:
 	# La cámara se detiene cuando su borde superior alcanza el techo del segmento final.
 	var view_height: float = float(ProjectSettings.get_setting("display/window/size/viewport_height"))
 	_camera_stop_local_y = bottom_y + view_height * 0.5
+	_spawn_coins()
 	level_built.emit(_seed)
 	return _seed
 
@@ -144,6 +154,8 @@ func clear() -> void:
 	_tier_starts.clear()
 	_door = null
 	_end_segment = null
+	_coin_segments.clear()
+	_coin_count = 0
 	_spawn_local = Vector2.ZERO
 	_hatch_local = Vector2.ZERO
 	_camera_stop_local_y = 0.0
@@ -220,9 +232,26 @@ func get_end_segment() -> LevelSegment:
 	return _end_segment
 
 
+## Devuelve cuántas monedas se repartieron en el nivel armado (0 con el progreso apagado).
+func get_coin_count() -> int:
+	return _coin_count
+
+
 ## Devuelve la puerta del segmento final (null si no hay).
 func get_goal_door() -> Door:
 	return _door
+
+
+# Reparte monedas en los segmentos intermedios (ver [CoinSpawner]). No hace nada con el progreso
+# apagado.
+func _spawn_coins() -> void:
+	if not PlayerProgress.is_enabled():
+		return
+	var coin_rng: RandomNumberGenerator = RandomNumberGenerator.new()
+	coin_rng.seed = _seed + COIN_SEED_OFFSET
+	var spawner: CoinSpawner = CoinSpawner.new(COIN_SCENE)
+	for segment: LevelSegment in _coin_segments:
+		_coin_count += spawner.populate(segment, coin_rng, PlayerProgress.config)
 
 
 func _resolve_seed(seed_override: int) -> int:
