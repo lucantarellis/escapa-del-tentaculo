@@ -309,7 +309,7 @@ func has_dash_break() -> bool:
 	return has_effect(UpgradeData.EFFECT_DASH_BREAK)
 
 
-## Devuelve cómo resiste golpes el jugador como {max_hp, hit_invulnerable_time, instakill_causes,
+## Devuelve cómo resiste golpes el jugador como {max_hp, hit_invulnerable_time, instakill_causes, no_respawn_causes,
 ## respawn, respawn_height, respawn_hp}. Sin compras (o con el progreso apagado): 1 punto, sin
 ## reaparecer, o sea que el primer golpe letal mata como siempre.
 func get_survival() -> Dictionary:
@@ -322,6 +322,7 @@ func get_survival() -> Dictionary:
 		"max_hp": max_hp,
 		"hit_invulnerable_time": config.hit_invulnerable_time,
 		"instakill_causes": config.instakill_causes,
+		"no_respawn_causes": config.no_respawn_causes,
 		"respawn": respawn,
 		"respawn_height": config.respawn_height,
 		"respawn_hp": clampi(config.respawn_hit_points, 1, max_hp),

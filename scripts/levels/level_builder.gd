@@ -107,6 +107,8 @@ func build(seed_override: int = 0) -> int:
 			var tier_segment: LevelSegment = _place(tier.segments[index], bottom_y)
 			if tier_segment != null:
 				_coin_segments.append(tier_segment)
+				if tier.force_breakable:
+					_force_breakable(tier_segment)
 				_apply_tier_tileset(tier_segment, tier)
 				_apply_tier_tints(tier_segment, tier)
 				bottom_y -= tier_segment.height
@@ -333,6 +335,17 @@ func _apply_tier_tileset(segment: LevelSegment, tier: SegmentTier) -> void:
 
 
 # Aplica los colores del tier a las plataformas del segmento (sólidas y letales por separado).
+# Vuelve BREAKABLE las plataformas sólidas del segmento (ver `SegmentTier.force_breakable`).
+func _force_breakable(segment: LevelSegment) -> void:
+	for child: Node in segment.get_children():
+		var platform: Platform = child as Platform
+		if platform == null:
+			continue
+		match platform.platform_type:
+			Platform.PlatformType.STATIC, Platform.PlatformType.ONE_WAY, Platform.PlatformType.TIMED:
+				platform.platform_type = Platform.PlatformType.BREAKABLE
+
+
 func _apply_tier_tints(segment: LevelSegment, tier: SegmentTier) -> void:
 	if tier.platform_tint.a <= 0.0 and tier.hazard_tint.a <= 0.0:
 		return

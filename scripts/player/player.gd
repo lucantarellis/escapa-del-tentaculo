@@ -118,6 +118,8 @@ var _hit_invuln_left: float = 0.0
 var _hit_invuln_time: float = 0.0
 ## Causas de muerte que matan siempre, sin tocar los puntos de golpe.
 var _instakill: Array[StringName] = []
+## Causas de muerte de las que Reaparecer no salva (los perseguidores).
+var _no_respawn: Array[StringName] = []
 ## Mejora Reaparecer: si está comprada, si ya se usó en esta partida y cómo reaparece.
 var _can_respawn: bool = false
 var _respawn_used: bool = false
@@ -311,7 +313,7 @@ func die(cause: StringName) -> void:
 			hit_taken.emit(cause)
 			return
 	# Mejora Reaparecer: una vez por partida, en lugar de morir se vuelve más arriba.
-	if _can_respawn and not _respawn_used:
+	if _can_respawn and not _respawn_used and not _no_respawn.has(cause):
 		_respawn_used = true
 		_respawn(cause)
 		return
@@ -463,6 +465,7 @@ func _setup_survival(data: Dictionary) -> void:
 	_hit_invuln_left = 0.0
 	_hit_invuln_time = maxf(float(data["hit_invulnerable_time"]), 0.0)
 	_instakill.assign(data["instakill_causes"])
+	_no_respawn.assign(data.get("no_respawn_causes", []))
 	_can_respawn = bool(data["respawn"])
 	_respawn_used = false
 	_respawn_height = maxf(float(data["respawn_height"]), 0.0)

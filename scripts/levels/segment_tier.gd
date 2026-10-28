@@ -28,6 +28,10 @@ extends Resource
 ## Color de las plataformas sólidas del tier (STATIC, ONE_WAY, BREAKABLE, TIMED). Alfa 0 = el
 ## color de cada tipo. Ej.: restos metálicos grises en el espacio.
 @export var platform_tint: Color = Color(0.0, 0.0, 0.0, 0.0)
+## Si es true, todas las plataformas sólidas (STATIC, ONE_WAY, TIMED) de los segmentos del tier se
+## vuelven BREAKABLE al armar el nivel. No afecta a la entrada ni a la salida del tier, ni a las
+## letales, de pulso o proyectiles, ni a los asteroides (tiles).
+@export var force_breakable: bool = false
 ## Color de lo letal del tier (LETHAL, PROJECTILE). Alfa 0 = rojo. Debe seguir leyéndose como
 ## peligro (rojo o naranja).
 @export var hazard_tint: Color = Color(0.0, 0.0, 0.0, 0.0)
