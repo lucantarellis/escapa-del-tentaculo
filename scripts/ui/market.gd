@@ -70,6 +70,8 @@ const RESET_CONFIRM_TIME: float = 3.0
 const RESET_TEXT: String = "Reset all"
 const RESET_CONFIRM_TEXT: String = "¿Seguro?"
 const COINS_TEXT: String = "Monedas: %d"
+const COINS_FREE_TEXT: String = "Monedas: %d   ·   Gratis: %d"
+const FREE_PRICE_TEXT: String = "%s   ·   GRATIS"
 const NODE_PRICE_TEXT: String = "%s   ·   %d"
 const OWNED_TEXT: String = "COMPRADO"
 const LOCKED_TEXT: String = "PRÓXIMAMENTE"
@@ -78,6 +80,7 @@ const STATE_LOCKED: String = "Próximamente: todavía no se puede comprar."
 const STATE_REQUIRES: String = "Primero comprá: %s."
 const STATE_COINS: String = "Cuesta %d monedas (te faltan %d)."
 const STATE_BUY: String = "Cuesta %d monedas. ¡Tocalo para comprarlo!"
+const STATE_FREE: String = "¡Es GRATIS! Usa una compra gratis (te quedan %d). Tocalo para comprarlo."
 
 ## Se cerró el mercado (botón VOLVER o Escape).
 signal closed
@@ -128,6 +131,7 @@ func _ready() -> void:
 	_update_reset_button()
 	_build_tree()
 	PlayerProgress.coins_changed.connect(_on_coins_changed)
+	PlayerProgress.free_buys_changed.connect(_on_coins_changed)
 	_refresh()
 
 
@@ -135,6 +139,8 @@ func _exit_tree() -> void:
 	# El autoload sobrevive a la escena: hay que soltar la conexión al descargar el mercado.
 	if PlayerProgress.coins_changed.is_connected(_on_coins_changed):
 		PlayerProgress.coins_changed.disconnect(_on_coins_changed)
+	if PlayerProgress.free_buys_changed.is_connected(_on_coins_changed):
+		PlayerProgress.free_buys_changed.disconnect(_on_coins_changed)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -232,7 +238,11 @@ func _build_tree() -> void:
 
 # Actualiza monedas, solapas, nodos y detalle.
 func _refresh() -> void:
-	_coins_label.text = COINS_TEXT % PlayerProgress.get_coins()
+	var free_buys: int = PlayerProgress.get_free_buys()
+	if free_buys > 0:
+		_coins_label.text = COINS_FREE_TEXT % [PlayerProgress.get_coins(), free_buys]
+	else:
+		_coins_label.text = COINS_TEXT % PlayerProgress.get_coins()
 	for index: int in _branches.size():
 		var branch: Dictionary = _branches[index]
 		var is_current: bool = index == _current_branch
@@ -260,7 +270,10 @@ func _refresh_node(upgrade: UpgradeData) -> void:
 			button.text = "%s   ·   %s" % [upgrade.display_name, LOCKED_TEXT]
 			fill = LOCKED_COLOR
 		PlayerProgress.BLOCK_NONE:
-			button.text = NODE_PRICE_TEXT % [upgrade.display_name, upgrade.price]
+			if PlayerProgress.is_free_buy(upgrade.id):
+				button.text = FREE_PRICE_TEXT % upgrade.display_name
+			else:
+				button.text = NODE_PRICE_TEXT % [upgrade.display_name, upgrade.price]
 			fill = BUY_COLOR
 			text_color = BUTTON_TEXT_COLOR
 		_:
@@ -288,7 +301,10 @@ func _update_detail() -> void:
 		PlayerProgress.BLOCK_COINS:
 			state = STATE_COINS % [upgrade.price, upgrade.price - PlayerProgress.get_coins()]
 		_:
-			state = STATE_BUY % upgrade.price
+			if PlayerProgress.is_free_buy(upgrade.id):
+				state = STATE_FREE % PlayerProgress.get_free_buys()
+			else:
+				state = STATE_BUY % upgrade.price
 	_detail_label.text = "%s\n%s\n%s" % [upgrade.display_name, upgrade.description, state]
 
 

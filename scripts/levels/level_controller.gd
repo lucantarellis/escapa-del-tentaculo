@@ -43,6 +43,20 @@ const DEFAULT_DEATH_TEXT: String = "PERDISTE — pulsá R para reiniciar"
 const MENU_HINT_TEXT: String = "\nEscape: volver al menú"
 ## Texto de victoria. Solo visual.
 const WIN_TEXT: String = "ESCAPASTE — pulsá R para reiniciar"
+## Aviso al completar una fase por primera vez (se ve unos segundos y se apaga). Solo visual.
+const PHASE_NOTICE_TEXT: String = "¡FASE %d COMPLETADA!\nGanaste una compra gratis"
+## Segundos que se ve el aviso de fase completada. Unidad: s. Solo visual.
+const NOTICE_TIME: float = 3.0
+## Duración del fundido del aviso. Unidad: s. Solo visual.
+const NOTICE_FADE: float = 0.6
+## Distancia del aviso al borde superior de la pantalla. Unidad: px. Solo visual.
+const NOTICE_TOP: float = 70.0
+## Tamaño de fuente del aviso. Unidad: px. Solo visual.
+const NOTICE_FONT_SIZE: int = 16
+## Color del aviso (celeste de los detalles de la paleta). Solo visual.
+const NOTICE_COLOR: Color = Color("C8E7EA")
+## Color del contorno del aviso. Solo visual.
+const NOTICE_OUTLINE_COLOR: Color = Color(0.0196, 0.0235, 0.0353, 1.0)
 
 ## Si es `true` (por defecto) la partida empieza sola al armarse el nivel. Si es `false` el nivel se
 ## arma pero queda en pausa hasta que alguien llame a [method begin] (lo usa [Main] para mostrar
@@ -73,10 +87,15 @@ var _intro_director: IntroDirector
 var _tier_starts: Array[Dictionary] = []
 var _next_tier: int = 0
 var _current_tier: int = -1
+# Aviso de fase completada (se arma por código en la capa de mensajes).
+var _notice_label: Label
+var _notice_tween: Tween
 
 
 func _ready() -> void:
 	_message_label.visible = false
+	_make_notice_label()
+	PlayerProgress.phase_completed.connect(_on_phase_completed)
 	var run_seed: int = 0
 	run_seed = _builder.build()
 	_player.reset(_builder.get_player_spawn())
@@ -185,6 +204,8 @@ func _physics_process(_delta: float) -> void:
 	# El jugador entra a un tier al cruzar (subiendo) el borde inferior de su primer segmento.
 	while _next_tier < _tier_starts.size() and _player.global_position.y <= float(_tier_starts[_next_tier]["y"]):
 		_enter_tier(int(_tier_starts[_next_tier]["tier"]))
+		# Cruzar al tier siguiente completa la fase anterior (la 1ª es la nave, la 2ª el espacio).
+		PlayerProgress.complete_phase(_next_tier)
 		_next_tier += 1
 
 
@@ -215,6 +236,8 @@ func _exit_tree() -> void:
 	# El autoload sobrevive a la escena: hay que soltar la conexión al descargarla.
 	if GameManager.state_changed.is_connected(_on_state_changed):
 		GameManager.state_changed.disconnect(_on_state_changed)
+	if PlayerProgress.phase_completed.is_connected(_on_phase_completed):
+		PlayerProgress.phase_completed.disconnect(_on_phase_completed)
 
 
 func _on_state_changed(new_state: GameManager.State, _old_state: GameManager.State) -> void:
@@ -223,12 +246,43 @@ func _on_state_changed(new_state: GameManager.State, _old_state: GameManager.Sta
 			_player.win()
 			_camera.set_scrolling(false)
 			_tentacle.set_rising(false)
+			# Llegar a la puerta completa la última fase.
+			PlayerProgress.complete_phase(maxi(_tier_starts.size(), 1))
 			_show_message(WIN_TEXT + _record_suffix(1.0) + _menu_hint())
 		GameManager.State.LOST:
 			_camera.set_scrolling(false)
 			_tentacle.set_rising(false)
 			var progress: float = _hud.get_progress() if _hud != null else 0.0
 			_show_message(DEATH_TEXTS.get(GameManager.get_last_death_cause(), DEFAULT_DEATH_TEXT) + _record_suffix(progress) + _menu_hint())
+
+
+# Arma el aviso de fase completada: un Label centrado arriba, escondido hasta que haga falta.
+func _make_notice_label() -> void:
+	_notice_label = Label.new()
+	_notice_label.visible = false
+	_notice_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_notice_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	_notice_label.offset_top = NOTICE_TOP
+	_notice_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_notice_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_notice_label.add_theme_font_size_override("font_size", NOTICE_FONT_SIZE)
+	_notice_label.add_theme_color_override("font_color", NOTICE_COLOR)
+	_notice_label.add_theme_color_override("font_outline_color", NOTICE_OUTLINE_COLOR)
+	_notice_label.add_theme_constant_override("outline_size", 6)
+	_message_label.get_parent().add_child(_notice_label)
+
+
+# Se completó una fase por primera vez: muestra el aviso unos segundos y lo disuelve.
+func _on_phase_completed(phase: int) -> void:
+	_notice_label.text = PHASE_NOTICE_TEXT % phase
+	_notice_label.modulate.a = 1.0
+	_notice_label.visible = true
+	if _notice_tween != null and _notice_tween.is_valid():
+		_notice_tween.kill()
+	_notice_tween = create_tween()
+	_notice_tween.tween_interval(NOTICE_TIME)
+	_notice_tween.tween_property(_notice_label, "modulate:a", 0.0, NOTICE_FADE)
+	_notice_tween.tween_callback(_notice_label.hide)
 
 
 func _show_message(text: String) -> void:

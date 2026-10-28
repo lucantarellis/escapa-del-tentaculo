@@ -15,6 +15,11 @@ signal run_coins_changed(run_total: int)
 signal progress_reset
 ## Se compró un nodo del árbol.
 signal upgrade_purchased(id: StringName)
+## Cambió la cantidad de compras gratis disponibles (ver [method get_free_buys]).
+signal free_buys_changed(available: int)
+## Se completó por PRIMERA vez la fase [param phase] (1 = la nave, 2 = el espacio, 3 = el alien) y
+## sumó una compra gratis.
+signal phase_completed(phase: int)
 
 ## Razones por las que una mejora no se puede comprar (ver [method get_block_reason]). Estructural.
 const BLOCK_NONE: StringName = &""
@@ -31,6 +36,10 @@ const KEY_COINS: String = "coins"
 const SECTION_UPGRADES: String = "upgrades"
 const SECTION_META: String = "meta"
 const KEY_TREE_VERSION: String = "tree_version"
+## Sección del guardado con las compras gratis: fases ya completadas y cuántas compras gratis se usaron.
+const SECTION_FREE: String = "free_buys"
+const KEY_PHASES: String = "phases"
+const KEY_USED: String = "used"
 ## Versión del árbol de talentos. Si el archivo de guardado es de otra versión (o no tiene), se
 ## empieza de cero una sola vez: monedas y compras en 0. Estructural.
 const TREE_VERSION: int = 1
@@ -43,6 +52,11 @@ var _run_coins: int = 0
 var _run_banked: bool = true
 # id del nodo -> true si está comprado (los que vienen de regalo no se guardan).
 var _owned: Dictionary = {}
+# Fases (1, 2, 3...) que ya se completaron alguna vez. Cada una dio una compra gratis; no se borran
+# con Reset all.
+var _phases_done: Array[int] = []
+# Compras gratis que se gastaron desde el último Reset all. Disponibles = fases completadas - usadas.
+var _free_used: int = 0
 
 
 func _ready() -> void:
@@ -56,6 +70,12 @@ func _ready() -> void:
 		_save()
 	elif config.enabled and config.debug_min_coins > _coins:
 		_coins = config.debug_min_coins
+		_save()
+	if config.enabled and config.debug_set_free_buys >= 0:
+		_phases_done.clear()
+		for phase: int in range(1, config.debug_set_free_buys + 1):
+			_phases_done.append(phase)
+		_free_used = 0
 		_save()
 	GameManager.run_started.connect(_on_run_started)
 	GameManager.run_won.connect(bank_run)
@@ -109,6 +129,39 @@ func bank_run() -> void:
 	coins_changed.emit(_coins)
 
 
+## Devuelve cuántas compras gratis hay disponibles: una por cada fase completada alguna vez, menos
+## las que ya se gastaron. Reset all las devuelve todas.
+func get_free_buys() -> int:
+	if not config.enabled:
+		return 0
+	return maxi(_phases_done.size() - _free_used, 0)
+
+
+## Devuelve true si la fase [param phase] ya se completó alguna vez.
+func is_phase_completed(phase: int) -> bool:
+	return _phases_done.has(phase)
+
+
+## Devuelve true si comprar el nodo [param id] gastaría una compra gratis en vez de monedas: hay
+## compras gratis y el nodo cuesta algo.
+func is_free_buy(id: StringName) -> bool:
+	var upgrade: UpgradeData = get_upgrade(id)
+	return upgrade != null and upgrade.price > 0 and get_free_buys() > 0
+
+
+## Marca la fase [param phase] (1 = nave, 2 = espacio, 3 = alien) como completada. Solo la PRIMERA
+## vez suma una compra gratis, emite [signal phase_completed] y guarda. Devuelve true si era la
+## primera vez. Se ignora con el progreso apagado.
+func complete_phase(phase: int) -> bool:
+	if not config.enabled or phase < 1 or _phases_done.has(phase):
+		return false
+	_phases_done.append(phase)
+	_save()
+	phase_completed.emit(phase)
+	free_buys_changed.emit(get_free_buys())
+	return true
+
+
 ## Devuelve true si el nodo [param id] está comprado (o viene de regalo).
 func is_owned(id: StringName) -> bool:
 	if _owned.has(id):
@@ -137,7 +190,7 @@ func get_block_reason(id: StringName) -> StringName:
 		return BLOCK_LOCKED
 	if upgrade.requires_id != &"" and not is_owned(upgrade.requires_id):
 		return BLOCK_REQUIRES
-	if _coins < upgrade.price:
+	if not is_free_buy(id) and _coins < upgrade.price:
 		return BLOCK_COINS
 	return BLOCK_NONE
 
@@ -147,27 +200,37 @@ func can_buy(id: StringName) -> bool:
 	return config.enabled and get_block_reason(id) == BLOCK_NONE
 
 
-## Compra el nodo [param id]: descuenta las monedas y guarda. Devuelve true si se compró.
+## Compra el nodo [param id] y guarda. Si hay compras gratis disponibles gasta una (sin tocar las
+## monedas); si no, descuenta el precio. Devuelve true si se compró.
 func buy(id: StringName) -> bool:
 	if not can_buy(id):
 		return false
 	var upgrade: UpgradeData = get_upgrade(id)
-	_coins -= upgrade.price
+	var free: bool = is_free_buy(id)
+	if free:
+		_free_used += 1
+	else:
+		_coins -= upgrade.price
 	_owned[id] = true
 	_save()
 	coins_changed.emit(_coins)
+	if free:
+		free_buys_changed.emit(get_free_buys())
 	upgrade_purchased.emit(id)
 	return true
 
 
-## Borra monedas y compras, y guarda el archivo vacío (para pruebas).
+## Borra monedas y compras, y guarda. NO borra las fases completadas: las compras gratis ganadas
+## se devuelven todas, incluso las que ya se habían gastado.
 func reset_all() -> void:
 	_coins = 0
 	_run_coins = 0
 	_run_banked = true
 	_owned.clear()
+	_free_used = 0
 	_save()
 	coins_changed.emit(_coins)
+	free_buys_changed.emit(get_free_buys())
 	run_coins_changed.emit(_run_coins)
 	progress_reset.emit()
 
@@ -295,12 +358,19 @@ func _load() -> void:
 		for key: String in file.get_section_keys(SECTION_UPGRADES):
 			if int(file.get_value(SECTION_UPGRADES, key, 0)) > 0:
 				_owned[StringName(key)] = true
+	_phases_done.clear()
+	for phase: Variant in file.get_value(SECTION_FREE, KEY_PHASES, []):
+		if int(phase) >= 1 and not _phases_done.has(int(phase)):
+			_phases_done.append(int(phase))
+	_free_used = clampi(int(file.get_value(SECTION_FREE, KEY_USED, 0)), 0, _phases_done.size())
 
 
 func _save() -> void:
 	var file: ConfigFile = ConfigFile.new()
 	file.set_value(SECTION_META, KEY_TREE_VERSION, TREE_VERSION)
 	file.set_value(SECTION_WALLET, KEY_COINS, _coins)
+	file.set_value(SECTION_FREE, KEY_PHASES, _phases_done)
+	file.set_value(SECTION_FREE, KEY_USED, _free_used)
 	for id: StringName in _owned:
 		file.set_value(SECTION_UPGRADES, String(id), 1)
 	file.save(SAVE_PATH)

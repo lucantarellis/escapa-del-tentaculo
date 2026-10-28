@@ -18,6 +18,10 @@ extends Resource
 ## arriba o para abajo) y se guarda. -1 = apagado. Si está activo, manda sobre `debug_min_coins`.
 ## Acordate de volverlo a -1 al terminar de probar. Unidad: monedas.
 @export var debug_set_coins: int = -1
+## Solo para pruebas: al abrir el juego, pasás a tener exactamente este número de compras gratis
+## disponibles (se marcan como completadas las primeras N fases y se vuelven a poner en 0 las usadas)
+## y se guarda. -1 = apagado. Acordate de volverlo a -1 al terminar de probar. Unidad: compras.
+@export var debug_set_free_buys: int = -1
 
 @export_group("Base sin mejoras")
 ## Combustible máximo (y inicial) sin ninguna mejora. Unidad: u.
