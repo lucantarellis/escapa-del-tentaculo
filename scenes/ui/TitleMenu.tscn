@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/ui/title_menu.gd" id="1_menu"]
 [ext_resource type="Resource" path="res://resources/configs/title_config.tres" id="2_cfg"]
+[ext_resource type="PackedScene" path="res://scenes/ui/Market.tscn" id="3_market"]
 
 [node name="TitleMenu" type="Control"]
 layout_mode = 3
@@ -46,3 +47,11 @@ autowrap_mode = 2
 layout_mode = 2
 size_flags_horizontal = 4
 text = "JUGAR"
+
+[node name="MarketButton" type="Button" parent="Center/Box"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "MERCADO"
+
+[node name="Market" parent="." instance=ExtResource("3_market")]
+layout_mode = 1
