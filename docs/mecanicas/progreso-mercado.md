@@ -22,9 +22,9 @@ Cada nodo es un `.tres` de `UpgradeData` en `resources/configs/upgrades/` y se c
 |---|---|---|---|---|
 | Dash | Dash corto (`dash`) | dash de 90 px | 20 | — |
 | Dash | Dash largo (`dash_long`) | dash de 130 px | 40 | `dash` |
-| Dash | Rompe plataformas (`dash_break`) | (candado) | 60 | `dash_long` |
+| Dash | Rompe plataformas (`dash_break`) | el dash rompe al instante las plataformas rompibles que toca y las atraviesa | 60 | `dash_long` |
 | Dash | Invulnerable (`dash_invuln`) | invulnerable el 67% del dash, desde el momento 0 | 50 | `dash_long` |
-| Dash | Invulnerable largo (`dash_invuln_long`) | (candado) | 80 | `dash_invuln` |
+| Dash | Invulnerable largo (`dash_invuln_long`) | invulnerable el 82% del dash (en vez del 67%), desde el momento 0 | 80 | `dash_invuln` |
 | Dash | Dash gratis (`dash_free`) | el dash no gasta combustible | 120 | `dash_invuln` |
 | Tanque | Tanque 100 (`tank_1`) | capacidad 100 (regalado) | — | — |
 | Tanque | Carga de 60 (`charge_1`) | cada tanque da 60 (regalado) | — | `tank_1` |
@@ -39,7 +39,7 @@ Cada nodo es un `.tres` de `UpgradeData` en `resources/configs/upgrades/` y se c
 | Vidas | Reaparecer (`life_respawn`) | una vez por partida, al morir volvés más arriba con 1 punto | 100 | `life_2` |
 | Reparadores | Reparador I, II, III, Escudo 10 s, Escudo eterno (`repair_1`, `repair_2`, `repair_3`, `shield_10`, `shield_inf`) | (candado) | 40 a 150 | `life_2`, luego el anterior |
 
-Decisión provisoria: "Invulnerable" pide Dash largo y no "Rompe plataformas" (que todavía no existe), y "Dash gratis" pide Invulnerable, para que se puedan probar. Se cambia con `requires_id`.
+Decisión provisoria: "Invulnerable" pide Dash largo y no "Rompe plataformas", y "Dash gratis" pide Invulnerable. Se cambia con `requires_id`.
 
 Velocidad: con la física actual (propulsión contraria al 90%) la distancia para frenar a tope es casi igual (~26 px antes, ~27 px con la perk), así que no cuesta más frenar.
 
@@ -76,9 +76,13 @@ Los puntos se ven como corazones provisorios bajo las monedas (solo con más de 
 
 Parámetros (`ProgressConfig`, grupo "Golpes y reaparición"): `hit_invulnerable_time` 1,5 s, `instakill_causes` [tentacle, fell], `respawn_height` 160 px, `respawn_hit_points` 1.
 
+## Rompe plataformas
+
+Con la mejora `dash_break`, durante el dash el jugador comprueba el paso de cada frame (`Player._break_platforms_ahead`): si va a chocar con una `Platform` `BREAKABLE`, la rompe al instante (`Platform.break_now()`, vuelve a los `respawn_time` de siempre) y la atraviesa; el choque con esa plataforma se ignora hasta que termina el dash. Sirve en cualquier dirección y rompe hasta 4 en fila en un mismo paso. Las demás plataformas, las paredes y el techo siguen frenando el dash. `PlayerProgress.has_dash_break()` dice si está comprada.
+
 ## Dash invulnerable
 
-La invulnerabilidad arranca en `dash_invulnerable_start` (0 s: apenas empieza el dash) y dura `dash_invulnerable_percent` (67%) de `dash_duration`, o sea 0,1005 s de 0,15 s (6 de los 9 ticks del dash a 60 fps). En esa ventana `Player.die(cause)` se ignora, salvo para las causas de `dash_unblockable_causes` (`&"tentacle"`, `&"fell"`, `&"minor_tentacle"`). Antes y después de la ventana el jugador es vulnerable. Las plataformas letales fijas matan solo al entrar: si un dash termina dentro de una, el jugador sobrevive hasta salir y volver a tocarla.
+La invulnerabilidad arranca en `dash_invulnerable_start` (0 s: apenas empieza el dash) y dura `dash_invulnerable_percent` (67%) de `dash_duration`, o sea 0,1005 s de 0,15 s (6 de los 9 ticks del dash a 60 fps). Con "Invulnerable largo" dura `dash_invulnerable_long_percent` (82%): 0,123 s de 0,15 s (7 de los 9 ticks). En esa ventana `Player.die(cause)` se ignora, salvo para las causas de `dash_unblockable_causes` (`&"tentacle"`, `&"fell"`, `&"minor_tentacle"`). Antes y después de la ventana el jugador es vulnerable. Las plataformas letales fijas matan solo al entrar: si un dash termina dentro de una, el jugador sobrevive hasta salir y volver a tocarla.
 
 ## Parámetros (`ProgressConfig`, `progress_config.tres`)
 
@@ -92,6 +96,7 @@ La invulnerabilidad arranca en `dash_invulnerable_start` (0 s: apenas empieza el
 | Base | `base_dash_distance` | 0 | px | Dash sin mejoras (0 = sin dash) |
 | Dash invulnerable | `dash_invulnerable_start` | 0 | s | Cuándo empieza, desde que arranca el dash |
 | Dash invulnerable | `dash_invulnerable_percent` | 67 | % | Cuánto dura, como porcentaje de `dash_duration` |
+| Dash invulnerable | `dash_invulnerable_long_percent` | 82 | % | Lo mismo, con la mejora "Invulnerable largo" (reemplaza al anterior) |
 | Golpes y reaparición | `hit_invulnerable_time` | 1,5 | s | Invulnerabilidad tras un golpe que no mata |
 | Golpes y reaparición | `instakill_causes` | tentacle, fell | — | Causas que matan siempre |
 | Golpes y reaparición | `respawn_height` | 160 | px | Cuánto más arriba reaparece |
@@ -136,5 +141,5 @@ El valor de cada moneda (`CoinConfig.value`, 1) y el vaivén están en `coin_con
 ## Limitaciones conocidas
 
 - El mercado solo se abre desde el título. Tras ganar o perder, Escape vuelve al título y R repite la partida directo (sin título). No hay pausa durante la partida.
-- Reparadores, escudo, rompe plataformas e invulnerable largo son nodos con candado sin efecto: se implementan en próximos pasos.
+- Reparadores y escudos (rama Repara) son nodos con candado sin efecto: se implementan en próximos pasos.
 - Las monedas se reparten automáticamente y no hay forma de ubicarlas a mano en un segmento.

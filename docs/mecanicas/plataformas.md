@@ -16,7 +16,7 @@ Todo lo que el jugador pisa, esquiva o lo mata en un segmento es una sola cosa: 
 |---|---|---|---|
 | `STATIC` | Sólida siempre, colisiona desde cualquier lado. | Celeste `#3A9BBF` | (plataformas de antes) |
 | `ONE_WAY` | Sólida solo desde arriba: se puede saltar a través desde abajo o los costados, y caer de nuevo a través de ella. | Verde `#8CC94C` | — |
-| `BREAKABLE` | Se rompe (deja de ser sólida) después de `break_delay` segundos parada encima, y vuelve a aparecer tras `respawn_time`. No mata directamente: el riesgo es la caída. | Naranja `#E59A4C` | — |
+| `BREAKABLE` | Se rompe (deja de ser sólida) después de `break_delay` segundos parada encima, y vuelve a aparecer tras `respawn_time`. No mata directamente: el riesgo es la caída. `break_now()` la rompe al instante (lo usa el dash con la mejora "Rompe plataformas"). | Naranja `#E59A4C` | — |
 | `TIMED` | Alterna sólida/ausente en un ciclo fijo: `timed_on_duration` sólida, `timed_off_duration` ausente. Si el jugador está en medio cuando le tocaría volverse sólida, espera a que se libere (no lo empuja). | Violeta `#B364C9` | — |
 | `LETHAL` | Nunca sólida, siempre letal al tocarla. | Rojo `#D83232` | — |
 | `PULSE` | Alterna segura (atravesable, con aviso parpadeante) / letal, en un ciclo fijo. Con `pulse_solid_when_safe` vuelve a ser sólida mientras es segura. | Azul `#3A9BBF` (segura) → blanco parpadeante (aviso) → rojo `#D83232` (letal) | — |
