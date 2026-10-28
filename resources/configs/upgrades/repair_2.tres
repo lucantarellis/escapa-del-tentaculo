@@ -6,9 +6,10 @@
 script = ExtResource("1_up")
 id = &"repair_2"
 display_name = "Reparador II"
-description = "Los reparadores curan 2 vidas."
+description = "También aparecen vendas, que curan 2 vidas."
 branch = &"repair"
 branch_label = "Repara"
 requires_id = &"repair_1"
 price = 60
-locked = true
+effect = &"repair"
+value = 2.0
