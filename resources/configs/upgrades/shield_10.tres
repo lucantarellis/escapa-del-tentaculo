@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3]
+
+[ext_resource type="Script" path="res://scripts/progress/upgrade_data.gd" id="1_up"]
+
+[resource]
+script = ExtResource("1_up")
+id = &"shield_10"
+display_name = "Escudo 10 s"
+description = "El escudo dura 10 s."
+branch = &"repair"
+branch_label = "Repara"
+requires_id = &"repair_3"
+price = 80
+locked = true

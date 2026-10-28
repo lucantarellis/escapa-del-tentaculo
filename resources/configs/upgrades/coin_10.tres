@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3]
+
+[ext_resource type="Script" path="res://scripts/progress/upgrade_data.gd" id="1_up"]
+
+[resource]
+script = ExtResource("1_up")
+id = &"coin_10"
+display_name = "Monedas x10"
+description = "Cada moneda vale 10."
+branch = &"coins"
+branch_label = "Monedas"
+requires_id = &"coin_3"
+price = 250
+effect = &"coin_value"
+value = 10.0

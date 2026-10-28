@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3]
+
+[ext_resource type="Script" path="res://scripts/progress/upgrade_data.gd" id="1_up"]
+
+[resource]
+script = ExtResource("1_up")
+id = &"life_respawn"
+display_name = "Reaparecer"
+description = "Una vez por partida, si morís, reaparecés más arriba con 1 punto de golpe."
+branch = &"lives"
+branch_label = "Vidas"
+requires_id = &"life_2"
+price = 100
+effect = &"respawn"

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3]
+
+[ext_resource type="Script" path="res://scripts/progress/upgrade_data.gd" id="1_up"]
+
+[resource]
+script = ExtResource("1_up")
+id = &"dash_invuln_long"
+display_name = "Invulnerable largo"
+description = "Invulnerable casi todo el dash largo."
+branch = &"dash"
+branch_label = "Dash"
+requires_id = &"dash_invuln"
+price = 80
+locked = true

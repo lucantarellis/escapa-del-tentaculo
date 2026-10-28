@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3]
+
+[ext_resource type="Script" path="res://scripts/progress/upgrade_data.gd" id="1_up"]
+
+[resource]
+script = ExtResource("1_up")
+id = &"life_2"
+display_name = "2 vidas"
+description = "Resistís dos golpes letales (3 puntos de golpe). No frena a los perseguidores."
+branch = &"lives"
+branch_label = "Vidas"
+requires_id = &"life_1"
+price = 60
+effect = &"hit_points"
+value = 3.0

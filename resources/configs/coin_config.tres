@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="CoinConfig" format=3 uid="uid://c5r36sma3pcwv"]
+
+[ext_resource type="Script" uid="uid://bndvqcbu3hvoy" path="res://scripts/pickups/coin_config.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+value = -23240
