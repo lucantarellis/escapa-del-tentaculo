@@ -46,6 +46,8 @@ const BLINK_ALPHA: float = 0.3
 const BLINK_RATE: float = 12.0
 ## Múltiplos de `respawn_height` donde se busca un lugar libre al reaparecer. Estructural.
 const RESPAWN_SEARCH_SCALES: Array[float] = [1.0, 0.75, 0.5, 1.25, 1.5, 0.25]
+## Máximo de plataformas rompibles que un mismo paso del dash puede romper en fila. Estructural.
+const DASH_BREAK_MAX_CHAIN: int = 4
 ## Distancia del indicador de propulsión al centro del cuerpo. Unidad: px. Solo visual.
 const THRUST_INDICATOR_DISTANCE: float = 16.0
 
@@ -123,6 +125,10 @@ var _respawn_height: float = 0.0
 var _respawn_hp: int = 1
 ## Config original (sin progreso), de donde se parte cada vez que se aplica el progreso.
 var _base_config: PlayerConfig
+## Mejora "Rompe plataformas": el dash rompe las plataformas rompibles que toca.
+var _dash_breaks: bool = false
+## Plataformas rotas por el dash en curso: el jugador las atraviesa hasta que termina el dash.
+var _dash_excepted: Array[Platform] = []
 
 
 func _ready() -> void:
@@ -151,6 +157,9 @@ func _physics_process(delta: float) -> void:
 		_hit_invuln_left = maxf(_hit_invuln_left - delta, 0.0)
 		var low: bool = _hit_invuln_left > 0.0 and int(_hit_invuln_left * BLINK_RATE) % 2 == 0
 		_body.modulate.a = BLINK_ALPHA if low else 1.0
+	# Terminado el dash, las plataformas que rompió vuelven a poder chocar con el jugador.
+	if _dash_distance_left <= 0.0 and not _dash_excepted.is_empty():
+		_clear_dash_exceptions()
 	if not _is_alive:
 		return
 	# Con el control bloqueado (tras un lanzamiento) no se lee el Input: solo actúan la inercia y la gravedad.
@@ -466,6 +475,7 @@ func _setup_survival(data: Dictionary) -> void:
 func _apply_progress() -> void:
 	config = PlayerProgress.apply_to_player_config(_base_config)
 	_setup_dash_invulnerability(PlayerProgress.get_dash_invulnerability())
+	_dash_breaks = PlayerProgress.has_dash_break()
 	_setup_survival(PlayerProgress.get_survival())
 
 
@@ -552,6 +562,8 @@ func _start_dash(direction: Vector2) -> void:
 # distancia configurada.
 func _process_dash(delta: float) -> void:
 	var step: float = minf(_dash_speed * delta, _dash_distance_left)
+	if _dash_breaks:
+		_break_platforms_ahead(_dash_direction * step)
 	velocity = _dash_direction * (step / delta)
 	move_and_slide()
 	_dash_distance_left -= step
@@ -562,6 +574,27 @@ func _process_dash(delta: float) -> void:
 	_update_fuel(false, delta)
 	_set_thrusting(false)
 	_update_visuals(Vector2.ZERO)
+
+
+# Con "Rompe plataformas": si el paso del dash choca con una plataforma rompible, la rompe y la
+# deja atravesar (el choque se ignora hasta que termina el dash). Repite por si hay varias en fila.
+func _break_platforms_ahead(motion: Vector2) -> void:
+	var hit: KinematicCollision2D = KinematicCollision2D.new()
+	for i: int in DASH_BREAK_MAX_CHAIN:
+		if not test_move(global_transform, motion, hit):
+			return
+		var platform: Platform = hit.get_collider() as Platform
+		if platform == null or not platform.break_now():
+			return
+		add_collision_exception_with(platform)
+		_dash_excepted.append(platform)
+
+
+func _clear_dash_exceptions() -> void:
+	for platform: Platform in _dash_excepted:
+		if is_instance_valid(platform):
+			remove_collision_exception_with(platform)
+	_dash_excepted.clear()
 
 
 # Termina el dash y frena en seco: así el desplazamiento total es la distancia configurada,

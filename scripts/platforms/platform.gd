@@ -359,12 +359,22 @@ func _process_breakable(delta: float) -> void:
 		# pegado arriba del borde y el jugador lo cruza un poco antes de aterrizar de verdad.
 		_break_timer += delta
 		if _break_timer >= config.break_delay:
-			_breaking = false
-			_broken = true
-			_break_timer = 0.0
-			_respawn_left = config.respawn_time
-			_apply_solid(false)
-			broke.emit()
+			break_now()
+
+
+## Rompe la plataforma YA (sin esperar `break_delay`): deja de ser sólida y vuelve tras
+## `respawn_time`, igual que cuando se rompe por pisarla. Solo actúa sobre una [BREAKABLE] que no
+## esté ya rota. Devuelve true si se rompió. Lo usa el dash con la mejora "Rompe plataformas".
+func break_now() -> bool:
+	if platform_type != PlatformType.BREAKABLE or _broken:
+		return false
+	_breaking = false
+	_broken = true
+	_break_timer = 0.0
+	_respawn_left = config.respawn_time
+	_apply_solid(false)
+	broke.emit()
+	return true
 
 
 func _process_timed(delta: float) -> void:

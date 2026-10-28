@@ -294,11 +294,19 @@ func get_coin_value(base_value: int) -> int:
 func get_dash_invulnerability() -> Dictionary:
 	if not has_effect(UpgradeData.EFFECT_DASH_INVULN):
 		return {}
+	var percent: float = config.dash_invulnerable_percent
+	if has_effect(UpgradeData.EFFECT_DASH_INVULN_LONG):
+		percent = config.dash_invulnerable_long_percent
 	return {
 		"start": config.dash_invulnerable_start,
-		"percent": config.dash_invulnerable_percent,
+		"percent": percent,
 		"unblockable": config.dash_unblockable_causes,
 	}
+
+
+## Devuelve true si el dash rompe las plataformas rompibles (mejora "Rompe plataformas").
+func has_dash_break() -> bool:
+	return has_effect(UpgradeData.EFFECT_DASH_BREAK)
 
 
 ## Devuelve cómo resiste golpes el jugador como {max_hp, hit_invulnerable_time, instakill_causes,

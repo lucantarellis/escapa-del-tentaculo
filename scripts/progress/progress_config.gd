@@ -35,6 +35,9 @@ extends Resource
 ## Cuánto dura la invulnerabilidad, como porcentaje de la duración del dash (`dash_duration` del
 ## jugador): 100 = todo el dash. Se cuenta desde `dash_invulnerable_start`. Unidad: %.
 @export_range(0.0, 100.0, 1.0) var dash_invulnerable_percent: float = 67.0
+## Con la mejora "Invulnerable largo": cuánto dura la invulnerabilidad, como porcentaje de la
+## duración del dash. Reemplaza a `dash_invulnerable_percent`. Unidad: %.
+@export_range(0.0, 100.0, 1.0) var dash_invulnerable_long_percent: float = 82.0
 ## Causas de muerte que la invulnerabilidad NO frena (la caída y el tentáculo).
 @export var dash_unblockable_causes: Array[StringName] = [&"tentacle", &"fell", &"minor_tentacle"]
 

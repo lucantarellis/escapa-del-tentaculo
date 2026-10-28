@@ -12,6 +12,8 @@ extends Resource
 const EFFECT_NONE: StringName = &"none"
 const EFFECT_DASH_DISTANCE: StringName = &"dash_distance"
 const EFFECT_DASH_INVULN: StringName = &"dash_invuln"
+const EFFECT_DASH_INVULN_LONG: StringName = &"dash_invuln_long"
+const EFFECT_DASH_BREAK: StringName = &"dash_break"
 const EFFECT_DASH_FREE: StringName = &"dash_free"
 const EFFECT_MAX_FUEL: StringName = &"max_fuel"
 const EFFECT_TANK_AMOUNT: StringName = &"tank_amount"
@@ -49,7 +51,8 @@ const EFFECT_RESPAWN: StringName = &"respawn"
 ## Qué hace al comprarlo (uno de los `EFFECT_*`). `none` = nada (nodo reservado).
 @export var effect: StringName = &"none"
 ## Valor principal del efecto. Su unidad depende del `effect`: distancia en px (`dash_distance`),
-## porcentaje del dash (`dash_invuln`; no se usa, el porcentaje está en `ProgressConfig`),
+## porcentaje del dash (`dash_invuln` y `dash_invuln_long`; no se usa, los porcentajes están en
+## `ProgressConfig`), `dash_break` no usa valor,
 ## combustible en u (`max_fuel`, `tank_amount`), velocidad máxima en px/s (`speed`) o monedas
 ## por moneda (`coin_value`), o puntos de golpe TOTALES que aguanta el jugador (`hit_points`: 2 =
 ## resiste un golpe letal, 3 = resiste dos). `respawn` no usa valor.
