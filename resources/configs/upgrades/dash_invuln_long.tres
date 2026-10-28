@@ -6,9 +6,9 @@
 script = ExtResource("1_up")
 id = &"dash_invuln_long"
 display_name = "Invulnerable largo"
-description = "Invulnerable casi todo el dash largo."
+description = "Sos invulnerable durante el 82% del dash, desde que arranca."
 branch = &"dash"
 branch_label = "Dash"
 requires_id = &"dash_invuln"
 price = 80
-locked = true
+effect = &"dash_invuln_long"

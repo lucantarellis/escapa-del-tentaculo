@@ -11,4 +11,4 @@ branch = &"dash"
 branch_label = "Dash"
 requires_id = &"dash_long"
 price = 60
-locked = true
+effect = &"dash_break"
