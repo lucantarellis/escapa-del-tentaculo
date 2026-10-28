@@ -37,7 +37,7 @@ Cada nodo es un `.tres` de `UpgradeData` en `resources/configs/upgrades/` y se c
 | Vidas | 1 vida (`life_1`) | aguantás 1 golpe letal (2 puntos de golpe) | 30 | — |
 | Vidas | 2 vidas (`life_2`) | aguantás 2 golpes letales (3 puntos de golpe) | 60 | `life_1` |
 | Vidas | Reaparecer (`life_respawn`) | una vez por partida, al morir volvés más arriba con 1 punto | 100 | `life_2` |
-| Reparadores | Reparador I, II, III, Escudo 10 s, Escudo eterno (`repair_1`, `repair_2`, `repair_3`, `shield_10`, `shield_inf`) | (candado) | 40 a 150 | `life_2`, luego el anterior |
+| Reparadores | Reparador I, II, III (`repair_1`, `repair_2`, `repair_3`: efecto `repair`, valor 1/2/3; llaves, vendas, botiquines) y Escudo 10 s, Escudo eterno (`shield_10`, `shield_inf`, con candado) | 40 a 150 | `life_2`, luego el anterior |
 
 Decisión provisoria: "Invulnerable" pide Dash largo y no "Rompe plataformas", y "Dash gratis" pide Invulnerable. Se cambia con `requires_id`.
 
@@ -141,5 +141,5 @@ El valor de cada moneda (`CoinConfig.value`, 1) y el vaivén están en `coin_con
 ## Limitaciones conocidas
 
 - El mercado solo se abre desde el título. Tras ganar o perder, Escape vuelve al título y R repite la partida directo (sin título). No hay pausa durante la partida.
-- Reparadores y escudos (rama Repara) son nodos con candado sin efecto: se implementan en próximos pasos.
+- Reparador I, II y III ya funcionan (ver `reparadores.md`). Escudo 10 s y Escudo eterno (rama Repara) siguen con candado y sin efecto.
 - Las monedas se reparten automáticamente y no hay forma de ubicarlas a mano en un segmento.

@@ -50,6 +50,7 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 | IntroDirector | `broken()` | `LevelController` | La escotilla se rompió y el jugador ya salió disparado: empieza la partida (`begin` sin activar el tentáculo) |
 | IntroDirector | `finished()` | `LevelController` | Empezó a entrar el tentáculo (o se saltó): libera al director |
 | GameManager | `run_started(seed)` / `run_won()` / `run_lost(cause)` | `PlayerProgress` | Hitos de la partida: al ganar o perder se guardan las monedas juntadas |
+| Repairer | `collected(kind, healed)` | `RepairerSpawner` (lo crea el `LevelBuilder`) | Un jugador vivo recogió un reparador (llave, venda o botiquín) |
 | Coin | `collected(value)` | `CoinSpawner` (la conecta a `PlayerProgress.add_run_coins`) | Un jugador vivo recogió la moneda |
 | PlayerProgress | `run_coins_changed(total)` / `coins_changed(total)` | `Hud` / `Market` | Contador de la partida y monedas guardadas |
 | Market | `closed()` | `TitleMenu` | Se cerró el mercado |
@@ -71,6 +72,7 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 | `TierEvent` | `scripts/levels/tier_event.gd` | Momento de historia al entrar a un tier (sacudida, destello, silueta del alien), en los segmentos de entrada. Ver `docs/mecanicas/tier-espacio.md` |
 | `WindowBreach` | `scripts/levels/window_breach.gd` | Ventanal que rompe el alien en la salida de la nave; descompresión que saca al jugador. Ver `docs/mecanicas/tier-espacio.md` |
 | `Asteroid` | `scripts/levels/asteroid.gd` | Asteroide del espacio: capa de tiles propia que flota y gira (cuerpos cinemáticos) |
+| `Repairer` | `scripts/pickups/repairer.gd`, `scenes/pickups/Repairer.tscn` (+ `scripts/levels/repairer_spawner.gd`) | Reparador: llave (cura 1), venda (cura 2) y botiquín (cura todo + escudo) |
 | `SpeedBoost` | `scripts/pickups/speed_boost.gd` (+ `speed_boost_config.gd`) | Recogible de impulso de velocidad (tier 2) |
 | `HullDebris` | `scripts/levels/hull_debris.gd` | Fragmento letal despedido por un `TierEvent` (causa `&"debris"`) |
 | `SpaceProjectile` | `scripts/hazards/space_projectile.gd` | Meteoro o cometa del tier 2: avisa, cruza la pantalla y mata (causas `&"meteor"`, `&"comet"`). Ver `docs/mecanicas/obstaculos-espacio.md` |
