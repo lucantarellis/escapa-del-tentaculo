@@ -45,6 +45,24 @@ Velocidad: con la física actual (propulsión contraria al 90%) la distancia par
 
 El dash dura siempre `dash_duration` = 0,15 s (valor de `player_config.tres`): el corto va a 600 px/s y el largo a unos 867 px/s.
 
+## Compras gratis por fase
+
+La **primera vez** que se completa una fase se gana una compra gratis (una por fase, para siempre):
+
+| Fase | Se completa cuando... |
+|---|---|
+| 1 (la nave) | el jugador cruza al segundo tier (el espacio) |
+| 2 (el espacio) | el jugador cruza al tercer tier (el alien) |
+| 3 (el alien) | el jugador llega a la puerta final (`WON`) |
+
+- Cuenta aunque después muera en la partida. Si se pasan dos fases por primera vez en la misma partida, se suman dos. Repetir una fase que ya se completó no suma nada.
+- La **próxima compra** del mercado no gasta monedas: usa una compra gratis, aunque haya 0 monedas. Valen los requisitos del árbol (no se saltea el orden ni los nodos con candado). Los nodos que cuestan 0 no gastan compras gratis.
+- En el mercado, junto a las monedas se ve `Gratis: N`, y los nodos comprables dicen `GRATIS` en lugar del precio (y el detalle lo aclara).
+- **Reset all** borra las compras y las monedas, pero NO las fases completadas: devuelve todas las compras gratis, incluso las ya gastadas. Disponibles = fases completadas − usadas desde el último Reset all.
+- Al completar una fase por primera vez, el nivel muestra unos segundos el aviso "¡FASE N COMPLETADA! Ganaste una compra gratis" (`LevelController`, constantes `NOTICE_*`).
+- Se guarda en `user://progress.cfg`, sección `[free_buys]` (`phases`, `used`). Las fases que se pasaron antes de existir esta mejora no cuentan: arranca en 0.
+- Pendiente: cuando exista el jefe final, la fase 3 se completará al llegar a él o derrotarlo (hoy es la puerta).
+
 ## Puntos de golpe y Reaparecer
 
 "Vida" en el árbol significa **punto de golpe**: cuántos golpes aguanta el jugador. Sin compras tiene 1 punto (el primer golpe letal mata, como siempre); con 1 vida tiene 2 y con 2 vidas tiene 3 (`hit_points` es el total). Se implementa en `Player.die(cause)`:
@@ -68,6 +86,7 @@ La invulnerabilidad arranca en `dash_invulnerable_start` (0 s: apenas empieza el
 |---|---|---|---|---|
 | General | `enabled` | true | — | Apaga o enciende todo el progreso |
 | General | `debug_min_coins` | 0 | monedas | Para pruebas: al abrir el juego completa las monedas hasta este número |
+| General | `debug_set_free_buys` | -1 | compras | Para pruebas: al abrir el juego fija las compras gratis disponibles en exactamente este número (marca las primeras N fases como completadas y pone en 0 las usadas; -1 = apagado) |
 | General | `debug_set_coins` | -1 | monedas | Para pruebas: al abrir el juego fija las monedas en exactamente este número (-1 = apagado; manda sobre `debug_min_coins`) |
 | Base | `base_max_fuel` | 100 | u | Combustible sin mejoras |
 | Base | `base_dash_distance` | 0 | px | Dash sin mejoras (0 = sin dash) |
@@ -91,7 +110,8 @@ El valor de cada moneda (`CoinConfig.value`, 1) y el vaivén están en `coin_con
 
 ## Señales y API
 
-- `PlayerProgress.coins_changed(total)`, `run_coins_changed(run_total)`, `upgrade_purchased(id)`.
+- `PlayerProgress.coins_changed(total)`, `run_coins_changed(run_total)`, `upgrade_purchased(id)`, `free_buys_changed(available)` y `phase_completed(phase)` (solo la primera vez que se completa esa fase).
+- `PlayerProgress.complete_phase(phase) -> bool` (true si era la primera vez), `get_free_buys()`, `is_phase_completed(phase)`, `is_free_buy(id)` (comprar ese nodo gastaría una compra gratis). `LevelController` llama a `complete_phase` al cruzar de tier y al ganar.
 - `PlayerProgress`: `is_enabled()`, `get_coins()`, `get_run_coins()`, `add_run_coins(n)`, `bank_run()`, `is_owned(id)`, `get_upgrade(id)`, `get_block_reason(id)` (`owned`, `locked`, `requires`, `coins` o vacío), `can_buy(id)`, `buy(id)`, `reset_all()`, `get_effect_value(effect, fallback)`, `has_effect(effect)`, `apply_to_player_config(base)`, `get_tank_amount(base)`, `get_coin_value(base)`, `get_dash_invulnerability()`, `get_survival()`.
 - `Coin.collected(value)`: `CoinSpawner` la conecta con `PlayerProgress.add_run_coins`.
 - `Player.is_dash_invulnerable()`, `get_hit_points()`, `get_max_hit_points()`, `is_hit_invulnerable()`, `can_respawn()`; señales `hit_points_changed(current, maximum)`, `hit_taken(cause)` y `respawned(at)`.
@@ -110,7 +130,8 @@ El valor de cada moneda (`CoinConfig.value`, 1) y el vaivén están en `coin_con
 4. Juntar monedas durante la partida (contador arriba a la izquierda); perder o ganar las guarda. Tras terminar, Escape vuelve al título y MERCADO muestra las monedas guardadas.
 5. Con la invulnerabilidad: dashear contra un obstáculo o una trampa durante los primeros 2/3 del dash debería salvarte; el tentáculo y la caída siguen matando.
 6. Para jugar como antes: `enabled = false`.
-7. Para empezar de cero desde el juego: botón **Reset all** del mercado (dos toques). Si `debug_set_coins` está activo, al abrir el juego las monedas vuelven a ese número. O bien: borrar `user://progress.cfg` (en Godot: Proyecto → Abrir carpeta de datos de usuario del proyecto) o subir `TREE_VERSION` en `player_progress.gd`.
+7. Compras gratis: con `debug_set_free_buys = 2` en `progress_config.tres` (volver a -1 después) el mercado muestra `Gratis: 2` y los nodos dicen GRATIS; al comprar uno baja a 1 y no se gastan monedas. Jugando de verdad: cruzar al espacio (o al alien) por primera vez muestra el aviso y suma 1. Reset all devuelve las gratis.
+8. Para empezar de cero desde el juego: botón **Reset all** del mercado (dos toques). Si `debug_set_coins` está activo, al abrir el juego las monedas vuelven a ese número. O bien: borrar `user://progress.cfg` (en Godot: Proyecto → Abrir carpeta de datos de usuario del proyecto) o subir `TREE_VERSION` en `player_progress.gd`.
 
 ## Limitaciones conocidas
 
