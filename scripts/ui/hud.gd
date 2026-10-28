@@ -12,8 +12,14 @@ extends CanvasLayer
 ##   ([RunRecords]) y marcas cortas donde empieza cada tier.
 ## - **Tentáculo:** en la misma línea, un marcador rojo con la altura del borde superior del
 ##   tentáculo, con el mismo cálculo. Se oculta mientras el tentáculo está inactivo (intro).
+## - **Monedas:** un contador de texto arriba a la izquierda con las monedas juntadas en la
+##   partida (ver [PlayerProgress]).
 ##
-## No modifica el juego. Sin números ni etiquetas. Todos los valores son visuales.
+## - **Puntos de golpe:** corazones provisorios debajo de las monedas, solo si el jugador tiene más
+##   de 1 punto (mejoras Vidas del mercado). Siguen a [signal Player.hit_points_changed].
+##
+## No modifica el juego. Aparte del contador de monedas, sin números ni etiquetas. Todos los
+## valores son visuales.
 ## Ver `docs/mecanicas/hud.md`.
 
 ## Color de la barra con combustible (naranja de meta/jugador). Solo visual.
@@ -48,6 +54,25 @@ const BAR_HEIGHT: float = 200.0
 const EDGE_MARGIN: float = 6.0
 ## Tamaño del marcador de progreso y de la marca de la puerta (px). Solo visual.
 const MARKER_SIZE: Vector2 = Vector2(13.0, 4.0)
+## Color del contador de monedas (cian de los recogibles). Solo visual.
+const COIN_COLOR: Color = Color("63D6C5")
+## Tamaño de fuente del contador de monedas (px). Solo visual.
+const COIN_FONT_SIZE: int = 14
+## Posición del contador de monedas, medida desde la esquina superior izquierda (px). Solo visual.
+const COIN_LABEL_POSITION: Vector2 = Vector2(16.0, 6.0)
+## Texto del contador de monedas: `%d` es la cantidad juntada en la partida. Solo visual.
+const COIN_TEXT: String = "monedas: %d"
+## Color de los puntos de golpe que quedan (rojo letal de la paleta). Solo visual.
+const HIT_COLOR: Color = Color("D83232")
+## Color de los puntos de golpe perdidos. Solo visual.
+const HIT_LOST_COLOR: Color = Color(0.7843, 0.9059, 0.9176, 0.3)
+## Tamaño de fuente de los corazones (px). Solo visual.
+const HIT_FONT_SIZE: int = 18
+## Posición de los corazones, desde la esquina superior izquierda (px). Solo visual.
+const HIT_LABEL_POSITION: Vector2 = Vector2(16.0, 26.0)
+## Símbolos de un punto de golpe que queda y de uno perdido. Solo visual.
+const HIT_FULL_TEXT: String = "♥"
+const HIT_LOST_TEXT: String = "♡"
 ## Viewport lógico del juego (px). Estructural: coincide con `project.godot` (360×640).
 const VIEWPORT_SIZE: Vector2 = Vector2(360.0, 640.0)
 
@@ -70,6 +95,8 @@ var _fuel_ratio: float = 1.0
 @onready var _tentacle_marker: ColorRect = $TentacleMarker
 @onready var _record_marker: ColorRect = $RecordMarker
 @onready var _tier_marks: Control = $TierMarks
+@onready var _coin_label: Label = $CoinLabel
+@onready var _hit_label: Label = $HitLabel
 
 var _record: float = 0.0
 var _tier_ys: PackedFloat32Array = PackedFloat32Array()
@@ -96,10 +123,13 @@ func _ready() -> void:
 	_tentacle_marker.visible = false
 	_record_marker.color = RECORD_COLOR
 	_record_marker.size = RECORD_SIZE
+	_setup_coin_label()
 	if player == null:
 		push_error("Hud: falta asignar 'player'.")
 		return
 	player.fuel_changed.connect(_on_fuel_changed)
+	player.hit_points_changed.connect(_on_hit_points_changed)
+	_setup_hit_label()
 	player.fuel_depleted.connect(_on_fuel_state_changed)
 	player.fuel_refilled.connect(_on_fuel_state_changed)
 	_fuel_ratio = player.get_fuel_ratio()
@@ -157,6 +187,43 @@ func get_fuel_ratio() -> float:
 ## Devuelve el color actual de la barra de combustible.
 func get_fuel_color() -> Color:
 	return _fuel_fill.color
+
+
+# Contador de las monedas juntadas en la partida (ver [PlayerProgress]). Se oculta con el progreso
+# apagado.
+func _setup_coin_label() -> void:
+	_coin_label.position = COIN_LABEL_POSITION
+	_coin_label.add_theme_font_size_override("font_size", COIN_FONT_SIZE)
+	_coin_label.add_theme_color_override("font_color", Color(COIN_COLOR, HUD_ALPHA + 0.2))
+	_coin_label.visible = PlayerProgress.is_enabled()
+	_on_run_coins_changed(PlayerProgress.get_run_coins())
+	PlayerProgress.run_coins_changed.connect(_on_run_coins_changed)
+
+
+# Corazones provisorios de los puntos de golpe (se ven solo con más de 1 punto).
+func _setup_hit_label() -> void:
+	_hit_label.position = HIT_LABEL_POSITION
+	_hit_label.add_theme_font_size_override("font_size", HIT_FONT_SIZE)
+	_hit_label.add_theme_color_override("font_color", Color(HIT_COLOR, HUD_ALPHA + 0.2))
+	_on_hit_points_changed(player.get_hit_points(), player.get_max_hit_points())
+
+
+func _on_hit_points_changed(current: int, maximum: int) -> void:
+	_hit_label.visible = maximum > 1
+	var text: String = ""
+	for index: int in maximum:
+		text += (HIT_FULL_TEXT if index < current else HIT_LOST_TEXT) + " "
+	_hit_label.text = text.strip_edges()
+
+
+func _exit_tree() -> void:
+	# El autoload sobrevive a la escena: hay que soltar la conexión al descargar el HUD.
+	if PlayerProgress.run_coins_changed.is_connected(_on_run_coins_changed):
+		PlayerProgress.run_coins_changed.disconnect(_on_run_coins_changed)
+
+
+func _on_run_coins_changed(run_total: int) -> void:
+	_coin_label.text = COIN_TEXT % run_total
 
 
 func _on_fuel_changed(current: float, maximum: float) -> void:

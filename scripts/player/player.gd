@@ -25,6 +25,12 @@ signal jumped
 signal died(cause: StringName)
 ## Se emite al ganar (ver [method win]).
 signal won
+## Se emite cuando cambian los puntos de golpe (al recibir un golpe, reaparecer o reiniciar).
+signal hit_points_changed(current: int, maximum: int)
+## Se emite al recibir un golpe que NO mata (había puntos de golpe de más). [param cause] es el motivo.
+signal hit_taken(cause: StringName)
+## Se emite al reaparecer con la mejora Reaparecer (en lugar de morir). [param at] es el lugar.
+signal respawned(at: Vector2)
 
 ## Color del cuerpo con combustible (naranja de la paleta). Solo visual.
 ## Tinte del jugador mientras dura un impulso de velocidad. Solo visual.
@@ -32,14 +38,32 @@ const BOOST_MODULATE: Color = Color(0.7, 1.4, 1.35, 1.0)
 const COLOR_BODY_NORMAL: Color = Color("#FF6B32")
 ## Color del cuerpo sin combustible (rojo de la paleta). Solo visual.
 const COLOR_BODY_EMPTY: Color = Color("#D83232")
+## Oscurecimiento del cuerpo placeholder por cada golpe recibido (0 a 1). Solo visual.
+const HIT_DARKEN_STEP: float = 0.3
+## Opacidad baja del parpadeo tras un golpe (0 a 1). Solo visual.
+const BLINK_ALPHA: float = 0.3
+## Velocidad del parpadeo tras un golpe. Unidad: cambios por segundo. Solo visual.
+const BLINK_RATE: float = 12.0
+## Múltiplos de `respawn_height` donde se busca un lugar libre al reaparecer. Estructural.
+const RESPAWN_SEARCH_SCALES: Array[float] = [1.0, 0.75, 0.5, 1.25, 1.5, 0.25]
 ## Distancia del indicador de propulsión al centro del cuerpo. Unidad: px. Solo visual.
 const THRUST_INDICATOR_DISTANCE: float = 16.0
 
 ## Parámetros de gameplay. Si queda vacío se usan los valores por defecto de [PlayerConfig].
 @export var config: PlayerConfig
 
+@export_group("Visual")
+## Sprites del jugador según los golpes recibidos: el primero es sin golpes, el segundo con 1 golpe,
+## el tercero con 2 golpes. Si hay menos que golpes, se repite el último. Con la lista vacía se
+## usa el cuerpo placeholder, que se oscurece con cada golpe. El sprite se muestra en el nodo
+## `Body/Sprite` (se puede escalar o mover desde ahí). Los dibujos miran a la derecha y se
+## espejan si el último lado al que se apretó moverse fue la izquierda.
+@export var hit_sprites: Array[Texture2D] = []
+
 @onready var _body: Polygon2D = $Body
+@onready var _sprite: Sprite2D = $Body/Sprite
 @onready var _thrust_indicator: Polygon2D = $ThrustIndicator
+@onready var _flame: Sprite2D = $Flame
 @onready var _collision: CollisionShape2D = $CollisionShape2D
 @onready var _cooldown_bar: DashCooldownBar = $DashCooldownBar
 
@@ -74,11 +98,42 @@ var _dash_cooldown_left: float = 0.0
 ## Último lado al que se apretó moverse (-1 izquierda, 1 derecha): hacia dónde va el dash
 ## cuando no se aprieta ninguna dirección.
 var _facing: float = 1.0
+## true si el último lado al que se apretó moverse fue la izquierda (el sprite se espeja). Solo visual.
+var _look_left: bool = false
+## Tiempo que lleva el dash en curso. Solo vale mientras hay un dash. Unidad: s.
+var _dash_time: float = 0.0
+## Invulnerabilidad del dash (mejora del mercado, ver [PlayerProgress]): cuándo empieza (s desde
+## que arranca el dash) y cuánto dura (s). Con `_invuln_time` en 0 no hay invulnerabilidad.
+var _invuln_start: float = 0.0
+var _invuln_time: float = 0.0
+## Causas de muerte que la invulnerabilidad del dash no frena.
+var _invuln_unblockable: Array[StringName] = []
+## Puntos de golpe: máximo y actuales (1 sin compras: el primer golpe letal mata).
+var _max_hp: int = 1
+var _hp: int = 1
+## Tiempo que falta para poder perder otro punto tras un golpe. Unidad: s.
+var _hit_invuln_left: float = 0.0
+var _hit_invuln_time: float = 0.0
+## Causas de muerte que matan siempre, sin tocar los puntos de golpe.
+var _instakill: Array[StringName] = []
+## Mejora Reaparecer: si está comprada, si ya se usó en esta partida y cómo reaparece.
+var _can_respawn: bool = false
+var _respawn_used: bool = false
+var _respawn_height: float = 0.0
+var _respawn_hp: int = 1
+## Config original (sin progreso), de donde se parte cada vez que se aplica el progreso.
+var _base_config: PlayerConfig
 
 
 func _ready() -> void:
 	if config == null:
 		config = PlayerConfig.new()
+	# El progreso (compras del árbol de talentos) se aplica sobre una copia: `player_config.tres` no
+	# se toca. Si se compra algo con el nivel ya armado (mercado del título), se reaplica.
+	_base_config = config
+	_apply_progress()
+	PlayerProgress.upgrade_purchased.connect(_on_upgrade_purchased)
+	PlayerProgress.progress_reset.connect(_on_progress_reset)
 	_fuel = clampf(config.starting_fuel, 0.0, config.max_fuel)
 	_current_gravity = config.gravity_with_fuel
 	_was_empty = is_fuel_empty()
@@ -92,6 +147,10 @@ func _physics_process(delta: float) -> void:
 		_boost_left -= delta
 		# Tinte mientras dura el impulso (placeholder).
 		modulate = BOOST_MODULATE if _boost_left > 0.0 else Color.WHITE
+	if _hit_invuln_left > 0.0:
+		_hit_invuln_left = maxf(_hit_invuln_left - delta, 0.0)
+		var low: bool = _hit_invuln_left > 0.0 and int(_hit_invuln_left * BLINK_RATE) % 2 == 0
+		_body.modulate.a = BLINK_ALPHA if low else 1.0
 	if not _is_alive:
 		return
 	# Con el control bloqueado (tras un lanzamiento) no se lee el Input: solo actúan la inercia y la gravedad.
@@ -101,6 +160,13 @@ func _physics_process(delta: float) -> void:
 	_tick_dash_cooldown(delta)
 	if input.x != 0.0:
 		_facing = signf(input.x)
+		_look_left = input.x < 0.0
+	# Con las dos teclas a la vez el eje se anula: el sprite mira hacia la que se apretó última.
+	if not locked:
+		if Input.is_action_just_pressed("move_left"):
+			_look_left = true
+		elif Input.is_action_just_pressed("move_right"):
+			_look_left = false
 	# El dash sale hacia la dirección que se mantiene (8 direcciones); sin dirección, hacia el
 	# último lado al que se apretó.
 	var dash_dir: Vector2 = _snap_dash_direction(input)
@@ -189,6 +255,14 @@ func is_dashing() -> bool:
 	return _dash_distance_left > 0.0
 
 
+## Devuelve true mientras el dash en curso está en su ventana de invulnerabilidad (mejora del
+## mercado): desde `start` hasta `start + time` segundos después de que arrancó el dash.
+func is_dash_invulnerable() -> bool:
+	if _invuln_time <= 0.0 or _dash_distance_left <= 0.0:
+		return false
+	return _dash_time >= _invuln_start and _dash_time < _invuln_start + _invuln_time
+
+
 ## Devuelve cuánto se recuperó el cooldown del dash, de 0.0 (recién usado) a 1.0 (listo).
 func get_dash_cooldown_ratio() -> float:
 	if config.dash_cooldown <= 0.0:
@@ -212,13 +286,53 @@ func is_alive() -> bool:
 func die(cause: StringName) -> void:
 	if not _is_alive:
 		return
+	# La invulnerabilidad del dash frena los golpes, pero no la caída ni el tentáculo.
+	if is_dash_invulnerable() and not _invuln_unblockable.has(cause):
+		return
+	if not _instakill.has(cause):
+		# Tras un golpe no se puede perder otro punto durante un rato.
+		if _hit_invuln_left > 0.0:
+			return
+		# Con puntos de más, el golpe resta uno y no mata.
+		if _hp > 1:
+			_hp -= 1
+			_hit_invuln_left = _hit_invuln_time
+			_update_visuals(Vector2.ZERO)
+			hit_points_changed.emit(_hp, _max_hp)
+			hit_taken.emit(cause)
+			return
+	# Mejora Reaparecer: una vez por partida, en lugar de morir se vuelve más arriba.
+	if _can_respawn and not _respawn_used:
+		_respawn_used = true
+		_respawn(cause)
+		return
 	_is_alive = false
 	velocity = Vector2.ZERO
 	_dash_distance_left = 0.0
 	_set_thrusting(false)
-	_thrust_indicator.visible = false
+	_show_thrust(false)
 	_update_cooldown_bar()
 	died.emit(cause)
+
+
+## Devuelve los puntos de golpe actuales (1 = el próximo golpe letal mata).
+func get_hit_points() -> int:
+	return _hp
+
+
+## Devuelve los puntos de golpe máximos (1 sin mejoras).
+func get_max_hit_points() -> int:
+	return _max_hp
+
+
+## Devuelve true mientras el jugador no puede perder otro punto por un golpe reciente.
+func is_hit_invulnerable() -> bool:
+	return _hit_invuln_left > 0.0
+
+
+## Devuelve true si todavía puede reaparecer en esta partida (mejora Reaparecer sin usar).
+func can_respawn() -> bool:
+	return _can_respawn and not _respawn_used
 
 
 ## Devuelve true si el jugador ganó (llamó a [method win]).
@@ -237,7 +351,7 @@ func win() -> void:
 	velocity = Vector2.ZERO
 	_dash_distance_left = 0.0
 	_set_thrusting(false)
-	_thrust_indicator.visible = false
+	_show_thrust(false)
 	_update_cooldown_bar()
 	won.emit()
 
@@ -253,7 +367,7 @@ func set_frozen(frozen: bool) -> void:
 	_collision.set_deferred("disabled", frozen)
 	if frozen:
 		_dash_distance_left = 0.0
-		_thrust_indicator.visible = false
+		_show_thrust(false)
 	else:
 		_update_visuals(Vector2.ZERO)
 	_update_cooldown_bar()
@@ -313,16 +427,102 @@ func reset(spawn_position: Vector2) -> void:
 	_gravity_blend = 0.0
 	_current_gravity = config.gravity_with_fuel
 	_dash_distance_left = 0.0
+	_dash_time = 0.0
 	_dash_cooldown_left = 0.0
 	_boost_left = 0.0
 	modulate = Color.WHITE
+	_hp = _max_hp
+	_hit_invuln_left = 0.0
+	_respawn_used = false
+	_body.modulate.a = 1.0
 	_facing = 1.0
+	_look_left = false
 	_set_thrusting(false)
 	_fuel = clampf(config.starting_fuel, 0.0, config.max_fuel)
 	_was_empty = is_fuel_empty()
 	fuel_changed.emit(_fuel, config.max_fuel)
 	_update_visuals(Vector2.ZERO)
 	_update_cooldown_bar()
+	hit_points_changed.emit(_hp, _max_hp)
+
+
+# Guarda cómo resiste golpes el jugador (ver [method PlayerProgress.get_survival]) y lo deja con
+# todos sus puntos y la reaparición disponible.
+func _setup_survival(data: Dictionary) -> void:
+	_max_hp = int(data["max_hp"])
+	_hp = _max_hp
+	_hit_invuln_left = 0.0
+	_hit_invuln_time = maxf(float(data["hit_invulnerable_time"]), 0.0)
+	_instakill.assign(data["instakill_causes"])
+	_can_respawn = bool(data["respawn"])
+	_respawn_used = false
+	_respawn_height = maxf(float(data["respawn_height"]), 0.0)
+	_respawn_hp = int(data["respawn_hp"])
+	_body.modulate.a = 1.0
+	hit_points_changed.emit(_hp, _max_hp)
+
+
+# Arma `config` a partir de la config original más las compras del árbol de talentos.
+func _apply_progress() -> void:
+	config = PlayerProgress.apply_to_player_config(_base_config)
+	_setup_dash_invulnerability(PlayerProgress.get_dash_invulnerability())
+	_setup_survival(PlayerProgress.get_survival())
+
+
+# Se compró un nodo del árbol: se reaplican los efectos y se actualiza el combustible inicial.
+func _on_upgrade_purchased(_id: StringName) -> void:
+	_apply_progress()
+	_fuel = clampf(config.starting_fuel, 0.0, config.max_fuel)
+	fuel_changed.emit(_fuel, config.max_fuel)
+	_update_visuals(Vector2.ZERO)
+
+
+# Se borró el progreso (Reset all): se vuelve a la config sin compras.
+func _on_progress_reset() -> void:
+	_on_upgrade_purchased(&"")
+
+
+func _exit_tree() -> void:
+	# El autoload sobrevive a la escena: hay que soltar las conexiones al descargar al jugador.
+	if PlayerProgress.upgrade_purchased.is_connected(_on_upgrade_purchased):
+		PlayerProgress.upgrade_purchased.disconnect(_on_upgrade_purchased)
+	if PlayerProgress.progress_reset.is_connected(_on_progress_reset):
+		PlayerProgress.progress_reset.disconnect(_on_progress_reset)
+
+
+# Reaparece más arriba en lugar de morir: busca un lugar libre desde `respawn_height` px por encima
+# de donde murió, queda quieto con `respawn_hp` puntos y con la invulnerabilidad de un golpe.
+func _respawn(_cause: StringName) -> void:
+	var origin: Vector2 = global_position
+	var target: Vector2 = origin + Vector2(0.0, -_respawn_height)
+	for scale_factor: float in RESPAWN_SEARCH_SCALES:
+		var candidate: Vector2 = origin + Vector2(0.0, -_respawn_height * scale_factor)
+		if not test_move(Transform2D(0.0, candidate), Vector2.ZERO, null, 0.08, true):
+			target = candidate
+			break
+	global_position = target
+	velocity = Vector2.ZERO
+	_dash_distance_left = 0.0
+	_set_thrusting(false)
+	_hp = _respawn_hp
+	_hit_invuln_left = _hit_invuln_time
+	_update_visuals(Vector2.ZERO)
+	_update_cooldown_bar()
+	hit_points_changed.emit(_hp, _max_hp)
+	respawned.emit(target)
+
+
+# Guarda la invulnerabilidad del dash que da el progreso ({} = sin invulnerabilidad).
+func _setup_dash_invulnerability(data: Dictionary) -> void:
+	_invuln_start = 0.0
+	_invuln_time = 0.0
+	_invuln_unblockable.clear()
+	if data.is_empty():
+		return
+	_invuln_start = maxf(float(data["start"]), 0.0)
+	# El porcentaje es sobre la duración del dash, así sigue valiendo si esa duración cambia.
+	_invuln_time = maxf(config.dash_duration, 0.0) * clampf(float(data["percent"]), 0.0, 100.0) / 100.0
+	_invuln_unblockable.assign(data["unblockable"])
 
 
 # Dirección del dash a partir de la entrada, redondeada a 8 direcciones (unitaria). Sin entrada,
@@ -339,6 +539,7 @@ func _snap_dash_direction(input: Vector2) -> Vector2:
 func _start_dash(direction: Vector2) -> void:
 	_dash_direction = direction
 	_dash_distance_left = _get_dash_distance(direction)
+	_dash_time = 0.0
 	_dash_speed = _dash_distance_left / maxf(config.dash_duration, 0.01)
 	_dash_cooldown_left = maxf(config.dash_cooldown, 0.0)
 	_set_fuel(_fuel - config.dash_fuel_cost)
@@ -354,6 +555,7 @@ func _process_dash(delta: float) -> void:
 	velocity = _dash_direction * (step / delta)
 	move_and_slide()
 	_dash_distance_left -= step
+	_dash_time += delta
 	# `is_zero_approx` evita un frame extra por la sobra mínima del redondeo de decimales.
 	if _dash_distance_left <= 0.0 or is_zero_approx(_dash_distance_left) or is_on_wall() or is_on_ceiling() or (_dash_direction.y > 0.0 and is_on_floor()):
 		_end_dash()
@@ -480,7 +682,28 @@ func _set_thrusting(value: bool) -> void:
 
 
 func _update_visuals(thrust_direction: Vector2) -> void:
-	_body.color = COLOR_BODY_EMPTY if is_fuel_empty() else COLOR_BODY_NORMAL
-	_thrust_indicator.visible = _is_alive and thrust_direction != Vector2.ZERO
-	if thrust_direction != Vector2.ZERO:
-		_thrust_indicator.position = thrust_direction.normalized() * THRUST_INDICATOR_DISTANCE
+	var base_color: Color = COLOR_BODY_EMPTY if is_fuel_empty() else COLOR_BODY_NORMAL
+	var hits_taken: int = _max_hp - _hp
+	if hit_sprites.is_empty():
+		_sprite.visible = false
+		_body.color = base_color.darkened(HIT_DARKEN_STEP * hits_taken)
+	else:
+		# Con sprites propios, el polígono queda transparente y se muestra el sprite del estado.
+		_body.color = Color(base_color, 0.0)
+		_sprite.texture = hit_sprites[mini(hits_taken, hit_sprites.size() - 1)]
+		# Los dibujos miran a la derecha: se espejan si el último lado apretado fue la izquierda.
+		_sprite.flip_h = _look_left
+		_sprite.visible = true
+		_sprite.modulate = Color(1.0, 0.6, 0.6) if is_fuel_empty() else Color.WHITE
+	_show_thrust(_is_alive and thrust_direction != Vector2.ZERO, thrust_direction)
+
+
+# Muestra u oculta lo que indica la propulsión. Con sprites propios es la llama, fija debajo del
+# astronauta sin importar hacia dónde se propulse; sin sprites, el cuadradito que apunta hacia
+# [param direction].
+func _show_thrust(on: bool, direction: Vector2 = Vector2.ZERO) -> void:
+	var use_flame: bool = not hit_sprites.is_empty() and _flame.texture != null
+	_flame.visible = on and use_flame
+	_thrust_indicator.visible = on and not use_flame
+	if on and not use_flame and direction != Vector2.ZERO:
+		_thrust_indicator.position = direction.normalized() * THRUST_INDICATOR_DISTANCE

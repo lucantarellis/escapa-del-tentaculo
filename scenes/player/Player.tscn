@@ -3,6 +3,10 @@
 [ext_resource type="Script" path="res://scripts/player/player.gd" id="1_player"]
 [ext_resource type="Resource" path="res://resources/configs/player_config.tres" id="2_config"]
 [ext_resource type="Script" path="res://scripts/player/dash_cooldown_bar.gd" id="3_dashbar"]
+[ext_resource type="Texture2D" path="res://assets/sprites/Astronaut/Normal.png" id="4_normal"]
+[ext_resource type="Texture2D" path="res://assets/sprites/Astronaut/dano.png" id="5_dano"]
+[ext_resource type="Texture2D" path="res://assets/sprites/Astronaut/variante_rojo.png" id="6_rojo"]
+[ext_resource type="Texture2D" path="res://assets/sprites/Astronaut/efecto_llama.png" id="8_flame"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(16, 24)
@@ -12,10 +16,24 @@ collision_layer = 2
 collision_mask = 1
 script = ExtResource("1_player")
 config = ExtResource("2_config")
+hit_sprites = Array[Texture2D]([ExtResource("4_normal"), ExtResource("5_dano"), ExtResource("6_rojo")])
+
+[node name="Flame" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(0, 2)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("8_flame")
+texture_filter = 1
 
 [node name="Body" type="Polygon2D" parent="."]
 color = Color(1, 0.4196, 0.1961, 1)
 polygon = PackedVector2Array(-8, -12, 8, -12, 8, 12, -8, 12)
+
+[node name="Sprite" type="Sprite2D" parent="Body"]
+visible = false
+position = Vector2(0, -12)
+scale = Vector2(0.25, 0.25)
+texture_filter = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_body")
