@@ -49,7 +49,11 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 | IntroDirector | `hit(index)` | _(nadie todavía; lo usará el audio)_ | Un golpe de la intro (`index` desde 0) |
 | IntroDirector | `broken()` | `LevelController` | La escotilla se rompió y el jugador ya salió disparado: empieza la partida (`begin` sin activar el tentáculo) |
 | IntroDirector | `finished()` | `LevelController` | Empezó a entrar el tentáculo (o se saltó): libera al director |
-| GameManager | `run_started(seed)` / `run_won()` / `run_lost(cause)` | _(nadie todavía; lo usarán UI y audio)_ | Hitos de la partida |
+| GameManager | `run_started(seed)` / `run_won()` / `run_lost(cause)` | `PlayerProgress` | Hitos de la partida: al ganar o perder se guardan las monedas juntadas |
+| Coin | `collected(value)` | `CoinSpawner` (la conecta a `PlayerProgress.add_run_coins`) | Un jugador vivo recogió la moneda |
+| PlayerProgress | `run_coins_changed(total)` / `coins_changed(total)` | `Hud` / `Market` | Contador de la partida y monedas guardadas |
+| Market | `closed()` | `TitleMenu` | Se cerró el mercado |
+| Player | `hit_points_changed(current, maximum)` / `hit_taken(cause)` / `respawned(at)` | `Hud` (corazones) | Puntos de golpe y reaparición (mejoras Vidas) |
 | ScrollCamera | `scroll_started()` | _(nadie todavía)_ | La cámara empezó a subir |
 | ScrollCamera | `scroll_stopped()` | _(nadie todavía)_ | La cámara dejó de subir |
 | FuelTank | `collected(amount)` | _(nadie todavía; lo usará la UI/feedback)_ | Un jugador recogió el tanque. Además el tanque llama a `Player.add_fuel(amount)` |
@@ -62,6 +66,7 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 | Nombre | Script | Qué hace |
 |---|---|---|
 | `GameManager` | `scripts/managers/game_manager.gd` | Estado de la partida (`READY`, `PLAYING`, `WON`, `LOST`), seed y causa de derrota; señales de fin de partida; reinicio con R. No conoce nodos de la escena. Ver `docs/mecanicas/game-manager.md` |
+| `PlayerProgress` | `scripts/progress/player_progress.gd` | Monedas, nodos del árbol de talentos comprados y su guardado en `user://progress.cfg`; aplica las mejoras al `Player` por encima de `player_config.tres`. Ver `docs/mecanicas/progreso-mercado.md` |
 | `RunRecords` | `scripts/managers/run_records.gd` | Récords guardados en `user://records.cfg` (mejor progreso). Funciones estáticas. Ver `docs/mecanicas/hud.md` |
 | `TierEvent` | `scripts/levels/tier_event.gd` | Momento de historia al entrar a un tier (sacudida, destello, silueta del alien), en los segmentos de entrada. Ver `docs/mecanicas/tier-espacio.md` |
 | `WindowBreach` | `scripts/levels/window_breach.gd` | Ventanal que rompe el alien en la salida de la nave; descompresión que saca al jugador. Ver `docs/mecanicas/tier-espacio.md` |
@@ -80,4 +85,6 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 2. El jugador propulsa, camina o salta para subir y esquivar.
 3. **Derrota:** quien lo mata (tentáculo, caída, obstáculo, trampa) llama a `Player.die(cause)` → `died(cause)` → `GameManager.notify_player_died(cause)` → estado `LOST` → `LevelController` detiene el scroll y muestra el mensaje según la causa.
 4. **Victoria:** `Door.player_reached` → `GameManager.notify_goal_reached()` → estado `WON` → `LevelController` llama a `Player.win()`, detiene el scroll y muestra "ESCAPASTE". Tras ganar, `is_alive()` es `false`, así que los peligros no lo afectan; además el manager ignora cualquier notificación fuera de `PLAYING`.
+4b. **Monedas:** al terminar la partida (ganar, perder, R) `PlayerProgress` suma las monedas juntadas a las guardadas. Las mejoras se compran en el mercado del título (`TitleMenu` → `Market`) y se aplican al crear el `Player`.
+4c. **Volver al título:** con la partida terminada, Escape (`ui_cancel`) hace que `Main` pida `GameManager.restart()` marcándolo "al título": reconstruye el nivel quieto y muestra un `TitleMenu` nuevo (con el mercado). Durante la partida Escape no hace nada.
 5. `restart` (R), escuchada por el `GameManager` (salvo en `READY`), pasa a `READY` y emite `restart_requested`. Con `Main`, este reconstruye solo el `Level` (sin volver al título). Sin `Main` (F6 sobre `Level.tscn`) nadie escucha la señal y el manager recarga la escena. En ambos casos el nivel llama a `start_run()` y, con `seed` = 0, es un nivel nuevo.

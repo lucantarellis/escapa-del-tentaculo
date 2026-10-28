@@ -10,9 +10,11 @@ Que al abrir el juego (F5) se vea el título con un botón grande de jugar **sob
 ## Flujo
 
 1. **Abrir el juego.** `Main` (escena principal, `run/main_scene`) instancia `Level.tscn` con `autostart = false`: el nivel se arma (segmentos, jugador en el spawn, tope de cámara) pero queda **en pausa** (`process_mode = DISABLED` en su nodo raíz: no corren `_process`, física, timers ni tweens, así que no se mueven ni la cámara, ni el tentáculo, ni obstáculos y trampas). El `GameManager` sigue en `READY`. Encima se dibuja el `TitleMenu`. El overlay F3 sigue funcionando (se marca `PROCESS_MODE_ALWAYS` mientras el nivel está en pausa).
+1b. **MERCADO.** Un botón secundario (azul frío) abre el [`Market`](progreso-mercado.md) encima del título; VOLVER o Escape lo cierran y el foco vuelve a ese botón. Se oculta si `ProgressConfig.enabled` es `false`. Es la única forma de llegar al mercado: R no vuelve al título.
 2. **Pulsar JUGAR** (clic, Enter o Espacio; el botón tiene el foco al abrir). El botón se deshabilita (no se puede pulsar dos veces), pasa `fade_delay`, y el menú baja su opacidad a 0 en `fade_duration`. Al terminar emite `faded_out`.
 3. **Arranque.** `Main` elimina el menú y llama a `LevelController.play_intro()`: se reproduce la intro de la escotilla (tres golpes de cámara con gas; el nivel sigue en pausa y el `GameManager` en `READY`). En la ruptura de la escotilla el propio nivel empieza la partida (el equivalente a `LevelController.begin()`, sin activar todavía el tentáculo, que entra unos segundos después): se reanuda (`PROCESS_MODE_INHERIT`) y se llama a `GameManager.start_run(seed)` (`PLAYING`). La cuenta de `start_delay` de la cámara empieza recién ahí. Ver `docs/mecanicas/intro-escotilla.md`.
 4. **Reinicio (R).** `GameManager.restart()` pasa a `READY` y emite `restart_requested`. `Main` está conectado: saca el nivel actual del árbol, lo libera e instancia uno nuevo con `autostart = false` (seed nueva si `level_config.seed` = 0) y llama de inmediato a `play_intro()`: el nivel **repite la intro de la escotilla**, sin menú ni fundido. R **no hace nada** mientras el estado es `READY` (título o intro, hasta la ruptura).
+4b. **Volver al título (Escape).** Solo con la partida terminada (`WON` o `LOST`), la acción `ui_cancel` (Escape) hace que `Main` pida `GameManager.restart()` marcando que el reinicio es "al título": reconstruye el nivel (quieto, `autostart = false`, sin intro) y vuelve a instanciar un `TitleMenu` en `TitleLayer`. Desde ahí se puede abrir el mercado o volver a JUGAR (fundido, intro, partida). Durante la partida Escape no hace nada: no hay pausa. El mensaje de fin avisa de las dos opciones (R para repetir, Escape para el menú) gracias a `LevelController.show_menu_hint`, que solo activa `Main`.
 5. **Sin `Main`.** `Level.tscn` (F6) no tiene a nadie conectado a `restart_requested`: `restart()` recarga la escena como antes y arrancan solos (`autostart = true` por defecto).
 
 ## Árbol de nodos de `Main`
@@ -23,7 +25,8 @@ Main (Node)                          scripts/main/main.gd
 └── TitleLayer (CanvasLayer, capa 95)   encima del juego (HUD 80, mensaje de fin 90), debajo del overlay F3 (100)
     └── TitleMenu (Control)          scenes/ui/TitleMenu.tscn
         ├── Dim (ColorRect)          fondo oscuro semitransparente, para leer el título sin tapar el nivel
-        └── Center → Box (VBox) → TitleLabel (Label) + PlayButton (Button)
+        ├── Center → Box (VBox) → TitleLabel (Label) + PlayButton (Button) + MarketButton (Button)
+        └── Market (Control)         scenes/ui/Market.tscn, pantalla completa y oculta hasta pulsar MERCADO
 ```
 
 ## Configuración (`TitleConfig`, `resources/configs/title_config.tres`)

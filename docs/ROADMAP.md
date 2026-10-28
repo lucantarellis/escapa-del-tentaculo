@@ -103,6 +103,7 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | — | Limpieza: fuera QA, sandbox, `lvl1`, obstáculos viejos, modo plano del `LevelBuilder`, `.gitkeep` y carpetas vacías; segmentos en carpetas por tier | Local en `main-l` | — |
 | F3 | Tier 3, dentro del alien: entrada por la piel de la extremidad, 10 segmentos de carne (contracciones, esfínteres, membranas, ácido, glóbulos), ácido como perseguidor; final con abertura en el techo (el jefe cerebro se eliminó el 2026-10-19) | Local en `main-l`; probado por LT, requiere retoques (ronda A) | — |
 | F2 | Tier 2, el espacio: física (multiplicadores por tier), fuego, `TierEvent`, 3 entradas y 10 segmentos; 5 segmentos por tier. Transición: el alien rompe el ventanal de la nave (salidas del tier 1, descompresión), la nave explota ya afuera con restos letales; asteroides como superficies | Local en `main-l`, pendiente de probar | — |
+| P1 | Progreso entre partidas: monedas en los niveles, mercado en el título como árbol de talentos (dash, invulnerabilidad del dash al 67%, dash gratis, tanques y cargas, propulsión veloz, monedas x2/x3/x10; vidas (puntos de golpe) y Reaparecer; reparadores y escudo como nodos con candado; base: 100 de combustible y sin dash) | Local en `guido/arbol-talentos`, pendiente de probar | — |
 | 8c | Controles táctiles | Pendiente (al final, tras arte y balance) | — |
 | 9 | Arte final, audio y pulido | Pendiente | — |
 
@@ -179,6 +180,7 @@ Integración de los tres sprite sheets (astronauta, tileset, tentáculo; el del 
 
 ## 7. Backlog de ideas (sin compromiso)
 
+- Progreso, siguientes pasos: los sprites del jugador por cada golpe (la lista `hit_sprites` ya está lista), los reparadores y el escudo, el dash que rompe plataformas, la invulnerabilidad larga y las duraciones de cada dash; armas que rompen plataformas rompibles y no rompibles; bombas para meteoritos; llegar al mercado sin cerrar el juego tras una partida; más mejoras para tener builds distintas.
 - Panel de tuning en juego con sliders sobre los `Resource` de configuración.
 - Presets de configuración (por ejemplo "flotante", "arcade") como archivos `.tres` intercambiables.
 - Aceleración progresiva del scroll a lo largo del nivel.

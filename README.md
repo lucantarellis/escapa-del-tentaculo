@@ -16,9 +16,11 @@ Abrir la carpeta del proyecto desde Godot (Project Manager → Import → selecc
 
 ## Estado actual
 
-Prototipo jugable con placeholders (polígonos): jugador con jetpack, plataformas, paredes con tiles, niveles armados por segmentos de 360 × 640 en tiers, intro de la escotilla, HUD y récord. El estado detallado está en `docs/ROADMAP.md`.
+Prototipo jugable con placeholders (polígonos; el astronauta ya usa sprites, ver `docs/mecanicas/jugador.md`): jugador con jetpack, plataformas, paredes con tiles, niveles armados por segmentos de 360 × 640 en tiers, intro de la escotilla, HUD y récord. El estado detallado está en `docs/ROADMAP.md`.
 
 `scenes/main/Main.tscn` es la escena principal (`run/main_scene`): muestra la pantalla de título (nombre del juego y un botón **JUGAR**) sobre el nivel ya armado y quieto (`scenes/levels/Level.tscn`). Al pulsar JUGAR el título se disuelve, una escotilla golpea tres veces (vibración de cámara y gas), se rompe, el jugador sale disparado hacia arriba, arranca el gameplay y poco después entra el tentáculo (ver `docs/mecanicas/intro-escotilla.md`); R reinicia directo al juego, repitiendo la intro (sin título). Ver `docs/mecanicas/pantalla-titulo.md`.
+
+El título tiene un botón **MERCADO** donde se gastan las monedas juntadas en mejoras permanentes (árbol de talentos: dash, dash invulnerable y gratis, tanques y cargas, propulsión veloz, monedas que valen más). Sin mejoras el jugador arranca con 100 de combustible y sin dash. Ver `docs/mecanicas/progreso-mercado.md`.
 
 Durante la partida hay un HUD mínimo (barra de combustible a la izquierda y progreso del nivel a la derecha). Ver `docs/mecanicas/hud.md`.
 

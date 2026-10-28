@@ -16,7 +16,7 @@ Un astronauta que se mueve con un jetpack de combustible limitado. Es la mecáni
 - **Gravedad única (brief 06, ronda 1).** `gravity_with_fuel` y `gravity_without_fuel` se llevaron al mismo valor: la gravedad ya no cambia al quedarse sin combustible. `gravity_transition_time` queda sin efecto práctico (ambas gravedades son iguales) pero no se quitó del código.
 - **Salto.** Sin combustible y apoyado en una superficie, `jump` da un impulso hacia arriba (`jump_velocity`). Sirve para llegar a un tanque elevado. Con combustible no se puede saltar (configurable).
 - **Rebote.** Al chocar contra una superficie a más de `bounce_min_speed`, se devuelve una fracción (`wall_bounce`) de la velocidad de impacto. Con 0 se detiene o desliza; con 1 rebota de forma elástica.
-- **Dash en 8 direcciones.** Con `dash` (Shift) el jugador se lanza en línea recta en `dash_duration` s, sin gravedad y sin control, en el aire o en el piso, hacia la dirección que se mantiene (arriba, abajo, los costados o las 4 diagonales); si no se mantiene ninguna, hacia el último lado pulsado (al empezar, derecha). Recorre `dash_distance` px en las rectas y `dash_diagonal_distance` px en las diagonales. Cuesta `dash_fuel_cost` u fijos (si hay menos, no se hace) y tiene un enfriamiento de `dash_cooldown` s contado desde que arranca. Al terminar queda con velocidad 0. Si choca con una pared, un techo o (hacia abajo) el piso se detiene ahí, sin rebote. **No es invulnerable:** un peligro en el camino lo mata. Mientras dura el enfriamiento aparece una barrita sobre la cabeza que se llena y desaparece (`show_cooldown_bar` la activa o desactiva).
+- **Dash en 8 direcciones.** Con `dash` (Shift) el jugador se lanza en línea recta en `dash_duration` s, sin gravedad y sin control, en el aire o en el piso, hacia la dirección que se mantiene (arriba, abajo, los costados o las 4 diagonales); si no se mantiene ninguna, hacia el último lado pulsado (al empezar, derecha). Recorre `dash_distance` px en las rectas y `dash_diagonal_distance` px en las diagonales. Cuesta `dash_fuel_cost` u fijos (si hay menos, no se hace) y tiene un enfriamiento de `dash_cooldown` s contado desde que arranca. Al terminar queda con velocidad 0. Si choca con una pared, un techo o (hacia abajo) el piso se detiene ahí, sin rebote. **No es invulnerable** salvo con la mejora "Dash invulnerable" del mercado (una ventana corta del dash; ver `progreso-mercado.md`): un peligro en el camino lo mata. Con el progreso activo, el combustible máximo y la distancia del dash salen de las mejoras compradas (sin mejoras: 100 u y sin dash); la mejora "Propulsión veloz" sube `max_speed` a 210 y `thrust_acceleration` a 900, y "Dash gratis" pone `dash_fuel_cost` en 0 y `player_config.tres` queda como base sin tocar. Mientras dura el enfriamiento aparece una barrita sobre la cabeza que se llena y desaparece (`show_cooldown_bar` la activa o desactiva).
 - **Orden de cálculo por frame** (`_physics_process`): entrada → enfriamiento y dash (si está en curso, reemplaza todo lo que sigue) → caminar (si está apoyado) y/o propulsión, o frenado → gravedad → salto → movimiento y rebote → consumo de combustible → visuales.
 
 ## Parámetros (`PlayerConfig`)
@@ -92,9 +92,11 @@ Un astronauta que se mueve con un jetpack de combustible limitado. Es la mecáni
 
 ```
 Player (CharacterBody2D, grupo "player", capa 2, máscara 1)
-├── Body (Polygon2D, 16×24, naranja; rojo sin combustible)
+├── Flame (Sprite2D, `efecto_llama`, fijo debajo del astronauta; visible solo mientras se propulsa)
+├── Body (Polygon2D, 16×24, transparente con sprites; naranja, rojo sin combustible, sin ellos)
+│   └── Sprite (Sprite2D, escala 0,25, posición (0, -12); muestra el astronauta)
 ├── CollisionShape2D (RectangleShape2D 16×24)
-├── ThrustIndicator (Polygon2D pequeño, blanco azulado, aparece hacia la dirección de propulsión)
+├── ThrustIndicator (Polygon2D pequeño, blanco azulado; solo se usa si no hay sprites)
 └── DashCooldownBar (Node2D con `DashCooldownBar`, 16×3 px sobre la cabeza, blanco azulado; solo visible durante el enfriamiento)
 ```
 
@@ -104,3 +106,21 @@ Player (CharacterBody2D, grupo "player", capa 2, máscara 1)
 2. Mover con WASD o flechas; F3 muestra u oculta el overlay con velocidad, combustible, gravedad y estado.
 3. Shift hace el dash (con W apretado, en diagonal hacia arriba): probar a la izquierda y a la derecha, en el aire y en el piso, contra una pared, con poco combustible (con menos de `dash_fuel_cost` no sale) y viendo la barrita durante 1 s.
 4. Editar `resources/configs/player_config.tres` en el inspector (con el juego cerrado) y volver a ejecutar. Los valores que se ajustan mientras se prueba son de prueba, no de balance: no se anotan en `docs/TUNING_LOG.md`.
+
+## Puntos de golpe y reaparición
+
+Con las mejoras Vidas del mercado el jugador aguanta golpes (`hit_points_changed`, `hit_taken`) y puede reaparecer una vez por partida (`respawned`). Los perseguidores y la caída (`instakill_causes`) siempre matan. `hit_sprites` (grupo Visual) permite poner un sprite por cada estado de golpes. Detalle en `progreso-mercado.md`.
+
+## Sprites del astronauta
+
+Los dibujos están en `assets/sprites/Astronaut/` (lienzo de 96×192 px con el astronauta apoyado abajo; con escala 0,25 mide casi lo mismo que la colisión de 16×24). Se asignan en `Player.tscn`:
+
+| Export (grupo Visual) | Qué muestra |
+|---|---|
+| `hit_sprites[0]` (`Normal`) | Sin golpes |
+| `hit_sprites[1]` (`dano`) | Con 1 golpe recibido |
+| `hit_sprites[2]` (`variante_rojo`) | Con 2 o más golpes |
+
+- **Espejo:** los dibujos miran a la derecha y se espejan (`flip_h`) si el último lado apretado fue la izquierda. Con las dos teclas a la vez gana la que se apretó última. Quieto o en movimiento se usa el mismo dibujo; al empezar o reiniciar la partida queda sin espejo.
+- **Llama (`Flame`):** se muestra mientras hay propulsión (cualquier dirección) y siempre queda debajo del astronauta, sin espejarse ni girar. Se oculta al morir, ganar o congelarse. Sin sprites se usa el `ThrustIndicator`.
+- **Ajustes visuales:** escala y posición del sprite (`Body/Sprite`) y de la llama (`Flame`) se cambian en el inspector de `Player.tscn`.

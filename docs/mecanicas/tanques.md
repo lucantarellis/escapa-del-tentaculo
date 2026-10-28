@@ -74,6 +74,10 @@ Cómo influye cada decisión:
 - **Espiral de muerte** (`ROADMAP.md`, sección 6): sin combustible lejos de una superficie, el jugador cae hacia el tentáculo. Regla práctica: poner un tanque antes de que el jugador pueda estar más lejos de una superficie de lo que un salto cubre, o dejar siempre una plataforma cerca de cada tanque.
 - **Scroll**: la cámara sube sola y ayuda a alcanzar tanques altos; con menos scroll, los mismos tanques quedan más "caros".
 
+## Mejora de tanques
+
+Con el progreso activo (ver `progreso-mercado.md`), según la carga comprada en el árbol (Carga de 100, Carga completa) cada tanque da ese valor cuando es mayor que `fuel_amount`. El `.tres` no cambia.
+
 ## Cómo probarlo
 
 1. Ejecutar `scenes/levels/Level.tscn` (F6) con F3 activo: el overlay muestra el combustible.

@@ -13,6 +13,9 @@ Mostrar, de forma muy discreta, cuánto combustible queda y cuánto falta para l
 - **Progreso del nivel** (borde derecho, línea vertical de las mismas medidas): un marcador blanco azulado `#C8E7EA` sube desde abajo (0 %, el spawn) hasta arriba (100 %, la puerta), donde hay una marca naranja `#FF6B32`.
 - **Tentáculo** (misma línea de progreso): un marcador rojo `#D83232` con la altura del borde superior del tentáculo, calculado con la misma fórmula que el del jugador (por debajo del spawn queda en 0). El del jugador se dibuja encima. Se oculta mientras el tentáculo está inactivo (intro de la escotilla). Requiere asignar `tentacle` en la instancia del HUD (`Level.tscn` ya lo tiene); si queda vacío, no se muestra.
 
+- **Puntos de golpe** (debajo de las monedas): corazones provisorios `♥ ♥ ♡` (rojo `#D83232`, los perdidos vacíos), solo si el jugador tiene más de 1 punto. Siguen a `Player.hit_points_changed`.
+- **Monedas** (arriba a la izquierda): un texto `monedas: N` con las monedas juntadas en la partida en curso (cian `#63D6C5`). Sigue a `PlayerProgress.run_coins_changed`; se oculta con el progreso apagado. Ver `progreso-mercado.md`.
+
 Todo con opacidad 0,7 (fondos de barra más tenues). Los valores son `const` visuales en `hud.gd`; no hay valores de gameplay, por eso no tiene `Resource` de configuración.
 
 ## Cómo se calcula el progreso
