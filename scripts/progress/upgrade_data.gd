@@ -21,6 +21,7 @@ const EFFECT_SPEED: StringName = &"speed"
 const EFFECT_COIN_VALUE: StringName = &"coin_value"
 const EFFECT_HIT_POINTS: StringName = &"hit_points"
 const EFFECT_RESPAWN: StringName = &"respawn"
+const EFFECT_REPAIR: StringName = &"repair"
 
 @export_group("Datos")
 ## Identificador único del nodo (también es la clave en el archivo de guardado).
@@ -55,7 +56,8 @@ const EFFECT_RESPAWN: StringName = &"respawn"
 ## `ProgressConfig`), `dash_break` no usa valor,
 ## combustible en u (`max_fuel`, `tank_amount`), velocidad máxima en px/s (`speed`) o monedas
 ## por moneda (`coin_value`), o puntos de golpe TOTALES que aguanta el jugador (`hit_points`: 2 =
-## resiste un golpe letal, 3 = resiste dos). `respawn` no usa valor.
+## resiste un golpe letal, 3 = resiste dos). `respawn` no usa valor. `repair`: nivel de reparador (1 = llave inglesa, 2 = también venda, 3 =
+## también botiquín).
 @export var value: float = 0.0
 ## Segundo valor del efecto. Con `speed` es la aceleración de la propulsión (px/s²).
 @export var extra_value: float = 0.0

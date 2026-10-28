@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/pickups/repairer.gd" id="1_rep"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_rep"]
+radius = 11.0
+
+[node name="Repairer" type="Area2D"]
+collision_layer = 32
+collision_mask = 2
+script = ExtResource("1_rep")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_rep")

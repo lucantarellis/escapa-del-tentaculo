@@ -31,6 +31,8 @@ signal hit_points_changed(current: int, maximum: int)
 signal hit_taken(cause: StringName)
 ## Se emite al reaparecer con la mejora Reaparecer (en lugar de morir). [param at] es el lugar.
 signal respawned(at: Vector2)
+## Se emite cuando el escudo del botiquín aparece (`active` = true) o desaparece (false).
+signal shield_changed(active: bool)
 
 ## Color del cuerpo con combustible (naranja de la paleta). Solo visual.
 ## Tinte del jugador mientras dura un impulso de velocidad. Solo visual.
@@ -47,6 +49,13 @@ const BLINK_RATE: float = 12.0
 ## Múltiplos de `respawn_height` donde se busca un lugar libre al reaparecer. Estructural.
 const RESPAWN_SEARCH_SCALES: Array[float] = [1.0, 0.75, 0.5, 1.25, 1.5, 0.25]
 ## Máximo de plataformas rompibles que un mismo paso del dash puede romper en fila. Estructural.
+## Aro del escudo del botiquín: color (cian de recogible), radio (px), grosor (px), cantidad de
+## puntos y cuánto antes de terminar empieza a parpadear (s). Solo visual.
+const SHIELD_COLOR: Color = Color("#63D6C5")
+const SHIELD_RING_RADIUS: float = 18.0
+const SHIELD_RING_WIDTH: float = 2.0
+const SHIELD_RING_POINTS: int = 24
+const SHIELD_BLINK_TIME: float = 1.0
 const DASH_BREAK_MAX_CHAIN: int = 4
 ## Distancia del indicador de propulsión al centro del cuerpo. Unidad: px. Solo visual.
 const THRUST_INDICATOR_DISTANCE: float = 16.0
@@ -118,6 +127,11 @@ var _hit_invuln_left: float = 0.0
 var _hit_invuln_time: float = 0.0
 ## Causas de muerte que matan siempre, sin tocar los puntos de golpe.
 var _instakill: Array[StringName] = []
+## Tiempo que le queda al escudo del botiquín. Mientras es mayor que 0 absorbe un golpe común.
+## Unidad: s.
+var _shield_left: float = 0.0
+## Aro placeholder que se ve mientras hay escudo (se crea la primera vez que hace falta).
+var _shield_ring: Line2D = null
 ## Causas de muerte de las que Reaparecer no salva (los perseguidores).
 var _no_respawn: Array[StringName] = []
 ## Mejora Reaparecer: si está comprada, si ya se usó en esta partida y cómo reaparece.
@@ -155,6 +169,11 @@ func _physics_process(delta: float) -> void:
 		_boost_left -= delta
 		# Tinte mientras dura el impulso (placeholder).
 		modulate = BOOST_MODULATE if _boost_left > 0.0 else Color.WHITE
+	if _shield_left > 0.0:
+		_shield_left = maxf(_shield_left - delta, 0.0)
+		_update_shield_visual()
+		if _shield_left <= 0.0:
+			shield_changed.emit(false)
 	if _hit_invuln_left > 0.0:
 		_hit_invuln_left = maxf(_hit_invuln_left - delta, 0.0)
 		var low: bool = _hit_invuln_left > 0.0 and int(_hit_invuln_left * BLINK_RATE) % 2 == 0
@@ -304,6 +323,13 @@ func die(cause: StringName) -> void:
 		# Tras un golpe no se puede perder otro punto durante un rato.
 		if _hit_invuln_left > 0.0:
 			return
+		# El escudo del botiquín absorbe el golpe y se rompe (no frena a las `instakill_causes`).
+		if _shield_left > 0.0:
+			_shield_left = 0.0
+			_hit_invuln_left = _hit_invuln_time
+			_update_shield_visual()
+			shield_changed.emit(false)
+			return
 		# Con puntos de más, el golpe resta uno y no mata.
 		if _hp > 1:
 			_hp -= 1
@@ -324,6 +350,41 @@ func die(cause: StringName) -> void:
 	_show_thrust(false)
 	_update_cooldown_bar()
 	died.emit(cause)
+
+
+## Cura hasta [param amount] puntos de golpe (sin pasar del máximo). Devuelve cuántos curó de
+## verdad. Un [param amount] menor que 0 cura todos. No hace nada si el jugador no está vivo.
+func heal(amount: int) -> int:
+	if not _is_alive:
+		return 0
+	var missing: int = _max_hp - _hp
+	var healed: int = missing if amount < 0 else mini(amount, missing)
+	if healed > 0:
+		_hp += healed
+		hit_points_changed.emit(_hp, _max_hp)
+	return healed
+
+
+## Devuelve true si al jugador le falta algún punto de golpe.
+func needs_healing() -> bool:
+	return _hp < _max_hp
+
+
+## Da un escudo de [param duration] s que absorbe el próximo golpe común (no frena a los
+## perseguidores ni a la caída). Si ya tenía, se renueva. Unidad: s.
+func give_shield(duration: float) -> void:
+	if not _is_alive or duration <= 0.0:
+		return
+	var was_active: bool = _shield_left > 0.0
+	_shield_left = duration
+	_update_shield_visual()
+	if not was_active:
+		shield_changed.emit(true)
+
+
+## Devuelve true mientras el escudo del botiquín está activo.
+func has_shield() -> bool:
+	return _shield_left > 0.0
 
 
 ## Devuelve los puntos de golpe actuales (1 = el próximo golpe letal mata).
@@ -444,6 +505,8 @@ func reset(spawn_position: Vector2) -> void:
 	modulate = Color.WHITE
 	_hp = _max_hp
 	_hit_invuln_left = 0.0
+	_shield_left = 0.0
+	_update_shield_visual()
 	_respawn_used = false
 	_body.modulate.a = 1.0
 	_facing = 1.0
@@ -743,3 +806,22 @@ func _show_thrust(on: bool, direction: Vector2 = Vector2.ZERO) -> void:
 	_thrust_indicator.visible = on and not use_flame
 	if on and not use_flame and direction != Vector2.ZERO:
 		_thrust_indicator.position = direction.normalized() * THRUST_INDICATOR_DISTANCE
+
+
+# Muestra u oculta el aro del escudo (placeholder: círculo cian). Parpadea el último segundo.
+func _update_shield_visual() -> void:
+	if _shield_ring == null:
+		if _shield_left <= 0.0:
+			return
+		_shield_ring = Line2D.new()
+		_shield_ring.width = SHIELD_RING_WIDTH
+		_shield_ring.default_color = SHIELD_COLOR
+		_shield_ring.position = Vector2(0.0, -12.0)
+		var points: PackedVector2Array = PackedVector2Array()
+		for i: int in SHIELD_RING_POINTS + 1:
+			points.append(Vector2.from_angle(TAU * float(i) / float(SHIELD_RING_POINTS)) * SHIELD_RING_RADIUS)
+		_shield_ring.points = points
+		add_child(_shield_ring)
+	_shield_ring.visible = _shield_left > 0.0
+	var blinking: bool = _shield_left > 0.0 and _shield_left < SHIELD_BLINK_TIME and int(_shield_left * BLINK_RATE) % 2 == 0
+	_shield_ring.modulate.a = BLINK_ALPHA if blinking else 1.0

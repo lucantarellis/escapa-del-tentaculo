@@ -76,3 +76,18 @@ extends Resource
 @export var coin_min_separation: float = 44.0
 ## Intentos de ubicar cada moneda antes de rendirse (si no hay lugar, el segmento tiene menos). Unidad: intentos.
 @export var coin_placement_tries: int = 40
+
+@export_group("Reparadores")
+## Probabilidad de que aparezca un reparador en cada segmento intermedio (con el nivel de
+## reparador comprado mayor que 0). Unidad: %.
+@export_range(0.0, 100.0, 1.0) var repairer_chance_percent: float = 40.0
+## Pesos para sortear cuál sale entre los que tenés habilitados: llave inglesa, venda y
+## botiquín. Más peso = sale más seguido. Unidad: peso relativo.
+@export var repairer_weight_wrench: float = 5.0
+@export var repairer_weight_bandage: float = 3.0
+@export var repairer_weight_medkit: float = 1.0
+## Vidas que cura la llave inglesa y la venda (el botiquín cura todas). Unidad: vidas.
+@export var repairer_heal_wrench: int = 1
+@export var repairer_heal_bandage: int = 2
+## Cuánto dura el escudo que da el botiquín. Absorbe un golpe común. Unidad: s.
+@export var repairer_shield_duration: float = 5.0

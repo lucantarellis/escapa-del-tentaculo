@@ -48,6 +48,24 @@ func populate(segment: LevelSegment, rng: RandomNumberGenerator, cfg: ProgressCo
 	return placed.size()
 
 
+## Busca al azar un punto libre de [param segment] (coordenadas del segmento) con el mismo criterio
+## que las monedas, lejos también de [param taken]. Devuelve [code]Vector2.INF[/code] si no
+## encontró lugar tras `coin_placement_tries` intentos.
+func find_free_position(segment: LevelSegment, rng: RandomNumberGenerator, cfg: ProgressConfig, taken: Array[Vector2] = []) -> Vector2:
+	var blocked: Array[Rect2] = _get_blocked_rects(segment)
+	var layers: Array[TileMapLayer] = []
+	for child: Node in segment.get_children():
+		if child is TileMapLayer:
+			layers.append(child as TileMapLayer)
+	for attempt: int in cfg.coin_placement_tries:
+		var pos: Vector2 = Vector2(
+			rng.randf_range(cfg.coin_edge_margin, LevelSegment.WIDTH - cfg.coin_edge_margin),
+			rng.randf_range(-LevelSegment.HEIGHT + cfg.coin_edge_margin, -cfg.coin_edge_margin))
+		if is_free(pos, blocked, layers, taken, cfg):
+			return pos
+	return Vector2.INF
+
+
 ## Devuelve true si [param pos] (coordenadas del segmento) está libre: lejos de los rectángulos
 ## de [param blocked], de las paredes de [param layers] y de las monedas ya puestas
 ## ([param placed]), según [param cfg].

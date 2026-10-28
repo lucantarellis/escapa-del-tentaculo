@@ -243,6 +243,12 @@ func get_effect_value(effect: StringName, fallback: float) -> float:
 	return fallback if node == null else node.value
 
 
+## Devuelve el nivel de reparador comprado: 0 = ninguno, 1 = llave inglesa, 2 = + venda, 3 = +
+## botiquín. Con el progreso apagado es 0 (no aparecen reparadores).
+func get_repair_level() -> int:
+	return clampi(int(get_effect_value(UpgradeData.EFFECT_REPAIR, 0.0)), 0, 3)
+
+
 ## Devuelve true si hay algún nodo comprado con ese [param effect].
 func has_effect(effect: StringName) -> bool:
 	return _best_node(effect) != null

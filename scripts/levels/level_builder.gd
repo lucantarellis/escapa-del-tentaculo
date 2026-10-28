@@ -25,6 +25,11 @@ const MAX_RANDOM_SEED: int = 2147483647
 ## segmentos y la misma seed da las mismas monedas. Estructural.
 const COIN_SEED_OFFSET: int = 1000003
 ## Escena de la moneda que se reparte en los segmentos intermedios. Estructural.
+## Se suma a la seed para el azar de los reparadores (distinto al de las monedas, así no se mueven).
+## Estructural.
+const REPAIRER_SEED_OFFSET: int = 2000003
+## Escena del reparador. Estructural.
+const REPAIRER_SCENE: PackedScene = preload("res://scenes/pickups/Repairer.tscn")
 const COIN_SCENE: PackedScene = preload("res://scenes/pickups/Coin.tscn")
 
 ## Parámetros de la generación. Si queda vacío se usan los valores por defecto de [LevelConfig]
@@ -138,6 +143,7 @@ func build(seed_override: int = 0) -> int:
 	var view_height: float = float(ProjectSettings.get_setting("display/window/size/viewport_height"))
 	_camera_stop_local_y = bottom_y + view_height * 0.5
 	_spawn_coins()
+	_spawn_repairers()
 	level_built.emit(_seed)
 	return _seed
 
@@ -254,6 +260,21 @@ func _spawn_coins() -> void:
 	var spawner: CoinSpawner = CoinSpawner.new(COIN_SCENE)
 	for segment: LevelSegment in _coin_segments:
 		_coin_count += spawner.populate(segment, coin_rng, PlayerProgress.config)
+
+
+# Reparte reparadores en los segmentos intermedios según el nivel comprado (ver
+# [RepairerSpawner]). No hace nada con el progreso apagado o sin comprar el Reparador I.
+func _spawn_repairers() -> void:
+	if not PlayerProgress.is_enabled():
+		return
+	var level: int = PlayerProgress.get_repair_level()
+	if level <= 0:
+		return
+	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+	rng.seed = _seed + REPAIRER_SEED_OFFSET
+	var spawner: RepairerSpawner = RepairerSpawner.new(REPAIRER_SCENE, CoinSpawner.new(COIN_SCENE))
+	for segment: LevelSegment in _coin_segments:
+		spawner.populate(segment, rng, PlayerProgress.config, level)
 
 
 func _resolve_seed(seed_override: int) -> int:
