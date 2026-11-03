@@ -9,7 +9,7 @@ Dar al jugador una forma de recuperar vidas durante la partida (mejora Reparador
 - Al armar el nivel, `LevelBuilder` pasa por cada segmento intermedio con `RepairerSpawner`: 40 % de chance de poner un reparador en un lugar libre (mismo criterio que las monedas: lejos de plataformas, paredes y otros objetos). Usa su propio azar (`seed + REPAIRER_SEED_OFFSET`), así que **no mueve las monedas** y la misma seed da los mismos reparadores.
 - Sin comprar Reparador I (o con el progreso apagado) no aparece ninguno.
 - La llave y la venda **no se recogen con la vida llena**: quedan en su lugar y se recogen apenas hace falta (si estás encima, reintenta cada frame de física). El botiquín se recoge siempre, por el escudo.
-- **Escudo del botiquín:** dura 5 s, absorbe UN golpe común y se rompe (el golpe no quita vida, queda la invulnerabilidad normal de un golpe). No frena a los perseguidores (`tentacle`) ni a la caída (`fell`). Se ve como un aro cian (placeholder) que parpadea el último segundo. `Player.reset()` lo quita.
+- **Escudo del botiquín:** dura 5 s, absorbe UN golpe común y se rompe (el golpe no quita vida, queda la invulnerabilidad normal de un golpe). No frena a los perseguidores (`tentacle`) ni a la caída (`fell`). Se ve como un óvalo vertical cian (aro más relleno translúcido, ~34 × 54 px, placeholder) que cubre al astronauta entero y la llama del jetpack, y parpadea el último segundo. `Player.reset()` lo quita.
 
 ## Parámetros (`ProgressConfig`, grupo "Reparadores")
 | Parámetro | Valor | Unidad |
@@ -33,4 +33,4 @@ Dar al jugador una forma de recuperar vidas durante la partida (mejora Reparador
 4. Con la seed fija en `level_config.tres` ves siempre los mismos lugares.
 
 ## Pendiente
-Escudo 10 s y Escudo eterno (nodos con candado), sprites, sonido y animación del escudo.
+Escudo 10 s y Escudo eterno (nodos con candado), sprites finales, sonido y animación del escudo.

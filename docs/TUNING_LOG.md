@@ -179,6 +179,13 @@ El pool plano (`segment_pool` y `segment_count`) se conserva como respaldo: solo
 | perseguidores | 2026-10-28 | `progress_config` → `no_respawn_causes` (nuevo) | — (Reaparecer salvaba del perseguidor) | `[tentacle]`: Reaparecer no salva | Sim: con 3 vidas y Reaparecer, `die(tentacle)` mata; `die(fell)` sí reaparece; obstáculo quita 1 vida | Pendiente de probar jugando |
 | tentaculitos | 2026-10-28 | `progress_config` → `dash_unblockable_causes` | `[tentacle, fell, minor_tentacle]` | `[tentacle, fell]` | Sim: el dash invulnerable ahora frena a `minor_tentacle` | Pendiente de probar jugando |
 
+## Iteración en `main-g`: frente de tentáculos vivos (fase 1)
+
+| Iteración | Fecha | Parámetro | Antes | Después | Evidencia | Cómo se sintió |
+|---|---|---|---|---|---|---|
+| frente de sprites | 2026-10-28 | `tentacle_config.tres` → `use_sprites`, `swap_interval`, `swap_duration`, `swap_dip`, `tip_overhang` (nuevos) | — (bloque de color) | `true`, 1,5 s, 0,3 s, 20 px, 24 px | Sim: 5 lugares × 6 sprites, cambia de orden pasados 2,2 s, zona letal intacta (borde en y=10), fuego/ácido (`use_sprites=false`) ocultan el frente | Pendiente de probar jugando |
+| frente denso (v2) | 2026-10-28 | `tentacle_config.tres` → `row_count`, `bend_amplitude`, `bend_speed`, `back_darken` (nuevos); `swap_interval`, `swap_dip` | — / 1,5 s / 20 px | 4 filas, 10 px, 0,8 Hz, 0,35 / 2,5 s / 12 px | Sim: 4 filas (15/12/10/9 tentáculos, 138 polígonos), cambia de sprite, zona letal en y=10, fuego sin frente; capturas sin huecos ni puntas sueltas | Pendiente de probar jugando |
+
 ## Valores finales del MVP
 
 Se completa al cierre ("tuning cerrado").

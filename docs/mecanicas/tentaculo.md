@@ -65,6 +65,32 @@ Tentacle (Node2D)          origen = borde superior (sin ondular), esquina izquie
     └── CollisionShape2D (RectangleShape2D, se redimensiona cada tick)
 ```
 
+## Frente de sprites (solo fase 1)
+
+Con `use_sprites = true` en la config, el nodo hijo `Front` ([TentacleFront], `scripts/tentacle/tentacle_front.gd`) dibuja una masa densa de tentáculos sobre un fondo violeta oscuro (`#3A1B5E`).
+
+- **Filas en profundidad** (`row_count`, 4): la fila 0 es la de adelante (grande, nítida, ~15 tentáculos solapados, 3 capas hacia abajo); cada fila de atrás es 15 % más chica, más oscura (`back_darken`), con la punta 6 px más alta y se mueve más lento. Los tentáculos enteros usan `vertical_01..05` y `completos` (el sprite con la punta arriba y el mismo en espejo debajo). En las filas de atrás se meten, entre ellos, piezas chicas (puntas, variantes, enrollados, segmentos) para tapar huecos.
+- **Doblez**: cada tentáculo es un `Polygon2D` subdividido y el shader `shaders/tentacle_bend.gdshader` lo curva de costado (`bend_amplitude` px, `bend_speed` Hz), más en la punta que en la base y con fase distinta por tentáculo. Además se mecen (`sway_*`) y "respiran" apenas.
+- **Cambio de sprite**: cada fila cada `swap_interval` s (arrancan desfasadas) cambia de sprite en una ola de izquierda a derecha (`swap_stagger`): cada tentáculo se agacha `swap_dip` px durante `swap_duration` s y a mitad de la agachada cambia de sprite.
+- Las puntas de la fila de adelante asoman `tip_overhang` px (la altura del jugador) sobre el borde de la zona letal: se pueden rozar sin morir. La zona letal no cambia.
+- Es solo visual. Fuego y ácido (`use_sprites = false`) siguen con el bloque de color.
+
+## Sprites de tentáculo disponibles (todavía sin usar)
+
+Recortados de una lámina de pruebas (90 dibujos, 104 archivos PNG con fondo transparente) en `assets/sprites/tentacle/<grupo>/`, al tamaño original de la lámina (de 39×46 a 175×301 px). El tentáculo del juego sigue usando su dibujo placeholder; estos sprites sirven para elegir cuáles se implementan. Se numeran de izquierda a derecha y de arriba hacia abajo, como en la lámina. En Godot conviene `Filter = Nearest` en el sprite para que el pixel art no se vea borroso.
+
+| Carpeta | Archivos | Qué es |
+|---|---|---|
+| `segmentos/` | `segmento_01` … `15` | Segmentos base del cuerpo |
+| `puntas/` | `punta_01` … `15` | Extremos del tentáculo |
+| `completos/` | `tentaculo_01` … `04` | Tentáculos enteros, verticales |
+| `movimiento/` | `onda_01` … `15` | Ondas horizontales |
+| `entrada_lateral/` | `entrada_01_tentaculo` + `entrada_01_pilar` … `10` | Entrada y salida por un costado. Tentáculo y pilar van en archivos distintos con el mismo lienzo: puestos en la misma posición encajan |
+| `enrollado/` | `enrollado_01` … `10` | Enrollado / atrapando |
+| `vertical/` | `vertical_01` … `05` | Persiguiendo en vertical, con espinas y burbujas |
+| `variantes/` | `variante_01` … `08` | Variantes y daño |
+| `escenas/` | `escena_01_tentaculo` + `escena_01_estructura` (también 05, 06 y 08); `escena_02`, `03`, `04` y `07` enteras | Combinaciones con estructuras. En las 4 enteras el tentáculo y la estructura se tapan tanto que al separarlos quedaban huecos |
+
 ## Manejo de la derrota
 
 El tentáculo llama a `Player.die(cause)`. `Player.died(cause)` llega a `LevelController`, que la pasa a `GameManager.notify_player_died`; el manager pasa a `LOST` y el controlador detiene el scroll y muestra "CAPTURADO — pulsá R para reiniciar" para `&"tentacle"` y `&"fell"` (mapa `DEATH_TEXTS`). R (acción `restart`) la maneja el `GameManager` y recarga la escena, lo que deja combustible, cámara y tentáculo en su estado inicial. Ver `game-manager.md`.
