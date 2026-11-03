@@ -14,6 +14,9 @@ signal player_caught(cause: StringName)
 
 ## Rojo de la paleta. Solo visual.
 const COLOR_BODY: Color = Color("#D83232")
+## Violeta oscuro del fondo que queda detrás de los sprites del frente (ver [TentacleFront]).
+## Solo visual.
+const COLOR_SPRITE_BACKDROP: Color = Color("#3A1B5E")
 ## Desfase de la onda entre puntos contiguos del borde superior. Solo visual. Unidad: rad.
 const WOBBLE_PHASE_PER_SEGMENT: float = 0.8
 ## Cuánto se extiende el cuerpo y la zona letal por debajo del borde inferior de la
@@ -30,6 +33,7 @@ const FREE_RISE_KILL_DEPTH: float = 8000.0
 @export var camera: ScrollCamera
 
 @onready var _body: Polygon2D = $BodyPolygon
+@onready var _front: TentacleFront = $Front
 @onready var _kill_zone: Area2D = $KillZone
 @onready var _kill_shape: CollisionShape2D = $KillZone/CollisionShape2D
 
@@ -60,6 +64,7 @@ func _ready() -> void:
 		set_process(false)
 		return
 	_kill_shape.shape = RectangleShape2D.new()
+	_apply_front()
 	_kill_zone.body_entered.connect(_on_kill_zone_body_entered)
 	_reset_free_rise()
 	_follow_camera()
@@ -99,10 +104,13 @@ func _process(delta: float) -> void:
 ## [param reset_position] lo vuelve a su distancia inicial bajo la pantalla, como un perseguidor
 ## que recién aparece; si no, sigue desde donde estaba (con la velocidad inicial de la config nueva).
 func apply_pursuer(new_config: TentacleConfig, color: Color, reset_position: bool) -> void:
-	_body.color = color
+	if new_config != null:
+		config = new_config
+	# Con sprites el fondo es siempre el violeta oscuro; sin sprites, el color del tier.
+	_body.color = COLOR_SPRITE_BACKDROP if config.use_sprites else color
+	_apply_front()
 	if new_config == null:
 		return
-	config = new_config
 	if reset_position and camera != null:
 		_reset_free_rise()
 	else:
@@ -181,6 +189,20 @@ func reset() -> void:
 	_rising = true
 	_reset_free_rise()
 	_follow_camera()
+	if config.use_sprites:
+		_front.reset_animation()
+
+
+# Muestra el frente de sprites si la config lo pide (con fondo violeta oscuro) o lo oculta y deja
+# el bloque de color. Solo visual: no toca la zona letal.
+func _apply_front() -> void:
+	if _front == null or camera == null:
+		return
+	_front.visible = config.use_sprites
+	_front.set_process(config.use_sprites)
+	if config.use_sprites:
+		_body.color = COLOR_SPRITE_BACKDROP
+		_front.setup(config, camera.get_visible_rect().size.x)
 
 
 # Deja el borde superior a `visible_height` px sobre el borde inferior de la pantalla y la velocidad

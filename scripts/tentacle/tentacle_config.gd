@@ -52,3 +52,34 @@ extends Resource
 @export var wobble_frequency: float = 2.0
 ## Cantidad de segmentos del borde superior (más segmentos = borde más suave).
 @export var wobble_segments: int = 12
+
+@export_group("Frente de sprites")
+## Si es true, el tentáculo se dibuja como una fila de tentáculos con sprites (ver
+## [TentacleFront]) sobre un fondo violeta oscuro, en vez del bloque de color. Solo visual: la
+## zona letal no cambia.
+@export var use_sprites: bool = false
+## Cada cuánto cambia de sprite cada fila de tentáculos (cada fila arranca desfasada). Unidad: s.
+@export var swap_interval: float = 2.5
+## Cuánto dura el cambio de cada tentáculo (se agacha y vuelve a subir). Unidad: s.
+@export var swap_duration: float = 0.3
+## Desfase entre un tentáculo y el siguiente (de izquierda a derecha) al cambiar, para que
+## parezca una ola. Unidad: s.
+@export var swap_stagger: float = 0.04
+## Cuánto se agacha cada tentáculo durante el cambio. Unidad: px.
+@export var swap_dip: float = 12.0
+## Cuánto asoman las puntas por encima de la zona letal: esa franja se puede rozar sin morir.
+## Es la altura del jugador. Unidad: px.
+@export var tip_overhang: float = 24.0
+## Amplitud del balanceo de costado entre cambios. Unidad: px.
+@export var sway_amplitude: float = 3.0
+## Velocidad del balanceo. Unidad: Hz.
+@export var sway_frequency: float = 0.6
+## Cantidad de filas de tentáculos en profundidad (la primera es la de adelante; las de atrás son
+## más chicas, más oscuras y más altas). De 1 a 6.
+@export_range(1, 6) var row_count: int = 4
+## Cuánto se dobla de costado la punta de cada tentáculo. Unidad: px.
+@export var bend_amplitude: float = 10.0
+## Velocidad de la onda del doblez en la fila de adelante (las de atrás van más lento). Unidad: Hz.
+@export var bend_speed: float = 0.8
+## Cuánto más oscura es la fila del fondo respecto de la de adelante (0 = igual, 1 = negra).
+@export_range(0.0, 1.0) var back_darken: float = 0.35
