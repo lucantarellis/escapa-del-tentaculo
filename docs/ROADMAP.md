@@ -181,7 +181,7 @@ Integración de los tres sprite sheets (astronauta, tileset, tentáculo; el del 
 
 ## 7. Backlog de ideas (sin compromiso)
 
-- Progreso, siguientes pasos: los sprites del jugador por cada golpe (la lista `hit_sprites` ya está lista), el escudo de 10 s y el eterno (los reparadores y el escudo del botiquín ya están), el dash que rompe plataformas, la invulnerabilidad larga y las duraciones de cada dash; armas que rompen plataformas rompibles y no rompibles; bombas para meteoritos; llegar al mercado sin cerrar el juego tras una partida; más mejoras para tener builds distintas.
+- Progreso, siguientes pasos: los sprites del jugador por cada golpe (la lista `hit_sprites` ya está lista), (los reparadores y los escudos del botiquín, de 10 s y eterno, ya están), el dash que rompe plataformas, la invulnerabilidad larga y las duraciones de cada dash; armas que rompen plataformas rompibles y no rompibles; bombas para meteoritos; llegar al mercado sin cerrar el juego tras una partida; más mejoras para tener builds distintas.
 - Panel de tuning en juego con sliders sobre los `Resource` de configuración.
 - Presets de configuración (por ejemplo "flotante", "arcade") como archivos `.tres` intercambiables.
 - Aceleración progresiva del scroll a lo largo del nivel.

@@ -186,6 +186,13 @@ El pool plano (`segment_pool` y `segment_count`) se conserva como respaldo: solo
 | frente de sprites | 2026-10-28 | `tentacle_config.tres` → `use_sprites`, `swap_interval`, `swap_duration`, `swap_dip`, `tip_overhang` (nuevos) | — (bloque de color) | `true`, 1,5 s, 0,3 s, 20 px, 24 px | Sim: 5 lugares × 6 sprites, cambia de orden pasados 2,2 s, zona letal intacta (borde en y=10), fuego/ácido (`use_sprites=false`) ocultan el frente | Pendiente de probar jugando |
 | frente denso (v2) | 2026-10-28 | `tentacle_config.tres` → `row_count`, `bend_amplitude`, `bend_speed`, `back_darken` (nuevos); `swap_interval`, `swap_dip` | — / 1,5 s / 20 px | 4 filas, 10 px, 0,8 Hz, 0,35 / 2,5 s / 12 px | Sim: 4 filas (15/12/10/9 tentáculos, 138 polígonos), cambia de sprite, zona letal en y=10, fuego sin frente; capturas sin huecos ni puntas sueltas | Pendiente de probar jugando |
 
+## Iteración en `main-g`: Escudo 10 s y Escudo eterno
+
+| Iteración | Fecha | Parámetro | Antes | Después | Evidencia | Cómo se sintió |
+|---|---|---|---|---|---|---|
+| escudos | 2026-11-03 | `shield_10.tres` y `shield_inf.tres` → `locked`, `effect`, `value` | con candado, sin efecto | sin candado, efecto `shield` (valor 1 y 2), precios 80 y 150 sin cambios | Sim: sin compras 5 s; Escudo 10 s: activo a los 6 s y vencido a los 10,6 s; Escudo eterno: activo a los 12 s, sin parpadeo, absorbe un golpe y se rompe, no frena al tentáculo; regresión sim_progress 50/50, sim_lives 33/33, sim_flow 110/110 | Pendiente de probar jugando |
+| escudos | 2026-11-03 | `progress_config` → `shield_upgrade_duration` (nuevo) | — | 10 s (valor por defecto del script, sin tocar `progress_config.tres`) | ídem | Pendiente de probar jugando |
+
 ## Valores finales del MVP
 
 Se completa al cierre ("tuning cerrado").

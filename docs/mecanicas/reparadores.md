@@ -9,7 +9,7 @@ Dar al jugador una forma de recuperar vidas durante la partida (mejora Reparador
 - Al armar el nivel, `LevelBuilder` pasa por cada segmento intermedio con `RepairerSpawner`: 40 % de chance de poner un reparador en un lugar libre (mismo criterio que las monedas: lejos de plataformas, paredes y otros objetos). Usa su propio azar (`seed + REPAIRER_SEED_OFFSET`), así que **no mueve las monedas** y la misma seed da los mismos reparadores.
 - Sin comprar Reparador I (o con el progreso apagado) no aparece ninguno.
 - La llave y la venda **no se recogen con la vida llena**: quedan en su lugar y se recogen apenas hace falta (si estás encima, reintenta cada frame de física). El botiquín se recoge siempre, por el escudo.
-- **Escudo del botiquín:** dura 5 s, absorbe UN golpe común y se rompe (el golpe no quita vida, queda la invulnerabilidad normal de un golpe). No frena a los perseguidores (`tentacle`) ni a la caída (`fell`). Se ve como un óvalo vertical cian (aro más relleno translúcido, ~34 × 54 px, placeholder) que cubre al astronauta entero y la llama del jetpack, y parpadea el último segundo. `Player.reset()` lo quita.
+- **Escudo del botiquín:** dura 5 s (10 s con la mejora **Escudo 10 s**; sin tiempo, hasta que absorbe un golpe, con **Escudo eterno**), absorbe UN golpe común y se rompe (el golpe no quita vida, queda la invulnerabilidad normal de un golpe). No frena a los perseguidores (`tentacle`) ni a la caída (`fell`). Se ve como un óvalo vertical cian (aro más relleno translúcido, ~34 × 54 px, placeholder) que cubre al astronauta entero y la llama del jetpack, y parpadea el último segundo (el eterno no parpadea ni se vence). Si agarrás otro botiquín con el escudo activo, se renueva. `Player.reset()` lo quita.
 
 ## Parámetros (`ProgressConfig`, grupo "Reparadores")
 | Parámetro | Valor | Unidad |
@@ -18,10 +18,11 @@ Dar al jugador una forma de recuperar vidas durante la partida (mejora Reparador
 | `repairer_weight_wrench` / `bandage` / `medkit` | 5 / 3 / 1 | peso relativo |
 | `repairer_heal_wrench` / `bandage` | 1 / 2 | vidas |
 | `repairer_shield_duration` | 5 | s |
+| `shield_upgrade_duration` (con Escudo 10 s) | 10 | s |
 
 ## Señales y API
 - `Repairer.collected(kind, healed)`.
-- `Player.heal(amount)` (menor que 0 = todas; devuelve lo curado), `Player.needs_healing()`, `Player.give_shield(duration)`, `Player.has_shield()`, señal `Player.shield_changed(active)`. Los corazones del HUD se actualizan solos (`hit_points_changed`).
+- `Player.heal(amount)` (menor que 0 = todas; devuelve lo curado), `Player.needs_healing()`, `Player.give_shield(duration)` (negativo = sin tiempo, dura hasta que te pegan), `PlayerProgress.get_shield_level()` / `get_shield_duration()`, `Player.has_shield()`, señal `Player.shield_changed(active)`. Los corazones del HUD se actualizan solos (`hit_points_changed`).
 
 ## Nodos
 `Repairer` (`Area2D`, capa 6 `pickups`, máscara 2 `player`) con un dibujo placeholder de polígonos según el tipo. Escena: `scenes/pickups/Repairer.tscn`.
@@ -33,4 +34,4 @@ Dar al jugador una forma de recuperar vidas durante la partida (mejora Reparador
 4. Con la seed fija en `level_config.tres` ves siempre los mismos lugares.
 
 ## Pendiente
-Escudo 10 s y Escudo eterno (nodos con candado), sprites finales, sonido y animación del escudo.
+sprites finales, sonido y animación del escudo.
