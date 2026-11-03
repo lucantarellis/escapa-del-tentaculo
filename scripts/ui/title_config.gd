@@ -13,6 +13,6 @@ extends Resource
 
 @export_group("Textos")
 ## Título del juego.
-@export var title_text: String = "ESCAPA DEL TENTÁCULO"
+@export var title_text: String = "Rise or Die"
 ## Texto del botón de jugar.
 @export var play_text: String = "JUGAR"

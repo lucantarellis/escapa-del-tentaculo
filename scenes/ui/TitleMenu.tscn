@@ -39,7 +39,7 @@ theme_override_constants/separation = 48
 
 [node name="TitleLabel" type="Label" parent="Center/Box"]
 layout_mode = 2
-text = "ESCAPA DEL TENTÁCULO"
+text = "Rise or Die"
 horizontal_alignment = 1
 autowrap_mode = 2
 
