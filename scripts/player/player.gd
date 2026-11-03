@@ -327,10 +327,10 @@ func die(cause: StringName) -> void:
 		# Tras un golpe no se puede perder otro punto durante un rato.
 		if _hit_invuln_left > 0.0:
 			return
-		# El escudo del botiquín absorbe el golpe y se rompe (no frena a las `instakill_causes`).
+		# El escudo del botiquín absorbe el golpe y se rompe (no frena a las `instakill_causes`). Sin
+		# parpadeo ni invulnerabilidad: el golpe no cuenta como golpe recibido.
 		if _shield_left > 0.0:
 			_shield_left = 0.0
-			_hit_invuln_left = _hit_invuln_time
 			_update_shield_visual()
 			shield_changed.emit(false)
 			return
