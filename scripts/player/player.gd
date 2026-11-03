@@ -49,12 +49,16 @@ const BLINK_RATE: float = 12.0
 ## Múltiplos de `respawn_height` donde se busca un lugar libre al reaparecer. Estructural.
 const RESPAWN_SEARCH_SCALES: Array[float] = [1.0, 0.75, 0.5, 1.25, 1.5, 0.25]
 ## Máximo de plataformas rompibles que un mismo paso del dash puede romper en fila. Estructural.
-## Aro del escudo del botiquín: color (cian de recogible), radio (px), grosor (px), cantidad de
-## puntos y cuánto antes de terminar empieza a parpadear (s). Solo visual.
+## Escudo del botiquín: óvalo vertical que cubre al astronauta entero más la llama del jetpack.
+## Color del aro (cian de recogible), color del relleno translúcido, tamaño del óvalo (ancho y alto,
+## px), centro respecto del origen del jugador (px), grosor del aro (px), cantidad de puntos y cuánto
+## antes de terminar empieza a parpadear (s). Solo visual.
 const SHIELD_COLOR: Color = Color("#63D6C5")
-const SHIELD_RING_RADIUS: float = 18.0
+const SHIELD_FILL_COLOR: Color = Color(0.388, 0.839, 0.773, 0.14)
+const SHIELD_SIZE: Vector2 = Vector2(34.0, 54.0)
+const SHIELD_CENTER: Vector2 = Vector2(0.0, 7.0)
 const SHIELD_RING_WIDTH: float = 2.0
-const SHIELD_RING_POINTS: int = 24
+const SHIELD_RING_POINTS: int = 32
 const SHIELD_BLINK_TIME: float = 1.0
 const DASH_BREAK_MAX_CHAIN: int = 4
 ## Distancia del indicador de propulsión al centro del cuerpo. Unidad: px. Solo visual.
@@ -808,7 +812,7 @@ func _show_thrust(on: bool, direction: Vector2 = Vector2.ZERO) -> void:
 		_thrust_indicator.position = direction.normalized() * THRUST_INDICATOR_DISTANCE
 
 
-# Muestra u oculta el aro del escudo (placeholder: círculo cian). Parpadea el último segundo.
+# Muestra u oculta el escudo (placeholder: óvalo cian con relleno translúcido). Parpadea el último segundo.
 func _update_shield_visual() -> void:
 	if _shield_ring == null:
 		if _shield_left <= 0.0:
@@ -816,11 +820,16 @@ func _update_shield_visual() -> void:
 		_shield_ring = Line2D.new()
 		_shield_ring.width = SHIELD_RING_WIDTH
 		_shield_ring.default_color = SHIELD_COLOR
-		_shield_ring.position = Vector2(0.0, -12.0)
+		_shield_ring.position = SHIELD_CENTER
+		_shield_ring.closed = true
 		var points: PackedVector2Array = PackedVector2Array()
-		for i: int in SHIELD_RING_POINTS + 1:
-			points.append(Vector2.from_angle(TAU * float(i) / float(SHIELD_RING_POINTS)) * SHIELD_RING_RADIUS)
+		for i: int in SHIELD_RING_POINTS:
+			points.append(Vector2.from_angle(TAU * float(i) / float(SHIELD_RING_POINTS)) * SHIELD_SIZE * 0.5)
 		_shield_ring.points = points
+		var fill: Polygon2D = Polygon2D.new()
+		fill.color = SHIELD_FILL_COLOR
+		fill.polygon = points
+		_shield_ring.add_child(fill)
 		add_child(_shield_ring)
 	_shield_ring.visible = _shield_left > 0.0
 	var blinking: bool = _shield_left > 0.0 and _shield_left < SHIELD_BLINK_TIME and int(_shield_left * BLINK_RATE) % 2 == 0
