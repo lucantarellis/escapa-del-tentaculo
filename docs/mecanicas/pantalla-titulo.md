@@ -35,7 +35,7 @@ Main (Node)                          scripts/main/main.gd
 |---|---|---|---|---|
 | Transición | `fade_duration` | 0.8 | s | Duración del fundido del menú a transparente |
 | Transición | `fade_delay` | 0.0 | s | Espera entre pulsar el botón y empezar el fundido |
-| Textos | `title_text` | "ESCAPA DEL TENTÁCULO" | — | Título del juego |
+| Textos | `title_text` | "Rise or Die" | — | Título del juego |
 | Textos | `play_text` | "JUGAR" | — | Texto del botón |
 
 Los textos no son gameplay; se dejan editables desde el inspector. Colores, tamaños de fuente y del botón son `const` visuales en `title_menu.gd`.
