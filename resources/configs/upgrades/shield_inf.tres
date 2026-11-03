@@ -6,9 +6,10 @@
 script = ExtResource("1_up")
 id = &"shield_inf"
 display_name = "Escudo eterno"
-description = "El escudo dura hasta que te lo quitan."
+description = "El escudo del botiquín no se vence: dura hasta que te pegan."
 branch = &"repair"
 branch_label = "Repara"
 requires_id = &"shield_10"
 price = 150
-locked = true
+effect = &"shield"
+value = 2.0
