@@ -91,3 +91,5 @@ extends Resource
 @export var repairer_heal_bandage: int = 2
 ## Cuánto dura el escudo que da el botiquín. Absorbe un golpe común. Unidad: s.
 @export var repairer_shield_duration: float = 5.0
+## Cuánto dura el escudo con la mejora Escudo 10 s. Unidad: s.
+@export var shield_upgrade_duration: float = 10.0

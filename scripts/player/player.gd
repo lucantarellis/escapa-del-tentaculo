@@ -375,12 +375,13 @@ func needs_healing() -> bool:
 
 
 ## Da un escudo de [param duration] s que absorbe el próximo golpe común (no frena a los
-## perseguidores ni a la caída). Si ya tenía, se renueva. Unidad: s.
+## perseguidores ni a la caída). Con [param duration] negativo (-1) no tiene tiempo: dura hasta que
+## absorbe un golpe. Si ya tenía, se renueva. Unidad: s.
 func give_shield(duration: float) -> void:
-	if not _is_alive or duration <= 0.0:
+	if not _is_alive or duration == 0.0:
 		return
 	var was_active: bool = _shield_left > 0.0
-	_shield_left = duration
+	_shield_left = INF if duration < 0.0 else duration
 	_update_shield_visual()
 	if not was_active:
 		shield_changed.emit(true)

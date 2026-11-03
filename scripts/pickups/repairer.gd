@@ -104,7 +104,7 @@ func _on_body_entered(body: Node2D) -> void:
 			healed = player.heal(cfg.repairer_heal_bandage)
 		Kind.MEDKIT:
 			healed = player.heal(-1)
-			player.give_shield(cfg.repairer_shield_duration)
+			player.give_shield(PlayerProgress.get_shield_duration())
 	_available = false
 	visible = false
 	set_deferred("monitoring", false)

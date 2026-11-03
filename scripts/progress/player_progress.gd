@@ -249,6 +249,24 @@ func get_repair_level() -> int:
 	return clampi(int(get_effect_value(UpgradeData.EFFECT_REPAIR, 0.0)), 0, 3)
 
 
+## Devuelve el nivel de escudo comprado: 0 = el normal (`repairer_shield_duration`), 1 = Escudo
+## 10 s, 2 = Escudo eterno. Con el progreso apagado es 0.
+func get_shield_level() -> int:
+	return clampi(int(get_effect_value(UpgradeData.EFFECT_SHIELD, 0.0)), 0, 2)
+
+
+## Devuelve cuánto dura el escudo del botiquín según lo comprado: `repairer_shield_duration` s sin
+## mejoras, `shield_upgrade_duration` s con Escudo 10 s y -1 (hasta que te pegan, ver
+## [method Player.give_shield]) con Escudo eterno. Unidad: s.
+func get_shield_duration() -> float:
+	match get_shield_level():
+		2:
+			return -1.0
+		1:
+			return config.shield_upgrade_duration
+	return config.repairer_shield_duration
+
+
 ## Devuelve true si hay algún nodo comprado con ese [param effect].
 func has_effect(effect: StringName) -> bool:
 	return _best_node(effect) != null
