@@ -87,12 +87,28 @@ const BOUNCE_PREVIEW_LENGTH: float = 80.0
 ## Estructural. Unidad: px.
 const DEFAULT_TRIGGER_RADIUS: float = 160.0
 const DEFAULT_EXPLOSION_RADIUS: float = 48.0
+## Carpeta de las tiras de fuego (4 cuadros por tira, un módulo con su fuego alrededor). Estructural.
+const FIRE_DIR: String = "res://assets/sprites/environment/fire_platform/"
+## Ancho y alto de un módulo del cuerpo de la plataforma de fuego. Estructural. Unidad: px.
+const FIRE_MODULE_WIDTH: float = 25.0
+const FIRE_MODULE_HEIGHT: float = 14.0
+## Cantidad mínima de módulos (tapa izquierda + tapa derecha). Estructural.
+const FIRE_MIN_MODULES: int = 2
+## Cuadros de cada tira de animación. Estructural.
+const FIRE_FRAME_COUNT: int = 4
+## Variantes dibujadas: tapas (izq/der) y centros (centro_a/centro_b). Estructural.
+const FIRE_CAP_VARIANTS: int = 2
+const FIRE_CENTER_VARIANTS: int = 3
+## Margen extra que ocupa el fuego alrededor del bloque, para el aviso de pantalla. Estructural. Unidad: px.
+const FIRE_PADDING: float = 14.0
+## Textura (tira) y SpriteFrames ya armados por nombre de módulo, compartidos entre instancias.
+static var _fire_frames_cache: Dictionary = {}
 
 @export_group("Forma")
 ## Tamaño del bloque (ancho, alto). Es diseño de nivel, no tuning. Unidad: px.
 @export var size: Vector2 = Vector2(80.0, 12.0):
 	set(value):
-		size = value.max(Vector2(4.0, 4.0))
+		size = _snap_fire_size(value.max(Vector2(4.0, 4.0)))
 		_update_shape()
 		queue_redraw()
 
@@ -135,6 +151,16 @@ const DEFAULT_EXPLOSION_RADIUS: float = 48.0
 	set(value):
 		projectile_end = value
 		queue_redraw()
+
+@export_group("Fuego")
+## Si es true y el tipo es LETHAL, el bloque se dibuja con módulos de fuego animado (el ancho
+## se ajusta a múltiplos de 25 px, mínimo 2 módulos, y el alto pasa a 14 px). La colisión y el
+## daño son los mismos de siempre. Con false, o en otros tipos, se dibuja el bloque de color.
+@export var fire_skin: bool = false:
+	set(value):
+		fire_skin = value
+		size = size
+		_apply_type()
 
 @export_group("Configuración")
 ## Tiempos de cada tipo y del movimiento (ver [PlatformConfig]).
@@ -179,6 +205,10 @@ var _proj_elapsed: float = 0.0
 var _proj_travelled: float = 0.0
 var _proj_bounces: int = 0
 var _proj_velocity: Vector2 = Vector2.ZERO
+## Nodo hijo con los sprites de fuego (null si no hay piel de fuego activa).
+var _fire_root: Node2D = null
+var _fire_sprites: Array[AnimatedSprite2D] = []
+var _fire_started: bool = false
 
 
 func _ready() -> void:
@@ -296,6 +326,7 @@ func _update_shape() -> void:
 	if not _explosion_shape.shape is CircleShape2D:
 		_explosion_shape.shape = CircleShape2D.new()
 	(_explosion_shape.shape as CircleShape2D).radius = _get_explosion_radius()
+	_rebuild_fire_skin()
 
 
 # Muestra u oculta en el editor los círculos de detección del proyectil según
@@ -321,6 +352,7 @@ func _apply_type() -> void:
 		_apply_pulse_visual()
 	else:
 		_body.color = _tint if _tint.a > 0.0 else COLOR_BY_TYPE.get(platform_type, COLOR_BY_TYPE[PlatformType.STATIC])
+	_rebuild_fire_skin()
 	if Engine.is_editor_hint():
 		return
 	_step_sensor.set_deferred("monitoring", platform_type == PlatformType.BREAKABLE)
@@ -512,7 +544,7 @@ func _is_footprint_occupied() -> bool:
 # colisiona físicamente pero sí debe verse). Diferido: seguro dentro de callbacks de física.
 func _apply_solid(solid: bool, body_visible: bool = solid) -> void:
 	_collision.set_deferred("disabled", not solid)
-	_body.visible = body_visible
+	_body.visible = body_visible and not _fire_active()
 
 
 func _on_step_entered(body: Node2D) -> void:
@@ -765,3 +797,123 @@ func _draw_projectile_preview(half: Vector2) -> void:
 			draw_arc(travel, _get_explosion_radius(), 0.0, TAU, 48, PROJECTILE_HELPER_COLOR, 1.5)
 	if projectile_trigger == ProjectileTrigger.DISTANCE:
 		draw_arc(Vector2.ZERO, _get_trigger_radius(), 0.0, TAU, 64, PROJECTILE_HELPER_COLOR, 1.5)
+
+
+# ---------------------------------------------------------------------------------------------
+# Piel de fuego (LETHAL con `fire_skin`)
+# ---------------------------------------------------------------------------------------------
+
+# Devuelve true si la piel de fuego debe dibujarse: solo en LETHAL con `fire_skin` activo.
+func _fire_active() -> bool:
+	return fire_skin and platform_type == PlatformType.LETHAL
+
+
+# Con `fire_skin` el tamaño se ajusta a módulos enteros (mínimo FIRE_MIN_MODULES) y alto fijo.
+# Con tipo distinto de LETHAL no se toca, así cambiar el tipo en el editor no deforma el bloque.
+func _snap_fire_size(value: Vector2) -> Vector2:
+	if not _fire_active():
+		return value
+	var modules: int = maxi(FIRE_MIN_MODULES, roundi(value.x / FIRE_MODULE_WIDTH))
+	return Vector2(modules * FIRE_MODULE_WIDTH, FIRE_MODULE_HEIGHT)
+
+
+# Arma (o desarma) los sprites de fuego. Un `AnimatedSprite2D` por módulo, con variante, cuadro
+# inicial y velocidad propios para que no se muevan al unísono.
+func _rebuild_fire_skin() -> void:
+	if not is_node_ready():
+		return
+	if _fire_root != null:
+		remove_child(_fire_root)
+		_fire_root.queue_free()
+		_fire_root = null
+		_fire_sprites.clear()
+	_fire_started = false
+	_body.visible = not _fire_active()
+	if not _fire_active():
+		return
+	var snapped: Vector2 = _snap_fire_size(size)
+	if snapped != size:
+		size = snapped
+		return
+	_fire_root = Node2D.new()
+	_fire_root.name = "FireSkin"
+	add_child(_fire_root)
+	var modules: int = roundi(size.x / FIRE_MODULE_WIDTH)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash([String(name), position])
+	var cfg: PlatformConfig = config if config != null else PlatformConfig.new()
+	var last_center: String = ""
+	for i in modules:
+		var module_name: String
+		var variant: int
+		if i == 0:
+			module_name = "izq"
+			variant = rng.randi_range(1, FIRE_CAP_VARIANTS)
+		elif i == modules - 1:
+			module_name = "der"
+			variant = rng.randi_range(1, FIRE_CAP_VARIANTS)
+		else:
+			module_name = "centro_a" if rng.randi() % 2 == 0 else "centro_b"
+			variant = rng.randi_range(1, FIRE_CENTER_VARIANTS)
+		var key: String = "%s_v%d" % [module_name, variant]
+		if key == last_center:
+			variant = variant % FIRE_CENTER_VARIANTS + 1 if i > 0 and i < modules - 1 else variant
+			key = "%s_v%d" % [module_name, variant]
+		last_center = key
+		var sprite := AnimatedSprite2D.new()
+		sprite.sprite_frames = _get_fire_frames(key)
+		sprite.position = Vector2(-size.x * 0.5 + (i + 0.5) * FIRE_MODULE_WIDTH, 0.0)
+		sprite.speed_scale = rng.randf_range(cfg.fire_speed_min, cfg.fire_speed_max)
+		sprite.animation = &"entrada"
+		sprite.frame = 0
+		_fire_root.add_child(sprite)
+		sprite.animation_finished.connect(_on_fire_entry_finished.bind(sprite, rng.randi() % FIRE_FRAME_COUNT))
+		_fire_sprites.append(sprite)
+	var notifier := VisibleOnScreenNotifier2D.new()
+	notifier.rect = Rect2(-size * 0.5 - Vector2.ONE * FIRE_PADDING, size + Vector2.ONE * FIRE_PADDING * 2.0)
+	_fire_root.add_child(notifier)
+	if Engine.is_editor_hint():
+		for sprite in _fire_sprites:
+			sprite.animation = &"idle"
+			sprite.frame = 1
+		return
+	notifier.screen_entered.connect(_start_fire)
+
+
+# Devuelve el SpriteFrames (entrada + idle) de una variante de módulo, armado desde las tiras PNG.
+func _get_fire_frames(key: String) -> SpriteFrames:
+	if _fire_frames_cache.has(key):
+		return _fire_frames_cache[key]
+	var cfg: PlatformConfig = config if config != null else PlatformConfig.new()
+	var frames := SpriteFrames.new()
+	frames.remove_animation(&"default")
+	for anim: StringName in [&"entrada", &"idle"]:
+		var tex: Texture2D = load("%s%s_%s.png" % [FIRE_DIR, key, anim])
+		var frame_w: int = tex.get_width() / FIRE_FRAME_COUNT
+		frames.add_animation(anim)
+		frames.set_animation_loop(anim, anim == &"idle")
+		frames.set_animation_speed(anim, cfg.fire_fps)
+		for f in FIRE_FRAME_COUNT:
+			var atlas := AtlasTexture.new()
+			atlas.atlas = tex
+			atlas.region = Rect2(f * frame_w, 0, frame_w, tex.get_height())
+			frames.add_frame(anim, atlas)
+	_fire_frames_cache[key] = frames
+	return frames
+
+
+# La plataforma entró en pantalla por primera vez: arranca la animación de entrada.
+func _start_fire() -> void:
+	if _fire_started:
+		return
+	_fire_started = true
+	for sprite in _fire_sprites:
+		sprite.play(&"entrada")
+
+
+# Terminó la entrada de un módulo: pasa al loop de idle desde un cuadro al azar.
+func _on_fire_entry_finished(sprite: AnimatedSprite2D, start_frame: int) -> void:
+	if sprite.animation != &"entrada":
+		return
+	sprite.play(&"idle")
+	sprite.set_frame_and_progress(start_frame, 0.0)

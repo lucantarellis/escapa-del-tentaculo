@@ -1,0 +1,44 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="1_platform"]
+
+[node name="FirePlatformTest" type="Node2D"]
+
+[node name="Fondo" type="ColorRect" parent="."]
+offset_right = 360.0
+offset_bottom = 640.0
+color = Color(0.0196, 0.0235, 0.0353, 1)
+
+[node name="Fuego50" parent="." instance=ExtResource("1_platform")]
+position = Vector2(60, 100)
+platform_type = 4
+fire_skin = true
+size = Vector2(50, 14)
+
+[node name="Fuego100" parent="." instance=ExtResource("1_platform")]
+position = Vector2(180, 200)
+platform_type = 4
+fire_skin = true
+size = Vector2(100, 14)
+
+[node name="Fuego200" parent="." instance=ExtResource("1_platform")]
+position = Vector2(180, 300)
+platform_type = 4
+fire_skin = true
+size = Vector2(200, 14)
+
+[node name="FuegoMovil" parent="." instance=ExtResource("1_platform")]
+position = Vector2(90, 400)
+platform_type = 4
+fire_skin = true
+size = Vector2(75, 14)
+moves = true
+travel = Vector2(120, 0)
+
+[node name="LetalSinFuego" parent="." instance=ExtResource("1_platform")]
+position = Vector2(180, 500)
+platform_type = 4
+size = Vector2(100, 14)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(180, 320)

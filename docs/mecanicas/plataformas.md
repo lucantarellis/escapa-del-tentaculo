@@ -40,6 +40,18 @@ Detalle completo de `PROJECTILE` en `docs/mecanicas/plataforma-proyectil.md`.
 - **Diseño de nivel vs. tuning**: `size`, `platform_type`, `moves`, `travel` y `cause` son diseño de nivel (por instancia). Los tiempos (`break_delay`, `respawn_time`, `timed_on_duration`, `timed_off_duration`, `timed_start_on`, `one_way_margin`, `moving_*`, `pulse_*`) son tuning y viven en `PlatformConfig` (`resources/configs/platform_config.tres`). Para que una instancia tenga tiempos propios, duplicar el `.tres` o hacerlo único en el inspector.
 - **`@tool`**: en el editor se ve el color según el tipo/fase, el nombre del tipo arriba del bloque, y si `moves` es true, la trayectoria dibujada en rojo.
 
+## Piel de fuego (`fire_skin`)
+
+Una plataforma `LETHAL` puede dibujarse con fuego animado en vez del bloque de color: se activa con `fire_skin = true` en la instancia (grupo "Fuego"). Es solo visual: la colisión, el área letal, `cause` y el daño son los de siempre (un golpe común: resta una vida si hay vidas de más, si no mata). Las llamas no hacen daño.
+
+- **Módulos:** el bloque se arma con módulos de 25 px de ancho y 14 px de alto (`FIRE_MODULE_WIDTH` / `FIRE_MODULE_HEIGHT`). Con `fire_skin` activo `size` se ajusta solo al múltiplo más cercano (mínimo 2 módulos: tapa izquierda + tapa derecha, 50 px). Con otro tipo, o con `fire_skin` apagado, `size` no se toca.
+- **Un `AnimatedSprite2D` por módulo** (hijo `FireSkin`). Cada uno trae el cuerpo agrietado con el fuego alrededor. Las tiras están en `assets/sprites/environment/fire_platform/` (`izq`, `der`, `centro_a`, `centro_b`, variantes `v1..v3`; animaciones `entrada` e `idle`, 4 cuadros cada una, 14 px de margen transparente alrededor).
+- **Sin sincronía:** cada módulo elige variante, velocidad (`fire_speed_min`..`fire_speed_max`) y cuadro inicial del loop al azar (semilla por nombre y posición, así es estable).
+- **Entrada:** `entrada` se reproduce una vez, la primera vez que la plataforma entra en pantalla (`VisibleOnScreenNotifier2D`); después queda en `idle`. En el editor se ve un cuadro de `idle`.
+- **Movimiento:** si `moves` es true, el fuego se mueve con el bloque (es hijo).
+- **Tuning** (`PlatformConfig`, grupo "Fuego (fire_skin)"): `fire_fps` (8), `fire_speed_min` (0,8), `fire_speed_max` (1,2).
+- **Prueba:** `scenes/platforms/FirePlatformTest.tscn` (F6): fuegos de 50, 100 y 200 px, uno móvil y una letal sin fuego como comparación.
+
 ## Color por tier
 
 `Platform.set_tint(color)` reemplaza el color del tipo (no el de PULSE, que comunica su fase). Lo usa `LevelBuilder` con `platform_tint` / `hazard_tint` de cada tier para que, por ejemplo, en el espacio las plataformas sean restos metálicos grises y lo letal se vea naranja, sin duplicar escenas.
