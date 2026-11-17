@@ -92,13 +92,13 @@ const FIRE_DIR: String = "res://assets/sprites/environment/fire_platform/"
 ## Ancho y alto de un módulo del cuerpo de la plataforma de fuego. Estructural. Unidad: px.
 const FIRE_MODULE_WIDTH: float = 25.0
 const FIRE_MODULE_HEIGHT: float = 14.0
-## Cantidad mínima de módulos (tapa izquierda + tapa derecha). Estructural.
+## Cantidad mínima y máxima de módulos con imagen de fuego dibujada (2 a 10 = 50 a 250 px). Estructural.
 const FIRE_MIN_MODULES: int = 2
+const FIRE_MAX_MODULES: int = 10
 ## Cuadros de cada tira de animación. Estructural.
 const FIRE_FRAME_COUNT: int = 4
-## Variantes dibujadas: tapas (izq/der) y centros (centro_a/centro_b). Estructural.
-const FIRE_CAP_VARIANTS: int = 2
-const FIRE_CENTER_VARIANTS: int = 3
+## Variantes de fuego dibujadas por cada ancho. Estructural.
+const FIRE_VARIANTS: int = 3
 ## Margen extra que ocupa el fuego alrededor del bloque, para el aviso de pantalla. Estructural. Unidad: px.
 const FIRE_PADDING: float = 14.0
 ## Textura (tira) y SpriteFrames ya armados por nombre de módulo, compartidos entre instancias.
@@ -808,17 +808,18 @@ func _fire_active() -> bool:
 	return fire_skin and platform_type == PlatformType.LETHAL
 
 
-# Con `fire_skin` el tamaño se ajusta a módulos enteros (mínimo FIRE_MIN_MODULES) y alto fijo.
+# Con `fire_skin` el tamaño se ajusta a módulos enteros (entre FIRE_MIN_MODULES y FIRE_MAX_MODULES) y alto fijo.
 # Con tipo distinto de LETHAL no se toca, así cambiar el tipo en el editor no deforma el bloque.
 func _snap_fire_size(value: Vector2) -> Vector2:
 	if not _fire_active():
 		return value
-	var modules: int = maxi(FIRE_MIN_MODULES, roundi(value.x / FIRE_MODULE_WIDTH))
+	var modules: int = clampi(roundi(value.x / FIRE_MODULE_WIDTH), FIRE_MIN_MODULES, FIRE_MAX_MODULES)
 	return Vector2(modules * FIRE_MODULE_WIDTH, FIRE_MODULE_HEIGHT)
 
 
-# Arma (o desarma) los sprites de fuego. Un `AnimatedSprite2D` por módulo, con variante, cuadro
-# inicial y velocidad propios para que no se muevan al unísono.
+# Arma (o desarma) el sprite de fuego: un solo `AnimatedSprite2D` con la imagen del ancho justo,
+# de una variante al azar, con velocidad y cuadro inicial propios para no moverse al unísono
+# con otras plataformas.
 func _rebuild_fire_skin() -> void:
 	if not is_node_ready():
 		return
@@ -842,45 +843,27 @@ func _rebuild_fire_skin() -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = hash([String(name), position])
 	var cfg: PlatformConfig = config if config != null else PlatformConfig.new()
-	var last_center: String = ""
-	for i in modules:
-		var module_name: String
-		var variant: int
-		if i == 0:
-			module_name = "izq"
-			variant = rng.randi_range(1, FIRE_CAP_VARIANTS)
-		elif i == modules - 1:
-			module_name = "der"
-			variant = rng.randi_range(1, FIRE_CAP_VARIANTS)
-		else:
-			module_name = "centro_a" if rng.randi() % 2 == 0 else "centro_b"
-			variant = rng.randi_range(1, FIRE_CENTER_VARIANTS)
-		var key: String = "%s_v%d" % [module_name, variant]
-		if key == last_center:
-			variant = variant % FIRE_CENTER_VARIANTS + 1 if i > 0 and i < modules - 1 else variant
-			key = "%s_v%d" % [module_name, variant]
-		last_center = key
-		var sprite := AnimatedSprite2D.new()
-		sprite.sprite_frames = _get_fire_frames(key)
-		sprite.position = Vector2(-size.x * 0.5 + (i + 0.5) * FIRE_MODULE_WIDTH, 0.0)
-		sprite.speed_scale = rng.randf_range(cfg.fire_speed_min, cfg.fire_speed_max)
-		sprite.animation = &"entrada"
-		sprite.frame = 0
-		_fire_root.add_child(sprite)
-		sprite.animation_finished.connect(_on_fire_entry_finished.bind(sprite, rng.randi() % FIRE_FRAME_COUNT))
-		_fire_sprites.append(sprite)
+	var key: String = "plataforma_%dm_v%d" % [modules, rng.randi_range(1, FIRE_VARIANTS)]
+	var sprite := AnimatedSprite2D.new()
+	sprite.sprite_frames = _get_fire_frames(key)
+	sprite.speed_scale = rng.randf_range(cfg.fire_speed_min, cfg.fire_speed_max)
+	sprite.animation = &"entrada"
+	sprite.frame = 0
+	_fire_root.add_child(sprite)
+	sprite.animation_finished.connect(_on_fire_entry_finished.bind(sprite, rng.randi() % FIRE_FRAME_COUNT))
+	_fire_sprites.append(sprite)
 	var notifier := VisibleOnScreenNotifier2D.new()
 	notifier.rect = Rect2(-size * 0.5 - Vector2.ONE * FIRE_PADDING, size + Vector2.ONE * FIRE_PADDING * 2.0)
 	_fire_root.add_child(notifier)
 	if Engine.is_editor_hint():
-		for sprite in _fire_sprites:
-			sprite.animation = &"idle"
-			sprite.frame = 1
+		for editor_sprite in _fire_sprites:
+			editor_sprite.animation = &"idle"
+			editor_sprite.frame = 1
 		return
 	notifier.screen_entered.connect(_start_fire)
 
 
-# Devuelve el SpriteFrames (entrada + idle) de una variante de módulo, armado desde las tiras PNG.
+# Devuelve el SpriteFrames (entrada + idle) de una variante de plataforma, armado desde las tiras PNG.
 func _get_fire_frames(key: String) -> SpriteFrames:
 	if _fire_frames_cache.has(key):
 		return _fire_frames_cache[key]

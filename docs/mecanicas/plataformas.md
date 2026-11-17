@@ -44,9 +44,9 @@ Detalle completo de `PROJECTILE` en `docs/mecanicas/plataforma-proyectil.md`.
 
 Una plataforma `LETHAL` puede dibujarse con fuego animado en vez del bloque de color: se activa con `fire_skin = true` en la instancia (grupo "Fuego"). Es solo visual: la colisión, el área letal, `cause` y el daño son los de siempre (un golpe común: resta una vida si hay vidas de más, si no mata). Las llamas no hacen daño.
 
-- **Módulos:** el bloque se arma con módulos de 25 px de ancho y 14 px de alto (`FIRE_MODULE_WIDTH` / `FIRE_MODULE_HEIGHT`). Con `fire_skin` activo `size` se ajusta solo al múltiplo más cercano (mínimo 2 módulos: tapa izquierda + tapa derecha, 50 px). Con otro tipo, o con `fire_skin` apagado, `size` no se toca.
-- **Un `AnimatedSprite2D` por módulo** (hijo `FireSkin`). Cada uno trae el cuerpo agrietado con el fuego alrededor. Las tiras están en `assets/sprites/environment/fire_platform/` (`izq`, `der`, `centro_a`, `centro_b`, variantes `v1..v3`; animaciones `entrada` e `idle`, 4 cuadros cada una, 14 px de margen transparente alrededor).
-- **Sin sincronía:** cada módulo elige variante, velocidad (`fire_speed_min`..`fire_speed_max`) y cuadro inicial del loop al azar (semilla por nombre y posición, así es estable).
+- **Módulos y ancho:** el bloque se mide en módulos de 25 px de ancho y 14 px de alto (`FIRE_MODULE_WIDTH` / `FIRE_MODULE_HEIGHT`). Con `fire_skin` activo `size` se ajusta solo al múltiplo más cercano, entre 2 y 10 módulos (50 a 250 px, `FIRE_MIN_MODULES` / `FIRE_MAX_MODULES`). Con otro tipo, o con `fire_skin` apagado, `size` no se toca.
+- **Un solo `AnimatedSprite2D` por plataforma** (hijo `FireSkin`). La imagen ya trae el cuerpo agrietado de la plataforma completa con el fuego alrededor, dibujado de una vez, así que no hay costuras entre módulos. Las tiras están en `assets/sprites/environment/fire_platform/` (`plataforma_{n}m_v{1..3}_{idle|entrada}.png`; 4 cuadros cada una, 14 px de margen transparente alrededor).
+- **Variedad:** cada plataforma elige una de las 3 variantes de su ancho, una velocidad (`fire_speed_min`..`fire_speed_max`) y un cuadro inicial del loop al azar (semilla por nombre y posición, así es estable).
 - **Entrada:** `entrada` se reproduce una vez, la primera vez que la plataforma entra en pantalla (`VisibleOnScreenNotifier2D`); después queda en `idle`. En el editor se ve un cuadro de `idle`.
 - **Movimiento:** si `moves` es true, el fuego se mueve con el bloque (es hijo).
 - **Tuning** (`PlatformConfig`, grupo "Fuego (fire_skin)"): `fire_fps` (8), `fire_speed_min` (0,8), `fire_speed_max` (1,2).
