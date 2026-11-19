@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="2_13t3b"]
 [ext_resource type="Script" uid="uid://cphk3uui2un6l" path="res://scripts/platforms/platform_config.gd" id="3_13t3b"]
 [ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="3_w40ed"]
-[ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
+[ext_resource type="PackedScene" path="res://scenes/levels/WallsShip.tscn" id="walls"]
 
 [sub_resource type="Resource" id="Resource_vbomv"]
 script = ExtResource("3_13t3b")
@@ -99,3 +99,5 @@ platform_type = 0
 
 [node name="UpFuelTank" parent="." instance=ExtResource("3_w40ed")]
 position = Vector2(180, -454)
+
+[editable path="Walls"]

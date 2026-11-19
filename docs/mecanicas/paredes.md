@@ -14,6 +14,8 @@ Pintar a mano, celda por celda, las partes del mapa que son pared, sin tener que
 - Se dibujan **detrás** del resto (`z_index = -1`).
 - `LevelSegment` avisa en el editor (icono de advertencia) si alguna celda pintada queda fuera del rectángulo del segmento (x 0..360, y −height..0).
 
+> **Segmentos de la nave:** usan `scenes/levels/WallsShip.tscn` (tileset `walls_tileset_ship.tres`, terreno `pared_nave`, capas `Detalle`/`Dano` y capas emisivas). Ver `docs/arte/paredes-nave.md`. Lo de abajo describe el tileset placeholder que siguen usando el espacio, el alien y el final.
+
 ## Tiles disponibles
 
 | Tile | Atlas | Alternativa | Forma | Uso |

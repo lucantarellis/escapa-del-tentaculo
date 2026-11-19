@@ -1,0 +1,35 @@
+[gd_scene format=3]
+
+[ext_resource type="TileSet" path="res://resources/tilesets/walls_tileset_ship.tres" id="1_walls"]
+[ext_resource type="TileSet" path="res://resources/tilesets/walls_tileset_ship_emissive.tres" id="2_walls_em"]
+[ext_resource type="TileSet" path="res://resources/tilesets/ship_walls_overlay.tres" id="3_overlay"]
+[ext_resource type="TileSet" path="res://resources/tilesets/ship_walls_overlay_emissive.tres" id="4_overlay_em"]
+[ext_resource type="Script" path="res://scripts/levels/emissive_mirror.gd" id="5_mirror"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_unshaded"]
+light_mode = 1
+
+[node name="Walls" type="TileMapLayer"]
+z_index = -1
+tile_set = ExtResource("1_walls")
+
+[node name="Emissive" type="TileMapLayer" parent="."]
+material = SubResource("CanvasItemMaterial_unshaded")
+tile_set = ExtResource("2_walls_em")
+script = ExtResource("5_mirror")
+
+[node name="Detalle" type="TileMapLayer" parent="."]
+tile_set = ExtResource("3_overlay")
+
+[node name="Emissive" type="TileMapLayer" parent="Detalle"]
+material = SubResource("CanvasItemMaterial_unshaded")
+tile_set = ExtResource("4_overlay_em")
+script = ExtResource("5_mirror")
+
+[node name="Dano" type="TileMapLayer" parent="."]
+tile_set = ExtResource("3_overlay")
+
+[node name="Emissive" type="TileMapLayer" parent="Dano"]
+material = SubResource("CanvasItemMaterial_unshaded")
+tile_set = ExtResource("4_overlay_em")
+script = ExtResource("5_mirror")

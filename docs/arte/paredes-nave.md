@@ -27,13 +27,28 @@ Arte cerrado el 18/11/2026. Editables en `assets/aseprite/environment/ship_walls
 
 Las texturas de los atlas son `CanvasTexture` (color + relieve), así que las luces 2D ya usan el relieve. Los tiles animados arrancan en un frame al azar.
 
+### Cómo está armado en el juego
+
+Los segmentos de la nave (`segments/ship/` y `segments/start/`) usan `scenes/levels/WallsShip.tscn` en lugar de `Walls.tscn`. Es un `TileMapLayer` llamado `Walls` (tileset `walls_tileset_ship.tres`, con colisión) con estos hijos:
+
+| Nodo | Tileset | Para qué |
+|---|---|---|
+| `Emissive` | `walls_tileset_ship_emissive.tres` | Solo luz de la pared. Se llena solo; no pintar. |
+| `Detalle` | `ship_walls_overlay.tres` | Parches y cañerías (sin colisión). |
+| `Detalle/Emissive` | `ship_walls_overlay_emissive.tres` | Solo luz del detalle. No pintar. |
+| `Dano` | `ship_walls_overlay.tres` | Roturas, grietas y bilis (sin colisión). |
+| `Dano/Emissive` | `ship_walls_overlay_emissive.tres` | Solo luz del daño. No pintar. |
+
+Las capas `Emissive` (script `scripts/levels/emissive_mirror.gd`) copian las celdas de la capa que tienen arriba y las dibujan con material sin sombreado. Las celdas copiadas no se guardan en la escena. Cada segmento migrado tiene `Walls` con "Editable Children" activado, así que `Detalle` y `Dano` se ven en el árbol.
+
+`LevelBuilder` no cambia nada: el tier de la nave no define `walls_tileset`, y los tiers de espacio y alien siguen usando `Walls.tscn`.
+
 ### Cómo pintar un segmento a mano
 
-1. En el `TileMapLayer` de paredes del segmento, cambiar el `tile_set` a `walls_tileset_ship.tres` (o crear una capa nueva con ese tileset y borrar la vieja).
-2. Pestaña **Terrains** → conjunto 0 → `pared_nave` → pintar con el pincel o el rectángulo. Godot elige bordes, esquinas y variantes solo. Volver a pintar encima re-sortea las variantes.
-3. **Diagonales:** no salen solas (probabilidad casi 0, porque comparten vecinos con las esquinas). Ponerlas a mano desde la pestaña **Tiles**, fuente 0, columnas 47–50 (◣ ◢ ◤ ◥), fila 0 o 1. Tienen colisión triangular.
-4. Agregar dos `TileMapLayer` encima de la pared con `ship_walls_overlay.tres`: `Detalle` (parche, cañería) y `Dano` (rotura, grieta, bilis). Pintar con **Terrains** eligiendo el conjunto. Pintar varias celdas juntas arma un agujero, mancha o caño continuo. Usar solo celdas que estén dentro de la pared, no en el borde.
-5. Las alarmas, chispas, rejillas y paneles animados salen solos al pintar la pared (baja probabilidad). Para poner uno en un lugar puntual, pintarlo desde **Tiles**, fuente 1.
+1. Abrir el segmento. Seleccionar `Walls` y pintar la pared en la pestaña **Terrains** (conjunto 0, `pared_nave`) con el pincel o el rectángulo. Godot elige bordes, esquinas y variantes solo. Volver a pintar encima re-sortea las variantes.
+2. **Diagonales:** no salen solas (probabilidad casi 0, porque comparten vecinos con las esquinas). Ponerlas a mano desde la pestaña **Tiles**, fuente 0, columnas 47–50 (◣ ◢ ◤ ◥), fila 0 o 1. Tienen colisión triangular.
+3. **Daño y detalle:** seleccionar `Walls/Dano` o `Walls/Detalle` en el árbol (si no se ven, clic derecho en `Walls` → **Editable Children**). En el panel de TileMap, pestaña **Terrains**, elegir el conjunto (0 `rotura`, 1 `grieta`, 2 `bilis`, 3 `parche`, 4 `caneria`) y pintar. Pintar varias celdas juntas arma un agujero, mancha o caño continuo. Usar solo celdas que estén dentro de la pared, no en el borde. No pintar en los nodos `Emissive`.
+4. Las alarmas, chispas, rejillas y paneles animados salen solos al pintar la pared (baja probabilidad). Para poner uno en un lugar puntual, pintarlo desde **Tiles**, fuente 1.
 
 Los `.tres` se generan desde `ship_walls_layout.json` con un script de Godot que quedó fuera del repo; si cambia el arte, se regeneran desde el chat de arte.
 
