@@ -1,0 +1,159 @@
+{ "frames": [
+   {
+    "filename": "pickup_wrench (color) 0.aseprite",
+    "frame": { "x": 0, "y": 0, "w": 44, "h": 44 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 44, "h": 44 },
+    "sourceSize": { "w": 44, "h": 44 },
+    "duration": 120
+   },
+   {
+    "filename": "pickup_wrench (color) 1.aseprite",
+    "frame": { "x": 0, "y": 44, "w": 44, "h": 44 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 44, "h": 44 },
+    "sourceSize": { "w": 44, "h": 44 },
+    "duration": 120
+   },
+   {
+    "filename": "pickup_wrench (color) 2.aseprite",
+    "frame": { "x": 0, "y": 88, "w": 44, "h": 44 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 44, "h": 44 },
+    "sourceSize": { "w": 44, "h": 44 },
+    "duration": 120
+   },
+   {
+    "filename": "pickup_wrench (color) 3.aseprite",
+    "frame": { "x": 0, "y": 132, "w": 44, "h": 44 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 44, "h": 44 },
+    "sourceSize": { "w": 44, "h": 44 },
+    "duration": 120
+   },
+   {
+    "filename": "pickup_wrench (color) 4.aseprite",
+    "frame": { "x": 0, "y": 176, "w": 44, "h": 44 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 44, "h": 44 },
+    "sourceSize": { "w": 44, "h": 44 },
+    "duration": 120
+   },
+   {
+    "filename": "pickup_wrench (color) 5.aseprite",
+    "frame": { "x": 0, "y": 220, "w": 44, "h": 44 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 44, "h": 44 },
+    "sourceSize": { "w": 44, "h": 44 },
+    "duration": 120
+   },
+   {
+    "filename": "pickup_wrench (color) 6.aseprite",
+    "frame": { "x": 0, "y": 264, "w": 44, "h": 44 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 44, "h": 44 },
+    "sourceSize": { "w": 44, "h": 44 },
+    "duration": 120
+   },
+   {
+    "filename": "pickup_wrench (color) 7.aseprite",
+    "frame": { "x": 0, "y": 308, "w": 44, "h": 44 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 44, "h": 44 },
+    "sourceSize": { "w": 44, "h": 44 },
+    "duration": 120
+   },
+   {
+    "filename": "pickup_wrench (color) 8.aseprite",
+    "frame": { "x": 0, "y": 352, "w": 44, "h": 44 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 44, "h": 44 },
+    "sourceSize": { "w": 44, "h": 44 },
+    "duration": 50
+   },
+   {
+    "filename": "pickup_wrench (color) 9.aseprite",
+    "frame": { "x": 0, "y": 396, "w": 44, "h": 44 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 44, "h": 44 },
+    "sourceSize": { "w": 44, "h": 44 },
+    "duration": 50
+   },
+   {
+    "filename": "pickup_wrench (color) 10.aseprite",
+    "frame": { "x": 0, "y": 440, "w": 44, "h": 44 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 44, "h": 44 },
+    "sourceSize": { "w": 44, "h": 44 },
+    "duration": 50
+   },
+   {
+    "filename": "pickup_wrench (color) 11.aseprite",
+    "frame": { "x": 0, "y": 484, "w": 44, "h": 44 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 44, "h": 44 },
+    "sourceSize": { "w": 44, "h": 44 },
+    "duration": 50
+   },
+   {
+    "filename": "pickup_wrench (color) 12.aseprite",
+    "frame": { "x": 0, "y": 528, "w": 44, "h": 44 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 44, "h": 44 },
+    "sourceSize": { "w": 44, "h": 44 },
+    "duration": 50
+   },
+   {
+    "filename": "pickup_wrench (color) 13.aseprite",
+    "frame": { "x": 0, "y": 572, "w": 44, "h": 44 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 44, "h": 44 },
+    "sourceSize": { "w": 44, "h": 44 },
+    "duration": 50
+   },
+   {
+    "filename": "pickup_wrench (color) 14.aseprite",
+    "frame": { "x": 0, "y": 616, "w": 44, "h": 44 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 44, "h": 44 },
+    "sourceSize": { "w": 44, "h": 44 },
+    "duration": 50
+   },
+   {
+    "filename": "pickup_wrench (color) 15.aseprite",
+    "frame": { "x": 0, "y": 660, "w": 44, "h": 44 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 44, "h": 44 },
+    "sourceSize": { "w": 44, "h": 44 },
+    "duration": 50
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.3.18.6-x64",
+  "image": "pickup_wrench.png",
+  "format": "RGBA8888",
+  "size": { "w": 44, "h": 704 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "idle", "from": 0, "to": 7, "direction": "forward", "color": "#000000ff" },
+   { "name": "collect", "from": 8, "to": 15, "direction": "forward", "color": "#000000ff" }
+  ]
+ }
+}

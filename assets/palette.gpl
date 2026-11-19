@@ -1,0 +1,56 @@
+GIMP Palette
+Name: Rise or Die
+Columns: 8
+#
+  5   6   9	negro
+200 231 234	blanco_azulado
+231 239 242	brillo
+ 14  22  50	acero_1
+ 28  39  59	acero_2
+ 35  46  82	acero_3
+ 50  67 112	acero_4
+ 74 100 141	acero_5
+102 137 183	acero_6
+144 174 211	acero_7
+ 54  71  97	gris_1
+ 87 115 132	gris_2
+176 187 206	gris_3
+ 58 155 191	cian_1
+ 99 214 197	cian_2
+137 217 235	cian_3
+ 17  15  53	alien_1
+ 25  17  70	alien_2
+ 41  28  95	alien_3
+ 58  39 121	alien_4
+ 83  60 154	alien_5
+126  87 174	alien_6
+167 129 205	alien_7
+203 170 222	alien_8
+180  97 119	alien_brillo
+ 37  22  42	piedra_1
+ 54  32  65	piedra_2
+ 69  42  86	piedra_3
+105  67 126	piedra_4
+117  77 139	piedra_5
+132  90 155	piedra_6
+154 106 178	piedra_7
+252 213  29	amarillo
+248 184  66	ambar
+252  99  13	naranja
+246  42  25	rojo_vivo
+205  20  23	rojo
+162  70  33	ladrillo
+142  62  40	oxido
+113  55  60	vino
+ 72  21  28	vino_oscuro
+ 16  17  52	tentaculo_1
+ 26  24  66	tentaculo_2
+ 39  34  91	tentaculo_3
+ 55  48 118	tentaculo_4
+ 80  73 150	tentaculo_5
+145 132 198	tentaculo_6
+181 186 226	tentaculo_7
+ 46  74  20	pus_1
+ 92 138  28	pus_2
+157 196  43	pus_3
+214 232 106	pus_4

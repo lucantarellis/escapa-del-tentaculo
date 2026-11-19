@@ -1,0 +1,12914 @@
+{
+ "tile_size": 12,
+ "normal_convention": "OpenGL (Y+ arriba)",
+ "sets": {
+  "walls_ship": {
+   "atlas": "walls_ship.png",
+   "mode": "match_corners_and_sides",
+   "tiles": [
+    {
+     "x": 0,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 0,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 0,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 0,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 0,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 0,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 0,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 0,
+     "y": 9,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "hazard",
+     "probability": 0.3
+    },
+    {
+     "x": 1,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 1,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 1,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 1,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 1,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 1,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 1,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 1,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 1,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 1,
+     "y": 9,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "hazard",
+     "probability": 0.3
+    },
+    {
+     "x": 2,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 2,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 2,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 2,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 2,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 2,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 2,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 2,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 2,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 2,
+     "y": 9,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "hazard",
+     "probability": 0.3
+    },
+    {
+     "x": 3,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 3,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 3,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 3,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 3,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 3,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 3,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 3,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 3,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 3,
+     "y": 9,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "hazard",
+     "probability": 0.3
+    },
+    {
+     "x": 4,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 4,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 4,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 4,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 4,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 4,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 4,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 4,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 4,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 4,
+     "y": 9,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "hazard",
+     "probability": 0.3
+    },
+    {
+     "x": 5,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 5,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 5,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 5,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 5,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 5,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 5,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 5,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 5,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 5,
+     "y": 9,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "hazard",
+     "probability": 0.3
+    },
+    {
+     "x": 6,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 6,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 6,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 6,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 6,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 6,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 6,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 6,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 6,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 6,
+     "y": 9,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "hazard",
+     "probability": 0.3
+    },
+    {
+     "x": 7,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 7,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 7,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 7,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 7,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 7,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 7,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 7,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 7,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 7,
+     "y": 9,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "hazard",
+     "probability": 0.3
+    },
+    {
+     "x": 8,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 8,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 8,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 8,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 8,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 8,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 8,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 8,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 8,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 8,
+     "y": 9,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "hazard",
+     "probability": 0.3
+    },
+    {
+     "x": 9,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 9,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 9,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 9,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 9,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 9,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 9,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 9,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 9,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 9,
+     "y": 9,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "hazard",
+     "probability": 0.3
+    },
+    {
+     "x": 10,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 10,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 10,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 10,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 10,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 10,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 10,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 10,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 10,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 10,
+     "y": 9,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "hazard",
+     "probability": 0.3
+    },
+    {
+     "x": 11,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 11,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 11,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 11,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 11,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 11,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 11,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 11,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 11,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 11,
+     "y": 9,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "hazard",
+     "probability": 0.3
+    },
+    {
+     "x": 12,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 12,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 12,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 12,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 12,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 12,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 12,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 12,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 12,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 12,
+     "y": 9,
+     "shape": "full",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "hazard",
+     "probability": 0.3
+    },
+    {
+     "x": 13,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 13,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 13,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 13,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 13,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 13,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 13,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 13,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 13,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 14,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 14,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 14,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 14,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 14,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 14,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 14,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 14,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 14,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 15,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 15,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 15,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 15,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 15,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 15,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 15,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 15,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 15,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 16,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 16,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 16,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 16,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 16,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 16,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 16,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 16,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 16,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 17,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 17,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 17,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 17,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 17,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 17,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 17,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 17,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 17,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 18,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 18,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 18,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 18,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 18,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 18,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 18,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 18,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 18,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 19,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 19,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 19,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 19,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 19,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 19,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 19,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 19,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 19,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 20,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 20,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 20,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 20,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 20,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 20,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 20,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 20,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 20,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 21,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 21,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 21,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 21,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 21,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 21,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 21,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 21,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 21,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 22,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 22,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 22,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 22,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 22,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 22,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 22,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 22,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 22,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 23,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 23,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 23,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 23,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 23,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 23,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 23,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 23,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 23,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 24,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 24,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 24,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 24,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 24,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 24,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 24,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 24,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 24,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 25,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 25,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 25,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 25,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 25,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 25,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 25,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 25,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 25,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 26,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 26,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 26,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 26,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 26,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 26,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 26,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 26,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 26,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 27,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 27,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 27,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 27,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 27,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 27,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 27,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 27,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 27,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 28,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 28,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 28,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 28,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 28,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 28,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 28,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 28,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 28,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 29,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 29,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 29,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 29,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 29,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 29,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 29,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 29,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 29,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 30,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 30,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 30,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 30,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 30,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 30,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 30,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 30,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 30,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 31,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 31,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 31,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 31,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 31,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 31,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 31,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 31,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 31,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 32,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 32,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 32,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 32,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 32,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 32,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 32,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 32,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 32,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 33,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 33,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 33,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 33,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 33,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 33,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 33,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 33,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 33,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 34,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 34,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 34,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 34,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 34,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 34,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 34,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 34,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 34,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 35,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 35,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 35,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 35,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 35,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 35,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 35,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 35,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 35,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 36,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 36,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 36,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 36,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 36,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 36,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 36,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 36,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 36,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 37,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 37,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 37,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 37,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 37,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 37,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 37,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 37,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 37,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 38,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 38,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 38,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 38,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 38,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 38,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 38,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 38,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 38,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 39,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 39,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 39,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 39,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 39,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 39,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 39,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 39,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 39,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 40,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 40,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 40,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 40,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 40,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 40,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 40,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 40,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 40,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 41,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 41,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 41,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 41,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 41,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 41,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 41,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 41,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 41,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 42,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 42,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 42,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 42,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 42,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 42,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 42,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 42,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 42,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 43,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 43,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 43,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 43,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 43,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 43,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 43,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 43,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 43,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 44,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 44,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 44,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 44,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 44,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 44,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 44,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 44,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 44,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 45,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 45,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 45,
+     "y": 2,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped",
+     "probability": 0.45
+    },
+    {
+     "x": 45,
+     "y": 3,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "chipped_vseam",
+     "probability": 0.45
+    },
+    {
+     "x": 45,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 45,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 45,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 45,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 45,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 46,
+     "y": 0,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 46,
+     "y": 1,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 46,
+     "y": 4,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "rivets",
+     "probability": 0.25
+    },
+    {
+     "x": 46,
+     "y": 5,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack",
+     "probability": 0.04
+    },
+    {
+     "x": 46,
+     "y": 6,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "crack_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 46,
+     "y": 7,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "dent",
+     "probability": 0.15
+    },
+    {
+     "x": 46,
+     "y": 8,
+     "shape": "full",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "vent_vseam",
+     "probability": 0.04
+    },
+    {
+     "x": 47,
+     "y": 0,
+     "shape": "dl",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 47,
+     "y": 1,
+     "shape": "dl",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 48,
+     "y": 0,
+     "shape": "dr",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 48,
+     "y": 1,
+     "shape": "dr",
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 49,
+     "y": 0,
+     "shape": "ul",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 49,
+     "y": 1,
+     "shape": "ul",
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    },
+    {
+     "x": 50,
+     "y": 0,
+     "shape": "ur",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain",
+     "probability": 1.0
+    },
+    {
+     "x": 50,
+     "y": 1,
+     "shape": "ur",
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "variant": "plain_vseam",
+     "probability": 1.0
+    }
+   ],
+   "note": "Diagonales (shape dl/dr/ul/ur): colisi\u00f3n triangular como el tileset actual; bits = lados s\u00f3lidos (catetos)."
+  },
+  "walls_ship_anim": {
+   "atlas": "walls_ship_anim.png",
+   "mode": "mismo terreno que walls_ship (tiles animados de baja probabilidad)",
+   "tiles": [
+    {
+     "x": 0,
+     "y": 0,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "vent_anim",
+     "probability": 0.015
+    },
+    {
+     "x": 0,
+     "y": 1,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "panel_anim",
+     "probability": 0.015
+    },
+    {
+     "x": 0,
+     "y": 2,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "lamp",
+     "probability": 0.06
+    },
+    {
+     "x": 0,
+     "y": 3,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "variant": "lamp_broken",
+     "probability": 0.06
+    },
+    {
+     "x": 0,
+     "y": 4,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "lamp",
+     "probability": 0.06
+    },
+    {
+     "x": 0,
+     "y": 5,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "lamp_broken",
+     "probability": 0.06
+    },
+    {
+     "x": 0,
+     "y": 6,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "variant": "spark",
+     "probability": 0.08
+    }
+   ]
+  },
+  "dmg_hole": {
+   "atlas": "dmg_hole.png",
+   "mode": "match_corners_and_sides",
+   "layer": "capa de da\u00f1o sobre la pared, solo en celdas interiores",
+   "tiles": [
+    {
+     "x": 0,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 1,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 1,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 2,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 2,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 3,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 3,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 4,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 4,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 5,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 5,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 6,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 6,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 7,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 7,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 8,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 8,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 9,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 9,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 10,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 10,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 11,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 11,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 12,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 12,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 13,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 13,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 14,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 14,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 15,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 15,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 16,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 16,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 17,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 17,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 18,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 18,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 19,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 19,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 20,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 20,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 21,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 21,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 22,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 22,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 23,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 23,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 24,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 24,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 25,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 25,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 26,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 26,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 27,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 27,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 28,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 28,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 29,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 29,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 30,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 30,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 31,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 31,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 32,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 32,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 33,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 33,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 34,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 34,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 35,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 35,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 36,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 36,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 37,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 37,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 38,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 38,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 39,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 39,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 40,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 40,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 41,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 41,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 42,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 42,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 43,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 43,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 44,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 44,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 45,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 45,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 46,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 46,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    }
+   ]
+  },
+  "dmg_patch": {
+   "atlas": "dmg_patch.png",
+   "mode": "match_corners_and_sides",
+   "layer": "capa de detalle",
+   "tiles": [
+    {
+     "x": 0,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 1,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 1,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 2,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 2,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 3,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 3,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 4,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 4,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 5,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 5,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 6,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 6,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 7,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 7,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 8,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 8,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 9,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 9,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 10,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 10,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 11,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 11,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 12,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 12,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 13,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 13,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 14,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 14,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 15,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 15,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 16,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 16,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 17,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 17,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 18,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 18,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 19,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 19,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 20,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 20,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 21,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 21,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 22,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 22,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 23,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 23,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 24,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 24,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 25,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 25,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 26,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 26,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 27,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 27,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 28,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 28,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 29,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 29,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 30,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 30,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 31,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 31,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 32,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 32,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 33,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 33,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 34,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 34,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 35,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 35,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 36,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 36,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 37,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 37,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 38,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 38,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 39,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 39,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 40,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 40,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 41,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 41,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 42,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 42,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 43,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 43,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 44,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 44,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 45,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 45,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 46,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 46,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    }
+   ]
+  },
+  "dmg_crack": {
+   "atlas": "dmg_crack.png",
+   "mode": "match_sides",
+   "layer": "capa de da\u00f1o",
+   "tiles": [
+    {
+     "x": 0,
+     "y": 0,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "E": 0,
+      "S": 0,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 1,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "E": 0,
+      "S": 0,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 2,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "E": 0,
+      "S": 0,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 3,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "E": 0,
+      "S": 0,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 4,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "E": 0,
+      "S": 1,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 5,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "E": 0,
+      "S": 1,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 6,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "E": 0,
+      "S": 1,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 7,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "E": 0,
+      "S": 1,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 8,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "E": 1,
+      "S": 0,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 9,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "E": 1,
+      "S": 0,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 10,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "E": 1,
+      "S": 0,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 11,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "E": 1,
+      "S": 0,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 12,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "E": 1,
+      "S": 1,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 13,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "E": 1,
+      "S": 1,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 14,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "E": 1,
+      "S": 1,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 15,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "E": 1,
+      "S": 1,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 16,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "E": 0,
+      "S": 0,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 17,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "E": 0,
+      "S": 0,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 18,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "E": 0,
+      "S": 0,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 19,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "E": 0,
+      "S": 0,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 20,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "E": 0,
+      "S": 1,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 21,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "E": 0,
+      "S": 1,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 22,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "E": 0,
+      "S": 1,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 23,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "E": 0,
+      "S": 1,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 24,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "E": 1,
+      "S": 0,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 25,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "E": 1,
+      "S": 0,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 26,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "E": 1,
+      "S": 0,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 27,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "E": 1,
+      "S": 0,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 28,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "E": 1,
+      "S": 1,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 29,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "E": 1,
+      "S": 1,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 30,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "E": 1,
+      "S": 1,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 31,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "E": 1,
+      "S": 1,
+      "W": 1
+     },
+     "probability": 1.0
+    }
+   ]
+  },
+  "dmg_bile": {
+   "atlas": "dmg_bile.png",
+   "mode": "match_corners_and_sides",
+   "layer": "capa de da\u00f1o",
+   "tiles": [
+    {
+     "x": 0,
+     "y": 0,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 1,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 2,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 3,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 4,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 5,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 6,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 7,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 8,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 9,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 10,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 11,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 12,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 13,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 14,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 15,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 16,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 17,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 18,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 19,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 20,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 21,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 22,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 23,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 24,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 25,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 26,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 27,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 28,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 29,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 30,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 31,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 32,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 33,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 34,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 35,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 36,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 37,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 38,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 39,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 40,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 41,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 0,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 42,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 43,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 44,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 45,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 46,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 47,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 48,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 49,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 50,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 51,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 52,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 53,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 54,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 55,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 56,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 57,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 58,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 59,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 60,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 61,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 62,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 63,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 64,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 65,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 66,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 67,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 0,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 68,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 69,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 70,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 71,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 72,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 73,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 0,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 74,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 75,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 76,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 77,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 78,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 79,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 80,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 81,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 82,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 83,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 0,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 84,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 85,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 0,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 86,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 87,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 88,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 89,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 0,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 90,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 91,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 92,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 93,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 1,
+      "NE": 1,
+      "E": 1,
+      "SE": 1,
+      "S": 1,
+      "SW": 1,
+      "W": 1,
+      "NW": 1
+     },
+     "probability": 1.0
+    }
+   ]
+  },
+  "det_pipe": {
+   "atlas": "det_pipe.png",
+   "mode": "match_sides",
+   "layer": "capa de detalle",
+   "tiles": [
+    {
+     "x": 0,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "E": 0,
+      "S": 0,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 0,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "E": 0,
+      "S": 0,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 1,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "E": 0,
+      "S": 0,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 1,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "E": 0,
+      "S": 0,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 2,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "E": 0,
+      "S": 1,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 2,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "E": 0,
+      "S": 1,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 3,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "E": 0,
+      "S": 1,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 3,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "E": 0,
+      "S": 1,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 4,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "E": 1,
+      "S": 0,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 4,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "E": 1,
+      "S": 0,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 5,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "E": 1,
+      "S": 0,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 5,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "E": 1,
+      "S": 0,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 6,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "E": 1,
+      "S": 1,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 6,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "E": 1,
+      "S": 1,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 7,
+     "y": 0,
+     "bits": {
+      "N": 0,
+      "E": 1,
+      "S": 1,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 7,
+     "y": 1,
+     "bits": {
+      "N": 0,
+      "E": 1,
+      "S": 1,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 8,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "E": 0,
+      "S": 0,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 8,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "E": 0,
+      "S": 0,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 9,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "E": 0,
+      "S": 0,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 9,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "E": 0,
+      "S": 0,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 10,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "E": 0,
+      "S": 1,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 10,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "E": 0,
+      "S": 1,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 11,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "E": 0,
+      "S": 1,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 11,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "E": 0,
+      "S": 1,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 12,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "E": 1,
+      "S": 0,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 12,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "E": 1,
+      "S": 0,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 13,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "E": 1,
+      "S": 0,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 13,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "E": 1,
+      "S": 0,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 14,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "E": 1,
+      "S": 1,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 14,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "E": 1,
+      "S": 1,
+      "W": 0
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 15,
+     "y": 0,
+     "bits": {
+      "N": 1,
+      "E": 1,
+      "S": 1,
+      "W": 1
+     },
+     "probability": 1.0
+    },
+    {
+     "x": 15,
+     "y": 1,
+     "bits": {
+      "N": 1,
+      "E": 1,
+      "S": 1,
+      "W": 1
+     },
+     "probability": 1.0
+    }
+   ]
+  },
+  "det_pipe_anim": {
+   "atlas": "det_pipe_anim.png",
+   "mode": "mismo terreno que det_pipe",
+   "tiles": [
+    {
+     "x": 0,
+     "y": 0,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "E": 1,
+      "S": 0,
+      "W": 1
+     },
+     "variant": "fuga",
+     "probability": 0.15
+    },
+    {
+     "x": 0,
+     "y": 1,
+     "frames": 8,
+     "frame_ms": 120,
+     "bits": {
+      "N": 0,
+      "E": 1,
+      "S": 0,
+      "W": 1
+     },
+     "variant": "fuga",
+     "probability": 0.15
+    }
+   ]
+  }
+ }
+}

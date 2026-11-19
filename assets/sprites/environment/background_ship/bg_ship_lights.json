@@ -1,0 +1,152 @@
+{
+ "bg_ship_far_01": {
+  "layer": "far",
+  "lights": []
+ },
+ "bg_ship_far_02": {
+  "layer": "far",
+  "lights": []
+ },
+ "bg_ship_far_03": {
+  "layer": "far",
+  "lights": []
+ },
+ "bg_ship_mid_01": {
+  "layer": "mid",
+  "lights": [
+   {
+    "type": "fire",
+    "x": 272,
+    "y": 178,
+    "kind": "machine"
+   },
+   {
+    "type": "fire",
+    "x": 300,
+    "y": 44,
+    "kind": "pipe"
+   },
+   {
+    "type": "spark",
+    "x": 208,
+    "y": 291
+   },
+   {
+    "type": "beacon",
+    "x": 41,
+    "y": 95,
+    "phase": 0
+   },
+   {
+    "type": "beacon",
+    "x": 311,
+    "y": 173,
+    "phase": 3
+   },
+   {
+    "type": "beacon",
+    "x": 179,
+    "y": 217,
+    "phase": 1
+   }
+  ]
+ },
+ "bg_ship_mid_02": {
+  "layer": "mid",
+  "lights": [
+   {
+    "type": "fire",
+    "x": 96,
+    "y": 188,
+    "kind": "embers"
+   },
+   {
+    "type": "fire",
+    "x": 286,
+    "y": 118,
+    "kind": "ledge"
+   },
+   {
+    "type": "spark",
+    "x": 264,
+    "y": 166
+   },
+   {
+    "type": "beacon",
+    "x": 41,
+    "y": 43,
+    "phase": 5
+   },
+   {
+    "type": "beacon",
+    "x": 311,
+    "y": 253,
+    "phase": 2
+   }
+  ]
+ },
+ "bg_ship_mid_03": {
+  "layer": "mid",
+  "lights": [
+   {
+    "type": "fire",
+    "x": 112,
+    "y": 250,
+    "kind": "pipe"
+   },
+   {
+    "type": "fire",
+    "x": 284,
+    "y": 50,
+    "kind": "machine"
+   },
+   {
+    "type": "spark",
+    "x": 136,
+    "y": 197
+   },
+   {
+    "type": "beacon",
+    "x": 311,
+    "y": 123,
+    "phase": 4
+   },
+   {
+    "type": "beacon",
+    "x": 41,
+    "y": 193,
+    "phase": 6
+   },
+   {
+    "type": "beacon",
+    "x": 179,
+    "y": 101,
+    "phase": 2
+   }
+  ]
+ },
+ "bg_ship_near_01": {
+  "layer": "near",
+  "lights": [
+   {
+    "type": "spark",
+    "x": 322,
+    "y": 243
+   }
+  ]
+ },
+ "bg_ship_near_02": {
+  "layer": "near",
+  "lights": []
+ },
+ "bg_ship_near_03": {
+  "layer": "near",
+  "lights": [
+   {
+    "type": "spark",
+    "x": 36,
+    "y": 278
+   }
+  ]
+ }
+}

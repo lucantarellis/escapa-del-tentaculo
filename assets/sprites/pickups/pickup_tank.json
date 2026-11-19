@@ -1,0 +1,159 @@
+{ "frames": [
+   {
+    "filename": "pickup_tank (color) 0.aseprite",
+    "frame": { "x": 0, "y": 0, "w": 38, "h": 38 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 38, "h": 38 },
+    "sourceSize": { "w": 38, "h": 38 },
+    "duration": 120
+   },
+   {
+    "filename": "pickup_tank (color) 1.aseprite",
+    "frame": { "x": 0, "y": 38, "w": 38, "h": 38 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 38, "h": 38 },
+    "sourceSize": { "w": 38, "h": 38 },
+    "duration": 120
+   },
+   {
+    "filename": "pickup_tank (color) 2.aseprite",
+    "frame": { "x": 0, "y": 76, "w": 38, "h": 38 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 38, "h": 38 },
+    "sourceSize": { "w": 38, "h": 38 },
+    "duration": 120
+   },
+   {
+    "filename": "pickup_tank (color) 3.aseprite",
+    "frame": { "x": 0, "y": 114, "w": 38, "h": 38 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 38, "h": 38 },
+    "sourceSize": { "w": 38, "h": 38 },
+    "duration": 120
+   },
+   {
+    "filename": "pickup_tank (color) 4.aseprite",
+    "frame": { "x": 0, "y": 152, "w": 38, "h": 38 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 38, "h": 38 },
+    "sourceSize": { "w": 38, "h": 38 },
+    "duration": 120
+   },
+   {
+    "filename": "pickup_tank (color) 5.aseprite",
+    "frame": { "x": 0, "y": 190, "w": 38, "h": 38 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 38, "h": 38 },
+    "sourceSize": { "w": 38, "h": 38 },
+    "duration": 120
+   },
+   {
+    "filename": "pickup_tank (color) 6.aseprite",
+    "frame": { "x": 0, "y": 228, "w": 38, "h": 38 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 38, "h": 38 },
+    "sourceSize": { "w": 38, "h": 38 },
+    "duration": 120
+   },
+   {
+    "filename": "pickup_tank (color) 7.aseprite",
+    "frame": { "x": 0, "y": 266, "w": 38, "h": 38 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 38, "h": 38 },
+    "sourceSize": { "w": 38, "h": 38 },
+    "duration": 120
+   },
+   {
+    "filename": "pickup_tank (color) 8.aseprite",
+    "frame": { "x": 0, "y": 304, "w": 38, "h": 38 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 38, "h": 38 },
+    "sourceSize": { "w": 38, "h": 38 },
+    "duration": 50
+   },
+   {
+    "filename": "pickup_tank (color) 9.aseprite",
+    "frame": { "x": 0, "y": 342, "w": 38, "h": 38 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 38, "h": 38 },
+    "sourceSize": { "w": 38, "h": 38 },
+    "duration": 50
+   },
+   {
+    "filename": "pickup_tank (color) 10.aseprite",
+    "frame": { "x": 0, "y": 380, "w": 38, "h": 38 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 38, "h": 38 },
+    "sourceSize": { "w": 38, "h": 38 },
+    "duration": 50
+   },
+   {
+    "filename": "pickup_tank (color) 11.aseprite",
+    "frame": { "x": 0, "y": 418, "w": 38, "h": 38 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 38, "h": 38 },
+    "sourceSize": { "w": 38, "h": 38 },
+    "duration": 50
+   },
+   {
+    "filename": "pickup_tank (color) 12.aseprite",
+    "frame": { "x": 0, "y": 456, "w": 38, "h": 38 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 38, "h": 38 },
+    "sourceSize": { "w": 38, "h": 38 },
+    "duration": 50
+   },
+   {
+    "filename": "pickup_tank (color) 13.aseprite",
+    "frame": { "x": 0, "y": 494, "w": 38, "h": 38 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 38, "h": 38 },
+    "sourceSize": { "w": 38, "h": 38 },
+    "duration": 50
+   },
+   {
+    "filename": "pickup_tank (color) 14.aseprite",
+    "frame": { "x": 0, "y": 532, "w": 38, "h": 38 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 38, "h": 38 },
+    "sourceSize": { "w": 38, "h": 38 },
+    "duration": 50
+   },
+   {
+    "filename": "pickup_tank (color) 15.aseprite",
+    "frame": { "x": 0, "y": 570, "w": 38, "h": 38 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 38, "h": 38 },
+    "sourceSize": { "w": 38, "h": 38 },
+    "duration": 50
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.3.18.6-x64",
+  "image": "pickup_tank.png",
+  "format": "RGBA8888",
+  "size": { "w": 38, "h": 608 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "idle", "from": 0, "to": 7, "direction": "forward", "color": "#000000ff" },
+   { "name": "collect", "from": 8, "to": 15, "direction": "forward", "color": "#000000ff" }
+  ]
+ }
+}

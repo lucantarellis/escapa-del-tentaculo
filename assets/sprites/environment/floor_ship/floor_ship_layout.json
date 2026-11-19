@@ -1,0 +1,18 @@
+{
+ "module_size": [20, 27],
+ "top_face_above_collision": 7,
+ "note": "Modulo i en x = i*20. La linea de colision del piso queda en y = 7 del sprite (el sprite empieza 7 px por encima). Normal OpenGL (Y+ arriba).",
+ "modules": [
+  {"i": 0, "name": "plain_a", "use": "relleno"},
+  {"i": 1, "name": "plain_b", "use": "relleno"},
+  {"i": 2, "name": "rivet", "use": "detalle"},
+  {"i": 3, "name": "joint", "use": "junta entre planchas (cada 3-5 modulos)"},
+  {"i": 4, "name": "vent", "use": "rejilla con rojo tenue (emisivo)"},
+  {"i": 5, "name": "dent", "use": "abolladura"},
+  {"i": 6, "name": "hazard", "use": "a ambos lados de la escotilla"},
+  {"i": 7, "name": "cable", "use": "cano en el frente; poner 2+ seguidos"},
+  {"i": 8, "name": "wall2d", "use": "bloque 2D bajo una pared lateral (solo si hay paredes a los costados)"},
+  {"i": 9, "name": "end_l", "use": "remate: pared 2D a la izquierda, piso 3/4 a la derecha"},
+  {"i": 10, "name": "end_r", "use": "remate: piso 3/4 a la izquierda, pared 2D a la derecha"}
+ ]
+}

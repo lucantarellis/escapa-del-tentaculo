@@ -18,3 +18,12 @@ Thumbs.db
 
 # Obsidian (carpeta temporal de lectura de los .md)
 docs/.obsidian/
+
+# Editables de arte (Aseprite)
+# - assets/aseprite/: finales, versionados; Aseprite Wizard los importa en Godot.
+# - art_src/: borradores y pruebas, solo locales (se versionan solo el README y el .gdignore).
+art_src/*
+!art_src/.gdignore
+!art_src/README.md
+*.aseprite
+!assets/aseprite/**/*.aseprite

@@ -1,0 +1,169 @@
+{ "frames": [
+   {
+    "filename": "Sprite (color) 0.",
+    "frame": { "x": 0, "y": 0, "w": 50, "h": 12 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 12 },
+    "sourceSize": { "w": 50, "h": 12 },
+    "duration": 1000
+   },
+   {
+    "filename": "Sprite (color) 1.",
+    "frame": { "x": 0, "y": 12, "w": 50, "h": 12 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 12 },
+    "sourceSize": { "w": 50, "h": 12 },
+    "duration": 80
+   },
+   {
+    "filename": "Sprite (color) 2.",
+    "frame": { "x": 0, "y": 24, "w": 50, "h": 12 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 12 },
+    "sourceSize": { "w": 50, "h": 12 },
+    "duration": 80
+   },
+   {
+    "filename": "Sprite (color) 3.",
+    "frame": { "x": 0, "y": 36, "w": 50, "h": 12 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 12 },
+    "sourceSize": { "w": 50, "h": 12 },
+    "duration": 80
+   },
+   {
+    "filename": "Sprite (color) 4.",
+    "frame": { "x": 0, "y": 48, "w": 50, "h": 12 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 12 },
+    "sourceSize": { "w": 50, "h": 12 },
+    "duration": 80
+   },
+   {
+    "filename": "Sprite (color) 5.",
+    "frame": { "x": 0, "y": 60, "w": 50, "h": 12 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 12 },
+    "sourceSize": { "w": 50, "h": 12 },
+    "duration": 80
+   },
+   {
+    "filename": "Sprite (color) 6.",
+    "frame": { "x": 0, "y": 72, "w": 50, "h": 12 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 12 },
+    "sourceSize": { "w": 50, "h": 12 },
+    "duration": 80
+   },
+   {
+    "filename": "Sprite (color) 7.",
+    "frame": { "x": 0, "y": 84, "w": 50, "h": 12 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 12 },
+    "sourceSize": { "w": 50, "h": 12 },
+    "duration": 80
+   },
+   {
+    "filename": "Sprite (color) 8.",
+    "frame": { "x": 0, "y": 96, "w": 50, "h": 12 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 12 },
+    "sourceSize": { "w": 50, "h": 12 },
+    "duration": 80
+   },
+   {
+    "filename": "Sprite (color) 9.",
+    "frame": { "x": 0, "y": 108, "w": 50, "h": 12 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 12 },
+    "sourceSize": { "w": 50, "h": 12 },
+    "duration": 60
+   },
+   {
+    "filename": "Sprite (color) 10.",
+    "frame": { "x": 0, "y": 120, "w": 50, "h": 12 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 12 },
+    "sourceSize": { "w": 50, "h": 12 },
+    "duration": 60
+   },
+   {
+    "filename": "Sprite (color) 11.",
+    "frame": { "x": 0, "y": 132, "w": 50, "h": 12 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 12 },
+    "sourceSize": { "w": 50, "h": 12 },
+    "duration": 60
+   },
+   {
+    "filename": "Sprite (color) 12.",
+    "frame": { "x": 0, "y": 144, "w": 50, "h": 12 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 12 },
+    "sourceSize": { "w": 50, "h": 12 },
+    "duration": 60
+   },
+   {
+    "filename": "Sprite (color) 13.",
+    "frame": { "x": 0, "y": 156, "w": 50, "h": 12 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 12 },
+    "sourceSize": { "w": 50, "h": 12 },
+    "duration": 60
+   },
+   {
+    "filename": "Sprite (color) 14.",
+    "frame": { "x": 0, "y": 168, "w": 50, "h": 12 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 12 },
+    "sourceSize": { "w": 50, "h": 12 },
+    "duration": 60
+   },
+   {
+    "filename": "Sprite (color) 15.",
+    "frame": { "x": 0, "y": 180, "w": 50, "h": 12 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 12 },
+    "sourceSize": { "w": 50, "h": 12 },
+    "duration": 60
+   },
+   {
+    "filename": "Sprite (color) 16.",
+    "frame": { "x": 0, "y": 192, "w": 50, "h": 12 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 12 },
+    "sourceSize": { "w": 50, "h": 12 },
+    "duration": 60
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.3.18.6-x64",
+  "image": "platform_pulse.png",
+  "format": "RGBA8888",
+  "size": { "w": 50, "h": 204 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "off", "from": 0, "to": 0, "direction": "forward", "color": "#000000ff" },
+   { "name": "warn", "from": 1, "to": 8, "direction": "forward", "color": "#000000ff" },
+   { "name": "on", "from": 9, "to": 16, "direction": "forward", "color": "#000000ff" }
+  ]
+ }
+}

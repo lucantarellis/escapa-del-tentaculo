@@ -1,0 +1,91 @@
+{ "frames": [
+   {
+    "filename": "Sprite (color) 0.",
+    "frame": { "x": 0, "y": 0, "w": 360, "h": 320 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 360, "h": 320 },
+    "sourceSize": { "w": 360, "h": 320 },
+    "duration": 120
+   },
+   {
+    "filename": "Sprite (color) 1.",
+    "frame": { "x": 0, "y": 320, "w": 360, "h": 320 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 360, "h": 320 },
+    "sourceSize": { "w": 360, "h": 320 },
+    "duration": 120
+   },
+   {
+    "filename": "Sprite (color) 2.",
+    "frame": { "x": 0, "y": 640, "w": 360, "h": 320 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 360, "h": 320 },
+    "sourceSize": { "w": 360, "h": 320 },
+    "duration": 120
+   },
+   {
+    "filename": "Sprite (color) 3.",
+    "frame": { "x": 0, "y": 960, "w": 360, "h": 320 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 360, "h": 320 },
+    "sourceSize": { "w": 360, "h": 320 },
+    "duration": 120
+   },
+   {
+    "filename": "Sprite (color) 4.",
+    "frame": { "x": 0, "y": 1280, "w": 360, "h": 320 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 360, "h": 320 },
+    "sourceSize": { "w": 360, "h": 320 },
+    "duration": 120
+   },
+   {
+    "filename": "Sprite (color) 5.",
+    "frame": { "x": 0, "y": 1600, "w": 360, "h": 320 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 360, "h": 320 },
+    "sourceSize": { "w": 360, "h": 320 },
+    "duration": 120
+   },
+   {
+    "filename": "Sprite (color) 6.",
+    "frame": { "x": 0, "y": 1920, "w": 360, "h": 320 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 360, "h": 320 },
+    "sourceSize": { "w": 360, "h": 320 },
+    "duration": 120
+   },
+   {
+    "filename": "Sprite (color) 7.",
+    "frame": { "x": 0, "y": 2240, "w": 360, "h": 320 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 360, "h": 320 },
+    "sourceSize": { "w": 360, "h": 320 },
+    "duration": 120
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.3.18.6-x64",
+  "image": "bg_ship_mid_01.png",
+  "format": "RGBA8888",
+  "size": { "w": 360, "h": 2560 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "loop", "from": 0, "to": 7, "direction": "forward", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "color", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

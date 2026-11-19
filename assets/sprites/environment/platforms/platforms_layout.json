@@ -1,0 +1,143 @@
+{
+ "platform_static": {
+  "module_width": 10,
+  "frame_height": 12,
+  "modules": [
+   "L",
+   "C0",
+   "C1",
+   "R"
+  ],
+  "tags": {
+   "idle": [
+    0,
+    0
+   ]
+  },
+  "frames": 1
+ },
+ "platform_oneway": {
+  "module_width": 10,
+  "frame_height": 12,
+  "modules": [
+   "L",
+   "C0",
+   "R"
+  ],
+  "tags": {
+   "idle": [
+    0,
+    0
+   ]
+  },
+  "frames": 1
+ },
+ "platform_breakable": {
+  "module_width": 10,
+  "frame_height": 30,
+  "modules": [
+   "L",
+   "C0",
+   "C1",
+   "C2",
+   "C3",
+   "R"
+  ],
+  "tags": {
+   "idle": [
+    0,
+    0
+   ],
+   "shake": [
+    1,
+    3
+   ],
+   "break_fall": [
+    4,
+    11
+   ],
+   "break_hit": [
+    12,
+    17
+   ],
+   "respawn": [
+    18,
+    21
+   ]
+  },
+  "frames": 22
+ },
+ "platform_timed": {
+  "module_width": 10,
+  "frame_height": 12,
+  "modules": [
+   "L",
+   "C0",
+   "C1",
+   "R"
+  ],
+  "tags": {
+   "on": [
+    0,
+    7
+   ],
+   "warning": [
+    8,
+    13
+   ],
+   "turn_off": [
+    14,
+    16
+   ],
+   "off": [
+    17,
+    17
+   ],
+   "turn_on": [
+    18,
+    20
+   ]
+  },
+  "frames": 21
+ },
+ "platform_pulse": {
+  "module_width": 10,
+  "frame_height": 12,
+  "modules": [
+   "L",
+   "C0",
+   "C1",
+   "C2",
+   "R"
+  ],
+  "tags": {
+   "off": [
+    0,
+    0
+   ],
+   "warn": [
+    1,
+    8
+   ],
+   "on": [
+    9,
+    16
+   ]
+  },
+  "frames": 17
+ },
+ "platform_thruster": {
+  "module_width": 6,
+  "frame_height": 9,
+  "modules": [
+   "T"
+  ],
+  "tags": {
+   "idle": [
+    0,
+    3
+   ]
+  },
+  "frames": 4
+ }
+}
