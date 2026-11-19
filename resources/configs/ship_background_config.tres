@@ -1,6 +1,10 @@
-[gd_resource type="Resource" script_class="ShipBackgroundConfig" format=3]
+[gd_resource type="Resource" script_class="ShipBackgroundConfig" format=3 uid="uid://bjjg6qtjksf1y"]
 
-[ext_resource type="Script" path="res://scripts/levels/ship_background_config.gd" id="1_cfg"]
+[ext_resource type="Script" uid="uid://dk6fhmwrig633" path="res://scripts/levels/ship_background_config.gd" id="1_cfg"]
 
 [resource]
 script = ExtResource("1_cfg")
+fog_color = Color(0.036388934, 0.060909458, 0.15221736, 1)
+far_fog = 0.8
+mid_fog = 0.6
+emissive_additive = true

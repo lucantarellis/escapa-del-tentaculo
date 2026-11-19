@@ -6,15 +6,7 @@
 [resource]
 script = ExtResource("1_cfg")
 visible_height = 30.0
-use_sprites = true
-swap_interval = 2.5
-swap_duration = 0.3
-swap_dip = 12.0
-row_count = 4
-bend_amplitude = 10.0
-bend_speed = 0.8
-back_darken = 0.35
-tip_overhang = 24.0
 rise_speed = 110.0
 max_rise_speed = 180.0
+use_sprites = true
 sea = ExtResource("2_sea")
