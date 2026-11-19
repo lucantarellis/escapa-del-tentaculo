@@ -33,6 +33,8 @@ static var _cache: Dictionary = {}
 var _color: AnimatedSprite2D
 var _aura: AnimatedSprite2D
 var _emissive: AnimatedSprite2D
+var _light: PointLight2D
+var _light_tween: Tween
 
 
 func _ready() -> void:
@@ -44,6 +46,10 @@ func _ready() -> void:
 func play_idle() -> void:
 	if _color == null:
 		return
+	if _light != null:
+		if _light_tween != null:
+			_light_tween.kill()
+		_light.energy = LevelLighting.get_config().pickup_energy
 	_color.play(TAG_IDLE)
 	var count: int = _color.sprite_frames.get_frame_count(TAG_IDLE)
 	_color.set_frame_and_progress(randi() % count, 0.0)
@@ -53,6 +59,14 @@ func play_idle() -> void:
 func play_collect() -> void:
 	if _color != null:
 		_color.play(TAG_COLLECT)
+	if _light != null:
+		# Destello de luz que acompaña al de la animación y se apaga.
+		var cfg: LightingConfig = LevelLighting.get_config()
+		if _light_tween != null:
+			_light_tween.kill()
+		_light.energy = cfg.pickup_collect_energy
+		_light_tween = create_tween()
+		_light_tween.tween_property(_light, "energy", 0.0, 0.4)
 
 
 func _build() -> void:
@@ -74,6 +88,10 @@ func _build() -> void:
 		_color.frame = 0
 		_sync()
 		return
+	var cfg: LightingConfig = LevelLighting.get_config()
+	if sheet != "pickup_coin" or cfg.pickup_light_on_coins:
+		_light = LevelLighting.make_light(cfg.pickup_color, cfg.pickup_energy, cfg.pickup_radius)
+		add_child(_light)
 	play_idle()
 
 

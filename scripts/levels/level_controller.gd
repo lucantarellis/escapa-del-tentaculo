@@ -77,6 +77,7 @@ const NOTICE_OUTLINE_COLOR: Color = Color(0.0196, 0.0235, 0.0353, 1.0)
 @onready var _debug_overlay: Node = get_node_or_null("DebugOverlay")
 @onready var _hud: Hud = get_node_or_null("Hud") as Hud
 @onready var _hatch: Hatch = get_node_or_null("Hatch") as Hatch
+@onready var _lighting: LevelLighting = get_node_or_null("Lighting") as LevelLighting
 @onready var _background: LevelBackground = get_node_or_null("Background") as LevelBackground
 
 var _run_seed: int = 0
@@ -222,6 +223,8 @@ func get_current_tier() -> int:
 func _apply_tier_background(tier: SegmentTier, fade: float) -> void:
 	if _background != null and tier.background_color.a > 0.0:
 		_background.apply_style(tier.background_color, tier.background_stars, fade, tier.background_vignette, tier.background_ship)
+	if _lighting != null:
+		_lighting.set_dark(tier.dark_ambient, fade)
 
 
 # El ventanal de la salida de la nave se rompió: del otro lado ya es el tier siguiente (el espacio),

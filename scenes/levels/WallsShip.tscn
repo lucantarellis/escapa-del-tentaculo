@@ -5,6 +5,7 @@
 [ext_resource type="TileSet" path="res://resources/tilesets/ship_walls_overlay.tres" id="3_overlay"]
 [ext_resource type="TileSet" path="res://resources/tilesets/ship_walls_overlay_emissive.tres" id="4_overlay_em"]
 [ext_resource type="Script" path="res://scripts/levels/emissive_mirror.gd" id="5_mirror"]
+[ext_resource type="Script" path="res://scripts/levels/wall_lights.gd" id="6_lights"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_unshaded"]
 light_mode = 1
@@ -33,3 +34,6 @@ tile_set = ExtResource("3_overlay")
 material = SubResource("CanvasItemMaterial_unshaded")
 tile_set = ExtResource("4_overlay_em")
 script = ExtResource("5_mirror")
+
+[node name="Lights" type="Node2D" parent="."]
+script = ExtResource("6_lights")

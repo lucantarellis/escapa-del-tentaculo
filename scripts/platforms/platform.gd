@@ -232,6 +232,11 @@ var _fire_sprites: Array[AnimatedSprite2D] = []
 var _fire_started: bool = false
 ## Sprites de la nave (null si el tipo no tiene hoja o hay un color de tier).
 var _skin: PlatformSkin = null
+## Luz de la temporizada encendida o del rayo del pulso, y la de los propulsores (null si no hay).
+## Ver [LevelLighting].
+var _light: PointLight2D = null
+var _thruster_light: PointLight2D = null
+var _light_time: float = 0.0
 
 
 func _ready() -> void:
@@ -259,6 +264,7 @@ func _physics_process(delta: float) -> void:
 	if moves and platform_type != PlatformType.PROJECTILE:
 		_move_elapsed += delta
 		position = _origin + travel * _get_move_progress()
+	_update_lights(delta)
 	match platform_type:
 		PlatformType.BREAKABLE:
 			_process_breakable(delta)
@@ -1004,6 +1010,7 @@ func _rebuild_skin() -> void:
 			remove_child(_skin)
 			_skin.queue_free()
 			_skin = null
+		_rebuild_lights()
 		return
 	if _skin == null:
 		_skin = PlatformSkin.new()
@@ -1013,6 +1020,56 @@ func _rebuild_skin() -> void:
 	_body.visible = false
 	var beam_top: float = SKIN_BEAM_TOP.get(platform_type, 0.0)
 	_skin.setup(SKIN_SHEETS[platform_type], size.x, size.y, beam_top, hash([String(name), position]), moves)
+	_rebuild_lights()
+
+
+# Luces de la nave oscura: temporizada y pulso (energía según el estado, en _update_lights) y
+# propulsores de las móviles. Solo en juego y con los sprites de la nave.
+func _rebuild_lights() -> void:
+	for light: PointLight2D in [_light, _thruster_light]:
+		if light != null:
+			light.queue_free()
+	_light = null
+	_thruster_light = null
+	if Engine.is_editor_hint() or _skin == null:
+		return
+	var cfg: LightingConfig = LevelLighting.get_config()
+	if platform_type == PlatformType.TIMED:
+		_light = LevelLighting.make_light(cfg.timed_color, 0.0, cfg.timed_radius)
+	elif platform_type == PlatformType.PULSE:
+		_light = LevelLighting.make_light(cfg.pulse_color, 0.0, cfg.pulse_radius)
+	if _light != null:
+		add_child(_light)
+	if moves:
+		_thruster_light = LevelLighting.make_light(cfg.thruster_color, cfg.thruster_energy, cfg.thruster_radius)
+		_thruster_light.name = "ThrusterLight"
+		_thruster_light.position = Vector2(0.0, size.y * 0.5 + 6.0)
+		add_child(_thruster_light)
+
+
+# Energía de la luz según lo que muestra la plataforma: temporizada encendida fija, aviso que
+# parpadea, apagada nada; pulso letal que titila con el rayo, aviso tenue, seguro nada.
+func _update_lights(delta: float) -> void:
+	if _light == null or _skin == null:
+		return
+	_light_time += delta
+	var cfg: LightingConfig = LevelLighting.get_config()
+	var energy: float = 0.0
+	match _skin.get_tag():
+		&"on":
+			if platform_type == PlatformType.TIMED:
+				energy = cfg.timed_energy
+			else:
+				energy = cfg.pulse_energy * randf_range(0.65, 1.0)
+		&"turn_on":
+			energy = cfg.timed_energy * 0.5
+		&"warning":
+			var blink: bool = int(_light_time * cfg.timed_warning_blink * 2.0) % 2 == 0
+			energy = cfg.timed_energy if blink else cfg.timed_energy * 0.25
+		&"warn":
+			energy = cfg.pulse_warning_energy
+	_light.energy = energy
+	_light.enabled = energy > 0.0
 
 
 # Estado visual inicial (o después de `reset`), según el tipo.

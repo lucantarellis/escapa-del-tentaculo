@@ -11,10 +11,14 @@
 [ext_resource type="PackedScene" path="res://scenes/intro/Hatch.tscn" id="21_hatch"]
 [ext_resource type="Resource" uid="uid://dslpeg0ydf5k6" path="res://resources/configs/intro_config.tres" id="22_introcfg"]
 [ext_resource type="Script" uid="uid://cqjl7erwi3hee" path="res://scripts/levels/level_background.gd" id="23_bg"]
+[ext_resource type="Script" path="res://scripts/levels/level_lighting.gd" id="24_lighting"]
 
 [node name="Level" type="Node2D" unique_id=2102741806]
 script = ExtResource("5_controller")
 intro_config = ExtResource("22_introcfg")
+
+[node name="Lighting" type="CanvasModulate" parent="."]
+script = ExtResource("24_lighting")
 
 [node name="Background" type="CanvasLayer" parent="." unique_id=1986665368]
 script = ExtResource("23_bg")

@@ -177,6 +177,7 @@ func _ready() -> void:
 	_current_gravity = config.gravity_with_fuel
 	_was_empty = is_fuel_empty()
 	_setup_sprites()
+	_setup_light()
 	_update_visuals(Vector2.ZERO)
 	_update_cooldown_bar()
 	fuel_changed.emit(_fuel, config.max_fuel)
@@ -865,6 +866,21 @@ func _setup_sprites() -> void:
 				var anim: StringName = StringName(String(base) + suffix)
 				if frames.has_animation(anim):
 					frames.set_animation_loop(anim, false)
+
+
+# Luz principal de la nave oscura: el jugador descubre el entorno al subir (ver [LevelLighting]).
+func _setup_light() -> void:
+	var cfg: LightingConfig = LevelLighting.get_config()
+	var light: PointLight2D = LevelLighting.make_light(cfg.player_color, cfg.player_energy, cfg.player_radius, cfg.player_height, cfg.player_core)
+	add_child(light)
+	if not cfg.player_self_lit:
+		# El astronauta se dibuja siempre con su color (sin oscuridad ni luces): su propia luz no lo
+		# quema y se lee igual en cualquier lugar.
+		var unshaded: CanvasItemMaterial = CanvasItemMaterial.new()
+		unshaded.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+		for sprite: CanvasItem in [_flame, _sprite, _visor]:
+			if sprite.material == null:
+				sprite.material = unshaded
 
 
 # Muestra u oculta la llama del jetpack (detrás del cuerpo, visible solo mientras se propulsa).

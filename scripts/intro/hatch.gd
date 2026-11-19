@@ -184,6 +184,8 @@ func _setup_light() -> void:
 	_light.texture = texture
 	_light.texture_scale = cfg.hatch_light_radius * 2.0 / float(LIGHT_TEXTURE_SIZE)
 	_light.color = cfg.hatch_light_color
+	# Con relieve en las texturas, una luz sin altura casi no ilumina lo plano (ver LightingConfig).
+	_light.height = LevelLighting.get_config().light_height
 
 
 # Aplica el estado actual (cerrada / golpeada / rota) sin animación de transición.

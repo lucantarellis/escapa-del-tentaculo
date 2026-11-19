@@ -48,6 +48,9 @@ extends Resource
 @export var background_stars: bool = false
 ## Si es true, el fondo es el pozo de la nave en parallax ([ShipBackground]).
 @export var background_ship: bool = false
+## Si es true, el mundo se oscurece (`LightingConfig.ambient_color`) y se descubre con las luces: la
+## del astronauta, las de las paredes, plataformas y recogibles. Ver [LevelLighting].
+@export var dark_ambient: bool = false
 ## Duración del fundido al nuevo fondo al entrar al tier. Unidad: s.
 @export var background_fade: float = 0.4
 ## Intensidad de la viñeta (oscurecimiento de los bordes con un latido leve), para dar sensación de
