@@ -25,6 +25,10 @@ const BODY_PADDING: float = 96.0
 ## Profundidad de la zona letal cuando el tentáculo sube por el nivel por su cuenta: todo lo que
 ## queda por debajo de su borde superior es letal, se vea o no. Estructural. Unidad: px.
 const FREE_RISE_KILL_DEPTH: float = 8000.0
+## Orden de dibujo del tentáculo con el mar de la nave: adelante de todo lo del nivel (jugador,
+## plataformas, paredes, efectos), salvo los avisos de peligro que van más arriba. Con el bloque
+## de color o el frente anterior queda en 0, como siempre. Solo visual.
+const SEA_Z_INDEX: int = 10
 
 ## Parámetros de gameplay. Si queda vacío se usan los valores por defecto de
 ## [TentacleConfig].
@@ -34,6 +38,7 @@ const FREE_RISE_KILL_DEPTH: float = 8000.0
 
 @onready var _body: Polygon2D = $BodyPolygon
 @onready var _front: TentacleFront = $Front
+@onready var _sea: TentacleSea = $Sea
 @onready var _kill_zone: Area2D = $KillZone
 @onready var _kill_shape: CollisionShape2D = $KillZone/CollisionShape2D
 
@@ -97,6 +102,8 @@ func _physics_process(delta: float) -> void:
 func _process(delta: float) -> void:
 	_time += delta
 	_update_body_polygon()
+	if _sea.visible:
+		_sea.set_depth(_get_depth())
 
 
 ## Cambia el perseguidor al entrar a un tier (ver [SegmentTier]): color placeholder [param color]
@@ -164,8 +171,9 @@ func enter(duration: float) -> void:
 		return
 	if _entry_tween != null:
 		_entry_tween.kill()
-	# Arranca con el borde superior (más la onda) justo bajo el borde inferior de la pantalla.
-	_entry_offset = config.visible_height + config.wobble_amplitude
+	# Arranca con todo lo que se dibuja (onda o puntas del mar) justo bajo el borde inferior de la
+	# pantalla, para que entre subiendo y no aparezca de golpe.
+	_entry_offset = config.visible_height + _get_visual_overhang()
 	set_active(true)
 	if duration <= 0.0:
 		_entry_offset = 0.0
@@ -189,20 +197,34 @@ func reset() -> void:
 	_rising = true
 	_reset_free_rise()
 	_follow_camera()
-	if config.use_sprites:
+	if config.sea != null:
+		_sea.reset_animation()
+	elif config.use_sprites:
 		_front.reset_animation()
 
 
-# Muestra el frente de sprites si la config lo pide (con fondo violeta oscuro) o lo oculta y deja
-# el bloque de color. Solo visual: no toca la zona letal.
+# Elige cómo se dibuja según la config: el mar de tentáculos de la nave (`sea`, sin bloque de color),
+# el frente de sprites (`use_sprites`, con fondo violeta oscuro) o el bloque de color. Solo visual:
+# no toca la zona letal.
 func _apply_front() -> void:
 	if _front == null or camera == null:
 		return
-	_front.visible = config.use_sprites
-	_front.set_process(config.use_sprites)
-	if config.use_sprites:
+	var use_sea: bool = config.sea != null
+	var use_front: bool = config.use_sprites and not use_sea
+	_sea.visible = use_sea
+	_sea.set_process(use_sea)
+	z_index = SEA_Z_INDEX if use_sea else 0
+	_body.visible = not use_sea
+	_front.visible = use_front
+	_front.set_process(use_front)
+	var width: float = camera.get_visible_rect().size.x
+	if use_sea:
+		# El mar se ubica respecto del borde de la zona letal (sus puntas asoman `sea.tip_overhang`).
+		_sea.setup(config.sea, config.kill_zone_inset, width)
+		_sea.set_depth(_get_depth())
+	elif use_front:
 		_body.color = COLOR_SPRITE_BACKDROP
-		_front.setup(config, camera.get_visible_rect().size.x)
+		_front.setup(config, width)
 
 
 # Deja el borde superior a `visible_height` px sobre el borde inferior de la pantalla y la velocidad
@@ -216,6 +238,13 @@ func _follow_camera() -> void:
 	var rect: Rect2 = camera.get_visible_rect()
 	var top_y: float = _top_y if camera.is_following_player() else camera.get_bottom_y() - config.visible_height - _extra_rise
 	global_position = Vector2(rect.position.x, top_y + _entry_offset)
+
+
+# Cuánto sube lo que se dibuja por encima del origen: las puntas del mar o la onda del bloque.
+func _get_visual_overhang() -> float:
+	if config.sea != null and _sea != null:
+		return _sea.get_top_overhang()
+	return config.wobble_amplitude
 
 
 ## Profundidad del cuerpo: desde el borde superior hasta pasado el borde de la pantalla.

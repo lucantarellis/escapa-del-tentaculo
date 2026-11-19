@@ -83,3 +83,9 @@ extends Resource
 @export var bend_speed: float = 0.8
 ## Cuánto más oscura es la fila del fondo respecto de la de adelante (0 = igual, 1 = negra).
 @export_range(0.0, 1.0) var back_darken: float = 0.35
+
+@export_group("Mar de tentáculos (nave)")
+## Si se asigna, el tentáculo se dibuja como el mar de tentáculos de la nave ([TentacleSea]) en vez
+## del frente de sprites o del bloque de color. Cuánto asoman sus puntas sobre la zona letal se
+## define en esa config (`tip_overhang`, no el de este grupo). Solo visual: la zona letal no cambia.
+@export var sea: TentacleSeaConfig

@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="TentacleConfig" format=3 uid="uid://cdx1ychim7kom"]
 
 [ext_resource type="Script" uid="uid://dagyhdy8hxugv" path="res://scripts/tentacle/tentacle_config.gd" id="1_cfg"]
+[ext_resource type="Resource" path="res://resources/configs/tentacle_sea_config.tres" id="2_sea"]
 
 [resource]
 script = ExtResource("1_cfg")
@@ -16,3 +17,4 @@ back_darken = 0.35
 tip_overhang = 24.0
 rise_speed = 110.0
 max_rise_speed = 180.0
+sea = ExtResource("2_sea")

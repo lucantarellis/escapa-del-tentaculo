@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/tentacle/tentacle.gd" id="1_tentacle"]
 [ext_resource type="Resource" path="res://resources/configs/tentacle_config.tres" id="2_config"]
 [ext_resource type="Script" path="res://scripts/tentacle/tentacle_front.gd" id="3_front"]
+[ext_resource type="Script" path="res://scripts/tentacle/tentacle_sea.gd" id="4_sea"]
 [ext_resource type="Texture2D" path="res://assets/sprites/tentacle/vertical/vertical_01.png" id="t0"]
 [ext_resource type="Texture2D" path="res://assets/sprites/tentacle/vertical/vertical_02.png" id="t1"]
 [ext_resource type="Texture2D" path="res://assets/sprites/tentacle/vertical/vertical_03.png" id="t2"]
@@ -72,6 +73,9 @@ color = Color(0.8471, 0.1961, 0.1961, 1)
 script = ExtResource("3_front")
 textures = Array[Texture2D]([ExtResource("t0"), ExtResource("t1"), ExtResource("t2"), ExtResource("t3"), ExtResource("t4"), ExtResource("t5"), ExtResource("t6"), ExtResource("t7"), ExtResource("t8")])
 filler_textures = Array[Texture2D]([ExtResource("f0"), ExtResource("f1"), ExtResource("f2"), ExtResource("f3"), ExtResource("f4"), ExtResource("f5"), ExtResource("f6"), ExtResource("f7"), ExtResource("f8"), ExtResource("f9"), ExtResource("f10"), ExtResource("f11"), ExtResource("f12"), ExtResource("f13"), ExtResource("f14"), ExtResource("f15"), ExtResource("f16"), ExtResource("f17"), ExtResource("f18"), ExtResource("f19"), ExtResource("f20"), ExtResource("f21"), ExtResource("f22"), ExtResource("f23"), ExtResource("f24"), ExtResource("f25"), ExtResource("f26"), ExtResource("f27"), ExtResource("f28"), ExtResource("f29"), ExtResource("f30"), ExtResource("f31"), ExtResource("f32"), ExtResource("f33"), ExtResource("f34"), ExtResource("f35"), ExtResource("f36"), ExtResource("f37"), ExtResource("f38"), ExtResource("f39"), ExtResource("f40"), ExtResource("f41"), ExtResource("f42"), ExtResource("f43"), ExtResource("f44"), ExtResource("f45"), ExtResource("f46"), ExtResource("f47")])
+
+[node name="Sea" type="Node2D" parent="."]
+script = ExtResource("4_sea")
 
 [node name="KillZone" type="Area2D" parent="."]
 collision_layer = 8
