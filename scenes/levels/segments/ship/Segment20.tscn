@@ -32,9 +32,9 @@ size = Vector2(190, 12)
 platform_type = 4
 
 [node name="Platform5" parent="." unique_id=863007671 instance=ExtResource("2_50h6a")]
-position = Vector2(-35.999992, -127)
+position = Vector2(-36.0, -133.5)
 rotation = -0.87266463
-size = Vector2(200, 25)
+size = Vector2(200, 12)
 moves = true
 travel = Vector2(158, 10)
 

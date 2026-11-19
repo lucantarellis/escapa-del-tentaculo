@@ -10,17 +10,17 @@ script = ExtResource("seg")
 
 [node name="Pulse1" parent="." unique_id=1226358586 instance=ExtResource("plat")]
 position = Vector2(145, -244)
-size = Vector2(39.67, 12)
+size = Vector2(40, 12)
 platform_type = 5
 
 [node name="Pulse3" parent="." unique_id=1526661713 instance=ExtResource("plat")]
 position = Vector2(311, -244)
-size = Vector2(39.67, 12)
+size = Vector2(40, 12)
 platform_type = 5
 
 [node name="Pulse4" parent="." unique_id=1633530219 instance=ExtResource("plat")]
 position = Vector2(233, -244)
-size = Vector2(39.67, 12)
+size = Vector2(40, 12)
 platform_type = 5
 
 [node name="Rest" parent="." unique_id=51879099 instance=ExtResource("plat")]

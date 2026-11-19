@@ -33,6 +33,10 @@ Arte cerrado el 19/11/2026. Editables en `assets/aseprite/environment/platforms/
 - **Variedad**: centros al azar por módulo (semilla estable por nombre y posición, como el fuego) y cuadro inicial al azar en los loops de `on` y `warn`.
 - **Luces sugeridas**: `PointLight2D` cian suave en la temporizada encendida y en la de pulso letal (que parpadee con el rayo); una chica azul en cada propulsor.
 
+## Conectado en Godot
+
+Lo dibuja `PlatformSkin` (`scripts/platforms/platform_skin.gd`), hijo `Skin` de cada `Platform` con sprites. Qué tag se muestra en cada estado y cómo se ajusta el tamaño: `docs/mecanicas/plataformas.md`, sección "Sprites de la nave". Si cambia el arte, alcanza con volver a exportar las hojas y el JSON con los mismos nombres y tags.
+
 ## Fuera de esta tanda
 
 Letales sin fuego (guardias, barredoras, bloques chicos móviles, losas de 300×30) y el proyectil: se redefinen junto con los segmentos nuevos. Para lo letal permanente, la idea es reutilizar el rayo de la de pulso siempre prendido o la piel de fuego.

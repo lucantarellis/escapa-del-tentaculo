@@ -103,12 +103,31 @@ const FIRE_CENTER_VARIANTS: int = 3
 const FIRE_PADDING: float = 14.0
 ## Textura (tira) y SpriteFrames ya armados por nombre de módulo, compartidos entre instancias.
 static var _fire_frames_cache: Dictionary = {}
+## Hoja de sprites de la nave por tipo (ver [PlatformSkin] y `docs/arte/plataformas-nave.md`). Los
+## tipos que no están acá (LETHAL sin fuego, PROJECTILE) siguen con el bloque de color.
+## Estructural.
+const SKIN_SHEETS: Dictionary = {
+	PlatformType.STATIC: "platform_static",
+	PlatformType.ONE_WAY: "platform_oneway",
+	PlatformType.BREAKABLE: "platform_breakable",
+	PlatformType.TIMED: "platform_timed",
+	PlatformType.PULSE: "platform_pulse",
+}
+## Filas transparentes arriba de la viga en la hoja (la rompible deja lugar a los pedazos que
+## caen). Estructural. Unidad: px.
+const SKIN_BEAM_TOP: Dictionary = {PlatformType.BREAKABLE: 2.0}
+## Alto de la viga dibujada = alto de la colisión de las plataformas con sprites. Estructural.
+## Unidad: px.
+const SKIN_HEIGHT: float = 12.0
+## Ancho de un módulo de la nave y ancho mínimo (dos tapas). Estructural. Unidad: px.
+const SKIN_MODULE_WIDTH: float = 10.0
+const SKIN_MIN_WIDTH: float = 20.0
 
 @export_group("Forma")
 ## Tamaño del bloque (ancho, alto). Es diseño de nivel, no tuning. Unidad: px.
 @export var size: Vector2 = Vector2(80.0, 12.0):
 	set(value):
-		size = _snap_fire_size(value.max(Vector2(4.0, 4.0)))
+		size = _snap_skin_size(_snap_fire_size(value.max(Vector2(4.0, 4.0))))
 		_update_shape()
 		queue_redraw()
 
@@ -117,6 +136,7 @@ static var _fire_frames_cache: Dictionary = {}
 @export var platform_type: PlatformType = PlatformType.STATIC:
 	set(value):
 		platform_type = value
+		size = size
 		_apply_type()
 		queue_redraw()
 ## Causa que se pasa a [method Player.die] cuando el tipo es letal (LETHAL, o PULSE en ON).
@@ -131,6 +151,7 @@ static var _fire_frames_cache: Dictionary = {}
 @export var moves: bool = false:
 	set(value):
 		moves = value
+		_rebuild_skin()
 		queue_redraw()
 ## Desplazamiento del extremo final respecto de la posición inicial. Con PROJECTILE es el recorrido
 ## en línea recta: su dirección es la dirección de vuelo y su largo es hasta dónde llega (con el
@@ -209,6 +230,8 @@ var _proj_velocity: Vector2 = Vector2.ZERO
 var _fire_root: Node2D = null
 var _fire_sprites: Array[AnimatedSprite2D] = []
 var _fire_started: bool = false
+## Sprites de la nave (null si el tipo no tiene hoja o hay un color de tier).
+var _skin: PlatformSkin = null
 
 
 func _ready() -> void:
@@ -266,8 +289,14 @@ func _draw() -> void:
 ## [LevelBuilder] para que cada tier tenga su aspecto (ej.: restos metálicos en el espacio) sin
 ## duplicar escenas. Alfa 0 = vuelve al color del tipo.
 func set_tint(color: Color) -> void:
+	var had_skin: bool = _skin_active()
 	_tint = color
-	if is_node_ready() and platform_type != PlatformType.PULSE:
+	if not is_node_ready():
+		return
+	if had_skin != _skin_active():
+		# Con color de tier (espacio, alien) se vuelve al bloque de color, y al revés.
+		_apply_type()
+	elif platform_type != PlatformType.PULSE:
 		_body.color = _tint if _tint.a > 0.0 else COLOR_BY_TYPE.get(platform_type, COLOR_BY_TYPE[PlatformType.STATIC])
 
 
@@ -290,6 +319,7 @@ func reset() -> void:
 		_setup_projectile()
 	elif platform_type != PlatformType.LETHAL and platform_type != PlatformType.PULSE:
 		_apply_solid(true)
+	_play_skin_initial()
 
 
 # Regenera polígono visual, forma de colisión y sensores a partir de `size`. Antes de _ready
@@ -327,6 +357,7 @@ func _update_shape() -> void:
 		_explosion_shape.shape = CircleShape2D.new()
 	(_explosion_shape.shape as CircleShape2D).radius = _get_explosion_radius()
 	_rebuild_fire_skin()
+	_rebuild_skin()
 
 
 # Muestra u oculta en el editor los círculos de detección del proyectil según
@@ -353,7 +384,9 @@ func _apply_type() -> void:
 	else:
 		_body.color = _tint if _tint.a > 0.0 else COLOR_BY_TYPE.get(platform_type, COLOR_BY_TYPE[PlatformType.STATIC])
 	_rebuild_fire_skin()
+	_rebuild_skin()
 	if Engine.is_editor_hint():
+		_play_skin_initial()
 		return
 	_step_sensor.set_deferred("monitoring", platform_type == PlatformType.BREAKABLE)
 	_footprint_sensor.set_deferred("monitoring", platform_type == PlatformType.TIMED)
@@ -374,6 +407,7 @@ func _apply_type() -> void:
 		_:
 			_apply_solid(true)
 			_lethal_area.set_deferred("monitoring", false)
+	_play_skin_initial()
 
 
 func _process_breakable(delta: float) -> void:
@@ -382,6 +416,9 @@ func _process_breakable(delta: float) -> void:
 		if _respawn_left <= 0.0:
 			_broken = false
 			_apply_solid(true)
+			if _skin != null:
+				_skin.visible = true
+				_skin.play(&"respawn")
 			restored.emit()
 		return
 	if _breaking and _is_step_occupied_and_landed():
@@ -391,13 +428,19 @@ func _process_breakable(delta: float) -> void:
 		# pegado arriba del borde y el jugador lo cruza un poco antes de aterrizar de verdad.
 		_break_timer += delta
 		if _break_timer >= config.break_delay:
-			break_now()
+			_break(true)
 
 
 ## Rompe la plataforma YA (sin esperar `break_delay`): deja de ser sólida y vuelve tras
 ## `respawn_time`, igual que cuando se rompe por pisarla. Solo actúa sobre una [BREAKABLE] que no
 ## esté ya rota. Devuelve true si se rompió. Lo usa el dash con la mejora "Rompe plataformas".
 func break_now() -> bool:
+	return _break(false)
+
+
+# Rompe la rompible. `fell`: el jugador estaba parado encima (los pedazos caen); si no, la rompió
+# un golpe (dash) y se deshace en el lugar.
+func _break(fell: bool) -> bool:
 	if platform_type != PlatformType.BREAKABLE or _broken:
 		return false
 	_breaking = false
@@ -405,6 +448,8 @@ func break_now() -> bool:
 	_break_timer = 0.0
 	_respawn_left = config.respawn_time
 	_apply_solid(false)
+	if _skin != null:
+		_skin.play(&"break_fall" if fell else &"break_hit")
 	broke.emit()
 	return true
 
@@ -414,6 +459,10 @@ func _process_timed(delta: float) -> void:
 	var duration: float = config.timed_on_duration if _timed_on else config.timed_off_duration
 	if duration <= 0.0:
 		return
+	# Aviso: los últimos `timed_warning_time` segundos antes de apagarse.
+	if _skin != null and _timed_on and duration - _timed_elapsed <= config.timed_warning_time \
+			and _skin.get_tag() == &"on":
+		_skin.play(&"warning", true)
 	if _timed_elapsed >= duration:
 		# No volver a aparecer empujando al jugador: si está en medio, esperar a que se vaya
 		# (no se pierde tiempo de más: se retoma apenas se libera).
@@ -423,6 +472,8 @@ func _process_timed(delta: float) -> void:
 		_timed_elapsed -= duration
 		_timed_on = not _timed_on
 		_apply_solid(_timed_on)
+		if _skin != null:
+			_skin.play(&"turn_on" if _timed_on else &"turn_off")
 		if _timed_on:
 			restored.emit()
 
@@ -466,8 +517,9 @@ func _change_pulse_state(new_state: PulseState) -> void:
 	# comportamiento anterior (sólida mientras es segura).
 	var solid_when_safe: bool = config.pulse_solid_when_safe if config != null else false
 	_collision.set_deferred("disabled", new_state == PulseState.ON or not solid_when_safe)
-	_body.visible = true
+	_body.visible = not _skin_active()
 	_apply_pulse_visual()
+	_play_skin_pulse()
 	if new_state == PulseState.ON and not was_on:
 		pass
 	elif new_state != PulseState.ON and was_on:
@@ -544,7 +596,7 @@ func _is_footprint_occupied() -> bool:
 # colisiona físicamente pero sí debe verse). Diferido: seguro dentro de callbacks de física.
 func _apply_solid(solid: bool, body_visible: bool = solid) -> void:
 	_collision.set_deferred("disabled", not solid)
-	_body.visible = body_visible and not _fire_active()
+	_body.visible = body_visible and not _fire_active() and not _skin_active()
 
 
 func _on_step_entered(body: Node2D) -> void:
@@ -555,6 +607,8 @@ func _on_step_entered(body: Node2D) -> void:
 		return
 	_breaking = true
 	_break_timer = 0.0
+	if _skin != null:
+		_skin.play(&"shake", true)
 	breaking_started.emit()
 
 
@@ -564,6 +618,8 @@ func _on_step_exited(body: Node2D) -> void:
 	if body is Player:
 		_breaking = false
 		_break_timer = 0.0
+		if _skin != null:
+			_skin.play(&"idle")
 
 
 func _on_lethal_entered(body: Node2D) -> void:
@@ -828,7 +884,7 @@ func _rebuild_fire_skin() -> void:
 		_fire_root = null
 		_fire_sprites.clear()
 	_fire_started = false
-	_body.visible = not _fire_active()
+	_body.visible = not _fire_active() and not _skin_active()
 	if not _fire_active():
 		return
 	var snapped: Vector2 = _snap_fire_size(size)
@@ -917,3 +973,85 @@ func _on_fire_entry_finished(sprite: AnimatedSprite2D, start_frame: int) -> void
 		return
 	sprite.play(&"idle")
 	sprite.set_frame_and_progress(start_frame, 0.0)
+
+
+# ---------------------------------------------------------------------------------------------
+# Sprites de la nave (STATIC, ONE_WAY, BREAKABLE, TIMED, PULSE)
+# ---------------------------------------------------------------------------------------------
+
+# true si la plataforma se dibuja con los sprites de la nave: el tipo tiene hoja y el tier no le
+# puso un color (el espacio y el alien siguen con el bloque de color).
+func _skin_active() -> bool:
+	return SKIN_SHEETS.has(platform_type) and _tint.a <= 0.0
+
+
+# Al editar en el editor, el ancho de las plataformas con sprites se ajusta a módulos de 10 px
+# (mínimo 20) y el alto a 12. Al cargar una escena no se toca nada (el tipo todavía no está
+# asignado cuando se asigna `size`).
+func _snap_skin_size(value: Vector2) -> Vector2:
+	if not Engine.is_editor_hint() or not is_node_ready() or not SKIN_SHEETS.has(platform_type):
+		return value
+	var width: float = maxf(SKIN_MIN_WIDTH, roundf(value.x / SKIN_MODULE_WIDTH) * SKIN_MODULE_WIDTH)
+	return Vector2(width, SKIN_HEIGHT)
+
+
+# Crea, rearma o quita los sprites según el tipo, el tamaño, `moves` y el color de tier.
+func _rebuild_skin() -> void:
+	if not is_node_ready():
+		return
+	if not _skin_active():
+		if _skin != null:
+			remove_child(_skin)
+			_skin.queue_free()
+			_skin = null
+		return
+	if _skin == null:
+		_skin = PlatformSkin.new()
+		_skin.name = "Skin"
+		add_child(_skin)
+		_skin.finished.connect(_on_skin_finished)
+	_body.visible = false
+	var beam_top: float = SKIN_BEAM_TOP.get(platform_type, 0.0)
+	_skin.setup(SKIN_SHEETS[platform_type], size.x, size.y, beam_top, hash([String(name), position]), moves)
+
+
+# Estado visual inicial (o después de `reset`), según el tipo.
+func _play_skin_initial() -> void:
+	if _skin == null:
+		return
+	_skin.visible = true
+	match platform_type:
+		PlatformType.STATIC, PlatformType.ONE_WAY, PlatformType.BREAKABLE:
+			_skin.play(&"idle")
+		PlatformType.TIMED:
+			if _timed_on:
+				_skin.play(&"on", true, true)
+			else:
+				_skin.play(&"off")
+		PlatformType.PULSE:
+			_play_skin_pulse()
+
+
+func _play_skin_pulse() -> void:
+	if _skin == null or platform_type != PlatformType.PULSE:
+		return
+	match _pulse_state:
+		PulseState.OFF:
+			_skin.play(&"off")
+		PulseState.WARNING:
+			_skin.play(&"warn", true, true)
+		PulseState.ON:
+			_skin.play(&"on", true, true)
+
+
+# Encadena los tags que no se repiten con el siguiente estado.
+func _on_skin_finished(tag: StringName) -> void:
+	match tag:
+		&"break_fall", &"break_hit":
+			_skin.visible = false
+		&"respawn":
+			_skin.play(&"idle")
+		&"turn_off":
+			_skin.play(&"off")
+		&"turn_on":
+			_skin.play(&"on", true, true)

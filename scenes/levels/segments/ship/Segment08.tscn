@@ -10,7 +10,7 @@ script = ExtResource("seg")
 
 [node name="Crumble1" parent="." unique_id=1557720011 instance=ExtResource("plat")]
 position = Vector2(119, -152)
-size = Vector2(142.07, 12)
+size = Vector2(140, 12)
 platform_type = 2
 
 [node name="Crumble2" parent="." unique_id=1690577865 instance=ExtResource("plat")]

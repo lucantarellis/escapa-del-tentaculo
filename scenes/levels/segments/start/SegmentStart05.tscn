@@ -24,32 +24,32 @@ tile_map_data = PackedByteArray("AAAAANn/AAAMAAUAAAAAANr/AAAuAAAAAAAAANv/AAAuAAc
 
 [node name="Start" parent="." instance=ExtResource("plat")]
 position = Vector2(70, -52)
-size = Vector2(116, 12)
+size = Vector2(120, 12)
 platform_type = 0
 
 [node name="Static" parent="." instance=ExtResource("plat")]
 position = Vector2(290, -163)
-size = Vector2(116, 12)
+size = Vector2(120, 12)
 platform_type = 0
 
 [node name="Static2" parent="." instance=ExtResource("plat")]
 position = Vector2(70, -273)
-size = Vector2(116, 12)
+size = Vector2(120, 12)
 platform_type = 0
 
 [node name="Static3" parent="." instance=ExtResource("plat")]
 position = Vector2(290, -384)
-size = Vector2(116, 12)
+size = Vector2(120, 12)
 platform_type = 0
 
 [node name="Static4" parent="." instance=ExtResource("plat")]
 position = Vector2(70, -495)
-size = Vector2(116, 12)
+size = Vector2(120, 12)
 platform_type = 0
 
 [node name="Static5" parent="." instance=ExtResource("plat")]
 position = Vector2(290, -593)
-size = Vector2(116, 12)
+size = Vector2(120, 12)
 platform_type = 0
 
 [node name="FuelTank1" parent="." instance=ExtResource("tank")]

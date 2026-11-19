@@ -52,9 +52,22 @@ Una plataforma `LETHAL` puede dibujarse con fuego animado en vez del bloque de c
 - **Tuning** (`PlatformConfig`, grupo "Fuego (fire_skin)"): `fire_fps` (8), `fire_speed_min` (0,8), `fire_speed_max` (1,2).
 - **Prueba:** `scenes/platforms/FirePlatformTest.tscn` (F6): fuegos de 50, 100 y 200 px, uno móvil y una letal sin fuego como comparación.
 
+## Sprites de la nave
+
+`STATIC`, `ONE_WAY`, `BREAKABLE`, `TIMED` y `PULSE` se dibujan con los módulos de la nave en lugar del bloque de color (arte y hojas: `docs/arte/plataformas-nave.md`). `LETHAL` sin fuego y `PROJECTILE` siguen con el bloque de color.
+
+- **Cómo se dibuja:** un hijo `Skin` (`scripts/platforms/platform_skin.gd`, clase `PlatformSkin`) dibuja tapa izquierda + centros al azar + tapa derecha, de 10 px cada uno, todos en el mismo cuadro. Su hijo `Emissive` dibuja lo que emite luz con material sin sombreado. Texturas `CanvasTexture` con relieve, compartidas entre instancias; duración de cada cuadro y tags desde el JSON de Aseprite. Los centros salen de una semilla por nombre y posición (estables).
+- **Tamaño:** al editar en el editor, el ancho se ajusta a múltiplos de 10 (mínimo 20) y el alto a 12. Al cargar una escena no se ajusta nada; si un ancho no es múltiplo de 10, el dibujo usa el múltiplo más cercano (centrado) y la colisión queda como está.
+- **Rompible:** `idle` → `shake` mientras la pisan → `break_fall` al romperse por peso, o `break_hit` si la rompe `break_now()` (dash) → oculta → `respawn` al volver → `idle`. El dibujo está 2 px más arriba para dejar lugar a los pedazos.
+- **Temporizada:** `on` → `warning` los últimos `timed_warning_time` s → `turn_off` → `off` (siguen visibles los emisores, sin colisión) → `turn_on` → `on`.
+- **Pulso:** `off` (solo los postes) → `warn` durante `pulse_warning_time` → `on` (rayo) mientras es letal.
+- **Móviles** (`moves`, con sprites): dos propulsores animados pegados abajo, a 10 px de cada punta.
+- **Variedad:** los loops `on` y `warn` arrancan en un cuadro al azar.
+- **Editor:** se ve el primer cuadro del estado inicial (`idle`, `on` u `off`), sin animar.
+
 ## Color por tier
 
-`Platform.set_tint(color)` reemplaza el color del tipo (no el de PULSE, que comunica su fase). Lo usa `LevelBuilder` con `platform_tint` / `hazard_tint` de cada tier para que, por ejemplo, en el espacio las plataformas sean restos metálicos grises y lo letal se vea naranja, sin duplicar escenas.
+`Platform.set_tint(color)` reemplaza el color del tipo (no el de PULSE, que comunica su fase). Lo usa `LevelBuilder` con `platform_tint` / `hazard_tint` de cada tier para que, por ejemplo, en el espacio las plataformas sean restos metálicos grises y lo letal se vea naranja, sin duplicar escenas. Una plataforma con sprites de la nave que recibe un color de tier vuelve al bloque de color: así la nave (sin color de tier) usa los sprites y el espacio y el alien quedan como antes. En el editor no hay color de tier, por eso los segmentos del espacio y del alien muestran los sprites de la nave hasta que se juega.
 
 ## Parámetros
 
@@ -83,6 +96,7 @@ Una plataforma `LETHAL` puede dibujarse con fuego animado en vez del bloque de c
 | Temporizada | `timed_on_duration` | float | 2,0 | s | Segundos sólida por ciclo |
 | Temporizada | `timed_off_duration` | float | 1,0 | s | Segundos ausente por ciclo |
 | Temporizada | `timed_start_on` | bool | true | — | Si el ciclo empieza sólida o ausente |
+| Temporizada | `timed_warning_time` | float | 0,7 | s | Últimos segundos sólida en que muestra el aviso (solo visual) |
 | One-way | `one_way_margin` | float | 5,0 | px | Margen de colisión de un solo sentido |
 | Letal | `lethal_margin` | float | 2,0 | px | Cuánto más chica es el área letal que el dibujo, por lado (margen de gracia en las esquinas) |
 | Movimiento | `moving_speed` | float | 60 | px/s | Velocidad media de desplazamiento |

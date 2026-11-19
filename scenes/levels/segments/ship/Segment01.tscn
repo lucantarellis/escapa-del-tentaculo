@@ -10,15 +10,15 @@ script = ExtResource("seg")
 
 [node name="Start" parent="." unique_id=318649586 instance=ExtResource("plat")]
 position = Vector2(55, -46)
-size = Vector2(32, 12)
+size = Vector2(30, 12)
 
 [node name="Start2" parent="." unique_id=173502357 instance=ExtResource("plat")]
 position = Vector2(174, -46)
-size = Vector2(32, 12)
+size = Vector2(30, 12)
 
 [node name="Start3" parent="." unique_id=253857168 instance=ExtResource("plat")]
 position = Vector2(302, -46)
-size = Vector2(32, 12)
+size = Vector2(30, 12)
 
 [node name="BonusLedge" parent="." unique_id=2110065249 instance=ExtResource("plat")]
 position = Vector2(192, -468)

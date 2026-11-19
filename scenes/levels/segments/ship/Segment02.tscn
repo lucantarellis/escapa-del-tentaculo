@@ -14,7 +14,7 @@ platform_type = 2
 
 [node name="Ferry" parent="." unique_id=1972669124 instance=ExtResource("plat")]
 position = Vector2(80, -250)
-size = Vector2(146, 12)
+size = Vector2(150, 12)
 moves = true
 travel = Vector2(206, 0)
 

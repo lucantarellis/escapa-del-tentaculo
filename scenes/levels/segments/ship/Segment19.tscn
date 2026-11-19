@@ -34,13 +34,13 @@ travel = Vector2(-180, 0)
 
 [node name="Platform" parent="." unique_id=108185826 instance=ExtResource("2_e3xlj")]
 position = Vector2(208, -302)
-size = Vector2(25, 12)
+size = Vector2(30, 12)
 platform_type = 2
 
 [node name="Plataform5" parent="." unique_id=705649529 instance=ExtResource("2_e3xlj")]
-position = Vector2(68.99999, -292)
+position = Vector2(69.0, -289.085)
 rotation = -2.549926
-size = Vector2(80, 6.17)
+size = Vector2(80, 12)
 platform_type = 2
 travel = Vector2(120, -1.005)
 
@@ -48,9 +48,9 @@ travel = Vector2(120, -1.005)
 position = Vector2(276, -266)
 
 [node name="End" parent="." unique_id=1095286192 instance=ExtResource("2_e3xlj")]
-position = Vector2(315.00003, -162)
+position = Vector2(315.0, -159.085)
 rotation = -3.7332592
-size = Vector2(80, 6.17)
+size = Vector2(80, 12)
 platform_type = 2
 travel = Vector2(120, -1.005)
 

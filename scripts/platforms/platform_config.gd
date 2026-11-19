@@ -20,6 +20,9 @@ extends Resource
 @export var timed_off_duration: float = 1.0
 ## Si el ciclo empieza sólida (true) o atravesable (false).
 @export var timed_start_on: bool = true
+## Cuánto antes de apagarse la TIMED muestra el aviso (los emisores parpadean). Solo visual: no
+## cambia el ciclo. Unidad: s. Rango razonable: 0,3–1,0.
+@export var timed_warning_time: float = 0.7
 
 @export_group("One-way")
 ## Margen de detección de colisión de un solo sentido. Muy chico puede dejar atravesar al
