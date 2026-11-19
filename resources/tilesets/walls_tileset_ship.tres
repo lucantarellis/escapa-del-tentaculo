@@ -1,9 +1,9 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://di3u6j8buoagu"]
 
-[ext_resource type="Texture2D" path="res://assets/sprites/environment/ship_walls/walls_ship.png" id="1_al0be"]
-[ext_resource type="Texture2D" path="res://assets/sprites/environment/ship_walls/walls_ship_normal.png" id="2_hdvf6"]
-[ext_resource type="Texture2D" path="res://assets/sprites/environment/ship_walls/walls_ship_anim.png" id="3_7bhpl"]
-[ext_resource type="Texture2D" path="res://assets/sprites/environment/ship_walls/walls_ship_anim_normal.png" id="4_p2ic4"]
+[ext_resource type="Texture2D" uid="uid://lu0l7ix7yybi" path="res://assets/sprites/environment/ship_walls/walls_ship.png" id="1_al0be"]
+[ext_resource type="Texture2D" uid="uid://dh4k1bdrfjtlj" path="res://assets/sprites/environment/ship_walls/walls_ship_normal.png" id="2_hdvf6"]
+[ext_resource type="Texture2D" uid="uid://dgivshldher2n" path="res://assets/sprites/environment/ship_walls/walls_ship_anim.png" id="3_7bhpl"]
+[ext_resource type="Texture2D" uid="uid://c3m3i80yokqjw" path="res://assets/sprites/environment/ship_walls/walls_ship_anim_normal.png" id="4_p2ic4"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_70rbc"]
 diffuse_texture = ExtResource("1_al0be")

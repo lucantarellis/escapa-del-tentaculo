@@ -1,6 +1,6 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://ceenq40nrnsaq"]
 
-[ext_resource type="Texture2D" path="res://assets/sprites/environment/ship_walls/walls_ship_anim_emissive.png" id="1_sbgw5"]
+[ext_resource type="Texture2D" uid="uid://dxfx1ldd7p56l" path="res://assets/sprites/environment/ship_walls/walls_ship_anim_emissive.png" id="1_sbgw5"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rf5vu"]
 texture = ExtResource("1_sbgw5")
