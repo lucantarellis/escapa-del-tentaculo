@@ -10,28 +10,38 @@ signal collected
 @export var config: SpeedBoostConfig
 
 var _bob_time: float = 0.0
+var _collected: bool = false
 
-@onready var _body: Polygon2D = $Body
+@onready var _body: PickupSkin = $Skin
 
 
 func _ready() -> void:
 	if config == null:
 		config = SpeedBoostConfig.new()
 	body_entered.connect(_on_body_entered)
+	_body.collect_finished.connect(_on_collect_finished)
 
 
 func _process(delta: float) -> void:
+	if _collected:
+		return
 	_bob_time += delta
 	_body.position.y = sin(_bob_time * TAU * 1.2) * 3.0
 
 
 func _on_body_entered(body: Node2D) -> void:
 	var player: Player = body as Player
-	if player == null or not player.is_alive() or not visible:
+	if player == null or not player.is_alive() or not visible or _collected:
 		return
 	player.apply_speed_boost(config.duration, config.multiplier)
 	if config.fuel_amount > 0.0:
 		player.add_fuel(config.fuel_amount)
-	visible = false
+	_collected = true
 	set_deferred("monitoring", false)
+	_body.play_collect()
 	collected.emit()
+
+
+# Terminó el destello de recolección: se oculta (no se libera, como antes).
+func _on_collect_finished() -> void:
+	visible = false

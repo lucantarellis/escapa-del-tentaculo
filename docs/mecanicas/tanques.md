@@ -17,9 +17,9 @@ Es la única forma de recuperar combustible. Convierte el combustible limitado e
 - **Vaivén.** El dibujo sube y baja con un seno (`bob_amplitude`, `bob_frequency`); el área de detección no se mueve.
 - **Reutilizable.** Es una escena por instancia, configurable con su `config`. Para que un tanque recargue otra cantidad, duplicar el `.tres` y asignarlo en su `Config`.
 
-## Colores (placeholder)
+## Dibujo
 
-Cuerpo cian `#63D6C5` (convención: cian = recogible) con un detalle blanco azulado `#C8E7EA`. Tamaño 12×16 px.
+Hijo `Skin` (`PickupSkin`, hoja `pickup_tank`): tambor de 200 L de 12×16 px en un cuadro de 38×38, con aura cian detrás y partes cian emisivas encima (ver "Recogibles con sprites" más abajo). Al recogerlo se reproduce el destello `collect` (0,4 s) y recién ahí se oculta; con `reset()` vuelve a `idle`.
 
 ## Parámetros (`FuelTankConfig`)
 
@@ -44,12 +44,22 @@ Cuerpo cian `#63D6C5` (convención: cian = recogible) con un detalle blanco azul
 | `is_available() -> bool` | true si el tanque está visible y recogible |
 | `reset() -> void` | Lo deja disponible y cancela una reaparición pendiente. Si el jugador está encima en ese momento, lo recoge de nuevo al instante |
 
+## Recogibles con sprites
+
+Moneda, tanque, impulso y los tres reparadores se dibujan con `PickupSkin` (`scripts/pickups/pickup_skin.gd`); arte y hojas en `docs/arte/recogibles.md`.
+
+- **Capas:** aura (detrás, sin sombreado), ítem y emisivo (encima, sin sombreado), tres `AnimatedSprite2D` que siguen el cuadro del ítem. `SpriteFrames` armados desde el JSON de Aseprite y compartidos entre instancias.
+- **Animación:** `idle` (8 cuadros, 120 ms, loop) arranca en un cuadro al azar; `collect` (8 cuadros, 50 ms, sin loop) al recoger. El vaivén lo sigue haciendo cada recogible moviendo el `Skin`.
+- **Al terminar `collect`:** la moneda se libera (`queue_free`); tanque, impulso y reparadores se ocultan (no se liberan: el tanque puede reaparecer o resetearse). La colisión se apaga y el efecto se aplica al recoger, no al terminar el destello.
+- **Hoja por recogible:** tanque `pickup_tank`, moneda `pickup_coin`, impulso `pickup_boost`, reparador llave `pickup_wrench`, venda `pickup_tape` (cinta selladora), botiquín `pickup_toolbox` (caja de herramientas). Las colisiones no cambiaron.
+- **Editor:** `PickupSkin` es `@tool`; muestra el primer cuadro del ítem elegido en `sheet`.
+- **Luz opcional:** un `PointLight2D` cian chico por recogible queda para el paso de iluminación.
+
 ## Estructura de nodos
 
 ```
 FuelTank (Area2D, capa 6, máscara 2)   script: fuel_tank.gd
-├── Body (Polygon2D, cian)             se mueve con el vaivén
-│   └── Detail (Polygon2D, blanco azulado)
+├── Skin (PickupSkin)                  se mueve con el vaivén
 └── CollisionShape2D (RectangleShape2D 12×16)
 ```
 

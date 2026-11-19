@@ -25,7 +25,7 @@ Dar al jugador una forma de recuperar vidas durante la partida (mejora Reparador
 - `Player.heal(amount)` (menor que 0 = todas; devuelve lo curado), `Player.needs_healing()`, `Player.give_shield(duration)` (negativo = sin tiempo, dura hasta que te pegan), `PlayerProgress.get_shield_level()` / `get_shield_duration()`, `Player.has_shield()`, señal `Player.shield_changed(active)`. Los corazones del HUD se actualizan solos (`hit_points_changed`).
 
 ## Nodos
-`Repairer` (`Area2D`, capa 6 `pickups`, máscara 2 `player`) con un dibujo placeholder de polígonos según el tipo. Escena: `scenes/pickups/Repairer.tscn`.
+`Repairer` (`Area2D`, capa 6 `pickups`, máscara 2 `player`) con un hijo `PickupSkin` creado en código según el tipo: llave → `pickup_wrench`, venda → `pickup_tape` (cinta selladora), botiquín → `pickup_toolbox` (caja de herramientas). Al recogerlo reproduce el destello de recolección y se oculta. Ver "Recogibles con sprites" en `docs/mecanicas/tanques.md`. Escena: `scenes/pickups/Repairer.tscn`.
 
 ## Cómo probar
 1. En el mercado (rama Repara) comprar Vidas I, Vidas II y Reparador I (alcanzan monedas de varias partidas; o `debug_set_coins` en `ProgressConfig`).

@@ -19,7 +19,7 @@ const FULL_TOLERANCE: float = 0.001
 ## Parámetros de recarga y animación (ver [FuelTankConfig]).
 @export var config: FuelTankConfig
 
-@onready var _body: Polygon2D = $Body
+@onready var _body: PickupSkin = $Skin
 
 var _available: bool = true
 var _respawn_left: float = 0.0
@@ -31,6 +31,7 @@ func _ready() -> void:
 		push_warning("FuelTank '%s' sin config: se usan los valores por defecto." % name)
 		config = FuelTankConfig.new()
 	body_entered.connect(_on_body_entered)
+	_body.collect_finished.connect(_on_collect_finished)
 
 
 func _process(delta: float) -> void:
@@ -90,5 +91,16 @@ func _try_collect(body: Node2D) -> void:
 # callbacks de física).
 func _set_available(available: bool) -> void:
 	_available = available
-	visible = available
 	set_deferred("monitoring", available)
+	if available:
+		visible = true
+		_body.play_idle()
+	else:
+		# Se queda visible mientras dura el destello de recolección (`_on_collect_finished`).
+		_body.play_collect()
+
+
+# Terminó el destello: si no volvió a estar disponible mientras tanto, se oculta.
+func _on_collect_finished() -> void:
+	if not _available:
+		visible = false

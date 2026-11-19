@@ -2,8 +2,8 @@ class_name Repairer
 extends Area2D
 ## Reparador: recogible que cura al jugador (mejora Reparador del mercado).
 ##
-## Hay tres tipos: la llave inglesa cura 1 vida, la venda cura 2 y el botiquín cura todas y da un
-## escudo. Es un [Area2D] (capa 6 `pickups`, máscara 2 `player`): al tocarlo un jugador vivo lo cura
+## Hay tres tipos: la llave inglesa cura 1 vida, la venda (cinta selladora) cura 2 y el botiquín (caja de
+## herramientas) cura todas y da un escudo. Es un [Area2D] (capa 6 `pickups`, máscara 2 `player`): al tocarlo un jugador vivo lo cura
 ## y desaparece (un solo uso). La llave y la venda no se recogen con la vida llena: se quedan en su
 ## lugar. El botiquín se recoge siempre (por el escudo). Los valores salen de [ProgressConfig].
 ## Ver `docs/mecanicas/reparadores.md`.
@@ -18,9 +18,12 @@ enum Kind {
 ## El jugador recogió el reparador. [param kind] es su tipo y [param healed] cuántas vidas curó.
 signal collected(kind: Kind, healed: int)
 
-## Colores placeholder: cian de recogible y blanco azulado de detalle. Solo visual.
-const COLOR_MAIN: Color = Color("#63D6C5")
-const COLOR_DETAIL: Color = Color("#C8E7EA")
+## Hoja de sprites de cada tipo (la venda se dibuja como cinta selladora). Estructural.
+const SHEET_BY_KIND: Dictionary = {
+	Kind.WRENCH: "pickup_wrench",
+	Kind.BANDAGE: "pickup_tape",
+	Kind.MEDKIT: "pickup_toolbox",
+}
 ## Amplitud (px) y velocidad (Hz) del vaivén. Solo visual.
 const BOB_AMPLITUDE: float = 2.0
 const BOB_FREQUENCY: float = 1.2
@@ -31,13 +34,14 @@ const BOB_FREQUENCY: float = 1.2
 
 var _available: bool = true
 var _bob_time: float = 0.0
-var _visual: Node2D
+var _visual: PickupSkin
 
 
 func _ready() -> void:
-	_visual = Node2D.new()
+	_visual = PickupSkin.new()
+	_visual.sheet = SHEET_BY_KIND[kind]
 	add_child(_visual)
-	_build_visual()
+	_visual.collect_finished.connect(_on_collect_finished)
 	body_entered.connect(_on_body_entered)
 
 
@@ -62,31 +66,6 @@ func is_available() -> bool:
 	return _available
 
 
-# Dibujo placeholder según el tipo, con polígonos simples (sin imágenes).
-func _build_visual() -> void:
-	match kind:
-		Kind.WRENCH:
-			# Mango inclinado y cabeza con boca.
-			_add_poly(PackedVector2Array([Vector2(-7, 5), Vector2(-4, 8), Vector2(5, -1), Vector2(2, -4)]), COLOR_MAIN)
-			_add_poly(PackedVector2Array([Vector2(1, -9), Vector2(8, -9), Vector2(9, -2), Vector2(5, -2), Vector2(5, -5), Vector2(3, -5), Vector2(3, -2), Vector2(-1, -2)]), COLOR_MAIN)
-		Kind.BANDAGE:
-			# Tira con una almohadilla al centro.
-			_add_poly(PackedVector2Array([Vector2(-10, -4), Vector2(10, -4), Vector2(10, 4), Vector2(-10, 4)]), COLOR_MAIN)
-			_add_poly(PackedVector2Array([Vector2(-3, -4), Vector2(3, -4), Vector2(3, 4), Vector2(-3, 4)]), COLOR_DETAIL)
-		Kind.MEDKIT:
-			# Caja blanca azulada con cruz cian.
-			_add_poly(PackedVector2Array([Vector2(-9, -7), Vector2(9, -7), Vector2(9, 7), Vector2(-9, 7)]), COLOR_DETAIL)
-			_add_poly(PackedVector2Array([Vector2(-2, -5), Vector2(2, -5), Vector2(2, 5), Vector2(-2, 5)]), COLOR_MAIN)
-			_add_poly(PackedVector2Array([Vector2(-6, -2), Vector2(6, -2), Vector2(6, 2), Vector2(-6, 2)]), COLOR_MAIN)
-
-
-func _add_poly(points: PackedVector2Array, color: Color) -> void:
-	var poly: Polygon2D = Polygon2D.new()
-	poly.polygon = points
-	poly.color = color
-	_visual.add_child(poly)
-
-
 func _on_body_entered(body: Node2D) -> void:
 	var player: Player = body as Player
 	if player == null or not player.is_alive() or not _available:
@@ -106,6 +85,11 @@ func _on_body_entered(body: Node2D) -> void:
 			healed = player.heal(-1)
 			player.give_shield(PlayerProgress.get_shield_duration())
 	_available = false
-	visible = false
 	set_deferred("monitoring", false)
+	_visual.play_collect()
 	collected.emit(kind, healed)
+
+
+# Terminó el destello de recolección: se oculta.
+func _on_collect_finished() -> void:
+	visible = false

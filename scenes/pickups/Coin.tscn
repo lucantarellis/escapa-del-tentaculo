@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/pickups/coin.gd" id="1_coin"]
 [ext_resource type="Resource" path="res://resources/configs/coin_config.tres" id="2_config"]
+[ext_resource type="Script" path="res://scripts/pickups/pickup_skin.gd" id="9_skin"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_coin"]
 radius = 8.0
@@ -12,13 +13,9 @@ collision_mask = 2
 script = ExtResource("1_coin")
 config = ExtResource("2_config")
 
-[node name="Body" type="Polygon2D" parent="."]
-color = Color(0.3882, 0.8392, 0.7725, 1)
-polygon = PackedVector2Array(-3, -7, 3, -7, 7, -3, 7, 3, 3, 7, -3, 7, -7, 3, -7, -3)
-
-[node name="Detail" type="Polygon2D" parent="Body"]
-color = Color(0.7843, 0.9059, 0.9176, 1)
-polygon = PackedVector2Array(-2, -4, 2, -4, 4, -2, 4, 2, 2, 4, -2, 4, -4, 2, -4, -2)
+[node name="Skin" type="Node2D" parent="."]
+script = ExtResource("9_skin")
+sheet = "pickup_coin"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_coin")

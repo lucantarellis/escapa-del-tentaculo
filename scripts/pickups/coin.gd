@@ -3,7 +3,8 @@ extends Area2D
 ## Moneda: recogible que suma monedas a la partida en curso.
 ##
 ## Es un [Area2D] (capa 6 `pickups`, máscara 2 `player`): no colisiona físicamente. Al tocarla un
-## jugador vivo emite [signal collected] y desaparece (un solo uso). Quien la crea (ver
+## jugador vivo emite [signal collected], reproduce el destello de recolección y se libera al
+## terminarlo (un solo uso). Quien la crea (ver
 ## [CoinSpawner]) conecta la señal con [method PlayerProgress.add_run_coins]. Las monedas
 ## juntadas se guardan al terminar la partida. Ver `docs/mecanicas/progreso-mercado.md`.
 
@@ -14,7 +15,7 @@ signal collected(value: int)
 ## Valor y animación (ver [CoinConfig]).
 @export var config: CoinConfig
 
-@onready var _body: Polygon2D = $Body
+@onready var _body: PickupSkin = $Skin
 
 var _available: bool = true
 var _bob_time: float = 0.0
@@ -24,6 +25,7 @@ func _ready() -> void:
 	if config == null:
 		config = CoinConfig.new()
 	body_entered.connect(_on_body_entered)
+	_body.collect_finished.connect(queue_free)
 
 
 func _process(delta: float) -> void:
@@ -44,7 +46,8 @@ func _on_body_entered(body: Node2D) -> void:
 	if player == null or not player.is_alive() or not _available:
 		return
 	_available = false
-	visible = false
 	set_deferred("monitoring", false)
+	# Destello de recolección; al terminar la moneda se libera (la suma ya se hizo).
+	_body.play_collect()
 	# Las mejoras de monedas del árbol suben lo que vale (ver [PlayerProgress]).
 	collected.emit(PlayerProgress.get_coin_value(config.value))
