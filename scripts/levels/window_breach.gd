@@ -33,6 +33,10 @@ const TENTACLE_ONE_SHOT: Array[StringName] = [&"reach", &"grab", &"retract"]
 ## z del tentáculo: detrás de las paredes (−1), así el techo lo recorta y se lo ve por el hueco.
 ## Estructural.
 const TENTACLE_Z: int = -2
+## Tronco que continúa la base del sprite hacia arriba (así nunca se ve el corte de la base): filas
+## de abajo del cuadro que se repiten en espejo, y largo total. Estructural. Unidad: px.
+const TRUNK_BLOCK_ROWS: int = 60
+const TRUNK_LENGTH: float = 1400.0
 ## Color del vidrio en el editor (cuando no hay sprite). Solo visual.
 const GLASS_COLOR: Color = Color(0.7843, 0.9059, 0.9176, 0.45)
 
@@ -60,9 +64,9 @@ const GLASS_COLOR: Color = Color(0.7843, 0.9059, 0.9176, 0.45)
 ## Cuánto entra en la nave, por debajo del vidrio, la parte más baja del tentáculo mientras intenta
 ## agarrar (`grab`). Unidad: px.
 @export var tentacle_grab_depth: float = 50.0
-## Cuánto se lo ve por encima del techo (afuera) antes de tocar el vidrio. Más arriba se recorta, así
-## no se ve el corte de la base del sprite. Unidad: px.
-@export var tentacle_visible_above: float = 80.0
+## Cuánto sube al retirarse antes de liberarse (sale de la pantalla aunque la cámara suba con el
+## jugador). Unidad: px.
+@export var tentacle_ascent_distance: float = 900.0
 ## Tiempo que tarda en subir hasta salir (mientras reproduce `retract`). Unidad: s.
 @export var tentacle_ascent_time: float = 0.7
 
@@ -89,7 +93,7 @@ var _glass: StaticBody2D
 var _glass_sprite: SheetSprite
 var _wind: SheetSprite
 var _tentacle: AnimatedSprite2D
-var _tentacle_clip: Node2D
+var _trunk: Node2D
 var _tentacle_path: String = ""
 var _tentacle_tween: Tween
 
@@ -179,19 +183,23 @@ func _start_tentacle() -> void:
 		if frames.has_animation(anim):
 			frames.set_animation_loop(anim, false)
 	_measure_tips(_tentacle_path, frames)
-	# Recorte: el tentáculo solo se ve desde `tentacle_visible_above` sobre el techo hacia abajo.
-	_tentacle_clip = Node2D.new()
-	_tentacle_clip.name = "TentacleClip"
-	_tentacle_clip.z_index = TENTACLE_Z
-	_tentacle_clip.clip_children = CanvasItem.CLIP_CHILDREN_ONLY
-	_tentacle_clip.draw.connect(_draw_tentacle_clip)
-	add_child(_tentacle_clip)
 	_tentacle = AnimatedSprite2D.new()
 	_tentacle.sprite_frames = frames
 	_tentacle.flip_v = true
 	_tentacle.flip_h = randf() < 0.5
+	_tentacle.z_index = TENTACLE_Z
 	_tentacle.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	_tentacle_clip.add_child(_tentacle)
+	add_child(_tentacle)
+	# Tronco hacia arriba desde la base: el tentáculo viene del alien, que está afuera.
+	_trunk = Node2D.new()
+	_trunk.name = "Trunk"
+	_trunk.show_behind_parent = true
+	_trunk.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_trunk.scale.x = -1.0 if _tentacle.flip_h else 1.0
+	_trunk.draw.connect(_draw_trunk)
+	_tentacle.add_child(_trunk)
+	_tentacle.frame_changed.connect(_trunk.queue_redraw)
+	_tentacle.animation_changed.connect(_trunk.queue_redraw)
 	_tentacle.animation = &"reach"
 	# Centrado en x del vidrio según dónde queda la punta al final de `reach` (el cuerpo se curva).
 	var last_tip: Vector2 = _tip_local(&"reach", frames.get_frame_count(&"reach") - 1)
@@ -226,31 +234,43 @@ func _on_descent_finished() -> void:
 func _retract() -> void:
 	_tentacle.play(&"retract")
 	_tentacle.speed_scale = _anim_length(_tentacle.sprite_frames, &"retract") / maxf(tentacle_ascent_time, 0.05)
-	# Sube hasta que todo el tentáculo queda por encima del recorte.
-	var deepest: float = -INF
-	for f: int in _tentacle.sprite_frames.get_frame_count(&"retract"):
-		deepest = maxf(deepest, _tip_local(&"retract", f).y)
-	var top_y: float = _clip_top() - deepest - 10.0
+	# Sube hasta salir de la pantalla (la cámara también sube, siguiendo al jugador).
+	var top_y: float = _tentacle.position.y - tentacle_ascent_distance
 	_tentacle_tween = create_tween()
 	_tentacle_tween.tween_property(_tentacle, "position:y", top_y, tentacle_ascent_time).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD)
 	_tentacle_tween.tween_callback(_free_tentacle)
 
 
 func _free_tentacle() -> void:
-	_tentacle_clip.queue_free()
-	_tentacle_clip = null
+	_tentacle.queue_free()
 	_tentacle = null
+	_trunk = null
 
 
-# Y del borde de arriba del recorte del tentáculo.
-func _clip_top() -> float:
-	return -glass_size.y * 0.5 - tentacle_visible_above
-
-
-# Zona donde se ve el tentáculo: desde el recorte hacia abajo, todo el ancho del segmento.
-func _draw_tentacle_clip() -> void:
-	var top: float = _clip_top()
-	_tentacle_clip.draw_rect(Rect2(-400.0, top, 800.0, 1200.0), Color.WHITE)
+# Dibuja el tronco encima de la base del sprite dado vuelta: el bloque de las últimas filas del cuadro
+# (donde está el corte de la base, igual en todos los cuadros) repetido en espejo hacia arriba, así
+# empalma sin costura con el sprite y el tentáculo no termina a la vista.
+func _draw_trunk() -> void:
+	if _tentacle == null:
+		return
+	var texture: AtlasTexture = _tentacle.sprite_frames.get_frame_texture(_tentacle.animation, _tentacle.frame) as AtlasTexture
+	if texture == null:
+		return
+	var size: Vector2 = texture.region.size
+	var rows: float = float(TRUNK_BLOCK_ROWS)
+	var region: Rect2 = Rect2(texture.region.position + Vector2(0.0, size.y - rows), Vector2(size.x, rows))
+	var top_of_sprite: float = -size.y * 0.5
+	var blocks: int = ceili(TRUNK_LENGTH / rows)
+	for i: int in blocks:
+		var bottom: float = top_of_sprite - rows * i
+		# Bloque 0 derecho (la última fila del cuadro queda pegada a la base, que dado vuelta es la
+		# primera fila del sprite); los siguientes alternan en espejo.
+		if i % 2 == 0:
+			_trunk.draw_texture_rect_region(texture.atlas, Rect2(-size.x * 0.5, bottom - rows, size.x, rows), region)
+		else:
+			_trunk.draw_set_transform(Vector2(0.0, bottom - rows * 0.5), 0.0, Vector2(1.0, -1.0))
+			_trunk.draw_texture_rect_region(texture.atlas, Rect2(-size.x * 0.5, -rows * 0.5, size.x, rows), region)
+			_trunk.draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 
 # Rompe el ventanal: grietas y estallido del vidrio, sacudida, vidrios, succión y señal.
