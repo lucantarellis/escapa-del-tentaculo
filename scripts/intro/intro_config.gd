@@ -40,8 +40,6 @@ extends Resource
 @export var break_shake_duration: float = 0.6
 ## Partículas de la ráfaga grande de gas de la ruptura.
 @export var break_gas_amount: int = 80
-## Duración de la animación de apertura de las hojas. Unidad: s.
-@export var break_duration: float = 0.35
 ## Fragmentos de polígono que salen despedidos al romperse.
 @export var break_debris_count: int = 6
 
@@ -65,3 +63,19 @@ extends Resource
 @export var tentacle_entry_delay: float = 1.5
 ## Duración de la subida del tentáculo desde fuera de pantalla hasta su posición. Unidad: s.
 @export var tentacle_entry_duration: float = 1.0
+
+@export_group("Luz de la escotilla")
+## Color de la luz que sale de la escotilla.
+@export var hatch_light_color: Color = Color("CD1417")
+## Radio de la luz. Unidad: px.
+@export var hatch_light_radius: float = 140.0
+## Energía con la escotilla cerrada (casi nula: solo la rendija).
+@export var hatch_light_energy_closed: float = 0.1
+## Energía que suma cada golpe.
+@export var hatch_light_energy_per_hit: float = 0.3
+## Pico de energía en la ruptura.
+@export var hatch_light_energy_break: float = 2.0
+## Energía con la escotilla rota (queda el hueco rojo).
+@export var hatch_light_energy_broken: float = 0.7
+## Tiempo con que la luz pasa de un valor al otro en cada golpe. Unidad: s.
+@export var hatch_light_fade: float = 0.15

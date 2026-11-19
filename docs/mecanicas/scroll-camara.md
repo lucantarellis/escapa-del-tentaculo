@@ -86,3 +86,7 @@ ScrollCamera (Camera2D, process_callback = Physics, sin suavizado)
 2. Empujar al jugador contra los costados y hacia arriba: no debe poder salir.
 3. Para ver el modo anterior, poner `follow_player` en false en `scroll_config.tres`: la cámara sube sola a `scroll_speed`.
 4. Editar `scroll_config.tres` (por ejemplo `scroll_speed` o `scroll_acceleration`) y volver a ejecutar. Los valores que se ajustan mientras se prueba son de prueba, no de balance: no se anotan en `docs/TUNING_LOG.md`.
+
+## Techo temporal de la vista
+
+`set_view_ceiling(top_y)` impide que el borde superior de la pantalla pase de `top_y` (Y mundo); `clear_view_ceiling()` lo quita. Se aplica después de todo el movimiento (seguimiento, scroll y `follow_up`). Lo usa `WindowBreach`: el ventanal de la salida de la nave queda arriba del todo hasta que se rompe.

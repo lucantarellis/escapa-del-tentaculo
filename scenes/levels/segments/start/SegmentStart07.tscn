@@ -1,5 +1,6 @@
 [gd_scene format=3]
 
+[ext_resource type="Script" path="res://scripts/levels/ship_floor.gd" id="floor"]
 [ext_resource type="Script" path="res://scripts/levels/level_segment.gd" id="seg"]
 [ext_resource type="PackedScene" path="res://scenes/platforms/Platform.tscn" id="plat"]
 [ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
@@ -12,9 +13,9 @@ script = ExtResource("seg")
 collision_layer = 1
 collision_mask = 0
 
-[node name="Polygon2D" type="Polygon2D" parent="Floor"]
-color = Color(0.2275, 0.6078, 0.749, 1)
-polygon = PackedVector2Array(0, -20, 360, -20, 360, 0, 0, 0)
+[node name="ShipFloor" type="Node2D" parent="Floor"]
+script = ExtResource("floor")
+floor_seed = 143
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Floor"]
 polygon = PackedVector2Array(0, -20, 360, -20, 360, 0, 0, 0)

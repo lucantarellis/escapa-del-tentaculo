@@ -42,6 +42,9 @@ var _follow_target: Node2D
 var _follow_margin: float = 0.0
 ## Jugador al que sigue la cámara con `follow_player` (se busca por el grupo `player`).
 var _player_target: Node2D
+## Techo temporal de la vista (ver [method set_view_ceiling]): Y mundo que el borde superior de la
+## pantalla no puede pasar. `INF` = sin techo.
+var _view_ceiling: float = INF
 
 
 func _ready() -> void:
@@ -54,6 +57,30 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	_step(delta)
+	_apply_view_ceiling()
+
+
+## Pone un techo temporal a la vista: el borde superior de la pantalla no sube más allá de
+## [param top_y] (Y mundo). Lo usa [WindowBreach] para que el ventanal quede arriba del todo hasta
+## que se rompe (lo que hay del otro lado es el espacio, que todavía no se muestra). Si hay varios
+## pedidos queda el más bajo.
+func set_view_ceiling(top_y: float) -> void:
+	_view_ceiling = top_y if _view_ceiling == INF else maxf(_view_ceiling, top_y)
+
+
+## Quita el techo temporal de la vista (ver [method set_view_ceiling]).
+func clear_view_ceiling() -> void:
+	_view_ceiling = INF
+
+
+func _apply_view_ceiling() -> void:
+	if _view_ceiling == INF:
+		return
+	global_position.y = maxf(global_position.y, _view_ceiling + _get_visible_size().y * 0.5)
+
+
+func _step(delta: float) -> void:
 	_apply_follow()
 	var follows_player: bool = config.follow_player
 	# Siguiendo al jugador la cámara nunca "termina": el tope solo limita hasta dónde sube.

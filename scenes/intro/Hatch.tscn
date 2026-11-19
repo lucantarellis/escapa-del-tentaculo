@@ -1,23 +1,33 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/intro/hatch.gd" id="1_hatch"]
+[ext_resource type="Script" path="res://scripts/visual/sheet_sprite.gd" id="2_sheet"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_unshaded"]
+light_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_glow"]
+blend_mode = 1
+light_mode = 1
 
 [node name="Hatch" type="Node2D"]
 process_mode = 3
 script = ExtResource("1_hatch")
 
+[node name="Light" type="PointLight2D" parent="."]
+position = Vector2(0, -12)
+energy = 0.1
+
 [node name="Visual" type="Node2D" parent="."]
 
-[node name="Frame" type="Polygon2D" parent="Visual"]
+[node name="Sprite" type="Sprite2D" parent="Visual"]
+script = ExtResource("2_sheet")
 
-[node name="Hole" type="Polygon2D" parent="Visual"]
-visible = false
+[node name="Emissive" type="Sprite2D" parent="Visual"]
+material = SubResource("CanvasItemMaterial_unshaded")
 
-[node name="Glow" type="Polygon2D" parent="Visual"]
-
-[node name="LeafLeft" type="Polygon2D" parent="Visual"]
-
-[node name="LeafRight" type="Polygon2D" parent="Visual"]
+[node name="Glow" type="Sprite2D" parent="Visual"]
+material = SubResource("CanvasItemMaterial_glow")
 
 [node name="GasParticles" type="CPUParticles2D" parent="."]
 emitting = false

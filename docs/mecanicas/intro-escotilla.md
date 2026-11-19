@@ -17,7 +17,7 @@ Tiempos medidos desde el fin del fundido del título (`TitleMenu.faded_out`), cu
 | 0.6 | Golpe 1 (fuerza ×1): vibración de cámara de 8 px, escotilla sacudida y algo abombada, ráfaga de gas |
 | 1.6 | Golpe 2 (fuerza ×1,3): 10,4 px |
 | 2.6 | Golpe 3 (fuerza ×1,69): 13,5 px |
-| 3.3 | **Ruptura** (`pre_break_pause` tras el último golpe): vibración fuerte de cámara (16 px, 0,6 s), ráfaga grande de gas (80 partículas), 6 fragmentos despedidos y las hojas se abren en 0,35 s. En ese mismo instante el jugador **aparece en el centro superior de la escotilla** con `velocity.y = −560` (`launch_speed`) y **sin control** durante 0,5 s (`control_lock_time`). Empieza la partida: `LevelController` reanuda el nivel, estado `PLAYING`, HUD visible. La cámara empieza a subir 2 s después (su `start_delay`, sin cambios) |
+| 3.3 | **Ruptura** (`pre_break_pause` tras el último golpe): vibración fuerte de cámara (16 px, 0,6 s), ráfaga grande de gas (80 partículas), 6 fragmentos despedidos y las hojas se abren con rebote (tag `break`, 0,41 s; la luz roja hace un pico y queda media). En ese mismo instante el jugador **aparece en el centro superior de la escotilla** con `velocity.y = −560` (`launch_speed`) y **sin control** durante 0,5 s (`control_lock_time`). Empieza la partida: `LevelController` reanuda el nivel, estado `PLAYING`, HUD visible. La cámara empieza a subir 2 s después (su `start_delay`, sin cambios) |
 | 3.8 | Vuelve el control al jugador (ya subió ~256 px) |
 | 4.8 | `tentacle_entry_delay` (1,5 s) tras la ruptura: el tentáculo empieza a entrar desde debajo de la pantalla y es letal donde esté su borde superior |
 | 5.8 | `tentacle_entry_duration` (1 s): el tentáculo llegó a su posición normal y sigue como siempre |
@@ -74,7 +74,6 @@ La intro corre cuando alguien llama a `LevelController.play_intro()`: `Main` al 
 | Ruptura | `break_shake_amplitude` | 16.0 | px | Amplitud de la vibración de la ruptura |
 | Ruptura | `break_shake_duration` | 0.6 | s | Duración de esa vibración |
 | Ruptura | `break_gas_amount` | 80 | partículas | Partículas de la ráfaga grande |
-| Ruptura | `break_duration` | 0.35 | s | Duración de la apertura de las hojas |
 | Ruptura | `break_debris_count` | 6 | — | Fragmentos que salen despedidos |
 | Lanzamiento | `launch_speed` | 520.0 | px/s | Velocidad vertical inicial (hacia arriba) |
 | Lanzamiento | `control_lock_time` | 0.5 | s | Tiempo sin control tras el lanzamiento |
@@ -89,15 +88,21 @@ Los valores son de prueba (no se anotan en `TUNING_LOG.md`). `Level.tscn` refere
 
 ```
 Hatch (Node2D, ALWAYS)           origen = centro del borde superior del piso
+├── Light (PointLight2D)         luz roja #CD1417; energía según el estado (IntroConfig, grupo "Luz de la escotilla")
 ├── Visual (Node2D)              se sacude con cada golpe
-│   ├── Frame (Polygon2D)        marco, blanco azulado #C8E7EA, 128×32 px
-│   ├── Hole (Polygon2D)         hueco oscuro #050609; solo visible cuando está rota
-│   ├── Glow (Polygon2D)         brillo rojo #D83232; su opacidad sube con cada golpe
-│   ├── LeafLeft / LeafRight     hojas azul frío #3A9BBF; se arquean con cada golpe y se abren al romperse
+│   ├── Sprite (SheetSprite)     hoja `hatch` con relieve; maneja la animación (tags del JSON de Aseprite)
+│   ├── Emissive (Sprite2D)      `hatch_emissive`, sin sombreado; sigue el cuadro de Sprite
+│   └── Glow (Sprite2D)          `hatch_glow`, sin sombreado y aditivo; sigue el cuadro de Sprite
 └── GasParticles (CPUParticles2D)  una sola ráfaga (one_shot), sin textura, blanco azulado con alfa
 ```
 
-Se ubica en el `HatchAnchor` (Marker2D) del segmento de inicio (`SegmentStartNN.tscn`, centro del borde superior del piso: (180, −20) local, o sea (180, 620) en el nivel) mediante `LevelBuilder.get_hatch_position()`. En `Level.tscn` está entre la cámara y el jugador: se dibuja sobre el piso y bajo el jugador. Todos los colores y medidas visuales son `const` en `hatch.gd`.
+**Estados (arte: `docs/arte/piso-y-escotilla.md`):** cerrada `closed` (loop); golpe *k* → `hit_k` y después `idle_k` (loop; desde el 4.º golpe se repite `hit_3`); `break_open()` → `break`, `break_finished` al terminar y queda en `broken` (loop); `set_broken(true/false)` → `broken` o `closed` sin animación. Las hojas ya no se rotan por código; la sacudida (`Visual.position`), el gas y los fragmentos (un cuadro al azar de `hatch_debris` cada uno) siguen en código. El jugador sale desde `FRAME_TOP` = −15 (cara superior del marco).
+
+**Luz:** energía `hatch_light_energy_closed` (0,1) cerrada, +`hatch_light_energy_per_hit` (0,3) por golpe, pico `hatch_light_energy_break` (2,0) en la ruptura y `hatch_light_energy_broken` (0,7) rota; radio `hatch_light_radius` (140 px), transición `hatch_light_fade` (0,15 s). Sin la oscuridad del Paso 9 la luz solo tiñe de rojo lo que alcanza.
+
+**Piso:** el `Floor` de cada `SegmentStartNN` dibuja el piso en 3/4 con `ShipFloor` (`scripts/levels/ship_floor.gd`, módulos de `floor_ship`, `floor_seed` propio por segmento, franjas de peligro a los lados de `hatch_x`); la colisión (banda de 360×20) no cambió.
+
+Se ubica en el `HatchAnchor` (Marker2D) del segmento de inicio (`SegmentStartNN.tscn`, centro del borde superior del piso: (180, −20) local, o sea (180, 620) en el nivel) mediante `LevelBuilder.get_hatch_position()`. En `Level.tscn` está entre la cámara y el jugador: se dibuja sobre el piso y bajo el jugador. Las medidas visuales son `const` en `hatch.gd`.
 
 ## API
 

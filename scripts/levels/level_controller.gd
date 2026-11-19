@@ -87,6 +87,8 @@ var _intro_director: IntroDirector
 var _tier_starts: Array[Dictionary] = []
 var _next_tier: int = 0
 var _current_tier: int = -1
+## Tiers cuyo fondo ya se aplicó antes de entrar (ver [method _on_window_broken]).
+var _background_preapplied: Dictionary = {}
 # Aviso de fase completada (se arma por código en la capa de mensajes).
 var _notice_label: Label
 var _notice_tween: Tween
@@ -122,6 +124,8 @@ func _ready() -> void:
 			ys.append(_tier_starts[i]["y"])
 		_hud.set_tier_marks(ys)
 		_hud.set_record(RunRecords.get_best_progress())
+	for window: Node in get_tree().get_nodes_in_group(&"window_breach"):
+		(window as WindowBreach).broken.connect(_on_window_broken)
 	GameManager.state_changed.connect(_on_state_changed)
 	_run_seed = run_seed
 	# El segmento de inicio es parte del primer tier: su escenario rige desde el arranque.
@@ -215,14 +219,32 @@ func get_current_tier() -> int:
 	return _current_tier
 
 
+func _apply_tier_background(tier: SegmentTier, fade: float) -> void:
+	if _background != null and tier.background_color.a > 0.0:
+		_background.apply_style(tier.background_color, tier.background_stars, fade, tier.background_vignette, tier.background_ship)
+
+
+# El ventanal de la salida de la nave se rompió: del otro lado ya es el tier siguiente (el espacio),
+# así que su fondo entra ahora, sin esperar a que el jugador cruce el borde del tier.
+func _on_window_broken() -> void:
+	if _next_tier >= _tier_starts.size():
+		return
+	var tier_index: int = int(_tier_starts[_next_tier]["tier"])
+	var tier: SegmentTier = _builder.config.tiers[tier_index]
+	if tier == null:
+		return
+	_apply_tier_background(tier, tier.background_fade)
+	_background_preapplied[tier_index] = true
+
+
 # Aplica el escenario del tier: perseguidor y física del jugador. El tileset de paredes ya lo
 # puso el LevelBuilder al armar.
 func _enter_tier(tier_index: int) -> void:
 	var first: bool = _current_tier < 0
 	_current_tier = tier_index
 	var tier: SegmentTier = _builder.config.tiers[tier_index]
-	if tier != null and _background != null and tier.background_color.a > 0.0:
-		_background.apply_style(tier.background_color, tier.background_stars, 0.0 if first else tier.background_fade, tier.background_vignette, tier.background_ship)
+	if tier != null and not _background_preapplied.has(tier_index):
+		_apply_tier_background(tier, 0.0 if first else tier.background_fade)
 	if tier != null:
 		_tentacle.apply_pursuer(tier.pursuer_config, tier.pursuer_color, tier.pursuer_reset_position)
 		if tier.pursuer_delay > 0.0 and not first:

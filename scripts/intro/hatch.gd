@@ -2,40 +2,41 @@ class_name Hatch
 extends Node2D
 ## Escotilla del piso del segmento de inicio: de ahí "sale" el jugador en la intro.
 ##
-## Tiene tres estados visuales: cerrada, golpeada (cada [method hit] la abomba un poco más, la
-## sacude, intensifica el brillo rojo de abajo y suelta una ráfaga de gas) y rota (hojas abiertas,
-## marco visible y hueco oscuro; ver [method set_broken]). El origen del nodo es el centro del
-## borde SUPERIOR del piso. Corre siempre (`PROCESS_MODE_ALWAYS`) porque el nivel está en
-## pausa mientras dura la intro. Todo es placeholder. Ver `docs/mecanicas/intro-escotilla.md`.
+## Tiene tres estados visuales, dibujados con la hoja `hatch` (ver `docs/arte/piso-y-escotilla.md`):
+## cerrada (`closed`, la rendija respira en rojo tenue), golpeada (cada [method hit] reproduce
+## `hit_k` y queda en `idle_k`, más abombada y con más luz) y rota (`break` y después `broken`).
+## Tres capas sincronizadas: color con relieve, emisivo y resplandor (aditivo), más una luz roja
+## (`PointLight2D`) cuya energía sigue el estado (valores en [IntroConfig]). El origen del nodo es
+## el centro del borde SUPERIOR del piso. Corre siempre (`PROCESS_MODE_ALWAYS`) porque el nivel
+## está en pausa mientras dura la intro. Ver `docs/mecanicas/intro-escotilla.md`.
 
-## Azul frío de la paleta: hojas. Solo visual.
-const COLOR_LEAF: Color = Color("#3A9BBF")
-## Blanco azulado de la paleta: marco. Solo visual.
-const COLOR_FRAME: Color = Color("#C8E7EA")
-## Rojo de la paleta: brillo de abajo. Solo visual.
-const COLOR_GLOW: Color = Color("#D83232")
-## Negro de la paleta: hueco de la escotilla rota. Solo visual.
-const COLOR_HOLE: Color = Color("#050609")
 ## Blanco azulado con alfa: gas. Solo visual.
 const COLOR_GAS: Color = Color(0.784, 0.906, 0.918, 0.55)
+## Hojas de la escotilla (color + relieve, emisivo, resplandor) y su JSON de Aseprite. Estructural.
+const SHEET_DIR: String = "res://assets/sprites/intro/"
+const SHEET_JSON: String = SHEET_DIR + "hatch.json"
+## Fragmentos: 6 cuadros de 12×12 en una columna. Estructural.
+const DEBRIS_SHEET: String = SHEET_DIR + "hatch_debris.png"
+const DEBRIS_SHEET_NORMAL: String = SHEET_DIR + "hatch_debris_normal.png"
+const DEBRIS_FRAMES: int = 6
+const DEBRIS_FRAME_SIZE: float = 12.0
+## Desplazamiento del dibujo: el origen del nodo (centro del borde superior del piso) está en
+## (72, 64) del cuadro de 144×96. Estructural. Unidad: px.
+const SPRITE_OFFSET: Vector2 = Vector2(0.0, -16.0)
+## Golpes con animación propia (`hit_1..3`); los siguientes repiten el último. Estructural.
+const MAX_HIT_ANIM: int = 3
 ## Semiancho del marco. Solo visual. Unidad: px.
 const FRAME_HALF_WIDTH: float = 64.0
-## Y del borde superior del marco respecto del origen (negativo = sobre el piso). Solo visual. Unidad: px.
-const FRAME_TOP: float = -12.0
-## Y del borde inferior del marco respecto del origen (cubre la banda del piso). Solo visual. Unidad: px.
-const FRAME_BOTTOM: float = 20.0
-## Grosor del marco visible alrededor de las hojas. Solo visual. Unidad: px.
+## Y de la cara superior del marco respecto del origen: de ahí sale el jugador. Solo visual.
+## Unidad: px.
+const FRAME_TOP: float = -15.0
+## Grosor del marco alrededor de las hojas (zona de donde sale el gas). Solo visual. Unidad: px.
 const FRAME_BORDER: float = 4.0
-## Cuánto se abomba el centro de las hojas con cada golpe. Solo visual. Unidad: px.
-const BULGE_PER_HIT: float = 2.5
-## Opacidad del brillo rojo con la escotilla cerrada. Solo visual.
-const GLOW_ALPHA_BASE: float = 0.12
-## Opacidad que suma el brillo con cada golpe. Solo visual.
-const GLOW_ALPHA_PER_HIT: float = 0.18
-## Ángulo de apertura de las hojas al romperse. Solo visual. Unidad: rad.
-const BROKEN_LEAF_ANGLE: float = 1.3
 ## Desplazamiento de la sacudida de la escotilla en un golpe normal. Solo visual. Unidad: px.
 const HIT_SHAKE_PX: float = 3.0
+## Salto hacia arriba de la escotilla en un golpe normal (el golpe viene de abajo): hace que se lea el
+## impacto, porque el abombamiento del arte en los primeros golpes es sutil. Solo visual. Unidad: px.
+const HIT_HOP_PX: float = 3.0
 ## Duración de la sacudida de la escotilla. Solo visual. Unidad: s.
 const HIT_SHAKE_TIME: float = 0.3
 ## Gravedad de los fragmentos de la ruptura. Solo visual. Unidad: px/s².
@@ -45,14 +46,14 @@ const DEBRIS_SPEED_MIN: float = 120.0
 const DEBRIS_SPEED_MAX: float = 300.0
 ## Vida de un fragmento (cae fuera de pantalla). Solo visual. Unidad: s.
 const DEBRIS_LIFETIME: float = 1.4
-## Tamaño de un fragmento. Solo visual. Unidad: px.
-const DEBRIS_SIZE: float = 9.0
 ## Giro máximo de un fragmento. Solo visual. Unidad: rad/s.
 const DEBRIS_SPIN: float = 8.0
 ## Apertura del cono del gas. Solo visual. Unidad: grados.
 const GAS_SPREAD_DEG: float = 35.0
 ## Tamaño de las partículas de gas (sin textura). Solo visual. Unidad: px.
 const GAS_PARTICLE_SIZE: float = 5.0
+## Lado de la textura radial de la luz roja. Estructural. Unidad: px.
+const LIGHT_TEXTURE_SIZE: int = 128
 
 ## Se emite cuando termina la animación de apertura de [method break_open].
 signal break_finished
@@ -62,22 +63,23 @@ signal break_finished
 @export var config: IntroConfig
 
 @onready var _visual: Node2D = $Visual
-@onready var _frame: Polygon2D = $Visual/Frame
-@onready var _hole: Polygon2D = $Visual/Hole
-@onready var _glow: Polygon2D = $Visual/Glow
-@onready var _leaf_left: Polygon2D = $Visual/LeafLeft
-@onready var _leaf_right: Polygon2D = $Visual/LeafRight
+@onready var _sprite: SheetSprite = $Visual/Sprite
+@onready var _emissive: Sprite2D = $Visual/Emissive
+@onready var _glow: Sprite2D = $Visual/Glow
+@onready var _light: PointLight2D = $Light
 @onready var _gas: CPUParticles2D = $GasParticles
 
 var _hits: int = 0
 var _broken: bool = false
 var _shake_tween: Tween
-var _break_tween: Tween
+var _light_tween: Tween
+var _debris_texture: CanvasTexture
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	_build_static_shapes()
+	_setup_sprites()
+	_setup_light()
 	_setup_gas()
 	_refresh()
 
@@ -89,15 +91,16 @@ func hit(strength: float) -> void:
 	if _broken:
 		return
 	_hits += 1
-	_refresh()
+	_sprite.play(StringName("hit_%d" % mini(_hits, MAX_HIT_ANIM)))
+	_set_light(_get_config().hatch_light_energy_closed + _get_config().hatch_light_energy_per_hit * _hits)
 	_shake_visual(strength)
 	_burst_gas(roundi(_get_config().gas_amount * strength))
 
 
 ## Rompe la escotilla con animación: ráfaga grande de gas (`break_gas_amount`), fragmentos que
-## salen despedidos (`break_debris_count`) y las hojas que se abren en `break_duration` s hasta
-## dejar el marco y el hueco oscuro. Desde que se llama, [method is_broken] es `true`. Al terminar
-## la apertura emite [signal break_finished]. Ignorado si ya está rota.
+## salen despedidos (`break_debris_count`), destello y las hojas que se abren con rebote (tag
+## `break`, 0,41 s). Desde que se llama, [method is_broken] es `true`. Al terminar la apertura emite
+## [signal break_finished] y queda en `broken`. Ignorado si ya está rota.
 func break_open() -> void:
 	if _broken:
 		return
@@ -106,33 +109,21 @@ func break_open() -> void:
 	if _shake_tween != null:
 		_shake_tween.kill()
 	_visual.position = Vector2.ZERO
-	_hole.visible = true
-	_glow.visible = false
-	# Aplana el abombamiento de los golpes: las hojas se abren desde su posición cerrada.
-	_leaf_left.polygon = _leaf_polygon(0.0, 1.0)
-	_leaf_right.polygon = _leaf_polygon(0.0, -1.0)
+	_sprite.play(&"break")
 	_burst_gas(cfg.break_gas_amount)
 	_spawn_debris(cfg.break_debris_count)
-	if _break_tween != null:
-		_break_tween.kill()
-	_break_tween = create_tween().set_parallel(true)
-	var duration: float = maxf(cfg.break_duration, 0.01)
-	_break_tween.tween_property(_leaf_left, "rotation", -BROKEN_LEAF_ANGLE, duration) \
-		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	_break_tween.tween_property(_leaf_right, "rotation", BROKEN_LEAF_ANGLE, duration) \
-		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	_break_tween.chain().tween_callback(break_finished.emit)
+	# Pico de luz con la ruptura y después baja a la luz media de la escotilla rota.
+	_set_light(cfg.hatch_light_energy_break, 0.04)
+	_light_tween.tween_property(_light, "energy", cfg.hatch_light_energy_broken, _sprite.get_tag_duration(&"break") + 0.2)
 
 
-## Fija el estado final sin animación: [param broken] `true` = rota (hojas abiertas, hueco
-## oscuro), `false` = cerrada (y sin golpes acumulados). Lo usa el nivel cuando no hay intro.
+## Fija el estado final sin animación: [param broken] `true` = rota (hueco rojo que respira),
+## `false` = cerrada (y sin golpes acumulados). Lo usa el nivel cuando no hay intro.
 func set_broken(broken: bool) -> void:
 	_broken = broken
 	_hits = 0
 	if _shake_tween != null:
 		_shake_tween.kill()
-	if _break_tween != null:
-		_break_tween.kill()
 	_visual.position = Vector2.ZERO
 	_refresh()
 
@@ -158,54 +149,78 @@ func _get_config() -> IntroConfig:
 	return config
 
 
-# Formas que no cambian: marco, hueco y colores fijos. Las hojas y el brillo dependen del estado.
-func _build_static_shapes() -> void:
-	_frame.color = COLOR_FRAME
-	_frame.polygon = _rect(-FRAME_HALF_WIDTH, FRAME_TOP, FRAME_HALF_WIDTH, FRAME_BOTTOM)
-	_hole.color = COLOR_HOLE
-	_hole.polygon = _rect(-_leaf_half_width(), FRAME_TOP + FRAME_BORDER, _leaf_half_width(), FRAME_BOTTOM - FRAME_BORDER)
-	_leaf_left.color = COLOR_LEAF
-	_leaf_right.color = COLOR_LEAF
-	_leaf_left.position = Vector2(-_leaf_half_width(), 0.0)
-	_leaf_right.position = Vector2(_leaf_half_width(), 0.0)
-	_glow.polygon = _rect(-FRAME_HALF_WIDTH + 1.0, FRAME_TOP + 1.0, FRAME_HALF_WIDTH - 1.0, FRAME_BOTTOM - 1.0)
-
-
 func _leaf_half_width() -> float:
 	return FRAME_HALF_WIDTH - FRAME_BORDER
 
 
-# Aplica el estado actual (cerrada / golpeada / rota) a las formas.
+# Tres sprites con el mismo cuadro: color con relieve, emisivo (sin sombreado) y resplandor (sin
+# sombreado, aditivo). El de color maneja la animación y los otros dos lo siguen.
+func _setup_sprites() -> void:
+	_sprite.set_sheet_textures(SHEET_DIR + "hatch.png", SHEET_DIR + "hatch_normal.png")
+	_emissive.texture = load(SHEET_DIR + "hatch_emissive.png")
+	_glow.texture = load(SHEET_DIR + "hatch_glow.png")
+	for sprite: Sprite2D in [_sprite, _emissive, _glow]:
+		sprite.centered = true
+		sprite.offset = SPRITE_OFFSET
+		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_sprite.followers = [_emissive, _glow]
+	_sprite.load_sheet(SHEET_JSON)
+	_sprite.finished.connect(_on_sprite_finished)
+
+
+# Luz roja que sale de la escotilla e ilumina al astronauta, el piso y las paredes.
+func _setup_light() -> void:
+	var cfg: IntroConfig = _get_config()
+	var gradient: Gradient = Gradient.new()
+	gradient.set_color(0, Color(1.0, 1.0, 1.0, 1.0))
+	gradient.set_color(1, Color(1.0, 1.0, 1.0, 0.0))
+	var texture: GradientTexture2D = GradientTexture2D.new()
+	texture.gradient = gradient
+	texture.fill = GradientTexture2D.FILL_RADIAL
+	texture.fill_from = Vector2(0.5, 0.5)
+	texture.fill_to = Vector2(1.0, 0.5)
+	texture.width = LIGHT_TEXTURE_SIZE
+	texture.height = LIGHT_TEXTURE_SIZE
+	_light.texture = texture
+	_light.texture_scale = cfg.hatch_light_radius * 2.0 / float(LIGHT_TEXTURE_SIZE)
+	_light.color = cfg.hatch_light_color
+
+
+# Aplica el estado actual (cerrada / golpeada / rota) sin animación de transición.
 func _refresh() -> void:
-	_hole.visible = _broken
-	_glow.visible = not _broken
-	var alpha: float = clampf(GLOW_ALPHA_BASE + GLOW_ALPHA_PER_HIT * _hits, 0.0, 1.0)
-	_glow.color = Color(COLOR_GLOW, alpha)
-	var bulge: float = 0.0 if _broken else BULGE_PER_HIT * _hits
-	_leaf_left.polygon = _leaf_polygon(bulge, 1.0)
-	_leaf_right.polygon = _leaf_polygon(bulge, -1.0)
-	_leaf_left.rotation = -BROKEN_LEAF_ANGLE if _broken else 0.0
-	_leaf_right.rotation = BROKEN_LEAF_ANGLE if _broken else 0.0
+	var cfg: IntroConfig = _get_config()
+	if _broken:
+		_sprite.play(&"broken", true)
+		_set_light(cfg.hatch_light_energy_broken, 0.0)
+	elif _hits > 0:
+		_sprite.play(StringName("idle_%d" % mini(_hits, MAX_HIT_ANIM)), true)
+		_set_light(cfg.hatch_light_energy_closed + cfg.hatch_light_energy_per_hit * _hits, 0.0)
+	else:
+		_sprite.play(&"closed", true)
+		_set_light(cfg.hatch_light_energy_closed, 0.0)
 
 
-# Polígono de una hoja relativo a su bisagra (el borde exterior). [param side] = 1 para la
-# izquierda (se extiende hacia +x) y -1 para la derecha (hacia -x). El borde superior se arquea
-# hacia arriba [param bulge] px en el centro de la escotilla.
-func _leaf_polygon(bulge: float, side: float) -> PackedVector2Array:
-	var width: float = _leaf_half_width() - 0.5
-	var top: float = FRAME_TOP + FRAME_BORDER
-	var bottom: float = FRAME_BOTTOM - FRAME_BORDER
-	return PackedVector2Array([
-		Vector2(0.0, top),
-		Vector2(side * width * 0.5, top - bulge * 0.6),
-		Vector2(side * width, top - bulge),
-		Vector2(side * width, bottom),
-		Vector2(0.0, bottom),
-	])
+# Encadena: golpe → reposo del mismo golpe; ruptura → aviso y escotilla rota.
+func _on_sprite_finished(tag: StringName) -> void:
+	if String(tag).begins_with("hit_"):
+		if not _broken:
+			_sprite.play(StringName("idle_%d" % mini(_hits, MAX_HIT_ANIM)), true)
+	elif tag == &"break":
+		_sprite.play(&"broken", true)
+		break_finished.emit()
 
 
-func _rect(x0: float, y0: float, x1: float, y1: float) -> PackedVector2Array:
-	return PackedVector2Array([Vector2(x0, y0), Vector2(x1, y0), Vector2(x1, y1), Vector2(x0, y1)])
+# Lleva la energía de la luz a [param energy] en [param fade] s (por defecto, `hatch_light_fade`).
+func _set_light(energy: float, fade: float = -1.0) -> void:
+	if _light_tween != null:
+		_light_tween.kill()
+	var duration: float = _get_config().hatch_light_fade if fade < 0.0 else fade
+	if duration <= 0.0:
+		_light.energy = energy
+		_light_tween = null
+		return
+	_light_tween = create_tween()
+	_light_tween.tween_property(_light, "energy", energy, duration)
 
 
 func _setup_gas() -> void:
@@ -244,22 +259,27 @@ func _burst_gas(amount: int) -> void:
 func _shake_visual(strength: float) -> void:
 	if _shake_tween != null:
 		_shake_tween.kill()
-	_visual.position = Vector2(HIT_SHAKE_PX * strength, 0.0)
+	_visual.position = Vector2(HIT_SHAKE_PX * strength, -HIT_HOP_PX * strength)
 	_shake_tween = create_tween()
 	_shake_tween.tween_property(_visual, "position", Vector2.ZERO, HIT_SHAKE_TIME) \
 		.set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
 
 
-# Fragmentos de las hojas que salen despedidos hacia arriba y caen fuera de pantalla.
+# Fragmentos de las hojas que salen despedidos hacia arriba y caen fuera de pantalla. Cada uno es
+# un cuadro al azar de `hatch_debris`.
 func _spawn_debris(count: int) -> void:
+	if _debris_texture == null:
+		_debris_texture = CanvasTexture.new()
+		_debris_texture.diffuse_texture = load(DEBRIS_SHEET)
+		if ResourceLoader.exists(DEBRIS_SHEET_NORMAL):
+			_debris_texture.normal_texture = load(DEBRIS_SHEET_NORMAL)
+		_debris_texture.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	for i: int in maxi(count, 0):
-		var piece := Polygon2D.new()
-		piece.color = COLOR_LEAF
-		piece.polygon = PackedVector2Array([
-			Vector2(-DEBRIS_SIZE * 0.5, -DEBRIS_SIZE * 0.5),
-			Vector2(DEBRIS_SIZE * randf_range(0.4, 0.9), -DEBRIS_SIZE * 0.2),
-			Vector2(0.0, DEBRIS_SIZE * randf_range(0.4, 0.8)),
-		])
+		var piece := Sprite2D.new()
+		piece.texture = _debris_texture
+		piece.region_enabled = true
+		piece.region_rect = Rect2(0.0, float(randi() % DEBRIS_FRAMES) * DEBRIS_FRAME_SIZE, DEBRIS_FRAME_SIZE, DEBRIS_FRAME_SIZE)
+		piece.flip_h = randf() < 0.5
 		var origin: Vector2 = Vector2(randf_range(-_leaf_half_width(), _leaf_half_width()), FRAME_TOP)
 		piece.position = origin
 		add_child(piece)
@@ -271,6 +291,6 @@ func _spawn_debris(count: int) -> void:
 
 
 # Movimiento parabólico de un fragmento en el instante [param t] (s).
-func _move_debris(t: float, piece: Polygon2D, origin: Vector2, velocity: Vector2, spin: float) -> void:
+func _move_debris(t: float, piece: Node2D, origin: Vector2, velocity: Vector2, spin: float) -> void:
 	piece.position = origin + velocity * t + Vector2(0.0, 0.5 * DEBRIS_GRAVITY * t * t)
 	piece.rotation = spin * t
