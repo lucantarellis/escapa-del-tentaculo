@@ -60,36 +60,21 @@ Exportadas: `config: TentacleConfig` y `camera: ScrollCamera` (obligatoria; sin 
 
 ```
 Tentacle (Node2D)          origen = borde superior (sin ondular), esquina izquierda de la pantalla
-├── BodyPolygon (Polygon2D, rojo de la paleta)
+├── BodyPolygon (Polygon2D, rojo de la paleta; oculto con el mar de tentáculos)
+├── Sea (Node2D con `TentacleSea`: el mar de tentáculos de la nave)
 └── KillZone (Area2D, capa 4, máscara 2)
     └── CollisionShape2D (RectangleShape2D, se redimensiona cada tick)
 ```
 
-## Frente de sprites (solo fase 1)
+## Mar de tentáculos (nave)
 
-Con `use_sprites = true` en la config, el nodo hijo `Front` ([TentacleFront], `scripts/tentacle/tentacle_front.gd`) dibuja una masa densa de tentáculos sobre un fondo violeta oscuro (`#3A1B5E`).
+Con `TentacleConfig.sea` asignado (`tentacle_sea_config.tres`, hoy en `tentacle_config.tres`), el hijo `Sea` (`scripts/tentacle/tentacle_sea.gd`, `TentacleSea`) dibuja el mar de tentáculos de la nave y el `BodyPolygon` se oculta. Fuego y ácido (`tentacle_config_fire/acid.tres`, sin `sea`) siguen con el bloque de color. Arte: `assets/sprites/tentacle/ship/` (`tentacle_front_01..04`, `tentacle_fill_01..05`, `tentacle_flesh`, `tentacle_flesh_deep`, importados con Aseprite Wizard).
 
-- **Filas en profundidad** (`row_count`, 4): la fila 0 es la de adelante (grande, nítida, ~15 tentáculos solapados, 3 capas hacia abajo); cada fila de atrás es 15 % más chica, más oscura (`back_darken`), con la punta 6 px más alta y se mueve más lento. Los tentáculos enteros usan `vertical_01..05` y `completos` (el sprite con la punta arriba y el mismo en espejo debajo). En las filas de atrás se meten, entre ellos, piezas chicas (puntas, variantes, enrollados, segmentos) para tapar huecos.
-- **Doblez**: cada tentáculo es un `Polygon2D` subdividido y el shader `shaders/tentacle_bend.gdshader` lo curva de costado (`bend_amplitude` px, `bend_speed` Hz), más en la punta que en la base y con fase distinta por tentáculo. Además se mecen (`sway_*`) y "respiran" apenas.
-- **Cambio de sprite**: cada fila cada `swap_interval` s (arrancan desfasadas) cambia de sprite en una ola de izquierda a derecha (`swap_stagger`): cada tentáculo se agacha `swap_dip` px durante `swap_duration` s y a mitad de la agachada cambia de sprite.
-- Las puntas de la fila de adelante asoman `tip_overhang` px (la altura del jugador) sobre el borde de la zona letal: se pueden rozar sin morir. La zona letal no cambia.
-- Es solo visual. Fuego y ácido (`use_sprites = false`) siguen con el bloque de color.
-
-## Sprites de tentáculo disponibles (todavía sin usar)
-
-Recortados de una lámina de pruebas (90 dibujos, 104 archivos PNG con fondo transparente) en `assets/sprites/tentacle/<grupo>/`, al tamaño original de la lámina (de 39×46 a 175×301 px). El tentáculo del juego sigue usando su dibujo placeholder; estos sprites sirven para elegir cuáles se implementan. Se numeran de izquierda a derecha y de arriba hacia abajo, como en la lámina. En Godot conviene `Filter = Nearest` en el sprite para que el pixel art no se vea borroso.
-
-| Carpeta | Archivos | Qué es |
-|---|---|---|
-| `segmentos/` | `segmento_01` … `15` | Segmentos base del cuerpo |
-| `puntas/` | `punta_01` … `15` | Extremos del tentáculo |
-| `completos/` | `tentaculo_01` … `04` | Tentáculos enteros, verticales |
-| `movimiento/` | `onda_01` … `15` | Ondas horizontales |
-| `entrada_lateral/` | `entrada_01_tentaculo` + `entrada_01_pilar` … `10` | Entrada y salida por un costado. Tentáculo y pilar van en archivos distintos con el mismo lienzo: puestos en la misma posición encajan |
-| `enrollado/` | `enrollado_01` … `10` | Enrollado / atrapando |
-| `vertical/` | `vertical_01` … `05` | Persiguiendo en vertical, con espinas y burbujas |
-| `variantes/` | `variante_01` … `08` | Variantes y daño |
-| `escenas/` | `escena_01_tentaculo` + `escena_01_estructura` (también 05, 06 y 08); `escena_02`, `03`, `04` y `07` enteras | Combinaciones con estructuras. En las 4 enteras el tentáculo y la estructura se tapan tanto que al separarlos quedaban huecos |
+- **Capas**, de atrás hacia adelante: relleno (`fill`, ~12 cada 34 px, más oscuros), adelante (`front`, ~8 cada 52 px, mirando a lados alternados), masa de carne (`flesh`) y carne profunda (`flesh_deep`, repetida hacia abajo según la profundidad). Cuadro inicial y `speed_scale` al azar (0,85–1,15) para que ninguno se mueva igual al de al lado.
+- **Secuencia de los de adelante:** `idle_a`/`idle_b` y, cada `reach_interval` s (como mucho `max_reaching` a la vez, o cuando el jugador está a menos de `grab_distance` de las puntas), `reach` → `grab` → `retract` → idle.
+- **Puntas:** asoman `TentacleSeaConfig.tip_overhang` (140 px) sobre el borde de la zona letal. La zona letal no cambia: se muere donde se moría antes.
+- **Dibujo:** con el mar, el tentáculo va con `z_index` 10, delante de todo el nivel (el jugador queda tapado cuando lo agarra). La entrada (`enter`) arranca con lo más alto del mar bajo el borde de la pantalla, así las puntas no aparecen de golpe.
+- **Ajustes:** `TentacleSeaConfig`: densidad (`front_count/spacing`, `fill_count/spacing`), ubicación (`tip_overhang`, `front/fill_base_depth`, `base_jitter`), variedad (`speed_scale`, `fill_brightness`) y agarre (`reach_interval`, `grab_distance`, `max_reaching`).
 
 ## Manejo de la derrota
 

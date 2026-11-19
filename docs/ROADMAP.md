@@ -10,7 +10,7 @@
 
 Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantalla sube a velocidad constante, el tentáculo permanece al borde inferior y el jugador usa un jetpack con combustible limitado para esquivar obstáculos y llegar a una puerta antes de ser atrapado.
 
-**Etapa actual:** prototipo de mecánicas con polígonos placeholder (`Polygon2D`). Nada de arte final hasta que las mecánicas se sientan bien. El arte (sprite sheets del astronauta, tileset y tentáculo) se integra en la etapa final.
+**Etapa actual:** arte final de la fase de la nave integrado (brief 07: astronauta, mar de tentáculos, paredes, plataformas, fondo, recogibles, piso, escotilla, ventanal e iluminación). El espacio y el alien siguen con placeholders (`Polygon2D` y tiles de color).
 
 ## 2. Decisiones de diseño
 
@@ -63,7 +63,7 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | Balance del MVP por rondas | El tuning se hace en rondas iterativas (Claude propone y da un checklist, LT juega y responde OK/KO, Claude simula y ajusta), sin avanzar sin el "seguí" de LT. Cada cambio se registra en `docs/TUNING_LOG.md`. Las simulaciones informan; el "se siente bien" es de LT | LT (brief 06) |
 | Dash lateral | Un botón (Shift): 90 px en 0,15 s hacia el lado que se mantiene (o el último pulsado); con arriba mantenido sale en diagonal hacia arriba (90 px totales, `dash_diagonal_distance`), sin gravedad ni control, se frena en seco y contra paredes no rebota. Cuesta 10 u de combustible, enfriamiento de 1 s desde que arranca, barrita de enfriamiento sobre el jugador (opcional). No es invulnerable. Valores editables en `player_config` (grupo Dash). Pendiente: efecto visual, otras direcciones (abajo, diagonales hacia abajo), dash invulnerable (solo si hay peligros que lo justifiquen), segmento de trampa que obligue a usarlo | Socio (rama `main-g`), ver `docs/mecanicas/jugador.md` |
 | Sin jefe final | Se elimina el jefe del cerebro. La partida se gana atravesando una **abertura en el techo** del segmento final (no hay puerta visible). El final debe ser desafiante (endgame) y la salida debe leerse sin flechas ni texto (luz, partículas, venas) | LT (2026-10-19) |
-| Transiciones por caso | Se quieren 10 variantes por caso: inicio, 1→2, 2→3 y final. Por ahora se trabaja con 1 por caso para probar; el resto se crea cuando haya assets. Los `SegmentEnd01`–`10` viejos se reusan como base de las salidas del tier 1 | LT (2026-10-19) |
+| Transiciones por caso | Se quieren 10 variantes por caso: inicio, 1→2, 2→3 y final. Por ahora se trabaja con 1 por caso para probar; el resto se crea cuando haya assets. Los `SegmentEnd01`–`10` viejos se usaron como base de las salidas del tier 1 y se borraron en el brief 07 | LT (2026-10-19) |
 | Ronda A: feedback tiers 2 y 3 | Tier 2: 3 explosiones con la misma sacudida, restos en abanico aleatorio desde la base y aviso previo visual + temblor leve (hecho 2026-10-19; **a refinar con feedback**: falta el sonido de aviso, paso de audio), asteroides de tamaños variados, obstáculos propios del espacio (meteoros con aviso, cometa con estela, campo de escombros, láser de satélite) y vida decorativa. Tier 3: espacio más confinado y amenazas (pared que escupe bilis, anticuerpos, tentáculos menores). Combustible: lo prueba LT, sin tanque de recarga completa | LT (2026-10-19) |
 | Objetivos de diseño del balance | Partida completa de ~3 min para un jugador competente; ~25–30 % de victoria; todas las muertes por error propio o desconocimiento (que enseñen para la próxima run); prioridades: tensión, exigencia y exploración/descubrimiento | LT (brief 06, Paso 0) |
 
@@ -106,7 +106,8 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | F2 | Tier 2, el espacio: física (multiplicadores por tier), fuego, `TierEvent`, 3 entradas y 10 segmentos; 5 segmentos por tier. Transición: el alien rompe el ventanal de la nave (salidas del tier 1, descompresión), la nave explota ya afuera con restos letales; asteroides como superficies | Local en `main-l`, pendiente de probar | — |
 | P1 | Progreso entre partidas: monedas en los niveles, mercado en el título como árbol de talentos (dash, invulnerabilidad del dash al 67%, dash gratis, tanques y cargas, propulsión veloz, monedas x2/x3/x10; vidas (puntos de golpe) y Reaparecer; reparadores y escudo como nodos con candado; base: 100 de combustible y sin dash) | Local en `guido/arbol-talentos`, pendiente de probar | — |
 | 8c | Controles táctiles | Pendiente (al final, tras arte y balance) | — |
-| 9 | Arte final, audio y pulido | Pendiente | — |
+| 9a | Arte de la nave: astronauta, mar de tentáculos, paredes con daño y emisivo, plataformas, fondo en parallax, recogibles, piso, escotilla, ventanal e iluminación | Hecho en la rama `feature/arte-nave`, pendiente de prueba de Guido | brief-07 |
+| 9 | Arte final del espacio y del alien, audio y pulido | Pendiente | — |
 
 Estados posibles: Pendiente, En brief, En curso, Hecho.
 
@@ -168,7 +169,7 @@ Tras el tercer golpe la escotilla se rompe, el jugador sale disparado hacia arri
 Joystick o zonas táctiles que emitan las mismas acciones del Input Map, para la versión móvil. Se hace después del arte y el balance.
 
 ### Paso 9 — Arte y audio
-Integración de los tres sprite sheets (astronauta, tileset, tentáculo; el del tentáculo sigue pendiente de aprobación), audio y pulido.
+Fase de la nave hecha en el brief 07 (paso 9a; detalle en `docs/arte/*.md`, `docs/mecanicas/iluminacion.md` y las mecánicas de cada pieza). Falta: arte del espacio y del alien (paredes, peligros, perseguidores fuego y ácido, fondos), puerta, gas de la escotilla, efectos del jugador, letales sin fuego y proyectil, audio y pulido. Lista en `docs/arte/lista-assets.md`.
 
 ## 6. Riesgos y decisiones abiertas
 
@@ -181,7 +182,7 @@ Integración de los tres sprite sheets (astronauta, tileset, tentáculo; el del 
 
 ## 7. Backlog de ideas (sin compromiso)
 
-- Progreso, siguientes pasos: los sprites del jugador por cada golpe (la lista `hit_sprites` ya está lista), (los reparadores y los escudos del botiquín, de 10 s y eterno, ya están), el dash que rompe plataformas, la invulnerabilidad larga y las duraciones de cada dash; armas que rompen plataformas rompibles y no rompibles; bombas para meteoritos; llegar al mercado sin cerrar el juego tras una partida; más mejoras para tener builds distintas.
+- Progreso, siguientes pasos: los sprites del jugador por cada golpe (hechos en el brief 07: animaciones `_dano_1`/`_dano_2`), (los reparadores y los escudos del botiquín, de 10 s y eterno, ya están), el dash que rompe plataformas, la invulnerabilidad larga y las duraciones de cada dash; armas que rompen plataformas rompibles y no rompibles; bombas para meteoritos; llegar al mercado sin cerrar el juego tras una partida; más mejoras para tener builds distintas.
 - Panel de tuning en juego con sliders sobre los `Resource` de configuración.
 - Presets de configuración (por ejemplo "flotante", "arcade") como archivos `.tres` intercambiables.
 - Aceleración progresiva del scroll a lo largo del nivel.

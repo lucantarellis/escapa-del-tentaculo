@@ -14,9 +14,6 @@ signal player_caught(cause: StringName)
 
 ## Rojo de la paleta. Solo visual.
 const COLOR_BODY: Color = Color("#D83232")
-## Violeta oscuro del fondo que queda detrás de los sprites del frente (ver [TentacleFront]).
-## Solo visual.
-const COLOR_SPRITE_BACKDROP: Color = Color("#3A1B5E")
 ## Desfase de la onda entre puntos contiguos del borde superior. Solo visual. Unidad: rad.
 const WOBBLE_PHASE_PER_SEGMENT: float = 0.8
 ## Cuánto se extiende el cuerpo y la zona letal por debajo del borde inferior de la
@@ -37,7 +34,6 @@ const SEA_Z_INDEX: int = 10
 @export var camera: ScrollCamera
 
 @onready var _body: Polygon2D = $BodyPolygon
-@onready var _front: TentacleFront = $Front
 @onready var _sea: TentacleSea = $Sea
 @onready var _kill_zone: Area2D = $KillZone
 @onready var _kill_shape: CollisionShape2D = $KillZone/CollisionShape2D
@@ -113,8 +109,7 @@ func _process(delta: float) -> void:
 func apply_pursuer(new_config: TentacleConfig, color: Color, reset_position: bool) -> void:
 	if new_config != null:
 		config = new_config
-	# Con sprites el fondo es siempre el violeta oscuro; sin sprites, el color del tier.
-	_body.color = COLOR_SPRITE_BACKDROP if config.use_sprites else color
+	_body.color = color
 	_apply_front()
 	if new_config == null:
 		return
@@ -199,32 +194,23 @@ func reset() -> void:
 	_follow_camera()
 	if config.sea != null:
 		_sea.reset_animation()
-	elif config.use_sprites:
-		_front.reset_animation()
 
 
-# Elige cómo se dibuja según la config: el mar de tentáculos de la nave (`sea`, sin bloque de color),
-# el frente de sprites (`use_sprites`, con fondo violeta oscuro) o el bloque de color. Solo visual:
-# no toca la zona letal.
+# Elige cómo se dibuja según la config: el mar de tentáculos de la nave (`sea`, sin bloque de color)
+# o el bloque de color. Solo visual: no toca la zona letal.
 func _apply_front() -> void:
-	if _front == null or camera == null:
+	if camera == null:
 		return
 	var use_sea: bool = config.sea != null
-	var use_front: bool = config.use_sprites and not use_sea
 	_sea.visible = use_sea
 	_sea.set_process(use_sea)
 	z_index = SEA_Z_INDEX if use_sea else 0
 	_body.visible = not use_sea
-	_front.visible = use_front
-	_front.set_process(use_front)
 	var width: float = camera.get_visible_rect().size.x
 	if use_sea:
 		# El mar se ubica respecto del borde de la zona letal (sus puntas asoman `sea.tip_overhang`).
 		_sea.setup(config.sea, config.kill_zone_inset, width)
 		_sea.set_depth(_get_depth())
-	elif use_front:
-		_body.color = COLOR_SPRITE_BACKDROP
-		_front.setup(config, width)
 
 
 # Deja el borde superior a `visible_height` px sobre el borde inferior de la pantalla y la velocidad

@@ -50,7 +50,7 @@ Una plataforma `LETHAL` puede dibujarse con fuego animado en vez del bloque de c
 - **Entrada:** `entrada` se reproduce una vez, la primera vez que la plataforma entra en pantalla (`VisibleOnScreenNotifier2D`); después queda en `idle`. En el editor se ve un cuadro de `idle`.
 - **Movimiento:** si `moves` es true, el fuego se mueve con el bloque (es hijo).
 - **Tuning** (`PlatformConfig`, grupo "Fuego (fire_skin)"): `fire_fps` (8), `fire_speed_min` (0,8), `fire_speed_max` (1,2).
-- **Prueba:** `scenes/platforms/FirePlatformTest.tscn` (F6): fuegos de 50, 100 y 200 px, uno móvil y una letal sin fuego como comparación.
+- **Prueba:** poner `fire_skin = true` en una plataforma `LETHAL` de un segmento y ejecutarlo con F6 (la escena de prueba `FirePlatformTest.tscn` se borró en el brief 07).
 
 ## Sprites de la nave
 

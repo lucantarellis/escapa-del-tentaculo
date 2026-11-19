@@ -6,7 +6,7 @@ Hay dos juegos de colores y no se mezclan: la **paleta de arte** (para dibujar s
 
 Consolidada el 18/11/2026 a partir de cuatro referencias:
 - `assets/sprites/environment/fire_platform/`: 20 PNG de pixel art real con 24 colores exactos. Es la referencia de la línea nueva y manda sobre las demás.
-- `assets/sprites/player/astronaut_spritesheet.png`, `assets/sprites/environment/scifi_tileset.png` y `assets/sprites/tentacle/tentacle_spritesheet.png`: sprite sheets con ruido (decenas de miles de tonos). Se agruparon por similitud de color sobre los píxeles de primer plano (sin el fondo negro) y se fusionaron los tonos a menos de ΔE 12 (CIELAB) de otro ya elegido.
+- Los sprite sheets de referencia originales (`astronaut_spritesheet.png`, `scifi_tileset.png` y `tentacle_spritesheet.png`, borrados en el brief 07): sprite sheets con ruido (decenas de miles de tonos). Se agruparon por similitud de color sobre los píxeles de primer plano (sin el fondo negro) y se fusionaron los tonos a menos de ΔE 12 (CIELAB) de otro ya elegido.
 
 Archivos para cargar en Aseprite: `assets/palette.gpl` y `assets/palette.hex`. Las columnas de origen indican en qué referencias aparece cada color (a ΔE ≤ 12).
 

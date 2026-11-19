@@ -16,25 +16,24 @@ Marcar con `[x]` a medida que se termina.
 # Checklist por categoría
 
 ## 0. Decisión previa
-- [x] Astronauta: rehecho a 1× en `assets/aseprite/player/astronaut/astronaut.aseprite` (lienzo 32×40, figura 23×32; la colisión sigue en 16×24). Capas `cuerpo` y `visor_reflejo`. 63 frames, tags `idle`, `walk`, `jump`, `thrust`, `thrust_side` y los mismos con `_dano_1` y `_dano_2`. Llama: `assets/aseprite/player/astronaut/astronaut_flame.aseprite` → `assets/sprites/player/astronaut/astronaut_flame.png` (tira 24×14, 3 frames de 8×14, 70 ms; sale de la mochila: centro en (−8, +20) respecto del centro del astronauta, espejar con el sprite y dibujar detrás). Falta: conectar en `Player.tscn`/`player.gd` y borrar `assets/sprites/Astronaut/`.
-- [x] Tentáculo de la nave: rehecho como mar de tentáculos en `assets/aseprite/tentacle/`. `front/tentacle_front_01..04` (300×384, base abajo al centro; tags `idle_a`, `idle_b`, `reach`, `grab`, `retract`; 01 y 03 miran a la derecha, 02 y 04 a la izquierda), `fill/tentacle_fill_01..05` (300×360, tag `idle`), `flesh/tentacle_flesh` (360×400, tag `idle`, respiración sutil) y `flesh/tentacle_flesh_deep` (360×120, se repite hacia abajo). Orden de dibujo: fill, front, flesh, flesh_deep. Una sola colisión. Falta: armar la escena (reemplaza el frente con doblez) y borrar los sprites viejos.
+- [x] Astronauta: rehecho a 1× en `assets/aseprite/player/astronaut/astronaut.aseprite` (lienzo 32×40, figura 23×32; la colisión sigue en 16×24). Capas `cuerpo` y `visor_reflejo`. 63 frames, tags `idle`, `walk`, `jump`, `thrust`, `thrust_side` y los mismos con `_dano_1` y `_dano_2`. Llama: `assets/aseprite/player/astronaut/astronaut_flame.aseprite` → `assets/sprites/player/astronaut/astronaut_flame.png` (tira 24×14, 3 frames de 8×14, 70 ms; sale de la mochila: centro en (−8, +20) respecto del centro del astronauta, espejar con el sprite y dibujar detrás). Conectado en el brief 07 (`docs/mecanicas/jugador.md`); `assets/sprites/Astronaut/` borrado.
+- [x] Tentáculo de la nave: rehecho como mar de tentáculos en `assets/aseprite/tentacle/`. `front/tentacle_front_01..04` (300×384, base abajo al centro; tags `idle_a`, `idle_b`, `reach`, `grab`, `retract`; 01 y 03 miran a la derecha, 02 y 04 a la izquierda), `fill/tentacle_fill_01..05` (300×360, tag `idle`), `flesh/tentacle_flesh` (360×400, tag `idle`, respiración sutil) y `flesh/tentacle_flesh_deep` (360×120, se repite hacia abajo). Orden de dibujo: fill, front, flesh, flesh_deep. Una sola colisión. Conectado en el brief 07 (`TentacleSea`, `docs/mecanicas/tentaculo.md`); el frente viejo con doblez y sus sprites se borraron.
 
 ## Limpieza (P1)
-- [ ] `scifi_tileset.png`, `astronaut_spritesheet.png` y `tentacle_spritesheet.png`: decidir si se borran (sin referencias en el proyecto).
-- [ ] Sprites de tentáculo sin conectar (`movimiento`, `entrada_lateral`, `escenas`): usarlos o descartarlos.
-- [ ] Los 3 `walls_placeholder*`: reemplazar al entrar el arte final de paredes.
+- [x] `scifi_tileset.png`, `astronaut_spritesheet.png`, `tentacle_spritesheet.png` y los sprites viejos del tentáculo (`completos`, `enrollado`, `entrada_lateral`, `escenas`, `movimiento`, `puntas`, `segmentos`, `variantes`, `vertical`): borrados en el brief 07.
+- [ ] Los 3 `walls_placeholder*` y `walls_tileset.tres`: los siguen usando el espacio, el alien y el final; reemplazar al entrar el arte final de esas paredes.
 
 ## Entorno base (P2)
-- [x] Paredes de la nave: tilesets en `assets/aseprite/environment/ship_walls/` → `assets/sprites/environment/ship_walls/` (pared con 47 combinaciones + diagonales, variantes y tiles animados; capas de rotura, grieta incandescente, bilis, parche remachado y cañerías; cada uno con relieve y emisivo). Detalle y armado: `docs/arte/paredes-nave.md`. TileSets en `resources/tilesets/walls_tileset_ship.tres` y `ship_walls_overlay.tres` (+ emisivos). Falta: pasar los segmentos de la nave al terreno nuevo a mano (LT) y la capa emisiva en código.
+- [x] Paredes de la nave: tilesets en `assets/aseprite/environment/ship_walls/` → `assets/sprites/environment/ship_walls/` (pared con 47 combinaciones + diagonales, variantes y tiles animados; capas de rotura, grieta incandescente, bilis, parche remachado y cañerías; cada uno con relieve y emisivo). Detalle y armado: `docs/arte/paredes-nave.md`. TileSets en `resources/tilesets/walls_tileset_ship.tres` y `ship_walls_overlay.tres` (+ emisivos). Conectado en el brief 07: los 34 segmentos de la nave y de inicio usan `WallsShip.tscn` con capas `Detalle`/`Dano` y emisivas; luces de grietas y alarmas en `WallLights`. Pintar daño y detalle a mano (LT).
 - [ ] Paredes del espacio: ídem (los 13 asteroides las reutilizan).
 - [ ] Paredes del alien: ídem.
 - [x] Plataforma estática: `assets/aseprite/environment/platforms/platform_static.aseprite`. Ver `docs/arte/plataformas-nave.md`.
 - [x] Plataforma de un solo sentido: `platform_oneway.aseprite`.
 - [x] Plataforma rompible: `platform_breakable.aseprite` (`idle`, `shake`, `break_fall`, `break_hit`, `respawn`).
 - [x] Plataforma temporizada: `platform_timed.aseprite` (`on`, `warning`, `turn_off`, `off`, `turn_on`).
-- [x] Plataforma de pulso: `platform_pulse.aseprite` (`off`, `warn`, `on`). Propulsores de móviles: `platform_thruster.aseprite`.
+- [x] Plataforma de pulso: `platform_pulse.aseprite` (`off`, `warn`, `on`). Propulsores de móviles: `platform_thruster.aseprite`. Todas conectadas en el brief 07 (`PlatformSkin`).
 - [ ] Plataforma proyectil (16 px): pospuesta, se redefine con los segmentos nuevos.
-- [ ] Plataforma letal con fuego: aplicar `fire_skin` en las plataformas letales de los segmentos (hoy solo está en `FirePlatformTest.tscn`).
+- [ ] Plataforma letal con fuego: aplicar `fire_skin` en las plataformas letales de los segmentos (la escena de prueba `FirePlatformTest.tscn` se borró).
 - [x] Fondo de la nave: 3 capas × 3 tramos en `assets/aseprite/environment/background_ship/`. Ver `docs/arte/fondo-nave.md`.
 - [ ] Fondo del espacio, con estrellas y decoración.
 - [ ] Fondo del alien.

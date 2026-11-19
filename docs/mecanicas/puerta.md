@@ -58,6 +58,6 @@ Door (Area2D, capa 5, máscara 2)   script: door.gd
 
 ## Cómo probarla
 
-1. Abrir un segmento final (`SegmentEnd01`–`10`) y ejecutarlo con F6. La puerta `GoalDoor` está sobre la plataforma `Goal`.
+1. Abrir el segmento final `SegmentFinal01` (`scenes/levels/segments/end/`; los viejos `SegmentEnd01`–`10` se borraron en el brief 07) y ejecutarlo con F6.
 2. Llegar hasta ella: aparece "ESCAPASTE — pulsá R para reiniciar" y la cámara se detiene. El jugador ya no se mueve, no gasta combustible y ni el tentáculo ni un obstáculo lo matan.
 3. R reinicia y la puerta vuelve a funcionar.

@@ -32,7 +32,7 @@ Lo usa `WindowBreach` en los segmentos de salida (`SegmentShipExit01`–`03`). T
 ## Tentáculo
 
 - **No hay arte nuevo:** se usa el `tentacle_front` aprobado (cualquier variante) **dado vuelta** (`flip_v`), por **detrás** del techo (el techo lo recorta y se lo ve pasar por el hueco), centrado en x del vidrio.
-- Secuencia (reemplaza el `Polygon2D` violeta de `_play_tentacle`):
+- Secuencia (conectada en el brief 07; detalle de código en `docs/mecanicas/tier-espacio.md`):
   1. Al disparar la rotura, el tentáculo baja desde arriba del techo reproduciendo `reach`.
   2. Cuando la punta llega al vidrio: ventanal `crack` → `shatter` → `broken`, sacudida de cámara, vidrios y empieza la succión.
   3. Ya adentro reproduce `grab` hacia el jugador (no lo alcanza; no tiene colisión).

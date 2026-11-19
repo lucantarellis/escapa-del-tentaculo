@@ -17,13 +17,15 @@ Hay dos niveles jugables. `scenes/levels/Level.tscn` (nivel por segmentos, el pr
 
 ```
 Level (Node2D)                        script: level_controller.gd
+├── Lighting (CanvasModulate)         script: level_lighting.gd; oscuridad de los tiers con dark_ambient (la nave)
 ├── Background (CanvasLayer, capa −10) script: level_background.gd (fondo por tier)
+│   └── ShipBackground (Node2D)       scenes/levels/ShipBackground.tscn; pozo de la nave en parallax (tier con background_ship)
 ├── LevelBuilder (Node2D)             script: level_builder.gd, config = level_config.tres
-│   └── SegmentStartNN, Segment.., SegmentEndNN (LevelSegment)   escenas de scenes/levels/segments/ (inicio y final sorteados entre 10), agregadas al iniciar
-│       └── Walls (TileMapLayer)       scenes/levels/Walls.tscn; paredes pintadas con tiles en cada segmento (ver mecanicas/paredes.md)
+│   └── SegmentStartNN, Segment.., SegmentFinal01 (LevelSegment)   escenas de scenes/levels/segments/, agregadas al iniciar
+│       └── Walls (TileMapLayer)       nave e inicio: scenes/levels/WallsShip.tscn (Emissive, Detalle, Dano, Lights); espacio, alien y final: scenes/levels/Walls.tscn (ver mecanicas/paredes.md)
 ├── ScrollCamera
 ├── Hatch (Node2D, ALWAYS)             scenes/intro/Hatch.tscn; escotilla de la intro, en el HatchAnchor del segmento de inicio
-│   └── Visual (Frame, Hole, Glow, LeafLeft, LeafRight), GasParticles
+│   └── Light, Visual (Sprite, Emissive, Glow), GasParticles
 ├── Player, Tentacle, DebugOverlay (muestra la seed)
 ├── IntroDirector (Node, ALWAYS)       creado por LevelController en play_intro(); vive mientras dura la intro
 ├── Hud (CanvasLayer, capa 80)         scenes/ui/Hud.tscn; barra de combustible y progreso (export: player)
@@ -76,7 +78,21 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 | `SpeedBoost` | `scripts/pickups/speed_boost.gd` (+ `speed_boost_config.gd`) | Recogible de impulso de velocidad (tier 2) |
 | `HullDebris` | `scripts/levels/hull_debris.gd` | Fragmento letal despedido por un `TierEvent` (causa `&"debris"`) |
 | `SpaceProjectile` | `scripts/hazards/space_projectile.gd` | Meteoro o cometa del tier 2: avisa, cruza la pantalla y mata (causas `&"meteor"`, `&"comet"`). Ver `docs/mecanicas/obstaculos-espacio.md` |
-| `LevelBackground` | `scripts/levels/level_background.gd` | Fondo del nivel (color y estrellas con parallax) por tier; nodo `Background` de `Level.tscn` |
+| `LevelBackground` | `scripts/levels/level_background.gd` | Fondo del nivel (color, pozo de la nave y estrellas con parallax) por tier; nodo `Background` de `Level.tscn` |
+
+### Arte de la nave (brief 07)
+
+| Clase | Script | Qué hace |
+|---|---|---|
+| `TentacleSea` | `scripts/tentacle/tentacle_sea.gd` (+ `tentacle_sea_config.gd`) | Mar de tentáculos del perseguidor en la nave. Ver `docs/mecanicas/tentaculo.md` |
+| `EmissiveMirror` | `scripts/levels/emissive_mirror.gd` | Capa emisiva de una capa de paredes: copia sus celdas con el tileset `*_emissive` sin sombreado |
+| `WallLights` | `scripts/levels/wall_lights.gd` | Luces de grietas y alarmas de las paredes de la nave |
+| `PlatformSkin` | `scripts/platforms/platform_skin.gd` | Módulos de sprites de las plataformas de la nave, animación por estado y propulsores |
+| `PickupSkin` | `scripts/pickups/pickup_skin.gd` | Aura, ítem y emisivo de los recogibles; `idle` y `collect` |
+| `ShipBackground` | `scripts/levels/ship_background.gd` (+ `ship_background_config.gd`, `shaders/background_layer.gdshader`) | Fondo en parallax de la nave. Ver `docs/arte/fondo-nave.md` |
+| `ShipFloor` | `scripts/levels/ship_floor.gd` | Piso 3/4 de los segmentos de inicio |
+| `SheetSprite` | `scripts/visual/sheet_sprite.gd` | Sprite que reproduce tags de una hoja de Aseprite con duración por cuadro (escotilla, ventanal) |
+| `LevelLighting` | `scripts/levels/level_lighting.gd` (+ `lighting_config.gd`) | Oscuridad por tier y fábrica de luces. Ver `docs/mecanicas/iluminacion.md` |
 
 ## Flujo de una partida
 

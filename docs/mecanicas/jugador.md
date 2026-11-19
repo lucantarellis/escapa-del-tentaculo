@@ -92,11 +92,13 @@ Un astronauta que se mueve con un jetpack de combustible limitado. Es la mecáni
 
 ```
 Player (CharacterBody2D, grupo "player", capa 2, máscara 1)
-├── Flame (Sprite2D, `efecto_llama`, fijo debajo del astronauta; visible solo mientras se propulsa)
-├── Body (Polygon2D, 16×24, transparente con sprites; naranja, rojo sin combustible, sin ellos)
-│   └── Sprite (Sprite2D, escala 0,25, posición (0, -12); muestra el astronauta)
+├── Flame (AnimatedSprite2D, `astronaut_flame.res`, detrás del cuerpo; visible solo mientras se propulsa)
+├── Body (Node2D; se espeja con flip_h de los sprites)
+│   ├── Sprite (AnimatedSprite2D, `cuerpo.res`: idle, walk, jump, thrust, thrust_side y sus `_dano_1/_dano_2`)
+│   └── Visor (AnimatedSprite2D, `visor_reflejo.res`, copia la animación y el cuadro del cuerpo)
+├── GasVent (Marker2D, punto de salida del gas del jetpack)
+├── Light (PointLight2D creada en código: luz principal de la nave oscura, ver iluminacion.md)
 ├── CollisionShape2D (RectangleShape2D 16×24)
-├── ThrustIndicator (Polygon2D pequeño, blanco azulado; solo se usa si no hay sprites)
 └── DashCooldownBar (Node2D con `DashCooldownBar`, 16×3 px sobre la cabeza, blanco azulado; solo visible durante el enfriamiento)
 ```
 
@@ -109,18 +111,15 @@ Player (CharacterBody2D, grupo "player", capa 2, máscara 1)
 
 ## Puntos de golpe y reaparición
 
-Con las mejoras Vidas del mercado el jugador aguanta golpes (`hit_points_changed`, `hit_taken`) y puede reaparecer una vez por partida (`respawned`). Los perseguidores (tentáculo, fuego y ácido, causa `tentacle`) y la caída (`instakill_causes`) siempre matan, aunque tengas vidas de más. Contra los perseguidores **Reaparecer tampoco salva** (`no_respawn_causes`): es una muerte real y la partida se reinicia; la caída (`fell`) sí se puede reaparecer. Los reparadores curan vidas con `heal()` y el botiquín da un escudo (`give_shield()`, señal `shield_changed`; se dibuja como un óvalo que cubre astronauta y llama) que absorbe un golpe común (sin parpadeo ni invulnerabilidad después) y no frena a los perseguidores ni a la caída; ver `reparadores.md`. Los tentaculitos de la fase 3 (`minor_tentacle`) son un golpe común: quitan 1 vida y el dash invulnerable los esquiva. `hit_sprites` (grupo Visual) permite poner un sprite por cada estado de golpes. Detalle en `progreso-mercado.md`.
+Con las mejoras Vidas del mercado el jugador aguanta golpes (`hit_points_changed`, `hit_taken`) y puede reaparecer una vez por partida (`respawned`). Los perseguidores (tentáculo, fuego y ácido, causa `tentacle`) y la caída (`instakill_causes`) siempre matan, aunque tengas vidas de más. Contra los perseguidores **Reaparecer tampoco salva** (`no_respawn_causes`): es una muerte real y la partida se reinicia; la caída (`fell`) sí se puede reaparecer. Los reparadores curan vidas con `heal()` y el botiquín da un escudo (`give_shield()`, señal `shield_changed`; se dibuja como un óvalo que cubre astronauta y llama) que absorbe un golpe común (sin parpadeo ni invulnerabilidad después) y no frena a los perseguidores ni a la caída; ver `reparadores.md`. Los tentaculitos de la fase 3 (`minor_tentacle`) son un golpe común: quitan 1 vida y el dash invulnerable los esquiva. Cada estado de golpes tiene su versión dañada de las animaciones (ver "Sprites del astronauta"). Detalle en `progreso-mercado.md`.
 
 ## Sprites del astronauta
 
-Los dibujos están en `assets/sprites/Astronaut/` (lienzo de 96×192 px con el astronauta apoyado abajo; con escala 0,25 mide casi lo mismo que la colisión de 16×24). Se asignan en `Player.tscn`:
+Editable en `assets/aseprite/player/astronaut/astronaut.aseprite` (lienzo 32×40, capas `cuerpo` y `visor_reflejo`) y la llama en `astronaut_flame.aseprite`. Importados con Aseprite Wizard como `SpriteFrames` versionados en `assets/sprites/player/astronaut/` (`cuerpo.res`, `visor_reflejo.res`, `astronaut_flame.res` + PNG); cómo reimportar en `docs/arte/SPRITES.md`.
 
-| Export (grupo Visual) | Qué muestra |
-|---|---|
-| `hit_sprites[0]` (`Normal`) | Sin golpes |
-| `hit_sprites[1]` (`dano`) | Con 1 golpe recibido |
-| `hit_sprites[2]` (`variante_rojo`) | Con 2 o más golpes |
-
-- **Espejo:** los dibujos miran a la derecha y se espejan (`flip_h`) si el último lado apretado fue la izquierda. Con las dos teclas a la vez gana la que se apretó última. Quieto o en movimiento se usa el mismo dibujo; al empezar o reiniciar la partida queda sin espejo.
-- **Llama (`Flame`):** se muestra mientras hay propulsión (cualquier dirección) y siempre queda debajo del astronauta, sin espejarse ni girar. Se oculta al morir, ganar o congelarse. Sin sprites se usa el `ThrustIndicator`.
-- **Ajustes visuales:** escala y posición del sprite (`Body/Sprite`) y de la llama (`Flame`) se cambian en el inspector de `Player.tscn`.
+- **Animación por estado** (`_pick_base_animation`): propulsando hacia arriba `thrust`, de costado o con velocidad lateral > 30 px/s `thrust_side`; en el piso `walk` (> 8 px/s) o `idle`; en el aire `jump` (una vez, queda en el último cuadro). El dash no tiene animación propia.
+- **Daño:** con 1 golpe se usan las animaciones `_dano_1` y con 2 o más `_dano_2`. Si solo cambia el daño se conserva el cuadro, así no salta.
+- **Sin combustible:** el cuerpo se tiñe con `EMPTY_FUEL_TINT`.
+- **Espejo:** los sprites miran a la derecha y se espejan (`flip_h`) si el último lado apretado fue la izquierda. La llama y el punto del gas (`FLAME_OFFSET`, `GAS_VENT_OFFSET`) se espejan con ellos.
+- **Llama:** visible solo mientras hay propulsión, detrás del cuerpo; se oculta al morir, ganar o congelarse.
+- **Luz:** el astronauta lleva la luz principal de la nave (`LightingConfig`, grupo Astronauta). Con `player_self_lit = false` (por defecto) sus sprites son sin sombreado: no se oscurecen ni se queman con su propia luz.

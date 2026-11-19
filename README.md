@@ -16,7 +16,7 @@ Abrir la carpeta del proyecto desde Godot (Project Manager → Import → selecc
 
 ## Estado actual
 
-Prototipo jugable con placeholders (polígonos; el astronauta ya usa sprites, ver `docs/mecanicas/jugador.md`): jugador con jetpack, plataformas, paredes con tiles, niveles armados por segmentos de 360 × 640 en tiers, intro de la escotilla, HUD y récord. El estado detallado está en `docs/ROADMAP.md`.
+Prototipo jugable con el arte final de la fase de la nave (astronauta, tentáculos, paredes, plataformas, fondo, recogibles, escotilla, ventanal e iluminación; el espacio y el alien siguen con placeholders): jugador con jetpack, plataformas, paredes con tiles, niveles armados por segmentos de 360 × 640 en tiers, intro de la escotilla, HUD y récord. El estado detallado está en `docs/ROADMAP.md`.
 
 `scenes/main/Main.tscn` es la escena principal (`run/main_scene`): muestra la pantalla de título (nombre del juego y un botón **JUGAR**) sobre el nivel ya armado y quieto (`scenes/levels/Level.tscn`). Al pulsar JUGAR el título se disuelve, una escotilla golpea tres veces (vibración de cámara y gas), se rompe, el jugador sale disparado hacia arriba, arranca el gameplay y poco después entra el tentáculo (ver `docs/mecanicas/intro-escotilla.md`); R reinicia directo al juego, repitiendo la intro (sin título). Ver `docs/mecanicas/pantalla-titulo.md`.
 

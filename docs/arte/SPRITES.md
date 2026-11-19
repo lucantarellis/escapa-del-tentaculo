@@ -5,7 +5,7 @@ Guía para los chats de sprites (Claude con el MCP de Aseprite). Leer completa a
 ## Antes de empezar
 
 1. Leer este archivo, `docs/arte/lista-assets.md` (qué falta y de qué tamaño) y `assets/palette.md`.
-2. Referencia de estilo: `assets/sprites/environment/fire_platform/`. Los sprite sheets `astronaut_spritesheet.png`, `scifi_tileset.png` y `tentacle_spritesheet.png` son solo referencia, no assets finales.
+2. Referencia de estilo: `assets/sprites/environment/fire_platform/` y el arte de la nave (`assets/sprites/environment/`, `player/astronaut/`, `tentacle/ship/`).
 3. Un chat por categoría de la lista (entorno base, recogibles, peligros del espacio, peligros del alien, meta e intro, UI; astronauta y tentáculo aparte). Si el chat toca otra categoría, avisar antes.
 
 ## Rutas
@@ -21,7 +21,7 @@ Guía para los chats de sprites (Claude con el MCP de Aseprite). Leer completa a
 - Frames temporales, zips y borradores van en `art_src/` y se borran al cerrar el asset. Ejemplo: `environment/fire_platform/centro_a_v1_idle`.
 - El MCP trabaja con rutas absolutas de Windows; crear la subcarpeta de `<ruta>` si no existe.
 - Nombres en `snake_case`, sin acentos ni mayúsculas.
-- No se mueven ni se renombran assets existentes. `Astronaut/` y `player/` conviven hoy; decidir dónde va el arte nuevo del astronauta antes de crearlo.
+- No se mueven ni se renombran assets existentes. El astronauta vive en `player/astronaut/` (la carpeta vieja `Astronaut/` se borró).
 
 ## Reglas de dibujo
 
@@ -39,6 +39,14 @@ Guía para los chats de sprites (Claude con el MCP de Aseprite). Leer completa a
 4. `export_sprite` (PNG, escala 1) a la ruta espejo en `assets/sprites/`.
 5. Tildar el asset en `docs/arte/lista-assets.md` y decir en qué escena o script hay que conectarlo. No se editan escenas ni scripts desde este chat.
 6. Para que Godot genere el `.import`, abrir el proyecto en el editor; el `.png` y su `.png.import` se commitean juntos.
+
+## Reimportar en Godot
+
+Hay dos caminos, según cómo se conectó el asset:
+
+- **Con Aseprite Wizard** (astronauta y llama en `assets/sprites/player/astronaut/`, mar de tentáculos en `assets/sprites/tentacle/ship/`): son `SpriteFrames` generados (`.res` + PNG) y versionados. Después de guardar el `.aseprite`, en Godot abrir el dock de Aseprite Wizard, elegir el archivo y **Import** con el mismo destino. **"Round FPS" apagado** (si no, cambia la duración de los cuadros). Commitear el `.res` y el PNG juntos. Todo se importa con loop: los tags que se usan una vez los apaga el código (`jump` del jugador; `reach`, `grab`, `retract` del tentáculo).
+- **Hojas + JSON de Aseprite** (plataformas, recogibles, fondo, piso, escotilla, ventanal, paredes): el código lee el PNG (y `_normal`, `_emissive`, `_aura` si existen) y el JSON (duración de cada cuadro y tags) por nombre. Exportar con **File > Export Sprite Sheet**, vertical u horizontal como el original, mismo nombre de archivo, JSON en formato Array con `frameTags`. No hace falta tocar escenas ni código mientras no cambien los nombres de los tags ni el tamaño del cuadro.
+- **Paredes:** los `.tres` de los tilesets se generan desde `ship_walls_layout.json` con un script fuera del repo; si cambia el arte, regenerarlos desde el chat de arte.
 
 ## No hacer
 

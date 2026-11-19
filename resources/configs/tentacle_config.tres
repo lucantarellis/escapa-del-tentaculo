@@ -8,5 +8,4 @@ script = ExtResource("1_cfg")
 visible_height = 30.0
 rise_speed = 110.0
 max_rise_speed = 180.0
-use_sprites = true
 sea = ExtResource("2_sea")

@@ -72,7 +72,7 @@ La **primera vez** que se completa una fase se gana una compra gratis (una por f
 3. Cualquier otra causa (obstáculo, trampa, escombros, láser, mini tentáculo, etc.) resta 1 punto si hay más de 1 y el jugador sobrevive. Tras el golpe queda `hit_invulnerable_time` (1,5 s) sin poder perder otro punto, parpadeando.
 4. Con la mejora Reaparecer y sin usarla en la partida, en lugar de morir (con cualquier causa, salvo los perseguidores: `no_respawn_causes`, ahí morís de verdad) el jugador reaparece `respawn_height` px más arriba (160; se busca un lugar libre en 6 alturas cercanas), con `respawn_hit_points` (1) y la invulnerabilidad de un golpe. Es una sola vez por partida: `Player.reset()` (R o partida nueva) la devuelve. No se emite `died`, así que el juego no termina.
 
-Los puntos se ven como corazones provisorios bajo las monedas (solo con más de 1 punto). Para ponerle sprites al jugador: en `Player.tscn`, nodo raíz, grupo Visual, `hit_sprites` (1.º sin golpes, 2.º con 1 golpe, 3.º con 2; si hay menos se repite el último). Se muestran en `Body/Sprite`. Con la lista vacía el cuerpo placeholder se oscurece con cada golpe.
+Los puntos se ven como corazones provisorios bajo las monedas (solo con más de 1 punto). El astronauta muestra el daño con sus animaciones `_dano_1` (1 golpe) y `_dano_2` (2 o más); ver "Sprites del astronauta" en `jugador.md`.
 
 Parámetros (`ProgressConfig`, grupo "Golpes y reaparición"): `hit_invulnerable_time` 1,5 s, `instakill_causes` [tentacle, fell], `respawn_height` 160 px, `respawn_hit_points` 1.
 
