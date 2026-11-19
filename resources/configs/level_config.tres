@@ -76,6 +76,7 @@ count_per_run = 1
 display_name = "La nave"
 exit_segments = Array[PackedScene]([ExtResource("ship_exit_01"), ExtResource("ship_exit_02"), ExtResource("ship_exit_03")])
 background_color = Color(0.0627, 0.0784, 0.1216, 1)
+background_ship = true
 pursuer_color = Color(0.54134405, 0.3044531, 0.93466634, 1)
 
 [sub_resource type="Resource" id="Resource_tier2"]

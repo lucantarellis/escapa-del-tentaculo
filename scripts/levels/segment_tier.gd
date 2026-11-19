@@ -46,6 +46,8 @@ extends Resource
 @export var background_color: Color = Color(0.0, 0.0, 0.0, 0.0)
 ## Si es true, el fondo muestra estrellas (el espacio).
 @export var background_stars: bool = false
+## Si es true, el fondo es el pozo de la nave en parallax ([ShipBackground]).
+@export var background_ship: bool = false
 ## Duración del fundido al nuevo fondo al entrar al tier. Unidad: s.
 @export var background_fade: float = 0.4
 ## Intensidad de la viñeta (oscurecimiento de los bordes con un latido leve), para dar sensación de

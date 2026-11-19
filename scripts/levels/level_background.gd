@@ -1,7 +1,7 @@
 class_name LevelBackground
 extends CanvasLayer
-## Fondo del nivel detrás de todo (capa −10): color liso y, opcionalmente, un campo de estrellas
-## con parallax. Cada tier define el suyo (`SegmentTier`, grupo "Fondo") y [LevelController] lo
+## Fondo del nivel detrás de todo (capa −10): color liso y, opcionalmente, el pozo de la nave en
+## parallax ([ShipBackground]) o un campo de estrellas con parallax. Cada tier define el suyo (`SegmentTier`, grupo "Fondo") y [LevelController] lo
 ## cambia al entrar al tier con un fundido. Placeholder hasta el arte final.
 
 ## Decorado del espacio (capas, planeta, frente desenfocado). Vacío = valores por defecto de
@@ -19,8 +19,11 @@ void fragment() {
 }"
 ## Viewport lógico del juego (px). Estructural: coincide con `project.godot` (360×640).
 const VIEWPORT_SIZE: Vector2 = Vector2(360.0, 640.0)
+## Fondo de la nave en parallax (pozo con máquinas). Estructural.
+const SHIP_BACKGROUND_SCENE: String = "res://scenes/levels/ShipBackground.tscn"
 
 var _rect: ColorRect
+var _ship: ShipBackground
 var _stars: Node2D
 var _front_layer: CanvasLayer
 var _front: Node2D
@@ -50,6 +53,9 @@ func _ready() -> void:
 	_rect.size = VIEWPORT_SIZE
 	_rect.color = Color("10141F")
 	add_child(_rect)
+	_ship = (load(SHIP_BACKGROUND_SCENE) as PackedScene).instantiate() as ShipBackground
+	add_child(_ship)
+	_ship.set_shown(false, 0.0)
 	_stars = Node2D.new()
 	_stars.draw.connect(_draw_back)
 	add_child(_stars)
@@ -105,10 +111,13 @@ func _process(delta: float) -> void:
 	_front.queue_redraw()
 
 
-## Cambia el fondo a [param color], con o sin estrellas y con viñeta de intensidad [param vignette], con un fundido de [param fade] s (0 = ya).
-func apply_style(color: Color, stars: bool, fade: float, vignette: float = 0.0) -> void:
+## Cambia el fondo a [param color], con o sin estrellas, con o sin el pozo de la nave
+## ([param ship]) y con viñeta de intensidad [param vignette], con un fundido de [param fade] s
+## (0 = ya).
+func apply_style(color: Color, stars: bool, fade: float, vignette: float = 0.0, ship: bool = false) -> void:
 	if _tween != null:
 		_tween.kill()
+	_ship.set_shown(ship, fade)
 	_vignette_rect.visible = true
 	_vignette_strength = vignette
 	var target_alpha: float = 1.0 if stars else 0.0
