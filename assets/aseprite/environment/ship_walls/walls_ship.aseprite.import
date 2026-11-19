@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://c3nfc500oohi1"
+path="res://.godot/imported/walls_ship.aseprite-5f15b4a6bd06173c9f69492c22d30347.res"
+
+[deps]
+
+source_file="res://assets/aseprite/environment/ship_walls/walls_ship.aseprite"
+dest_files=["res://.godot/imported/walls_ship.aseprite-5f15b4a6bd06173c9f69492c22d30347.res"]
+
+[params]
+

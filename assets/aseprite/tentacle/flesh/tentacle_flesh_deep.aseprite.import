@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://bnb3vr7vugs1b"
+path="res://.godot/imported/tentacle_flesh_deep.aseprite-d08a713ae843dcafb6f9eecb44fd3fd3.res"
+
+[deps]
+
+source_file="res://assets/aseprite/tentacle/flesh/tentacle_flesh_deep.aseprite"
+dest_files=["res://.godot/imported/tentacle_flesh_deep.aseprite-d08a713ae843dcafb6f9eecb44fd3fd3.res"]
+
+[params]
+

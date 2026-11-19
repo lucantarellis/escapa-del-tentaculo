@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://crs254jk13kge"
+path="res://.godot/imported/bg_ship_far_02.aseprite-a19c25b36c733cf35e64b153d3d04951.res"
+
+[deps]
+
+source_file="res://assets/aseprite/environment/background_ship/bg_ship_far_02.aseprite"
+dest_files=["res://.godot/imported/bg_ship_far_02.aseprite-a19c25b36c733cf35e64b153d3d04951.res"]
+
+[params]
+

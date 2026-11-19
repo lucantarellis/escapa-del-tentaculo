@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://dvgfkm31ewvwk"
+path="res://.godot/imported/hatch.aseprite-d86f22bff04c142dc8a8bbe1e9016398.res"
+
+[deps]
+
+source_file="res://assets/aseprite/intro/hatch.aseprite"
+dest_files=["res://.godot/imported/hatch.aseprite-d86f22bff04c142dc8a8bbe1e9016398.res"]
+
+[params]
+

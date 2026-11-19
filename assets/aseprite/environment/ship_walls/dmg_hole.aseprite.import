@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://de7u2tv4hv7di"
+path="res://.godot/imported/dmg_hole.aseprite-a360a7a542765e980887306d8d3a1052.res"
+
+[deps]
+
+source_file="res://assets/aseprite/environment/ship_walls/dmg_hole.aseprite"
+dest_files=["res://.godot/imported/dmg_hole.aseprite-a360a7a542765e980887306d8d3a1052.res"]
+
+[params]
+

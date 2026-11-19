@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://pt1syv8pr4j8"
+path="res://.godot/imported/pickup_tape.aseprite-4e68c895838448c24eca2dc4576a9e8c.res"
+
+[deps]
+
+source_file="res://assets/aseprite/pickups/pickup_tape.aseprite"
+dest_files=["res://.godot/imported/pickup_tape.aseprite-4e68c895838448c24eca2dc4576a9e8c.res"]
+
+[params]
+

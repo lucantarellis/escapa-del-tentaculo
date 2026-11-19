@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://bb3xqvfsfjwi7"
+path="res://.godot/imported/astronaut.aseprite-fe081036ae9766ff1a2d12de3b981877.res"
+
+[deps]
+
+source_file="res://assets/aseprite/player/astronaut/astronaut.aseprite"
+dest_files=["res://.godot/imported/astronaut.aseprite-fe081036ae9766ff1a2d12de3b981877.res"]
+
+[params]
+

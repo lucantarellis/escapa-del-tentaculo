@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://bfl0ff666pqdl"
+path="res://.godot/imported/window_breach.aseprite-3e74465cdfcbe1253f39d33eac3080ef.res"
+
+[deps]
+
+source_file="res://assets/aseprite/environment/window/window_breach.aseprite"
+dest_files=["res://.godot/imported/window_breach.aseprite-3e74465cdfcbe1253f39d33eac3080ef.res"]
+
+[params]
+

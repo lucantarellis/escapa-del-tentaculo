@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://bnpipafwp5hco"
+path="res://.godot/imported/platform_thruster.aseprite-583de4d091338c7b5778ff2564ff1d85.res"
+
+[deps]
+
+source_file="res://assets/aseprite/environment/platforms/platform_thruster.aseprite"
+dest_files=["res://.godot/imported/platform_thruster.aseprite-583de4d091338c7b5778ff2564ff1d85.res"]
+
+[params]
+

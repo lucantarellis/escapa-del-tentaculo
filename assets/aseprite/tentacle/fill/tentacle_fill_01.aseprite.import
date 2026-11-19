@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://dfbml4537d6sk"
+path="res://.godot/imported/tentacle_fill_01.aseprite-f527a16dc5af3ae6c32e3db0e1c8389d.res"
+
+[deps]
+
+source_file="res://assets/aseprite/tentacle/fill/tentacle_fill_01.aseprite"
+dest_files=["res://.godot/imported/tentacle_fill_01.aseprite-f527a16dc5af3ae6c32e3db0e1c8389d.res"]
+
+[params]
+

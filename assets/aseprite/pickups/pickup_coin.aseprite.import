@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://dnf4s3iwrpfcm"
+path="res://.godot/imported/pickup_coin.aseprite-ace9678c41e65916a53ed991460244ef.res"
+
+[deps]
+
+source_file="res://assets/aseprite/pickups/pickup_coin.aseprite"
+dest_files=["res://.godot/imported/pickup_coin.aseprite-ace9678c41e65916a53ed991460244ef.res"]
+
+[params]
+

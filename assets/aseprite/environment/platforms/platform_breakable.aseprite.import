@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://d4ef3kjhfr0nu"
+path="res://.godot/imported/platform_breakable.aseprite-7c002bfe84ce1c0c060703c3dc73ee73.res"
+
+[deps]
+
+source_file="res://assets/aseprite/environment/platforms/platform_breakable.aseprite"
+dest_files=["res://.godot/imported/platform_breakable.aseprite-7c002bfe84ce1c0c060703c3dc73ee73.res"]
+
+[params]
+

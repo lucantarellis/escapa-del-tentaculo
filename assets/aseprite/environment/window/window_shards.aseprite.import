@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://b6aj63tdc1dpu"
+path="res://.godot/imported/window_shards.aseprite-4a6fe1551e4ccebfb248af78e83e8448.res"
+
+[deps]
+
+source_file="res://assets/aseprite/environment/window/window_shards.aseprite"
+dest_files=["res://.godot/imported/window_shards.aseprite-4a6fe1551e4ccebfb248af78e83e8448.res"]
+
+[params]
+

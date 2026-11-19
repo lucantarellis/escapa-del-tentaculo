@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://63vm1w1kpfrc"
+path="res://.godot/imported/det_pipe.aseprite-383a757d321974509bca36ab1cfd0075.res"
+
+[deps]
+
+source_file="res://assets/aseprite/environment/ship_walls/det_pipe.aseprite"
+dest_files=["res://.godot/imported/det_pipe.aseprite-383a757d321974509bca36ab1cfd0075.res"]
+
+[params]
+

@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://cw8n8i7m1aema"
+path="res://.godot/imported/dmg_crack.aseprite-8fb51f38d8150d2d041656f0422930f6.res"
+
+[deps]
+
+source_file="res://assets/aseprite/environment/ship_walls/dmg_crack.aseprite"
+dest_files=["res://.godot/imported/dmg_crack.aseprite-8fb51f38d8150d2d041656f0422930f6.res"]
+
+[params]
+

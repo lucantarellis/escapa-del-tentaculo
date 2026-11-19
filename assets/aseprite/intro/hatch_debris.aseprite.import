@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://c7ftk7q7fgti0"
+path="res://.godot/imported/hatch_debris.aseprite-319b41629dbb926dee63a77164fdb36a.res"
+
+[deps]
+
+source_file="res://assets/aseprite/intro/hatch_debris.aseprite"
+dest_files=["res://.godot/imported/hatch_debris.aseprite-319b41629dbb926dee63a77164fdb36a.res"]
+
+[params]
+
