@@ -34,14 +34,10 @@ signal respawned(at: Vector2)
 ## Se emite cuando el escudo del botiquín aparece (`active` = true) o desaparece (false).
 signal shield_changed(active: bool)
 
-## Color del cuerpo con combustible (naranja de la paleta). Solo visual.
 ## Tinte del jugador mientras dura un impulso de velocidad. Solo visual.
 const BOOST_MODULATE: Color = Color(0.7, 1.4, 1.35, 1.0)
-const COLOR_BODY_NORMAL: Color = Color("#FF6B32")
-## Color del cuerpo sin combustible (rojo de la paleta). Solo visual.
-const COLOR_BODY_EMPTY: Color = Color("#D83232")
-## Oscurecimiento del cuerpo placeholder por cada golpe recibido (0 a 1). Solo visual.
-const HIT_DARKEN_STEP: float = 0.3
+## Tinte rojizo del sprite del astronauta sin combustible. Solo visual.
+const EMPTY_FUEL_TINT: Color = Color(1.0, 0.6, 0.6)
 ## Opacidad baja del parpadeo tras un golpe (0 a 1). Solo visual.
 const BLINK_ALPHA: float = 0.3
 ## Velocidad del parpadeo tras un golpe. Unidad: cambios por segundo. Solo visual.
@@ -61,24 +57,36 @@ const SHIELD_RING_WIDTH: float = 2.0
 const SHIELD_RING_POINTS: int = 32
 const SHIELD_BLINK_TIME: float = 1.0
 const DASH_BREAK_MAX_CHAIN: int = 4
-## Distancia del indicador de propulsión al centro del cuerpo. Unidad: px. Solo visual.
-const THRUST_INDICATOR_DISTANCE: float = 16.0
+## Sufijo de la animación según los golpes recibidos: el índice es la cantidad de golpes y el último
+## vale para 2 o más (`idle`, `idle_dano_1`, `idle_dano_2`). Solo visual.
+const DAMAGE_SUFFIXES: Array[String] = ["", "_dano_1", "_dano_2"]
+## Animaciones de una sola pasada (sin loop). El Wizard importa todo en loop y los tags no se pueden
+## renombrar con el prefijo `_`, así que se corrige al cargar. Solo visual.
+const ONE_SHOT_ANIMATIONS: Array[StringName] = [&"jump"]
+## Velocidad horizontal mínima desde la que, en el suelo, se ve el trote en lugar de `idle`.
+## Unidad: px/s. Solo visual.
+const WALK_MIN_SPEED: float = 8.0
+## Velocidad horizontal mínima desde la que, propulsando sin entrada lateral, se ve `thrust_side`.
+## Unidad: px/s. Solo visual.
+const SIDE_THRUST_MIN_SPEED: float = 30.0
+## Centro de la llama del jetpack respecto del centro del sprite del astronauta. Con el sprite
+## espejado, X cambia de signo. Unidad: px. Solo visual.
+const FLAME_OFFSET: Vector2 = Vector2(-8.0, 20.0)
+## Punto de fuga de gas (daño 2) respecto del centro del sprite, para partículas futuras. Con el
+## sprite espejado, X cambia de signo. Unidad: px. Solo visual.
+const GAS_VENT_OFFSET: Vector2 = Vector2(-2.0, 9.0)
 
 ## Parámetros de gameplay. Si queda vacío se usan los valores por defecto de [PlayerConfig].
 @export var config: PlayerConfig
 
-@export_group("Visual")
-## Sprites del jugador según los golpes recibidos: el primero es sin golpes, el segundo con 1 golpe,
-## el tercero con 2 golpes. Si hay menos que golpes, se repite el último. Con la lista vacía se
-## usa el cuerpo placeholder, que se oscurece con cada golpe. El sprite se muestra en el nodo
-## `Body/Sprite` (se puede escalar o mover desde ahí). Los dibujos miran a la derecha y se
-## espejan si el último lado al que se apretó moverse fue la izquierda.
-@export var hit_sprites: Array[Texture2D] = []
-
-@onready var _body: Polygon2D = $Body
-@onready var _sprite: Sprite2D = $Body/Sprite
-@onready var _thrust_indicator: Polygon2D = $ThrustIndicator
-@onready var _flame: Sprite2D = $Flame
+# Visual: `Body/Sprite` (cuerpo) y `Body/Visor` (brillo del visor, encima) son AnimatedSprite2D con los
+# SpriteFrames del Wizard; `Flame` (detrás) solo se ve al propulsar. Los dibujos miran a la derecha y
+# se espejan si el último lado al que se apretó moverse fue la izquierda.
+@onready var _body: Node2D = $Body
+@onready var _sprite: AnimatedSprite2D = $Body/Sprite
+@onready var _visor: AnimatedSprite2D = $Body/Visor
+@onready var _flame: AnimatedSprite2D = $Flame
+@onready var _gas_vent: Marker2D = $GasVent
 @onready var _collision: CollisionShape2D = $CollisionShape2D
 @onready var _cooldown_bar: DashCooldownBar = $DashCooldownBar
 
@@ -115,6 +123,11 @@ var _dash_cooldown_left: float = 0.0
 var _facing: float = 1.0
 ## true si el último lado al que se apretó moverse fue la izquierda (el sprite se espeja). Solo visual.
 var _look_left: bool = false
+## Animación base (sin sufijo de daño) y animación completa que se están mostrando. Solo visual.
+var _anim_base: StringName = &""
+var _anim_current: StringName = &""
+## Última dirección de propulsión con que se actualizó el visual (para refrescar sin cortar la animación).
+var _last_thrust_direction: Vector2 = Vector2.ZERO
 ## Tiempo que lleva el dash en curso. Solo vale mientras hay un dash. Unidad: s.
 var _dash_time: float = 0.0
 ## Invulnerabilidad del dash (mejora del mercado, ver [PlayerProgress]): cuándo empieza (s desde
@@ -163,9 +176,16 @@ func _ready() -> void:
 	_fuel = clampf(config.starting_fuel, 0.0, config.max_fuel)
 	_current_gravity = config.gravity_with_fuel
 	_was_empty = is_fuel_empty()
+	_setup_sprites()
 	_update_visuals(Vector2.ZERO)
 	_update_cooldown_bar()
 	fuel_changed.emit(_fuel, config.max_fuel)
+
+
+func _process(_delta: float) -> void:
+	# El visor copia animación y cuadro del cuerpo (mismos tags y duraciones) para no desfasarse.
+	_visor.animation = _sprite.animation
+	_visor.frame = _sprite.frame
 
 
 func _physics_process(delta: float) -> void:
@@ -338,7 +358,7 @@ func die(cause: StringName) -> void:
 		if _hp > 1:
 			_hp -= 1
 			_hit_invuln_left = _hit_invuln_time
-			_update_visuals(Vector2.ZERO)
+			_update_visuals(_last_thrust_direction)
 			hit_points_changed.emit(_hp, _max_hp)
 			hit_taken.emit(cause)
 			return
@@ -786,31 +806,70 @@ func _set_thrusting(value: bool) -> void:
 
 
 func _update_visuals(thrust_direction: Vector2) -> void:
-	var base_color: Color = COLOR_BODY_EMPTY if is_fuel_empty() else COLOR_BODY_NORMAL
-	var hits_taken: int = _max_hp - _hp
-	if hit_sprites.is_empty():
-		_sprite.visible = false
-		_body.color = base_color.darkened(HIT_DARKEN_STEP * hits_taken)
-	else:
-		# Con sprites propios, el polígono queda transparente y se muestra el sprite del estado.
-		_body.color = Color(base_color, 0.0)
-		_sprite.texture = hit_sprites[mini(hits_taken, hit_sprites.size() - 1)]
-		# Los dibujos miran a la derecha: se espejan si el último lado apretado fue la izquierda.
-		_sprite.flip_h = _look_left
-		_sprite.visible = true
-		_sprite.modulate = Color(1.0, 0.6, 0.6) if is_fuel_empty() else Color.WHITE
-	_show_thrust(_is_alive and thrust_direction != Vector2.ZERO, thrust_direction)
+	_last_thrust_direction = thrust_direction
+	var thrusting: bool = _is_alive and thrust_direction != Vector2.ZERO
+	_set_body_animation(_pick_base_animation(thrusting, thrust_direction))
+	# Los dibujos miran a la derecha: se espejan si el último lado apretado fue la izquierda.
+	_sprite.flip_h = _look_left
+	_visor.flip_h = _look_left
+	_sprite.modulate = EMPTY_FUEL_TINT if is_fuel_empty() else Color.WHITE
+	_place_attachments()
+	_show_thrust(thrusting)
 
 
-# Muestra u oculta lo que indica la propulsión. Con sprites propios es la llama, fija debajo del
-# astronauta sin importar hacia dónde se propulse; sin sprites, el cuadradito que apunta hacia
-# [param direction].
-func _show_thrust(on: bool, direction: Vector2 = Vector2.ZERO) -> void:
-	var use_flame: bool = not hit_sprites.is_empty() and _flame.texture != null
-	_flame.visible = on and use_flame
-	_thrust_indicator.visible = on and not use_flame
-	if on and not use_flame and direction != Vector2.ZERO:
-		_thrust_indicator.position = direction.normalized() * THRUST_INDICATOR_DISTANCE
+# Estado base según el movimiento: propulsando (`thrust_side` si hay entrada o velocidad lateral, si
+# no `thrust`), en el suelo (`walk` o `idle`) o en el aire sin propulsar (`jump`).
+func _pick_base_animation(thrusting: bool, thrust_direction: Vector2) -> StringName:
+	if thrusting:
+		var sideways: bool = thrust_direction.x != 0.0 or absf(velocity.x) > SIDE_THRUST_MIN_SPEED
+		return &"thrust_side" if sideways else &"thrust"
+	if is_on_floor():
+		return &"walk" if absf(velocity.x) > WALK_MIN_SPEED else &"idle"
+	return &"jump"
+
+
+# Sufijo de daño según los golpes recibidos (0 = ninguno, 1 = `_dano_1`, 2 o más = `_dano_2`).
+func _damage_suffix() -> String:
+	return DAMAGE_SUFFIXES[clampi(_max_hp - _hp, 0, DAMAGE_SUFFIXES.size() - 1)]
+
+
+# Cambia la animación del cuerpo. Si solo cambió el sufijo de daño, conserva el cuadro (y su avance)
+# para que no salte; si cambió el estado base, arranca del primer cuadro.
+func _set_body_animation(base: StringName) -> void:
+	var anim: StringName = StringName(String(base) + _damage_suffix())
+	if anim == _anim_current:
+		return
+	var keep_frame: bool = base == _anim_base and _sprite.sprite_frames.has_animation(anim)
+	var frame: int = _sprite.frame
+	var progress: float = _sprite.frame_progress
+	_anim_base = base
+	_anim_current = anim
+	_sprite.play(anim)
+	if keep_frame:
+		_sprite.set_frame_and_progress(frame, progress)
+
+
+# Pone la llama y el punto de fuga de gas respecto del centro del sprite, espejando X con él.
+func _place_attachments() -> void:
+	var side: float = -1.0 if _look_left else 1.0
+	_flame.flip_h = _look_left
+	_flame.position = _sprite.position + Vector2(FLAME_OFFSET.x * side, FLAME_OFFSET.y)
+	_gas_vent.position = _sprite.position + Vector2(GAS_VENT_OFFSET.x * side, GAS_VENT_OFFSET.y)
+
+
+# Todo el arte de una sola pasada (ver ONE_SHOT_ANIMATIONS) deja de repetirse en loop.
+func _setup_sprites() -> void:
+	for frames: SpriteFrames in [_sprite.sprite_frames, _visor.sprite_frames]:
+		for suffix: String in DAMAGE_SUFFIXES:
+			for base: StringName in ONE_SHOT_ANIMATIONS:
+				var anim: StringName = StringName(String(base) + suffix)
+				if frames.has_animation(anim):
+					frames.set_animation_loop(anim, false)
+
+
+# Muestra u oculta la llama del jetpack (detrás del cuerpo, visible solo mientras se propulsa).
+func _show_thrust(on: bool) -> void:
+	_flame.visible = on
 
 
 # Muestra u oculta el escudo (placeholder: óvalo cian con relleno translúcido). Parpadea el último segundo.

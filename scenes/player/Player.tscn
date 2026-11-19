@@ -3,10 +3,9 @@
 [ext_resource type="Script" path="res://scripts/player/player.gd" id="1_player"]
 [ext_resource type="Resource" path="res://resources/configs/player_config.tres" id="2_config"]
 [ext_resource type="Script" path="res://scripts/player/dash_cooldown_bar.gd" id="3_dashbar"]
-[ext_resource type="Texture2D" path="res://assets/sprites/Astronaut/Normal.png" id="4_normal"]
-[ext_resource type="Texture2D" path="res://assets/sprites/Astronaut/dano.png" id="5_dano"]
-[ext_resource type="Texture2D" path="res://assets/sprites/Astronaut/variante_rojo.png" id="6_rojo"]
-[ext_resource type="Texture2D" path="res://assets/sprites/Astronaut/efecto_llama.png" id="8_flame"]
+[ext_resource type="SpriteFrames" path="res://assets/sprites/player/astronaut/cuerpo.res" id="4_body"]
+[ext_resource type="SpriteFrames" path="res://assets/sprites/player/astronaut/visor_reflejo.res" id="5_visor"]
+[ext_resource type="SpriteFrames" path="res://assets/sprites/player/astronaut/astronaut_flame.res" id="6_flame"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(16, 24)
@@ -16,32 +15,34 @@ collision_layer = 2
 collision_mask = 1
 script = ExtResource("1_player")
 config = ExtResource("2_config")
-hit_sprites = Array[Texture2D]([ExtResource("4_normal"), ExtResource("5_dano"), ExtResource("6_rojo")])
 
-[node name="Flame" type="Sprite2D" parent="."]
+[node name="Flame" type="AnimatedSprite2D" parent="."]
 visible = false
-position = Vector2(0, 2)
-scale = Vector2(0.25, 0.25)
-texture = ExtResource("8_flame")
 texture_filter = 1
+position = Vector2(-8, 12)
+sprite_frames = ExtResource("6_flame")
+animation = &"flame"
+autoplay = "flame"
 
-[node name="Body" type="Polygon2D" parent="."]
-color = Color(1, 0.4196, 0.1961, 1)
-polygon = PackedVector2Array(-8, -12, 8, -12, 8, 12, -8, 12)
+[node name="Body" type="Node2D" parent="."]
 
-[node name="Sprite" type="Sprite2D" parent="Body"]
-visible = false
-position = Vector2(0, -12)
-scale = Vector2(0.25, 0.25)
+[node name="Sprite" type="AnimatedSprite2D" parent="Body"]
 texture_filter = 1
+position = Vector2(0, -8)
+sprite_frames = ExtResource("4_body")
+animation = &"idle"
+
+[node name="Visor" type="AnimatedSprite2D" parent="Body"]
+texture_filter = 1
+position = Vector2(0, -8)
+sprite_frames = ExtResource("5_visor")
+animation = &"idle"
+
+[node name="GasVent" type="Marker2D" parent="."]
+position = Vector2(-2, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_body")
-
-[node name="ThrustIndicator" type="Polygon2D" parent="."]
-visible = false
-color = Color(0.7843, 0.9059, 0.9176, 1)
-polygon = PackedVector2Array(-3, -3, 3, -3, 3, 3, -3, 3)
 
 [node name="DashCooldownBar" type="Node2D" parent="."]
 visible = false
