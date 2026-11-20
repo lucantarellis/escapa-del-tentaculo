@@ -75,6 +75,8 @@ const FLAME_OFFSET: Vector2 = Vector2(-8.0, 20.0)
 ## Punto de fuga de gas (daño 2) respecto del centro del sprite, para partículas futuras. Con el
 ## sprite espejado, X cambia de signo. Unidad: px. Solo visual.
 const GAS_VENT_OFFSET: Vector2 = Vector2(-2.0, 9.0)
+## Tiempo con que se enciende la luz del astronauta al salir de la escotilla. Solo visual. Unidad: s.
+const LIGHT_FADE_IN: float = 0.3
 
 ## Parámetros de gameplay. Si queda vacío se usan los valores por defecto de [PlayerConfig].
 @export var config: PlayerConfig
@@ -108,6 +110,9 @@ var _boost_left: float = 0.0
 var _boost_multiplier: float = 1.0
 ## true mientras el jugador está congelado (ver [method set_frozen]).
 var _frozen: bool = false
+## Luz principal de la nave oscura (ver [LevelLighting]) y su encendido.
+var _light: PointLight2D
+var _light_tween: Tween
 ## Tiempo que le queda al bloqueo del Input tras un lanzamiento (ver [method launch]). Unidad: s.
 var _control_lock_left: float = 0.0
 ## Dirección (vector unitario, 8 direcciones) del dash en curso. Solo vale mientras hay un dash.
@@ -462,6 +467,7 @@ func set_frozen(frozen: bool) -> void:
 	_frozen = frozen
 	set_physics_process(not frozen)
 	_body.visible = not frozen
+	_set_light_on(not frozen)
 	_collision.set_deferred("disabled", frozen)
 	if frozen:
 		_dash_distance_left = 0.0
@@ -873,6 +879,8 @@ func _setup_light() -> void:
 	var cfg: LightingConfig = LevelLighting.get_config()
 	var light: PointLight2D = LevelLighting.make_light(cfg.player_color, cfg.player_energy, cfg.player_radius, cfg.player_height, cfg.player_core)
 	add_child(light)
+	_light = light
+	_set_light_on(not _frozen)
 	if not cfg.player_self_lit:
 		# El astronauta se dibuja siempre con su color (sin oscuridad ni luces): su propia luz no lo
 		# quema y se lee igual en cualquier lugar.
@@ -881,6 +889,24 @@ func _setup_light() -> void:
 		for sprite: CanvasItem in [_flame, _sprite, _visor]:
 			if sprite.material == null:
 				sprite.material = unshaded
+
+
+# Prende o apaga la luz del astronauta. Congelado (antes de la intro) no se ve ni ilumina: sin esto
+# su luz quedaba prendida en el punto de aparición, al costado de la escotilla. Al prenderse sube
+# en `LIGHT_FADE_IN` s para no aparecer de golpe.
+func _set_light_on(on: bool) -> void:
+	if _light == null:
+		return
+	if _light_tween != null:
+		_light_tween.kill()
+	if not on:
+		_light.enabled = false
+		return
+	var target: float = LevelLighting.get_config().player_energy
+	_light.enabled = true
+	_light.energy = 0.0
+	_light_tween = create_tween()
+	_light_tween.tween_property(_light, "energy", target, LIGHT_FADE_IN)
 
 
 # Muestra u oculta la llama del jetpack (detrás del cuerpo, visible solo mientras se propulsa).
