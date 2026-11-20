@@ -65,17 +65,45 @@ extends Resource
 @export var tentacle_entry_duration: float = 1.0
 
 @export_group("Luz de la escotilla")
-## Color de la luz que sale de la escotilla.
+## La escotilla tiene tres luces que siguen el estado (cerrada → cada golpe → ruptura → rota):
+## la luz que ilumina el entorno (piso, paredes, astronauta), un halo rojo visible alrededor y un
+## haz que se escapa por la rendija hacia arriba. Halo y haz no los oscurece la nave oscura.
+
+## Color de la luz que ilumina el entorno.
 @export var hatch_light_color: Color = Color("CD1417")
-## Radio de la luz. Unidad: px.
-@export var hatch_light_radius: float = 140.0
-## Energía con la escotilla cerrada (casi nula: solo la rendija).
-@export var hatch_light_energy_closed: float = 0.1
-## Energía que suma cada golpe.
-@export var hatch_light_energy_per_hit: float = 0.3
-## Pico de energía en la ruptura.
-@export var hatch_light_energy_break: float = 2.0
-## Energía con la escotilla rota (queda el hueco rojo).
-@export var hatch_light_energy_broken: float = 0.7
-## Tiempo con que la luz pasa de un valor al otro en cada golpe. Unidad: s.
-@export var hatch_light_fade: float = 0.15
+## Radio de la luz del entorno. Unidad: px.
+@export var hatch_light_radius: float = 170.0
+## Altura de la luz del entorno sobre las paredes: más alta, llega más lejos (ver LightingConfig).
+## Unidad: px.
+@export var hatch_light_height: float = 90.0
+## Energía de la luz del entorno: cerrada, lo que suma cada golpe, pico en la ruptura y rota.
+@export var hatch_light_energy_closed: float = 0.15
+@export var hatch_light_energy_per_hit: float = 0.35
+@export var hatch_light_energy_break: float = 2.5
+@export var hatch_light_energy_broken: float = 1.0
+
+## Color y tamaño (ancho, alto) del halo rojo alrededor de la escotilla. Unidad: px.
+@export var hatch_halo_color: Color = Color(1.0, 0.12, 0.1)
+@export var hatch_halo_size: Vector2 = Vector2(240.0, 130.0)
+## Intensidad del halo (0–1): cerrada, lo que suma cada golpe, pico en la ruptura y rota.
+@export_range(0.0, 1.0, 0.01) var hatch_halo_closed: float = 0.06
+@export_range(0.0, 1.0, 0.01) var hatch_halo_per_hit: float = 0.12
+@export_range(0.0, 1.0, 0.01) var hatch_halo_break: float = 1.0
+@export_range(0.0, 1.0, 0.01) var hatch_halo_broken: float = 0.6
+
+## Color y tamaño (ancho arriba, alto) del haz que se escapa por la rendija. Unidad: px.
+@export var hatch_beam_color: Color = Color(1.0, 0.15, 0.1)
+@export var hatch_beam_size: Vector2 = Vector2(120.0, 200.0)
+## Intensidad del haz (0–1): lo que suma cada golpe (cerrada no hay), pico en la ruptura y rota.
+@export_range(0.0, 1.0, 0.01) var hatch_beam_per_hit: float = 0.2
+@export_range(0.0, 1.0, 0.01) var hatch_beam_break: float = 1.0
+@export_range(0.0, 1.0, 0.01) var hatch_beam_broken: float = 0.5
+
+## Destello de cada golpe: cuánto más brillan las tres luces en el impacto (0,5 = 50 % más) antes
+## de volver a su nivel.
+@export var hatch_hit_flash: float = 0.6
+## Tiempo con que las luces pasan de un nivel al otro. Unidad: s.
+@export var hatch_light_fade: float = 0.3
+## Respiración del halo y el haz con la escotilla rota: cuánto varían (0–1) y a qué velocidad (Hz).
+@export_range(0.0, 1.0, 0.05) var hatch_breath_amount: float = 0.2
+@export var hatch_breath_speed: float = 0.7

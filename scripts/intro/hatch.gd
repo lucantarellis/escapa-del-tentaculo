@@ -52,8 +52,6 @@ const DEBRIS_SPIN: float = 8.0
 const GAS_SPREAD_DEG: float = 35.0
 ## Tamaño de las partículas de gas (sin textura). Solo visual. Unidad: px.
 const GAS_PARTICLE_SIZE: float = 5.0
-## Lado de la textura radial de la luz roja. Estructural. Unidad: px.
-const LIGHT_TEXTURE_SIZE: int = 128
 
 ## Se emite cuando termina la animación de apertura de [method break_open].
 signal break_finished
@@ -73,6 +71,13 @@ var _hits: int = 0
 var _broken: bool = false
 var _shake_tween: Tween
 var _light_tween: Tween
+## Niveles actuales de las tres luces (entorno, halo y haz); _process los aplica con la respiración.
+var _light_level: float = 0.0
+var _halo_level: float = 0.0
+var _beam_level: float = 0.0
+var _time: float = 0.0
+var _halo: Sprite2D
+var _beam: Sprite2D
 var _debris_texture: CanvasTexture
 
 
@@ -84,6 +89,17 @@ func _ready() -> void:
 	_refresh()
 
 
+func _process(delta: float) -> void:
+	_time += delta
+	var cfg: IntroConfig = _get_config()
+	var breath: float = 1.0
+	if _broken:
+		breath = 1.0 + cfg.hatch_breath_amount * sin(_time * TAU * cfg.hatch_breath_speed)
+	_light.energy = _light_level * breath
+	_halo.modulate.a = clampf(_halo_level * breath, 0.0, 1.0)
+	_beam.modulate.a = clampf(_beam_level * breath, 0.0, 1.0)
+
+
 ## Golpe: sacude la escotilla, la abomba un poco más, intensifica el brillo y suelta una ráfaga
 ## de gas. [param strength] es el multiplicador de intensidad (1 = golpe base). Ignorado si la
 ## escotilla ya está rota.
@@ -92,7 +108,10 @@ func hit(strength: float) -> void:
 		return
 	_hits += 1
 	_sprite.play(StringName("hit_%d" % mini(_hits, MAX_HIT_ANIM)))
-	_set_light(_get_config().hatch_light_energy_closed + _get_config().hatch_light_energy_per_hit * _hits)
+	# Destello del impacto y después queda en el nivel del golpe: más abollada, más luz se escapa.
+	var level: Vector3 = _state_levels()
+	_set_levels(level * (1.0 + _get_config().hatch_hit_flash), 0.04)
+	_light_tween.tween_method(_apply_levels, level * (1.0 + _get_config().hatch_hit_flash), level, _get_config().hatch_light_fade)
 	_shake_visual(strength)
 	_burst_gas(roundi(_get_config().gas_amount * strength))
 
@@ -112,9 +131,10 @@ func break_open() -> void:
 	_sprite.play(&"break")
 	_burst_gas(cfg.break_gas_amount)
 	_spawn_debris(cfg.break_debris_count)
-	# Pico de luz con la ruptura y después baja a la luz media de la escotilla rota.
-	_set_light(cfg.hatch_light_energy_break, 0.04)
-	_light_tween.tween_property(_light, "energy", cfg.hatch_light_energy_broken, _sprite.get_tag_duration(&"break") + 0.2)
+	# Pico con la ruptura y después queda el halo rojo que respira, de donde sale el astronauta.
+	var peak: Vector3 = Vector3(cfg.hatch_light_energy_break, cfg.hatch_halo_break, cfg.hatch_beam_break)
+	_set_levels(peak, 0.04)
+	_light_tween.tween_method(_apply_levels, peak, _state_levels(), _sprite.get_tag_duration(&"break") + 0.4)
 
 
 ## Fija el estado final sin animación: [param broken] `true` = rota (hueco rojo que respira),
@@ -168,24 +188,68 @@ func _setup_sprites() -> void:
 	_sprite.finished.connect(_on_sprite_finished)
 
 
-# Luz roja que sale de la escotilla e ilumina al astronauta, el piso y las paredes.
+# Tres luces: la que ilumina el entorno (PointLight2D), un halo rojo visible detrás de la escotilla
+# y un haz que se escapa por la rendija hacia arriba (estos dos aditivos y sin sombreado, así la
+# nave oscura no los apaga).
 func _setup_light() -> void:
 	var cfg: IntroConfig = _get_config()
-	var gradient: Gradient = Gradient.new()
-	gradient.set_color(0, Color(1.0, 1.0, 1.0, 1.0))
-	gradient.set_color(1, Color(1.0, 1.0, 1.0, 0.0))
-	var texture: GradientTexture2D = GradientTexture2D.new()
-	texture.gradient = gradient
-	texture.fill = GradientTexture2D.FILL_RADIAL
-	texture.fill_from = Vector2(0.5, 0.5)
-	texture.fill_to = Vector2(1.0, 0.5)
-	texture.width = LIGHT_TEXTURE_SIZE
-	texture.height = LIGHT_TEXTURE_SIZE
-	_light.texture = texture
-	_light.texture_scale = cfg.hatch_light_radius * 2.0 / float(LIGHT_TEXTURE_SIZE)
+	_light.texture = LevelLighting.get_light_texture(0.6)
+	_light.texture_scale = cfg.hatch_light_radius * 2.0 / float(LevelLighting.LIGHT_TEXTURE_SIZE)
 	_light.color = cfg.hatch_light_color
-	# Con relieve en las texturas, una luz sin altura casi no ilumina lo plano (ver LightingConfig).
-	_light.height = LevelLighting.get_config().light_height
+	_light.height = cfg.hatch_light_height
+	var glow_material: CanvasItemMaterial = CanvasItemMaterial.new()
+	glow_material.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	glow_material.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	# Halo: detrás de la escotilla (primer hijo dibujado), centrado en la rendija.
+	_halo = Sprite2D.new()
+	_halo.name = "Halo"
+	_halo.texture = LevelLighting.get_light_texture(0.35)
+	_halo.scale = cfg.hatch_halo_size / float(LevelLighting.LIGHT_TEXTURE_SIZE)
+	_halo.position = Vector2(0.0, FRAME_TOP + 4.0)
+	_halo.self_modulate = cfg.hatch_halo_color
+	_halo.material = glow_material
+	add_child(_halo)
+	move_child(_halo, 0)
+	# Haz: delante de la escotilla, con la base en la rendija y abriéndose hacia arriba.
+	_beam = Sprite2D.new()
+	_beam.name = "Beam"
+	_beam.texture = _make_beam_texture()
+	_beam.centered = false
+	var beam_scale: Vector2 = cfg.hatch_beam_size / Vector2(_beam.texture.get_size())
+	_beam.scale = beam_scale
+	_beam.position = Vector2(-cfg.hatch_beam_size.x * 0.5, FRAME_TOP + 6.0 - cfg.hatch_beam_size.y)
+	_beam.self_modulate = cfg.hatch_beam_color
+	_beam.material = glow_material
+	add_child(_beam)
+	move_child(_beam, _visual.get_index() + 1)
+
+
+# Cono que se abre hacia arriba: angosto y brillante en la base (la rendija), ancho y transparente
+# arriba.
+static func _make_beam_texture() -> Texture2D:
+	var w: int = 64
+	var h: int = 128
+	var image: Image = Image.create(w, h, false, Image.FORMAT_RGBA8)
+	for y: int in h:
+		var t: float = float(y) / float(h - 1)  # 0 arriba, 1 en la base
+		var half: float = lerpf(0.5, 0.12, t)
+		var vertical: float = pow(t, 1.8)
+		for x: int in w:
+			var dx: float = absf((float(x) + 0.5) / float(w) - 0.5) / half
+			var horizontal: float = clampf(1.0 - dx, 0.0, 1.0)
+			image.set_pixel(x, y, Color(1.0, 1.0, 1.0, vertical * horizontal * horizontal))
+	return ImageTexture.create_from_image(image)
+
+
+# Niveles (entorno, halo, haz) del estado actual, sin destellos.
+func _state_levels() -> Vector3:
+	var cfg: IntroConfig = _get_config()
+	if _broken:
+		return Vector3(cfg.hatch_light_energy_broken, cfg.hatch_halo_broken, cfg.hatch_beam_broken)
+	return Vector3(
+		cfg.hatch_light_energy_closed + cfg.hatch_light_energy_per_hit * _hits,
+		minf(cfg.hatch_halo_closed + cfg.hatch_halo_per_hit * _hits, 1.0),
+		minf(cfg.hatch_beam_per_hit * _hits, 1.0))
 
 
 # Aplica el estado actual (cerrada / golpeada / rota) sin animación de transición.
@@ -193,13 +257,11 @@ func _refresh() -> void:
 	var cfg: IntroConfig = _get_config()
 	if _broken:
 		_sprite.play(&"broken", true)
-		_set_light(cfg.hatch_light_energy_broken, 0.0)
 	elif _hits > 0:
 		_sprite.play(StringName("idle_%d" % mini(_hits, MAX_HIT_ANIM)), true)
-		_set_light(cfg.hatch_light_energy_closed + cfg.hatch_light_energy_per_hit * _hits, 0.0)
 	else:
 		_sprite.play(&"closed", true)
-		_set_light(cfg.hatch_light_energy_closed, 0.0)
+	_set_levels(_state_levels(), 0.0)
 
 
 # Encadena: golpe → reposo del mismo golpe; ruptura → aviso y escotilla rota.
@@ -212,17 +274,23 @@ func _on_sprite_finished(tag: StringName) -> void:
 		break_finished.emit()
 
 
-# Lleva la energía de la luz a [param energy] en [param fade] s (por defecto, `hatch_light_fade`).
-func _set_light(energy: float, fade: float = -1.0) -> void:
+# Lleva las tres luces a [param levels] (entorno, halo, haz) en [param fade] s (0 = ya). Deja el
+# tween en `_light_tween` para encadenar el paso siguiente.
+func _set_levels(levels: Vector3, fade: float) -> void:
 	if _light_tween != null:
 		_light_tween.kill()
-	var duration: float = _get_config().hatch_light_fade if fade < 0.0 else fade
-	if duration <= 0.0:
-		_light.energy = energy
-		_light_tween = null
+	_light_tween = null
+	if fade <= 0.0:
+		_apply_levels(levels)
 		return
 	_light_tween = create_tween()
-	_light_tween.tween_property(_light, "energy", energy, duration)
+	_light_tween.tween_method(_apply_levels, Vector3(_light_level, _halo_level, _beam_level), levels, fade)
+
+
+func _apply_levels(levels: Vector3) -> void:
+	_light_level = levels.x
+	_halo_level = levels.y
+	_beam_level = levels.z
 
 
 func _setup_gas() -> void:

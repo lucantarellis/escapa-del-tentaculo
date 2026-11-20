@@ -88,17 +88,23 @@ Los valores son de prueba (no se anotan en `TUNING_LOG.md`). `Level.tscn` refere
 
 ```
 Hatch (Node2D, ALWAYS)           origen = centro del borde superior del piso
-├── Light (PointLight2D)         luz roja #CD1417; energía según el estado (IntroConfig, grupo "Luz de la escotilla")
+├── Halo (Sprite2D, en código)   resplandor rojo aditivo detrás de la escotilla
+├── Light (PointLight2D)         luz roja #CD1417 que ilumina el entorno; energía según el estado
 ├── Visual (Node2D)              se sacude con cada golpe
 │   ├── Sprite (SheetSprite)     hoja `hatch` con relieve; maneja la animación (tags del JSON de Aseprite)
 │   ├── Emissive (Sprite2D)      `hatch_emissive`, sin sombreado; sigue el cuadro de Sprite
 │   └── Glow (Sprite2D)          `hatch_glow`, sin sombreado y aditivo; sigue el cuadro de Sprite
+├── Beam (Sprite2D, en código)   haz rojo aditivo que sale de la rendija hacia arriba
 └── GasParticles (CPUParticles2D)  una sola ráfaga (one_shot), sin textura, blanco azulado con alfa
 ```
 
 **Estados (arte: `docs/arte/piso-y-escotilla.md`):** cerrada `closed` (loop); golpe *k* → `hit_k` y después `idle_k` (loop; desde el 4.º golpe se repite `hit_3`); `break_open()` → `break`, `break_finished` al terminar y queda en `broken` (loop); `set_broken(true/false)` → `broken` o `closed` sin animación. Las hojas ya no se rotan por código; la sacudida (`Visual.position`), el gas y los fragmentos (un cuadro al azar de `hatch_debris` cada uno) siguen en código. El jugador sale desde `FRAME_TOP` = −15 (cara superior del marco).
 
-**Luz:** energía `hatch_light_energy_closed` (0,1) cerrada, +`hatch_light_energy_per_hit` (0,3) por golpe, pico `hatch_light_energy_break` (2,0) en la ruptura y `hatch_light_energy_broken` (0,7) rota; radio `hatch_light_radius` (140 px), transición `hatch_light_fade` (0,15 s). Sin la oscuridad del Paso 9 la luz solo tiñe de rojo lo que alcanza.
+**Luz:** tres capas que siguen el estado (cerrada → cada golpe → ruptura → rota), con valores en `IntroConfig`, grupo "Luz de la escotilla":
+- **Luz del entorno** (`Light`, `PointLight2D`): ilumina piso, paredes y astronauta. Energía 0,15 cerrada, +0,35 por golpe, pico 2,5 en la ruptura y 1,0 rota; radio 170 px, altura 90 px.
+- **Haz** (`Beam`, creado en código, aditivo y sin sombreado): cono rojo que se escapa por la rendija hacia arriba; no hay con la escotilla cerrada, suma 0,2 por golpe, pico en la ruptura y queda en 0,5.
+- **Halo** (`Halo`, detrás de la escotilla, aditivo y sin sombreado): resplandor rojo de 240×130 px; casi nada cerrada (0,06), +0,12 por golpe, pico en la ruptura y queda en 0,6. De ahí sale el astronauta.
+- Cada golpe hace un destello (`hatch_hit_flash`, +60 %) y vuelve a su nivel en `hatch_light_fade` (0,3 s). Rota, halo y haz respiran (`hatch_breath_amount`, `hatch_breath_speed`). Halo y haz no los oscurece la nave oscura.
 
 **Piso:** el `Floor` de cada `SegmentStartNN` dibuja el piso en 3/4 con `ShipFloor` (`scripts/levels/ship_floor.gd`, módulos de `floor_ship`, `floor_seed` propio por segmento, franjas de peligro a los lados de `hatch_x`); la colisión (banda de 360×20) no cambió.
 
