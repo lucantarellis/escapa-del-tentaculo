@@ -2,9 +2,18 @@
 
 [ext_resource type="Script" path="res://scripts/intro/hatch.gd" id="1_hatch"]
 [ext_resource type="Script" path="res://scripts/visual/sheet_sprite.gd" id="2_sheet"]
+[ext_resource type="Texture2D" path="res://assets/sprites/fx/gas_puff_a.png" id="3_puff_a"]
+[ext_resource type="Texture2D" path="res://assets/sprites/fx/gas_puff_b.png" id="4_puff_b"]
+[ext_resource type="Texture2D" path="res://assets/sprites/fx/gas_puff_c.png" id="5_puff_c"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_unshaded"]
 light_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_puff"]
+particles_animation = true
+particles_anim_h_frames = 4
+particles_anim_v_frames = 1
+particles_anim_loop = false
 
 [node name="Hatch" type="Node2D"]
 process_mode = 3
@@ -22,6 +31,29 @@ script = ExtResource("2_sheet")
 [node name="Emissive" type="Sprite2D" parent="Visual"]
 material = SubResource("CanvasItemMaterial_unshaded")
 
-[node name="GasParticles" type="CPUParticles2D" parent="."]
+[node name="GasPuffA" type="CPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_puff")
+texture_filter = 1
 emitting = false
 one_shot = true
+texture = ExtResource("3_puff_a")
+anim_speed_min = 1.0
+anim_speed_max = 1.0
+
+[node name="GasPuffB" type="CPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_puff")
+texture_filter = 1
+emitting = false
+one_shot = true
+texture = ExtResource("4_puff_b")
+anim_speed_min = 1.0
+anim_speed_max = 1.0
+
+[node name="GasPuffC" type="CPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_puff")
+texture_filter = 1
+emitting = false
+one_shot = true
+texture = ExtResource("5_puff_c")
+anim_speed_min = 1.0
+anim_speed_max = 1.0

@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://77xjn0ef10ja"
+path="res://.godot/imported/gas_puff.aseprite-25429fbfe85797546b107bb161f3db6d.res"
+
+[deps]
+
+source_file="res://assets/aseprite/fx/gas_puff.aseprite"
+dest_files=["res://.godot/imported/gas_puff.aseprite-25429fbfe85797546b107bb161f3db6d.res"]
+
+[params]
+

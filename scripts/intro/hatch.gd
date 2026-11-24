@@ -10,8 +10,6 @@ extends Node2D
 ## el centro del borde SUPERIOR del piso. Corre siempre (`PROCESS_MODE_ALWAYS`) porque el nivel
 ## está en pausa mientras dura la intro. Ver `docs/mecanicas/intro-escotilla.md`.
 
-## Blanco azulado con alfa: gas. Solo visual.
-const COLOR_GAS: Color = Color(0.784, 0.906, 0.918, 0.55)
 ## Hojas de la escotilla (color + relieve, emisivo, resplandor) y su JSON de Aseprite. Estructural.
 const SHEET_DIR: String = "res://assets/sprites/intro/"
 const SHEET_JSON: String = SHEET_DIR + "hatch.json"
@@ -50,8 +48,6 @@ const DEBRIS_LIFETIME: float = 1.4
 const DEBRIS_SPIN: float = 8.0
 ## Apertura del cono del gas. Solo visual. Unidad: grados.
 const GAS_SPREAD_DEG: float = 35.0
-## Tamaño de las partículas de gas (sin textura). Solo visual. Unidad: px.
-const GAS_PARTICLE_SIZE: float = 5.0
 
 ## Se emite cuando termina la animación de apertura de [method break_open].
 signal break_finished
@@ -64,7 +60,8 @@ signal break_finished
 @onready var _sprite: SheetSprite = $Visual/Sprite
 @onready var _emissive: Sprite2D = $Visual/Emissive
 @onready var _light: PointLight2D = $Light
-@onready var _gas: CPUParticles2D = $GasParticles
+## Tres emisores de gas, uno por forma de bocanada (`gas_puff_a/b/c`).
+@onready var _gas_emitters: Array[CPUParticles2D] = [$GasPuffA, $GasPuffB, $GasPuffC]
 
 var _hits: int = 0
 var _broken: bool = false
@@ -292,36 +289,45 @@ func _apply_levels(levels: Vector3) -> void:
 
 
 func _setup_gas() -> void:
-	_gas.emitting = false
-	_gas.one_shot = true
-	_gas.explosiveness = 0.85
-	_gas.local_coords = false
-	_gas.position = Vector2(0.0, FRAME_TOP + FRAME_BORDER)
-	_gas.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
-	_gas.emission_rect_extents = Vector2(_leaf_half_width(), 1.0)
-	_gas.direction = Vector2.UP
-	_gas.spread = GAS_SPREAD_DEG
-	_gas.gravity = Vector2.ZERO
-	_gas.damping_min = 40.0
-	_gas.damping_max = 70.0
-	_gas.scale_amount_min = GAS_PARTICLE_SIZE * 0.6
-	_gas.scale_amount_max = GAS_PARTICLE_SIZE
-	_gas.color = COLOR_GAS
 	var ramp := Gradient.new()
 	ramp.set_color(0, Color(1.0, 1.0, 1.0, 1.0))
 	ramp.set_color(1, Color(1.0, 1.0, 1.0, 0.0))
-	_gas.color_ramp = ramp
+	for gas: CPUParticles2D in _gas_emitters:
+		gas.emitting = false
+		gas.one_shot = true
+		gas.explosiveness = 0.85
+		gas.local_coords = false
+		gas.position = Vector2(0.0, FRAME_TOP + FRAME_BORDER)
+		gas.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
+		gas.emission_rect_extents = Vector2(_leaf_half_width(), 1.0)
+		gas.direction = Vector2.UP
+		gas.spread = GAS_SPREAD_DEG
+		gas.gravity = Vector2.ZERO
+		gas.damping_min = 40.0
+		gas.damping_max = 70.0
+		# Sin escalar: deforma el pixel art. El color ya está en la textura.
+		gas.scale_amount_min = 1.0
+		gas.scale_amount_max = 1.0
+		gas.color = Color.WHITE
+		gas.color_ramp = ramp
 
 
-# Suelta una ráfaga de [param amount] partículas.
+# Suelta una ráfaga de [param amount] partículas, repartidas entre las tres formas.
 func _burst_gas(amount: int) -> void:
 	var cfg: IntroConfig = _get_config()
-	_gas.amount = maxi(1, amount)
-	_gas.lifetime = cfg.gas_lifetime
-	_gas.initial_velocity_min = cfg.gas_speed * 0.6
-	_gas.initial_velocity_max = cfg.gas_speed
-	_gas.restart()
-	_gas.emitting = true
+	var total: int = maxi(1, amount)
+	var count: int = _gas_emitters.size()
+	for index: int in count:
+		var gas: CPUParticles2D = _gas_emitters[index]
+		var share: int = total / count + (1 if index < total % count else 0)
+		if share <= 0:
+			continue
+		gas.amount = share
+		gas.lifetime = cfg.gas_lifetime
+		gas.initial_velocity_min = cfg.gas_speed * 0.6
+		gas.initial_velocity_max = cfg.gas_speed
+		gas.restart()
+		gas.emitting = true
 
 
 func _shake_visual(strength: float) -> void:

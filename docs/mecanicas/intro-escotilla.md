@@ -94,7 +94,7 @@ Hatch (Node2D, ALWAYS)           origen = centro del borde superior del piso
 │   ├── Sprite (SheetSprite)     hoja `hatch` con relieve; maneja la animación (tags del JSON de Aseprite)
 │   └── Emissive (Sprite2D)      `hatch_emissive`, sin sombreado; sigue el cuadro de Sprite
 ├── Beam (Sprite2D, en código)   haz rojo aditivo que sale de la rendija hacia arriba
-└── GasParticles (CPUParticles2D)  una sola ráfaga (one_shot), sin textura, blanco azulado con alfa
+└── GasPuffA/B/C (CPUParticles2D)  tres emisores one_shot, uno por forma de bocanada (`gas_puff_a/b/c`, 4 cuadros animados en la vida de la partícula, sin escalar); `gas_amount` y `break_gas_amount` se reparten entre los tres
 ```
 
 **Estados (arte: `docs/arte/piso-y-escotilla.md`):** cerrada `closed` (loop); golpe *k* → `hit_k` y después `idle_k` (loop; desde el 4.º golpe se repite `hit_3`); `break_open()` → `break`, `break_finished` al terminar y queda en `broken` (loop); `set_broken(true/false)` → `broken` o `closed` sin animación. Las hojas ya no se rotan por código; la sacudida (`Visual.position`), el gas y los fragmentos (un cuadro al azar de `hatch_debris` cada uno) siguen en código. El jugador sale desde `FRAME_TOP` = −15 (cara superior del marco).
