@@ -31,6 +31,9 @@ const EFFECT_SHIELD: StringName = &"shield"
 @export var display_name: String = ""
 ## Texto corto que explica qué hace el nodo. Se ve en el detalle.
 @export_multiline var description: String = ""
+## Versión de una línea de [member description] para el detalle del mercado (Tiny5 16 px: hasta
+## ~45 caracteres). Si queda vacía se usa [member description].
+@export var short_description: String = ""
 
 @export_group("Árbol")
 ## Rama a la que pertenece (por ejemplo `dash`). Los nodos de una misma rama se muestran juntos,

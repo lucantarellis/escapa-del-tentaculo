@@ -7,6 +7,7 @@ script = ExtResource("1_up")
 id = &"dash"
 display_name = "Dash corto"
 description = "Un impulso rápido de 90 px en 8 direcciones. Gasta combustible."
+short_description = "Impulso de 90 px en 8 direcciones."
 branch = &"dash"
 branch_label = "Dash"
 price = 20

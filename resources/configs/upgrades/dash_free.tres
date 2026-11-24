@@ -7,6 +7,7 @@ script = ExtResource("1_up")
 id = &"dash_free"
 display_name = "Dash gratis"
 description = "El dash no gasta combustible."
+short_description = "El dash no gasta combustible."
 branch = &"dash"
 branch_label = "Dash"
 requires_id = &"dash_invuln"

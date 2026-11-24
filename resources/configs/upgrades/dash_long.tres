@@ -7,6 +7,7 @@ script = ExtResource("1_up")
 id = &"dash_long"
 display_name = "Dash largo"
 description = "El dash llega más lejos: 130 px."
+short_description = "El dash llega a 130 px."
 branch = &"dash"
 branch_label = "Dash"
 requires_id = &"dash"

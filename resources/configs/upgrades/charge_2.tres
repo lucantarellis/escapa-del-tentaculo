@@ -7,6 +7,7 @@ script = ExtResource("1_up")
 id = &"charge_2"
 display_name = "Carga de 100"
 description = "Cada tanque que recogés da 100 de combustible."
+short_description = "Cada tanque da 100 de combustible."
 branch = &"tank"
 branch_label = "Tanque"
 requires_id = &"tank_2"

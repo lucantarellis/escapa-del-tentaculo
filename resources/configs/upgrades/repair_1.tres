@@ -7,6 +7,7 @@ script = ExtResource("1_up")
 id = &"repair_1"
 display_name = "Reparador I"
 description = "Aparecen llaves inglesas que curan 1 vida. Requiere 2 vidas."
+short_description = "Aparecen llaves que curan 1 vida."
 branch = &"repair"
 branch_label = "Repara"
 requires_id = &"life_2"

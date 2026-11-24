@@ -7,6 +7,7 @@ script = ExtResource("1_up")
 id = &"life_respawn"
 display_name = "Reaparecer"
 description = "Una vez por partida, si morís, reaparecés más arriba con 1 punto de golpe."
+short_description = "Una vez por partida, reaparecés al morir."
 branch = &"lives"
 branch_label = "Vidas"
 requires_id = &"life_2"

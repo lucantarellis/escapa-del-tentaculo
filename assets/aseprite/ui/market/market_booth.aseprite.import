@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://cooylt01a1eve"
+path="res://.godot/imported/market_booth.aseprite-c96121e70739f20fa7fd5935e9757e59.res"
+
+[deps]
+
+source_file="res://assets/aseprite/ui/market/market_booth.aseprite"
+dest_files=["res://.godot/imported/market_booth.aseprite-c96121e70739f20fa7fd5935e9757e59.res"]
+
+[params]
+

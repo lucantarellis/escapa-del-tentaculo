@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://y6m4ki0bonio"
+path="res://.godot/imported/market_face.aseprite-b723b2a9f67a04c03efca9ba61f2cc19.res"
+
+[deps]
+
+source_file="res://assets/aseprite/ui/market/market_face.aseprite"
+dest_files=["res://.godot/imported/market_face.aseprite-b723b2a9f67a04c03efca9ba61f2cc19.res"]
+
+[params]
+

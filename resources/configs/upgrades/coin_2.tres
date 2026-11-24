@@ -7,6 +7,7 @@ script = ExtResource("1_up")
 id = &"coin_2"
 display_name = "Monedas x2"
 description = "Cada moneda vale 2."
+short_description = "Cada moneda vale 2."
 branch = &"coins"
 branch_label = "Monedas"
 price = 30

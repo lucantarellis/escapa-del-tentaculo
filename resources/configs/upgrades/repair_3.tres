@@ -7,6 +7,7 @@ script = ExtResource("1_up")
 id = &"repair_3"
 display_name = "Reparador III"
 description = "También aparecen botiquines: curan todo y dan un escudo de 5 s que aguanta un golpe."
+short_description = "Botiquines: curan todo y dan escudo."
 branch = &"repair"
 branch_label = "Repara"
 requires_id = &"repair_2"

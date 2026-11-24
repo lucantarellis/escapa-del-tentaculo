@@ -57,8 +57,8 @@ La **primera vez** que se completa una fase se gana una compra gratis (una por f
 
 - Cuenta aunque después muera en la partida. Si se pasan dos fases por primera vez en la misma partida, se suman dos. Repetir una fase que ya se completó no suma nada.
 - La **próxima compra** del mercado no gasta monedas: usa una compra gratis, aunque haya 0 monedas. Valen los requisitos del árbol (no se saltea el orden ni los nodos con candado). Los nodos que cuestan 0 no gastan compras gratis.
-- En el mercado, junto a las monedas se ve `Gratis: N`, y los nodos comprables dicen `GRATIS` en lugar del precio (y el detalle lo aclara).
-- **Reset all** borra las compras y las monedas, pero NO las fases completadas: devuelve todas las compras gratis, incluso las ya gastadas. Disponibles = fases completadas − usadas desde el último Reset all.
+- En el mercado, junto a las monedas se ve `+N compra(s) gratis` (texto ámbar, no es botón), y los nodos comprables dicen `GRATIS` en lugar del precio (también en COMPRAR).
+- **RESET** (antes "Reset all") borra las compras y las monedas, pero NO las fases completadas: devuelve todas las compras gratis, incluso las ya gastadas. Disponibles = fases completadas − usadas desde el último RESET.
 - Al completar una fase por primera vez, el nivel muestra unos segundos el aviso "¡FASE N COMPLETADA! Ganaste una compra gratis" (`LevelController`, constantes `NOTICE_*`).
 - Se guarda en `user://progress.cfg`, sección `[free_buys]` (`phases`, `used`). Las fases que se pasaron antes de existir esta mejora no cuentan: arranca en 0.
 - Pendiente: cuando exista el jefe final, la fase 3 se completará al llegar a él o derrotarlo (hoy es la puerta).
@@ -125,18 +125,24 @@ El valor de cada moneda (`CoinConfig.value`, 1) y el vaivén están en `coin_con
 
 ## Nodos
 
-`TitleMenu` → `Center/Box/MarketButton` y `Market` (pantalla completa, oculta). `Market` → `Margin/Box` con título, monedas, `Tabs` (una solapa por rama, creadas por código), `Scroll/Nodes` (los nodos de la rama activa como botones unidos por líneas), `DetailPanel` (qué hace, cuánto cuesta y qué falta del nodo seleccionado) y VOLVER. En la línea de monedas, a la derecha, está el botón **Reset all** (`CoinsRow/ResetButton`): el primer toque pide confirmación ("¿Seguro?", rojo, se cancela a los 3 s o al tocar otra cosa) y el segundo borra monedas y compras (los nodos regalados siguen). Tocar un nodo lo selecciona y, si se puede, lo compra. `Hud` → `CoinLabel`.
+`TitleMenu` → `Center/Box/MarketButton` y `Market` (pantalla completa, oculta). `Market` se arma por código (`scripts/ui/market.gd`; arte y medidas en `docs/arte/mercado.md`):
+- **Arriba (y 0–207):** el puesto `market_booth` (tag `ambient` en bucle) y la cara del vendedor `market_face` en (134, 59), con una `PointLight2D` cian sobre la pantalla (roja durante `deny`). La cara reacciona: `enter` al abrir, `browse` mientras se mueve el foco por la lista (vuelve a `idle` tras 2 s quieto), `buy` al comprar, `deny` al tocar COMPRAR sin monedas y `exit` al salir (el mercado se cierra y emite `closed` cuando termina).
+- **Barra superior:** moneda + monedas guardadas, `+N compra gratis` y el botón **RESET**: el primer toque pide confirmación (`¿SÍ?` en rojo, se cancela a los 3 s o al salir del botón) y el segundo borra monedas y compras (los nodos regalados siguen).
+- **Solapas:** Movimiento (Dash y Velocidad), Supervivencia (Vida, Reparación y Tanque) y Economía (Monedas). Una rama nueva que no figure en `Market.TABS` va a la última solapa.
+- **Lista con scroll:** un subencabezado por rama (ícono `mk_branch_*` y título) y una fila por nodo, con el estado a la vista: comprado (`mk_row_own`, ✓ "Comprado"), comprable (moneda + precio ámbar, o `GRATIS`), sin monedas (precio rojo) y bloqueado (`mk_row_lock`, candado). Barra de scroll propia a la derecha.
+- **Detalle:** nombre, motivo a la derecha ("Requiere: …", "Te faltan N", "Próximamente", "Comprado") y la descripción de una línea (`UpgradeData.short_description`; si está vacía, `description`). **Volver** cierra el mercado; **COMPRAR** (moneda + precio) compra el nodo elegido. Sin monedas se ve apagado pero se puede tocar (la cara dice que no); comprado o bloqueado no se puede tocar.
+- **Navegación:** tocar una fila la elige y pasa el foco a COMPRAR. Con teclado/joystick: arriba/abajo recorre la lista (el scroll sigue el foco), izquierda/derecha sobre la lista cambia de solapa, desde la primera fila se sube a las solapas y a RESET, desde la última se baja a COMPRAR / Volver. Escape cierra.
 
 ## Cómo probarlo
 
 1. Con el juego cerrado, poner `debug_min_coins = 200` en `progress_config.tres` para tener monedas de entrada (volver a 0 después).
-2. F5: en el título, MERCADO. Cambiar de rama con las solapas, tocar nodos y ver el detalle de abajo (cuesta, "te faltan N", "Primero comprá: ...", "Próximamente"). Los comprados se ven cian, los comprables naranja. Escape o VOLVER cierran.
+2. F5: en el título, MERCADO. La cara se prende y saluda. Cambiar de solapa, recorrer la lista (la cara mira la lista) y ver el detalle ("Te faltan N", "Requiere: …"). COMPRAR con monedas: la cara festeja; sin monedas: la pantalla se pone roja. Escape o Volver: la cara se apaga y se cierra.
 3. JUGAR: sin compras, combustible 100 en la barra y Shift no hace nada. Con dash comprado, Shift lanza el dash (90 o 130 px). Con Propulsión veloz se acelera más rápido y se llega a 210 px/s. Con Dash gratis la barra de combustible no baja al dashear.
 4. Juntar monedas durante la partida (contador arriba a la izquierda); perder o ganar las guarda. Tras terminar, Escape vuelve al título y MERCADO muestra las monedas guardadas.
 5. Con la invulnerabilidad: dashear contra un obstáculo o una trampa durante los primeros 2/3 del dash debería salvarte; el tentáculo y la caída siguen matando.
 6. Para jugar como antes: `enabled = false`.
-7. Compras gratis: con `debug_set_free_buys = 2` en `progress_config.tres` (volver a -1 después) el mercado muestra `Gratis: 2` y los nodos dicen GRATIS; al comprar uno baja a 1 y no se gastan monedas. Jugando de verdad: cruzar al espacio (o al alien) por primera vez muestra el aviso y suma 1. Reset all devuelve las gratis.
-8. Para empezar de cero desde el juego: botón **Reset all** del mercado (dos toques). Si `debug_set_coins` está activo, al abrir el juego las monedas vuelven a ese número. O bien: borrar `user://progress.cfg` (en Godot: Proyecto → Abrir carpeta de datos de usuario del proyecto) o subir `TREE_VERSION` en `player_progress.gd`.
+7. Compras gratis: con `debug_set_free_buys = 2` en `progress_config.tres` (volver a -1 después) el mercado muestra `+2 compras gratis` y los nodos dicen GRATIS; al comprar uno baja a 1 y no se gastan monedas. Jugando de verdad: cruzar al espacio (o al alien) por primera vez muestra el aviso y suma 1. RESET devuelve las gratis.
+8. Para empezar de cero desde el juego: botón **RESET** del mercado (dos toques). Si `debug_set_coins` está activo, al abrir el juego las monedas vuelven a ese número. O bien: borrar `user://progress.cfg` (en Godot: Proyecto → Abrir carpeta de datos de usuario del proyecto) o subir `TREE_VERSION` en `player_progress.gd`.
 
 ## Limitaciones conocidas
 

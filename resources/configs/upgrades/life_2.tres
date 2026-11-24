@@ -7,6 +7,7 @@ script = ExtResource("1_up")
 id = &"life_2"
 display_name = "2 vidas"
 description = "Resistís dos golpes letales (3 puntos de golpe). No frena a los perseguidores."
+short_description = "Resistís 2 golpes letales."
 branch = &"lives"
 branch_label = "Vidas"
 requires_id = &"life_1"

@@ -7,6 +7,7 @@ script = ExtResource("1_up")
 id = &"dash_break"
 display_name = "Rompe plataformas"
 description = "El dash rompe las plataformas rompibles."
+short_description = "El dash rompe plataformas rompibles."
 branch = &"dash"
 branch_label = "Dash"
 requires_id = &"dash_long"
