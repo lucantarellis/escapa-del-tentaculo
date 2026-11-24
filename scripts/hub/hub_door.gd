@@ -33,9 +33,11 @@ const HOLE_TOP: float = 78.0
 const HOLE_BOTTOM: float = 126.0
 ## Distancia del centro del hueco al punto donde queda el jugador al volver (px). Solo visual.
 const RETURN_DISTANCE: float = 32.0
-## Fila del sprite en la que termina el haz (y 640: el borde de abajo de la pantalla, así cubre todo
-## el piso) y cuánto baja su borde de arriba en el extremo lejano (px). Solo visual.
-const BEAM_BOTTOM_ROW: float = 154.0
+## Fila del sprite en la que termina el haz (y 610: el final de la cara de arriba del piso) y cuánto
+## baja su borde de arriba en el extremo lejano (px). Solo visual.
+const BEAM_BOTTOM_ROW: float = 124.0
+## Altura (fila del sprite) de la luz de la base, que alumbra el triángulo del marco. Solo visual.
+const BASE_LIGHT_ROW: float = 114.0
 const BEAM_TOP_DROP: float = 37.0
 ## Desde qué fracción de la animación `opening` se puede pasar (el bloqueo se quita antes de que la
 ## puerta termine de abrirse, así correr hacia ella no frena). Solo visual.
@@ -58,6 +60,7 @@ signal progress_changed(progress: float)
 
 var _sprite: SheetSprite
 var _light: PointLight2D
+var _base_light: PointLight2D
 var _beam: Sprite2D
 var _area: Area2D
 var _player: Player
@@ -166,6 +169,8 @@ func _process(delta: float) -> void:
 		flicker = 1.0 + config.door_light_flicker * sin(_time * FLICKER_SPEED)
 	_light.energy = config.door_light_energy * _level * flicker
 	_light.visible = _level > 0.001
+	_base_light.energy = config.door_light_energy * config.door_base_light_ratio * _level * flicker
+	_base_light.visible = _level > 0.001
 	_beam.modulate.a = config.door_beam_alpha * _level * flicker
 	_beam.visible = _level > 0.001
 	_opening_time = _opening_time + delta if _sprite.get_tag() == &"opening" else 0.0
@@ -233,6 +238,11 @@ func _setup_light() -> void:
 	_light.energy = 0.0
 	_light.height = LevelLighting.get_config().light_height
 	add_child(_light)
+	# Luz radial chica en la base: el cono (±35°) no llega al triángulo de abajo del marco.
+	_base_light = LevelLighting.make_light(color, 0.0, config.door_base_light_range)
+	_base_light.name = "BaseLight"
+	_base_light.position = Vector2(local_gap.x + inward * 8.0, BASE_LIGHT_ROW)
+	add_child(_base_light)
 	_beam = Sprite2D.new()
 	_beam.name = "Beam"
 	_beam.texture = _make_beam_texture(inward)
