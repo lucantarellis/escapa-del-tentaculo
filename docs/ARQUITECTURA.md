@@ -4,13 +4,14 @@ Documento vivo: se completa en cada paso del roadmap. Estado: **pasos 8d y 8e co
 
 ## Árbol de escenas
 
-La escena principal es `scenes/main/Main.tscn` (título sobre el nivel):
+La escena principal es `scenes/main/Main.tscn` (hub y, al subir el ascensor, la partida):
 
 ```
 Main (Node)                           script: scripts/main/main.gd
-├── LevelHolder (Node)                aquí vive la instancia de Level.tscn (autostart = false hasta pulsar JUGAR)
-└── TitleLayer (CanvasLayer, capa 95)
-    └── TitleMenu (Control)           scenes/ui/TitleMenu.tscn; se elimina tras el fundido
+├── LevelHolder (Node)                acá se instancia Level.tscn al arrancar la partida
+├── HubHolder (Node)                  acá se instancia scenes/hub/Hub.tscn (menú navegable)
+└── FadeLayer (CanvasLayer, capa 95)
+    └── Fade (ColorRect)              fundido desde negro al arrancar la partida
 ```
 
 Hay dos niveles jugables. `scenes/levels/Level.tscn` (nivel por segmentos, el principal):
@@ -47,7 +48,9 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 | Door | `player_reached()` | `LevelController` | Un jugador vivo llegó a la puerta. El controlador llama a `GameManager.notify_goal_reached()`. La puerta no llama a `Player` |
 | GameManager | `state_changed(new, old)` | `LevelController` | En `WON`: `Player.win()`, detiene el scroll y muestra "ESCAPASTE". En `LOST`: detiene el scroll y muestra el mensaje según la causa |
 | GameManager | `restart_requested()` | `Main` | Reconstruye el `Level` (sin título). Si nadie está conectado (`Level.tscn` solo, con F6), el manager recarga la escena |
-| TitleMenu | `play_pressed()` / `faded_out()` | `Main` | `faded_out`: elimina el menú y llama a `LevelController.play_intro()` |
+| Hub | `launch_finished()` | `Main` | Terminó la subida del ascensor (pantalla en negro): libera el hub, instancia el `Level` y llama a `play_intro()` |
+| HubDoor | `entered()` | `Hub` | El jugador entró por la puerta (fundido y se abre el mercado) |
+| HubElevator | `launch_started()` / `ride_finished()` | `Hub` | Sube la plataforma con el jugador / terminó la subida |
 | IntroDirector | `hit(index)` | _(nadie todavía; lo usará el audio)_ | Un golpe de la intro (`index` desde 0) |
 | IntroDirector | `broken()` | `LevelController` | La escotilla se rompió y el jugador ya salió disparado: empieza la partida (`begin` sin activar el tentáculo) |
 | IntroDirector | `finished()` | `LevelController` | Empezó a entrar el tentáculo (o se saltó): libera al director |
@@ -55,7 +58,7 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 | Repairer | `collected(kind, healed)` | `RepairerSpawner` (lo crea el `LevelBuilder`) | Un jugador vivo recogió un reparador (llave, venda o botiquín) |
 | Coin | `collected(value)` | `CoinSpawner` (la conecta a `PlayerProgress.add_run_coins`) | Un jugador vivo recogió la moneda |
 | PlayerProgress | `run_coins_changed(total)` / `coins_changed(total)` | `Hud` / `Market` | Contador de la partida y monedas guardadas |
-| Market | `closed()` | `TitleMenu` | Se cerró el mercado |
+| Market | `closed()` | `Hub` | Se cerró el mercado (tras la animación `exit`): el jugador vuelve delante de la puerta |
 | Player | `hit_points_changed(current, maximum)` / `hit_taken(cause)` / `respawned(at)` | `Hud` (corazones) | Puntos de golpe y reaparición (mejoras Vidas) |
 | ScrollCamera | `scroll_started()` | _(nadie todavía)_ | La cámara empezó a subir |
 | ScrollCamera | `scroll_stopped()` | _(nadie todavía)_ | La cámara dejó de subir |
@@ -96,13 +99,13 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 
 ## Flujo de una partida
 
-0. **Título (solo con `Main`):** `Main` instancia `Level.tscn` con `autostart = false` (armado y en pausa, `GameManager` en `READY`; escotilla cerrada, tentáculo inactivo y jugador congelado) y encima el `TitleMenu`. Al pulsar JUGAR el menú se disuelve y `Main` llama a `LevelController.play_intro()`. Ver `docs/mecanicas/pantalla-titulo.md`.
+0. **Hub (solo con `Main`):** `Main` instancia el `Hub` (`GameManager` en `READY`). El jugador camina y vuela por la nave intacta; por la puerta derecha entra al mercado. Al quedarse ~1 s sobre el ascensor, este sube con él; al terminar la subida (pantalla en negro) `Main` libera el hub, instancia `Level.tscn` con `autostart = false` y llama a `LevelController.play_intro()`. Ver `docs/mecanicas/hub.md`.
 0a. **Intro (solo con `Main`):** `LevelController.play_intro()` crea un `IntroDirector` que, con el nivel aún en pausa, llama tres veces a `ScrollCamera.shake()` y `Hatch.hit()` (vibración de cámara y gas). Tras el último golpe la escotilla se rompe (`Hatch.break_open`), la cámara vibra más fuerte, el jugador aparece en la escotilla y sale disparado (`Player.launch`, Input bloqueado 0,5 s; la cámara lo sigue con `ScrollCamera.follow_up` durante el vuelo) y el director emite `broken`: el nivel se reanuda y llama a `start_run()` (`PLAYING`, HUD, scroll). El tentáculo sigue inactivo, pero vigila la caída (`set_fall_watch`); tras `tentacle_entry_delay` s el director lo hace entrar (`Tentacle.enter`), salvo que la partida ya haya terminado. R no hace nada hasta la ruptura (estado `READY`); desde la ruptura reinicia como siempre. Con R, `Main` reconstruye el nivel (`autostart = false`) y llama a `play_intro()`: repite la intro. Sin `Main` (F6 sobre `Level.tscn`) no hay intro: `autostart = true`, escotilla ya rota. Ver `docs/mecanicas/intro-escotilla.md`.
 0b. **HUD:** el `Hud` (capa 80) queda oculto mientras el nivel está en pausa y `begin()` lo muestra. `LevelController` le fija el rango de progreso (Y del spawn y de la puerta). Ver `docs/mecanicas/hud.md`.
 1. Arranca el nivel (`Level.tscn`; con `autostart = true`, el valor por defecto, `begin()` se llama solo): `LevelController` arma el nivel con `LevelBuilder.build()` (segmentos por seed), ubica al jugador en el `PlayerSpawn`, fija el tope de la cámara con `ScrollCamera.set_stop_y()`, conecta `Player.died` y `Door.player_reached` (la del segmento final) con el `GameManager` y llama a `GameManager.start_run(seed)` (estado `PLAYING`). La cámara espera `start_delay` y empieza a seguir al jugador (sube y baja con él); el tentáculo sube por su cuenta y puede quedar fuera de pantalla.
 2. El jugador propulsa, camina o salta para subir y esquivar.
 3. **Derrota:** quien lo mata (tentáculo, caída, obstáculo, trampa) llama a `Player.die(cause)` → `died(cause)` → `GameManager.notify_player_died(cause)` → estado `LOST` → `LevelController` detiene el scroll y muestra el mensaje según la causa.
 4. **Victoria:** `Door.player_reached` → `GameManager.notify_goal_reached()` → estado `WON` → `LevelController` llama a `Player.win()`, detiene el scroll y muestra "ESCAPASTE". Tras ganar, `is_alive()` es `false`, así que los peligros no lo afectan; además el manager ignora cualquier notificación fuera de `PLAYING`.
-4b. **Monedas:** al terminar la partida (ganar, perder, R) `PlayerProgress` suma las monedas juntadas a las guardadas. Las mejoras se compran en el mercado del título (`TitleMenu` → `Market`) y se aplican al crear el `Player`.
-4c. **Volver al título:** con la partida terminada, Escape (`ui_cancel`) hace que `Main` pida `GameManager.restart()` marcándolo "al título": reconstruye el nivel quieto y muestra un `TitleMenu` nuevo (con el mercado). Durante la partida Escape no hace nada.
-5. `restart` (R), escuchada por el `GameManager` (salvo en `READY`), pasa a `READY` y emite `restart_requested`. Con `Main`, este reconstruye solo el `Level` (sin volver al título). Sin `Main` (F6 sobre `Level.tscn`) nadie escucha la señal y el manager recarga la escena. En ambos casos el nivel llama a `start_run()` y, con `seed` = 0, es un nivel nuevo.
+4b. **Monedas:** al terminar la partida (ganar, perder, R) `PlayerProgress` suma las monedas juntadas a las guardadas. Las mejoras se compran en el mercado del hub (`Hub` → `Ui/Market`) y se aplican al crear el `Player`.
+4c. **Volver al hub:** con la partida terminada, Escape (`ui_cancel`) hace que `Main` pida `GameManager.restart()` marcándolo "al hub": libera el nivel y muestra un `Hub` nuevo. Durante la partida Escape no hace nada.
+5. `restart` (R), escuchada por el `GameManager` (salvo en `READY`), pasa a `READY` y emite `restart_requested`. Con `Main`, este reconstruye solo el `Level` (sin volver al hub). Sin `Main` (F6 sobre `Level.tscn`) nadie escucha la señal y el manager recarga la escena. En ambos casos el nivel llama a `start_run()` y, con `seed` = 0, es un nivel nuevo.

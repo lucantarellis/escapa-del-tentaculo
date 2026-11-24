@@ -1,14 +1,22 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/main/main.gd" id="1_main"]
-[ext_resource type="PackedScene" path="res://scenes/ui/TitleMenu.tscn" id="2_menu"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_main")
 
 [node name="LevelHolder" type="Node" parent="."]
 
-[node name="TitleLayer" type="CanvasLayer" parent="."]
+[node name="HubHolder" type="Node" parent="."]
+
+[node name="FadeLayer" type="CanvasLayer" parent="."]
 layer = 95
 
-[node name="TitleMenu" parent="TitleLayer" instance=ExtResource("2_menu")]
+[node name="Fade" type="ColorRect" parent="FadeLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)

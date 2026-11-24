@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://dphlcjcl1c6wb"
+path="res://.godot/imported/door_market.aseprite-4ca8fc1a3bbaa7eb0263544c4d0ce2bb.res"
+
+[deps]
+
+source_file="res://assets/aseprite/environment/hub_doors/door_market.aseprite"
+dest_files=["res://.godot/imported/door_market.aseprite-4ca8fc1a3bbaa7eb0263544c4d0ce2bb.res"]
+
+[params]
+
