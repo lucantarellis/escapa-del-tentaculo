@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://crhs66mho521s"
+path="res://.godot/imported/hud_fuel.aseprite-c399d733967b9d08cd8ab9f12261d7c4.res"
+
+[deps]
+
+source_file="res://assets/aseprite/ui/hud/hud_fuel.aseprite"
+dest_files=["res://.godot/imported/hud_fuel.aseprite-c399d733967b9d08cd8ab9f12261d7c4.res"]
+
+[params]
+

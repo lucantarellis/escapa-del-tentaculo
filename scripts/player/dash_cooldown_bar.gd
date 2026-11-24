@@ -3,25 +3,38 @@ extends Node2D
 ## Barrita horizontal que sigue al jugador y muestra cuánto falta para poder volver a hacer dash.
 ##
 ## Es hija de [Player] y la controla él (llamadas hacia abajo): fija el avance con
-## [method set_ratio] y la muestra u oculta con `visible`. Se dibuja centrada en su propia
-## posición; el jugador la ubica sobre su cabeza desde `Player.tscn`. No tiene lógica de juego.
-## Ver `docs/mecanicas/jugador.md`.
+## [method set_ratio] y la muestra u oculta con `visible`. Dibuja `hud_dash_under` y, encima,
+## `hud_dash_progress` recortada de izquierda a derecha, centradas en su propia posición; el jugador
+## la ubica sobre su cabeza desde `Player.tscn`. No tiene lógica de juego.
+## Ver `docs/mecanicas/jugador.md` y `docs/arte/hud.md`.
 
-## Tamaño de la barra (ancho, alto). Solo visual. Unidad: px.
-const BAR_SIZE: Vector2 = Vector2(16.0, 3.0)
-## Color del relleno (blanco azulado de detalles de la paleta). Solo visual.
-const FILL_COLOR: Color = Color("C8E7EA")
-## Color del fondo de la barra (negro de la paleta, semitransparente). Solo visual.
-const TRACK_COLOR: Color = Color(0.0196, 0.0235, 0.0353, 0.6)
+## Fondo y relleno de la barra (18×5). Estructural.
+const UNDER_TEXTURE: Texture2D = preload("res://assets/sprites/ui/hud/hud_dash_under.png")
+const PROGRESS_TEXTURE: Texture2D = preload("res://assets/sprites/ui/hud/hud_dash_progress.png")
+## Columnas del relleno dentro de la textura: primera columna y ancho (px). Solo visual; coincide
+## con `hud_dash_progress.png` (relleno en x 2–15).
+const FILL_START_X: float = 2.0
+const FILL_WIDTH: float = 14.0
+## Opacidad de la barra (igual que el HUD). Solo visual.
+const BAR_ALPHA: float = 0.7
 
 ## Avance actual de 0 (recién usado) a 1 (listo para usar de nuevo).
 var _ratio: float = 0.0
 
 
+func _ready() -> void:
+	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	modulate.a = BAR_ALPHA
+
+
 func _draw() -> void:
-	var origin: Vector2 = -BAR_SIZE * 0.5
-	draw_rect(Rect2(origin, BAR_SIZE), TRACK_COLOR)
-	draw_rect(Rect2(origin, Vector2(BAR_SIZE.x * _ratio, BAR_SIZE.y)), FILL_COLOR)
+	var size: Vector2 = UNDER_TEXTURE.get_size()
+	var origin: Vector2 = (-size * 0.5).floor()
+	draw_texture(UNDER_TEXTURE, origin)
+	var width: float = FILL_START_X + roundf(FILL_WIDTH * _ratio)
+	if _ratio > 0.0:
+		var region: Rect2 = Rect2(0.0, 0.0, width, size.y)
+		draw_texture_rect_region(PROGRESS_TEXTURE, Rect2(origin, region.size), region)
 
 
 ## Fija el avance de la barra. [param ratio] va de 0 (recién usado, barra vacía) a 1 (listo,

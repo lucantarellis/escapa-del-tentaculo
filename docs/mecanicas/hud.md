@@ -1,22 +1,27 @@
-# Mecánica: HUD mínimo (combustible y progreso)
+# Mecánica: HUD "pantalla del traje" (combustible, progreso, monedas y vida)
 
-**Archivos:** `scenes/ui/Hud.tscn`, `scripts/ui/hud.gd` (`Hud`, `CanvasLayer` capa 80).
-**Depende de:** `Player.fuel_changed`, `fuel_depleted`, `fuel_refilled`, `get_fuel_ratio()`, `is_fuel_empty()` y la posición del jugador; `LevelController` (le asigna el rango de progreso y lo muestra).
+**Archivos:** `scenes/ui/Hud.tscn`, `scripts/ui/hud.gd` (`Hud`, `CanvasLayer` capa 80). Arte: `assets/sprites/ui/hud/` (especificación en `docs/arte/hud.md`). Fuente: Tiny5 (`assets/fonts/`, SIL OFL), importada sin antialiasing ni hinting.
+**Depende de:** `Player.fuel_changed`, `fuel_depleted`, `fuel_refilled`, `hit_points_changed`, `shield_changed`, `get_fuel_ratio()`, `is_fuel_empty()`, `has_shield()` y la posición del jugador; `Tentacle.is_active()` y su posición; `PlayerProgress.run_coins_changed`; `LevelController` (le asigna el rango de progreso, el récord y los tiers, y lo muestra).
 
 ## Propósito
 
-Mostrar, de forma muy discreta, cuánto combustible queda y cuánto falta para la puerta. Es de **solo lectura**: nunca modifica el juego. Sin números ni etiquetas.
+Mostrar, de forma discreta y con estética de display del traje, cuánto combustible queda, cuánto falta para la puerta, dónde está el tentáculo, las monedas y la integridad del traje. Es de **solo lectura**: nunca modifica el juego. Único número: las monedas.
 
 ## Qué muestra
 
-- **Barra de combustible** (borde izquierdo, vertical, 5 px de ancho, 200 px de alto, centrada): crece hacia arriba y representa `Player.get_fuel_ratio()`. Es **naranja `#FF6B32`** con combustible y **roja `#D83232`** cuando está vacío (mismos colores que el cuerpo del jugador). Se actualiza con `fuel_changed`; el color cambia con `fuel_depleted` / `fuel_refilled`.
-- **Progreso del nivel** (borde derecho, línea vertical de las mismas medidas): un marcador blanco azulado `#C8E7EA` sube desde abajo (0 %, el spawn) hasta arriba (100 %, la puerta), donde hay una marca naranja `#FF6B32`.
-- **Tentáculo** (misma línea de progreso): un marcador rojo `#D83232` con la altura del borde superior del tentáculo, calculado con la misma fórmula que el del jugador (por debajo del spawn queda en 0). El del jugador se dibuja encima. Se oculta mientras el tentáculo está inactivo (intro de la escotilla). Requiere asignar `tentacle` en la instancia del HUD (`Level.tscn` ya lo tiene); si queda vacío, no se muestra.
+- **Combustible** (borde izquierdo): `TextureProgressBar` vertical (`hud_fuel_under/progress/over`, 11×206; área útil de 5×200 en x 6, centrada en alto). Crece hacia arriba con `Player.get_fuel_ratio()`. Con el tanque vacío el relleno pasa a `hud_fuel_progress_empty` (rojo). Ícono `fuel` debajo.
+- **Progreso** (borde derecho, mismas medidas): `TextureProgressBar` con `hud_progress_under/danger/over`. El relleno **rojo sube desde abajo hasta el tentáculo** (`get_tentacle_progress()`), sin ondulación; vacío mientras el tentáculo está inactivo (intro). Ícono `goal` arriba (la puerta).
+- **Marcadores** a la izquierda de la barra de progreso, cada uno centrado en su altura y con una **línea de 1 px que cruza la barra** (desde 3 px a su izquierda hasta su borde derecho):
+  - `player`: línea `#E7EFF2` (encima de todo).
+  - `skull`: en el borde del rojo, línea `#F62A19`. Solo con el tentáculo activo.
+  - `record`: línea `#63D6C5` punteada (1 px sí, 1 no). Solo si hay récord.
+  - **Tiers:** línea `#C8E7EA` dentro de la barra + 2 px afuera a la derecha, en cada Y de `set_tier_marks` (cualquier cantidad).
+- **Monedas** (arriba a la izquierda): ícono `coin` (18×18) en (6, 6) y el número de monedas juntadas en la partida con Tiny5 16 px `#89D9EB` y sombra de 1 px `#050609`; borde superior de los dígitos en (27, 12). Sigue a `PlayerProgress.run_coins_changed`; se oculta con el progreso apagado. Ver `progreso-mercado.md`.
+- **Vida** (debajo de la moneda, y 28): una celda `cell_full` / `cell_empty` (11×8, cada 13 px) por punto de golpe máximo, solo si el máximo es mayor que 1. Al perder una, parpadea 3 veces antes de quedar vacía. Siguen a `Player.hit_points_changed`.
+- **Escudo:** ícono `shield` a continuación de las celdas (+2 px; en su lugar si no se ven) mientras está activo (`Player.shield_changed`).
+- **Enfriamiento del dash:** no es parte del HUD; lo dibuja `DashCooldownBar` sobre el jugador con `hud_dash_under/progress` (18×5, de izquierda a derecha). Ver `jugador.md`.
 
-- **Puntos de golpe** (debajo de las monedas): corazones provisorios `♥ ♥ ♡` (rojo `#D83232`, los perdidos vacíos), solo si el jugador tiene más de 1 punto. Siguen a `Player.hit_points_changed`.
-- **Monedas** (arriba a la izquierda): un texto `monedas: N` con las monedas juntadas en la partida en curso (cian `#63D6C5`). Sigue a `PlayerProgress.run_coins_changed`; se oculta con el progreso apagado. Ver `progreso-mercado.md`.
-
-Todo con opacidad 0,7 (fondos de barra más tenues). Los valores son `const` visuales en `hud.gd`; no hay valores de gameplay, por eso no tiene `Resource` de configuración.
+Barras, íconos y líneas con opacidad 0,7 (`HUD_ALPHA`); monedas, celdas y escudo 0,9 (`STATUS_ALPHA`). Todo a 1× con filtro nearest. Los valores son `const` visuales en `hud.gd`; no hay valores de gameplay, por eso no tiene `Resource` de configuración.
 
 ## Cómo se calcula el progreso
 
@@ -37,24 +42,25 @@ progreso = clamp((start_y − player.global_position.y) / (start_y − end_y), 0
 | Elemento | Descripción |
 |---|---|
 | `player` (`@export`) | Jugador a observar, asignado desde la escena que instancia el HUD |
+| `tentacle` (`@export`) | Tentáculo a observar para el relleno rojo y la calavera (opcional) |
 | `set_progress_range(start_y, end_y)` | Fija el rango del progreso (Y globales del spawn y de la puerta) |
-| `tentacle` (`@export`) | Tentáculo a observar para su marcador (opcional) |
+| `set_record(progress)` | Muestra el marcador del récord (0..1; 0 = sin récord) |
+| `set_tier_marks(ys)` | Marcas donde empieza cada tier (Y globales de `LevelBuilder.get_tier_starts()`) |
 | `get_progress() -> float` | Progreso actual 0..1 |
-| `get_tentacle_progress() -> float` | Altura del tentáculo en la línea de progreso, 0..1 |
+| `get_tentacle_progress() -> float` | Altura del tentáculo en la barra de progreso, 0..1 |
 | `get_fuel_ratio() -> float` | Proporción de combustible mostrada 0..1 |
-| `get_fuel_color() -> Color` | Color actual de la barra de combustible |
-| `set_record(progress)` | Muestra la marca del récord (0..1; 0 = sin récord) |
-| `set_tier_marks(ys)` | Marcas cortas donde empieza cada tier (Y globales de `LevelBuilder.get_tier_starts()`) |
+| `is_fuel_shown_empty() -> bool` | true si la barra muestra el relleno rojo de tanque vacío |
 
-## Récord y marcas de tier
+## Récord y tiers
 
-- **Récord:** una marca fina en cian `#63D6C5`, más ancha que el marcador, en el mejor progreso guardado. Lo guarda `RunRecords` (`scripts/managers/run_records.gd`) en `user://records.cfg` al terminar cada partida. Si la partida lo supera, el mensaje de fin agrega "NUEVO RÉCORD" y la marca se mueve. Como todo segmento mide 640 px, el progreso de partidas distintas es comparable. `RunRecords.clear()` lo borra (pruebas).
-- **Tiers:** una marca corta y tenue (blanco azulado) en la Y donde empieza cada tier, salvo el primero (el inicio ya es parte de él).
+- **Récord:** lo guarda `RunRecords` (`scripts/managers/run_records.gd`) en `user://records.cfg` al terminar cada partida. Si la partida lo supera, el mensaje de fin agrega "NUEVO RÉCORD" y el marcador se mueve. Como todo segmento mide 640 px, el progreso de partidas distintas es comparable. `RunRecords.clear()` lo borra (pruebas).
+- **Tiers:** una marca por cada Y que pase el `LevelController` (hoy, donde empieza cada tier salvo el primero).
 
 ## Cómo probarlo
 
-1. F5 → JUGAR: aparecen las dos barras a los costados. En el título no se ven.
-2. Propulsar: la barra izquierda baja; al vaciarse se pone roja; al recoger un tanque vuelve a naranja y sube.
-3. Subir: el marcador de la derecha avanza y llega arriba al alcanzar la puerta.
-4. Ganar o perder: el HUD queda debajo del mensaje. R reinicia con la barra llena y el progreso en 0.
-5. F6 sobre `Level.tscn`: el HUD también aparece.
+1. F5 → JUGAR: aparecen las dos barras con sus íconos; en el título no se ven.
+2. Propulsar: el combustible baja; vacío se pone rojo; al recoger un tanque vuelve a naranja.
+3. Subir: el ícono del jugador y su línea suben por la barra de la derecha.
+4. Tras la intro: el rojo sube desde abajo con el tentáculo y la calavera queda en su borde.
+5. Con mejoras de vida: las celdas se ven; al recibir un golpe, la celda parpadea y queda vacía. Con el escudo del botiquín aparece el ícono al lado.
+6. Dash: la barrita sobre el personaje se llena durante el enfriamiento.

@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://bwj81771e3h31"
+path="res://.godot/imported/hud_icons.aseprite-369fbf012f280fd7643f2b750aec2cca.res"
+
+[deps]
+
+source_file="res://assets/aseprite/ui/hud/hud_icons.aseprite"
+dest_files=["res://.godot/imported/hud_icons.aseprite-369fbf012f280fd7643f2b750aec2cca.res"]
+
+[params]
+

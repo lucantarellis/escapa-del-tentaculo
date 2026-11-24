@@ -1,138 +1,138 @@
 class_name Hud
 extends CanvasLayer
-## HUD mínimo de solo lectura: barra de combustible y progreso del nivel.
+## HUD de solo lectura con estética de "pantalla del traje": combustible, progreso, monedas y vida.
 ##
-## - **Combustible:** barra vertical fina pegada al borde izquierdo. Sigue a
-##   [signal Player.fuel_changed]; es naranja con combustible y roja cuando se vacía
-##   ([signal Player.fuel_depleted] / [signal Player.fuel_refilled]), como el cuerpo del jugador.
-## - **Progreso:** línea vertical fina pegada al borde derecho con un marcador que sube desde el
-##   spawn (0 %) hasta la puerta (100 %, marca naranja arriba). Se calcula con la Y del jugador
-##   entre [method set_progress_range]'s `start_y` y `end_y`, acotado a 0..1.
-## - **Récord y tiers:** en la misma línea, una marca fina con el mejor progreso guardado
-##   ([RunRecords]) y marcas cortas donde empieza cada tier.
-## - **Tentáculo:** en la misma línea, un marcador rojo con la altura del borde superior del
-##   tentáculo, con el mismo cálculo. Se oculta mientras el tentáculo está inactivo (intro).
-## - **Monedas:** un contador de texto arriba a la izquierda con las monedas juntadas en la
-##   partida (ver [PlayerProgress]).
+## - **Combustible:** [TextureProgressBar] vertical pegada al borde izquierdo (`hud_fuel_*`). Sigue a
+##   [signal Player.fuel_changed]; con el tanque vacío ([signal Player.fuel_depleted]) el relleno
+##   pasa a la textura roja `hud_fuel_progress_empty`. Ícono `fuel` debajo.
+## - **Progreso:** barra vertical pegada al borde derecho (`hud_progress_*`). Su relleno rojo
+##   (`danger`) sube desde abajo hasta la altura del tentáculo ([method get_tentacle_progress]).
+##   Ícono `goal` arriba (la puerta).
+## - **Marcadores:** a la izquierda de la barra de progreso, cada uno con una línea de 1 px que la
+##   cruza: jugador, calavera en el borde del rojo (tentáculo) y récord (línea punteada). Marcas de
+##   tier en cada Y de [method set_tier_marks].
+## - **Monedas:** ícono `coin` + número (Tiny5 16 px) arriba a la izquierda (ver [PlayerProgress]).
+## - **Vida:** celdas de integridad del traje, una por punto de golpe máximo, solo si hay más de 1
+##   ([signal Player.hit_points_changed]). Al perder una, parpadea antes de quedar vacía. El ícono
+##   `shield` aparece al lado mientras el escudo está activo ([signal Player.shield_changed]).
 ##
-## - **Puntos de golpe:** corazones provisorios debajo de las monedas, solo si el jugador tiene más
-##   de 1 punto (mejoras Vidas del mercado). Siguen a [signal Player.hit_points_changed].
-##
-## No modifica el juego. Aparte del contador de monedas, sin números ni etiquetas. Todos los
-## valores son visuales.
-## Ver `docs/mecanicas/hud.md`.
+## No modifica el juego. Todos los valores son visuales.
+## Ver `docs/mecanicas/hud.md` y `docs/arte/hud.md`.
 
-## Color de la barra con combustible (naranja de meta/jugador). Solo visual.
-const FUEL_COLOR: Color = Color("FF6B32")
-## Color de la barra sin combustible (rojo letal, igual que el jugador vacío). Solo visual.
-const EMPTY_COLOR: Color = Color("D83232")
-## Color del marcador de progreso (blanco azulado de detalles). Solo visual.
-const MARKER_COLOR: Color = Color("C8E7EA")
-## Color del marcador del tentáculo (rojo letal). Solo visual.
-const TENTACLE_COLOR: Color = Color("D83232")
-## Color de la marca del récord (cian de la paleta, bien visible). Solo visual.
-const RECORD_COLOR: Color = Color(0.3882, 0.8392, 0.7725, 0.9)
-## Tamaño de la marca del récord: más ancha que el marcador del jugador (px). Solo visual.
-const RECORD_SIZE: Vector2 = Vector2(21.0, 2.0)
-## Color de las marcas de inicio de tier. Solo visual.
-const TIER_MARK_COLOR: Color = Color(0.7843, 0.9059, 0.9176, 0.35)
-## Tamaño de las marcas de inicio de tier (px). Solo visual.
-const TIER_MARK_SIZE: Vector2 = Vector2(9.0, 1.0)
-## Color de la marca de la puerta (naranja de meta). Solo visual.
-const GOAL_COLOR: Color = Color("FF6B32")
-## Color del fondo de las barras. Solo visual.
-const TRACK_COLOR: Color = Color(0.0196, 0.0235, 0.0353, 1.0)
-## Opacidad general del HUD (0..1). Solo visual.
-const HUD_ALPHA: float = 0.7
-## Opacidad del fondo de las barras respecto de [constant HUD_ALPHA]. Solo visual.
-const TRACK_ALPHA_FACTOR: float = 0.6
-## Ancho de las barras (px). Solo visual.
-const BAR_WIDTH: float = 5.0
-## Alto de las barras (px). Solo visual.
-const BAR_HEIGHT: float = 200.0
-## Separación al borde de la pantalla (px). Solo visual.
-const EDGE_MARGIN: float = 6.0
-## Tamaño del marcador de progreso y de la marca de la puerta (px). Solo visual.
-const MARKER_SIZE: Vector2 = Vector2(13.0, 4.0)
-## Color del contador de monedas (cian de los recogibles). Solo visual.
-const COIN_COLOR: Color = Color("63D6C5")
-## Tamaño de fuente del contador de monedas (px). Solo visual.
-const COIN_FONT_SIZE: int = 14
-## Posición del contador de monedas, medida desde la esquina superior izquierda (px). Solo visual.
-const COIN_LABEL_POSITION: Vector2 = Vector2(16.0, 6.0)
-## Texto del contador de monedas: `%d` es la cantidad juntada en la partida. Solo visual.
-const COIN_TEXT: String = "monedas: %d"
-## Color de los puntos de golpe que quedan (rojo letal de la paleta). Solo visual.
-const HIT_COLOR: Color = Color("D83232")
-## Color de los puntos de golpe perdidos. Solo visual.
-const HIT_LOST_COLOR: Color = Color(0.7843, 0.9059, 0.9176, 0.3)
-## Tamaño de fuente de los corazones (px). Solo visual.
-const HIT_FONT_SIZE: int = 18
-## Posición de los corazones, desde la esquina superior izquierda (px). Solo visual.
-const HIT_LABEL_POSITION: Vector2 = Vector2(16.0, 26.0)
-## Símbolos de un punto de golpe que queda y de uno perdido. Solo visual.
-const HIT_FULL_TEXT: String = "♥"
-const HIT_LOST_TEXT: String = "♡"
+## Carpeta de las texturas del HUD. Estructural.
+const SPRITE_DIR: String = "res://assets/sprites/ui/hud/"
+## Fuente del número de monedas (Tiny5, SIL OFL). Estructural.
+const FONT_PATH: String = "res://assets/fonts/Tiny5-Regular.ttf"
 ## Viewport lógico del juego (px). Estructural: coincide con `project.godot` (360×640).
 const VIEWPORT_SIZE: Vector2 = Vector2(360.0, 640.0)
 
+## Opacidad general del HUD (0..1). Solo visual.
+const HUD_ALPHA: float = 0.7
+## Opacidad de monedas, celdas y escudo (más legibles que las barras). Solo visual.
+const STATUS_ALPHA: float = 0.9
+## Ancho y alto del área útil de las barras (px). Solo visual.
+const BAR_WIDTH: float = 5.0
+const BAR_HEIGHT: float = 200.0
+## Margen de la textura de la barra alrededor del área útil: izquierda/arriba y abajo (px). Solo
+## visual; coincide con `hud_fuel_*` / `hud_progress_*` (11×206, área útil x 3–7, y 3–202).
+const BAR_TEXTURE_MARGIN: Vector2 = Vector2(3.0, 3.0)
+const BAR_TEXTURE_BOTTOM_MARGIN: float = 3.0
+## Separación del área útil de las barras al borde de la pantalla (px). Solo visual.
+const EDGE_MARGIN: float = 6.0
+## Separación de los íconos `fuel` y `goal` respecto de la textura de su barra (px). Solo visual.
+const BAR_ICON_GAP: float = 3.0
+## Cuánto empieza la línea de un marcador a la izquierda de la barra (px). Solo visual.
+const MARKER_LINE_LEAD: float = 3.0
+## Separación entre el ícono de un marcador y el inicio de su línea (px). Solo visual.
+const MARKER_ICON_GAP: float = 1.0
+## Cuánto sobresalen las marcas de tier a la derecha de la barra (px). Solo visual.
+const TIER_MARK_OVERHANG: float = 2.0
+## Colores de las líneas de los marcadores. Solo visual.
+const PLAYER_LINE_COLOR: Color = Color("E7EFF2")
+const TENTACLE_LINE_COLOR: Color = Color("F62A19")
+const RECORD_LINE_COLOR: Color = Color("63D6C5")
+const TIER_LINE_COLOR: Color = Color("C8E7EA")
+## Posición del ícono de la moneda (px). Solo visual.
+const COIN_ICON_POSITION: Vector2 = Vector2(6.0, 6.0)
+## Esquina superior de los dígitos de las monedas (px). Solo visual.
+const COIN_TEXT_POSITION: Vector2 = Vector2(27.0, 12.0)
+## Tamaño de fuente del número (mínimo de texto del juego, múltiplo de 8). Solo visual.
+const COIN_FONT_SIZE: int = 16
+## Alto de los dígitos de Tiny5 a [constant COIN_FONT_SIZE] (para ubicar su borde superior). Solo
+## visual.
+const COIN_GLYPH_HEIGHT: float = 10.0
+## Colores del número y de su sombra de 1 px. Solo visual.
+const COIN_COLOR: Color = Color("89D9EB")
+const TEXT_SHADOW_COLOR: Color = Color("050609")
+## Posición de la primera celda de vida y paso entre celdas (px). Solo visual.
+const CELL_POSITION: Vector2 = Vector2(6.0, 28.0)
+const CELL_STEP: float = 13.0
+## Separación entre la última celda y el ícono del escudo (px). Solo visual.
+const SHIELD_GAP: float = 2.0
+## Parpadeos de una celda al perderse y duración de cada medio parpadeo (s). Solo visual.
+const CELL_BLINK_COUNT: int = 3
+const CELL_BLINK_HALF: float = 0.08
+
 ## Jugador a observar. Se asigna desde la escena que instancia el HUD.
 @export var player: Player
-## Tentáculo a observar para su marcador en la línea de progreso. Opcional: si queda vacío, el
-## marcador no se muestra.
+## Tentáculo a observar para el relleno rojo y la calavera. Opcional: si queda vacío, no se
+## muestran.
 @export var tentacle: Tentacle
 
 var _start_y: float = 0.0
 var _end_y: float = 0.0
 var _top: float = 0.0
 var _fuel_ratio: float = 1.0
-
-@onready var _fuel_track: ColorRect = $FuelTrack
-@onready var _fuel_fill: ColorRect = $FuelFill
-@onready var _progress_track: ColorRect = $ProgressTrack
-@onready var _goal_mark: ColorRect = $GoalMark
-@onready var _marker: ColorRect = $ProgressMarker
-@onready var _tentacle_marker: ColorRect = $TentacleMarker
-@onready var _record_marker: ColorRect = $RecordMarker
-@onready var _tier_marks: Control = $TierMarks
-@onready var _coin_label: Label = $CoinLabel
-@onready var _hit_label: Label = $HitLabel
-
 var _record: float = 0.0
 var _tier_ys: PackedFloat32Array = PackedFloat32Array()
+var _fuel_texture: Texture2D
+var _fuel_empty_texture: Texture2D
+var _cell_full: Texture2D
+var _cell_empty: Texture2D
+var _cells: Array[TextureRect] = []
+var _shown_hp: int = 0
+var _cell_tweens: Dictionary = {}
+
+@onready var _bars: Control = $Bars
+@onready var _fuel_bar: TextureProgressBar = $Bars/FuelBar
+@onready var _fuel_icon: TextureRect = $Bars/FuelIcon
+@onready var _progress_bar: TextureProgressBar = $Bars/ProgressBar
+@onready var _goal_icon: TextureRect = $Bars/GoalIcon
+@onready var _lines: Control = $Bars/Lines
+@onready var _record_icon: TextureRect = $Bars/RecordIcon
+@onready var _skull_icon: TextureRect = $Bars/SkullIcon
+@onready var _player_icon: TextureRect = $Bars/PlayerIcon
+@onready var _status: Control = $Status
+@onready var _coin_icon: TextureRect = $Status/CoinIcon
+@onready var _coin_label: Label = $Status/CoinLabel
+@onready var _cells_root: Control = $Status/Cells
+@onready var _shield_icon: TextureRect = $Status/ShieldIcon
 
 
 func _ready() -> void:
 	_top = (VIEWPORT_SIZE.y - BAR_HEIGHT) * 0.5
-	var track_color: Color = Color(TRACK_COLOR, HUD_ALPHA * TRACK_ALPHA_FACTOR)
-	_fuel_track.color = track_color
-	_fuel_track.position = Vector2(EDGE_MARGIN, _top)
-	_fuel_track.size = Vector2(BAR_WIDTH, BAR_HEIGHT)
-	_fuel_fill.position = _fuel_track.position
-	_progress_track.color = track_color
-	_progress_track.size = Vector2(BAR_WIDTH, BAR_HEIGHT)
-	_progress_track.position = Vector2(VIEWPORT_SIZE.x - EDGE_MARGIN - BAR_WIDTH, _top)
-	var center_x: float = _progress_track.position.x + BAR_WIDTH * 0.5
-	_goal_mark.color = Color(GOAL_COLOR, HUD_ALPHA)
-	_goal_mark.size = MARKER_SIZE
-	_goal_mark.position = Vector2(center_x - MARKER_SIZE.x * 0.5, _top - MARKER_SIZE.y)
-	_marker.color = Color(MARKER_COLOR, HUD_ALPHA)
-	_marker.size = MARKER_SIZE
-	_tentacle_marker.color = Color(TENTACLE_COLOR, HUD_ALPHA)
-	_tentacle_marker.size = MARKER_SIZE
-	_tentacle_marker.visible = false
-	_record_marker.color = RECORD_COLOR
-	_record_marker.size = RECORD_SIZE
-	_setup_coin_label()
+	_bars.modulate.a = HUD_ALPHA
+	_status.modulate.a = STATUS_ALPHA
+	_setup_bars()
+	_setup_markers()
+	_setup_coins()
+	_cell_full = _tex("hud_icon_cell_full")
+	_cell_empty = _tex("hud_icon_cell_empty")
+	_shield_icon.texture = _tex("hud_icon_shield")
+	_shield_icon.visible = false
+	_lines.draw.connect(_draw_lines)
 	if player == null:
 		push_error("Hud: falta asignar 'player'.")
 		return
 	player.fuel_changed.connect(_on_fuel_changed)
+	player.fuel_depleted.connect(_refresh_fuel)
+	player.fuel_refilled.connect(_refresh_fuel)
 	player.hit_points_changed.connect(_on_hit_points_changed)
-	_setup_hit_label()
-	player.fuel_depleted.connect(_on_fuel_state_changed)
-	player.fuel_refilled.connect(_on_fuel_state_changed)
+	player.shield_changed.connect(_on_shield_changed)
 	_fuel_ratio = player.get_fuel_ratio()
+	_shown_hp = player.get_hit_points()
+	_rebuild_cells(player.get_hit_points(), player.get_max_hit_points())
+	_on_shield_changed(player.has_shield())
 	_refresh_fuel()
 	_refresh_progress()
 
@@ -147,21 +147,21 @@ func set_progress_range(start_y: float, end_y: float) -> void:
 	_start_y = start_y
 	_end_y = end_y
 	_refresh_progress()
-	_refresh_record()
-	_refresh_tier_marks()
 
 
-## Muestra la marca del récord en [param progress] (0..1). Con 0 (sin récord) no se muestra.
+## Muestra el marcador del récord en [param progress] (0..1). Con 0 (sin récord) no se muestra.
 func set_record(progress: float) -> void:
 	_record = clampf(progress, 0.0, 1.0)
-	_refresh_record()
+	if is_node_ready():
+		_refresh_progress()
 
 
 ## Fija dónde empieza cada tier: [param ys] son Y globales (como las de
-## [method LevelBuilder.get_tier_starts]). Se dibuja una marca corta por cada una.
+## [method LevelBuilder.get_tier_starts]). Se dibuja una marca por cada una.
 func set_tier_marks(ys: PackedFloat32Array) -> void:
 	_tier_ys = ys
-	_refresh_tier_marks()
+	if is_node_ready():
+		_lines.queue_redraw()
 
 
 ## Devuelve el progreso actual (0..1) según la Y del jugador. 0 si el rango no es válido.
@@ -171,7 +171,7 @@ func get_progress() -> float:
 	return _ratio_for_y(player.global_position.y)
 
 
-## Devuelve la altura del borde superior del tentáculo en la línea de progreso (0..1), con el
+## Devuelve la altura del borde superior del tentáculo en la barra de progreso (0..1), con el
 ## mismo rango que [method get_progress]. 0 si no hay tentáculo o el rango no es válido.
 func get_tentacle_progress() -> float:
 	if tentacle == null:
@@ -184,36 +184,77 @@ func get_fuel_ratio() -> float:
 	return _fuel_ratio
 
 
-## Devuelve el color actual de la barra de combustible.
-func get_fuel_color() -> Color:
-	return _fuel_fill.color
+## Devuelve true si la barra de combustible muestra el relleno de tanque vacío.
+func is_fuel_shown_empty() -> bool:
+	return _fuel_bar.texture_progress == _fuel_empty_texture
 
 
-# Contador de las monedas juntadas en la partida (ver [PlayerProgress]). Se oculta con el progreso
-# apagado.
-func _setup_coin_label() -> void:
-	_coin_label.position = COIN_LABEL_POSITION
+static func _tex(file_name: String) -> Texture2D:
+	return load(SPRITE_DIR + file_name + ".png") as Texture2D
+
+
+func _setup_bars() -> void:
+	_fuel_texture = _tex("hud_fuel_progress")
+	_fuel_empty_texture = _tex("hud_fuel_progress_empty")
+	_setup_bar(_fuel_bar, Vector2(EDGE_MARGIN, _top), _tex("hud_fuel_under"), _fuel_texture, _tex("hud_fuel_over"))
+	var progress_x: float = VIEWPORT_SIZE.x - EDGE_MARGIN - BAR_WIDTH
+	_setup_bar(_progress_bar, Vector2(progress_x, _top), _tex("hud_progress_under"), _tex("hud_progress_danger"), _tex("hud_progress_over"))
+	_fuel_icon.texture = _tex("hud_icon_fuel")
+	_fuel_icon.position = Vector2(
+		roundf(_fuel_bar.position.x + (_fuel_bar.size.x - _fuel_icon.texture.get_width()) * 0.5),
+		_fuel_bar.position.y + _fuel_bar.size.y + BAR_ICON_GAP)
+	_goal_icon.texture = _tex("hud_icon_goal")
+	_goal_icon.position = Vector2(
+		roundf(_progress_bar.position.x + (_progress_bar.size.x - _goal_icon.texture.get_width()) * 0.5),
+		_progress_bar.position.y - BAR_ICON_GAP - _goal_icon.texture.get_height())
+
+
+# [param area_pos] es la esquina superior izquierda del área útil; la textura empieza
+# [constant BAR_TEXTURE_MARGIN] antes. El valor va en filas de la textura (ver [method _bar_value]).
+func _setup_bar(bar: TextureProgressBar, area_pos: Vector2, under: Texture2D, progress: Texture2D, over: Texture2D) -> void:
+	bar.texture_under = under
+	bar.texture_progress = progress
+	bar.texture_over = over
+	bar.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	bar.fill_mode = TextureProgressBar.FILL_BOTTOM_TO_TOP
+	bar.min_value = 0.0
+	bar.max_value = under.get_height()
+	bar.step = 1.0
+	bar.position = area_pos - BAR_TEXTURE_MARGIN
+	bar.size = under.get_size()
+
+
+# Filas de la textura a mostrar para que el área útil quede llena en [param ratio] (0..1).
+static func _bar_value(ratio: float) -> float:
+	return BAR_TEXTURE_BOTTOM_MARGIN + roundf(BAR_HEIGHT * clampf(ratio, 0.0, 1.0))
+
+
+func _setup_markers() -> void:
+	_player_icon.texture = _tex("hud_icon_player")
+	_skull_icon.texture = _tex("hud_icon_skull")
+	_record_icon.texture = _tex("hud_icon_record")
+
+
+func _setup_coins() -> void:
+	_coin_icon.texture = _tex("hud_icon_coin")
+	_coin_icon.position = COIN_ICON_POSITION
+	var font: Font = load(FONT_PATH) as Font
+	_coin_label.add_theme_font_override("font", font)
 	_coin_label.add_theme_font_size_override("font_size", COIN_FONT_SIZE)
-	_coin_label.add_theme_color_override("font_color", Color(COIN_COLOR, HUD_ALPHA + 0.2))
-	_coin_label.visible = PlayerProgress.is_enabled()
+	_coin_label.add_theme_color_override("font_color", COIN_COLOR)
+	_coin_label.add_theme_color_override("font_shadow_color", TEXT_SHADOW_COLOR)
+	_coin_label.add_theme_constant_override("shadow_offset_x", 1)
+	_coin_label.add_theme_constant_override("shadow_offset_y", 1)
+	_coin_label.add_theme_constant_override("shadow_outline_size", 0)
+	# El Label dibuja la línea base a `ascent` de su borde: se corre para que el borde superior de
+	# los dígitos quede en COIN_TEXT_POSITION.
+	var ascent: float = font.get_ascent(COIN_FONT_SIZE)
+	_coin_label.position = COIN_TEXT_POSITION - Vector2(0.0, roundf(ascent - COIN_GLYPH_HEIGHT))
+	var shown: bool = PlayerProgress.is_enabled()
+	_coin_icon.visible = shown
+	_coin_label.visible = shown
 	_on_run_coins_changed(PlayerProgress.get_run_coins())
 	PlayerProgress.run_coins_changed.connect(_on_run_coins_changed)
-
-
-# Corazones provisorios de los puntos de golpe (se ven solo con más de 1 punto).
-func _setup_hit_label() -> void:
-	_hit_label.position = HIT_LABEL_POSITION
-	_hit_label.add_theme_font_size_override("font_size", HIT_FONT_SIZE)
-	_hit_label.add_theme_color_override("font_color", Color(HIT_COLOR, HUD_ALPHA + 0.2))
-	_on_hit_points_changed(player.get_hit_points(), player.get_max_hit_points())
-
-
-func _on_hit_points_changed(current: int, maximum: int) -> void:
-	_hit_label.visible = maximum > 1
-	var text: String = ""
-	for index: int in maximum:
-		text += (HIT_FULL_TEXT if index < current else HIT_LOST_TEXT) + " "
-	_hit_label.text = text.strip_edges()
 
 
 func _exit_tree() -> void:
@@ -223,7 +264,7 @@ func _exit_tree() -> void:
 
 
 func _on_run_coins_changed(run_total: int) -> void:
-	_coin_label.text = COIN_TEXT % run_total
+	_coin_label.text = str(run_total)
 
 
 func _on_fuel_changed(current: float, maximum: float) -> void:
@@ -231,23 +272,28 @@ func _on_fuel_changed(current: float, maximum: float) -> void:
 	_refresh_fuel()
 
 
-func _on_fuel_state_changed() -> void:
-	_refresh_fuel()
-
-
 func _refresh_fuel() -> void:
-	var empty: bool = player.is_fuel_empty()
-	_fuel_fill.color = Color(EMPTY_COLOR if empty else FUEL_COLOR, HUD_ALPHA)
-	var height: float = BAR_HEIGHT * clampf(_fuel_ratio, 0.0, 1.0)
-	_fuel_fill.size = Vector2(BAR_WIDTH, height)
-	# La barra crece hacia arriba desde la base.
-	_fuel_fill.position = Vector2(EDGE_MARGIN, _top + BAR_HEIGHT - height)
+	_fuel_bar.texture_progress = _fuel_empty_texture if player.is_fuel_empty() else _fuel_texture
+	_fuel_bar.value = _bar_value(_fuel_ratio)
 
 
 func _refresh_progress() -> void:
-	var y: float = _top + BAR_HEIGHT * (1.0 - get_progress()) - MARKER_SIZE.y * 0.5
-	_marker.position = Vector2(_progress_track.position.x + BAR_WIDTH * 0.5 - MARKER_SIZE.x * 0.5, y)
-	_refresh_tentacle_marker()
+	var tentacle_shown: bool = tentacle != null and tentacle.is_active()
+	_progress_bar.value = _bar_value(get_tentacle_progress()) if tentacle_shown else 0.0
+	_place_marker(_player_icon, get_progress(), true)
+	_place_marker(_skull_icon, get_tentacle_progress(), tentacle_shown)
+	_place_marker(_record_icon, _record, _record > 0.0)
+	_lines.queue_redraw()
+
+
+# Ícono a la izquierda de la barra de progreso, centrado en la Y de [param progress].
+func _place_marker(icon: TextureRect, progress: float, shown: bool) -> void:
+	icon.visible = shown
+	if not shown:
+		return
+	var size: Vector2 = icon.texture.get_size()
+	var right: float = _progress_area_x() - MARKER_LINE_LEAD - MARKER_ICON_GAP
+	icon.position = Vector2(right - size.x, _line_y(progress) - floorf(size.y * 0.5))
 
 
 # Proporción 0..1 de una Y global dentro del rango spawn → puerta. 0 si el rango no es válido.
@@ -257,39 +303,100 @@ func _ratio_for_y(y: float) -> float:
 	return clampf((_start_y - y) / (_start_y - _end_y), 0.0, 1.0)
 
 
-# Ubica el marcador del tentáculo; lo oculta si no hay tentáculo o está inactivo (intro).
-func _refresh_tentacle_marker() -> void:
-	if tentacle == null or not tentacle.is_active():
-		_tentacle_marker.visible = false
-		return
-	_tentacle_marker.visible = true
-	var y: float = _top + BAR_HEIGHT * (1.0 - get_tentacle_progress()) - MARKER_SIZE.y * 0.5
-	_tentacle_marker.position = Vector2(_progress_track.position.x + BAR_WIDTH * 0.5 - MARKER_SIZE.x * 0.5, y)
+func _progress_area_x() -> float:
+	return VIEWPORT_SIZE.x - EDGE_MARGIN - BAR_WIDTH
 
 
-# Y (en pantalla) de la línea de progreso para un progreso 0..1.
+# Fila (en pantalla, entera) del área útil para un progreso 0..1: la de arriba del relleno.
 func _line_y(progress: float) -> float:
-	return _top + BAR_HEIGHT * (1.0 - progress)
+	return _top + BAR_HEIGHT - roundf(BAR_HEIGHT * clampf(progress, 0.0, 1.0))
 
 
-func _refresh_record() -> void:
-	if not is_node_ready():
-		return
-	_record_marker.visible = _record > 0.0
-	var center_x: float = _progress_track.position.x + BAR_WIDTH * 0.5
-	_record_marker.position = Vector2(center_x - RECORD_SIZE.x * 0.5, _line_y(_record) - RECORD_SIZE.y * 0.5)
-
-
-func _refresh_tier_marks() -> void:
-	if not is_node_ready():
-		return
-	for child: Node in _tier_marks.get_children():
-		child.queue_free()
-	var center_x: float = _progress_track.position.x + BAR_WIDTH * 0.5
+# Líneas de 1 px que cruzan la barra de progreso, de abajo hacia arriba en importancia: tiers,
+# récord, tentáculo y jugador (encima).
+func _draw_lines() -> void:
+	var bar_x: float = _progress_area_x()
+	var start_x: float = bar_x - MARKER_LINE_LEAD
+	var end_x: float = bar_x + BAR_WIDTH
 	for y: float in _tier_ys:
-		var mark: ColorRect = ColorRect.new()
-		mark.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		mark.color = TIER_MARK_COLOR
-		mark.size = TIER_MARK_SIZE
-		mark.position = Vector2(center_x - TIER_MARK_SIZE.x * 0.5, _line_y(_ratio_for_y(y)) - TIER_MARK_SIZE.y * 0.5)
-		_tier_marks.add_child(mark)
+		var tier_y: float = _line_y(_ratio_for_y(y))
+		_lines.draw_rect(Rect2(bar_x, tier_y, BAR_WIDTH + TIER_MARK_OVERHANG, 1.0), TIER_LINE_COLOR)
+	if _record_icon.visible:
+		var record_y: float = _line_y(_record)
+		var x: float = start_x
+		while x < end_x:
+			_lines.draw_rect(Rect2(x, record_y, 1.0, 1.0), RECORD_LINE_COLOR)
+			x += 2.0
+	if _skull_icon.visible:
+		_lines.draw_rect(Rect2(start_x, _line_y(get_tentacle_progress()), end_x - start_x, 1.0), TENTACLE_LINE_COLOR)
+	_lines.draw_rect(Rect2(start_x, _line_y(get_progress()), end_x - start_x, 1.0), PLAYER_LINE_COLOR)
+
+
+func _on_hit_points_changed(current: int, maximum: int) -> void:
+	if maximum != _cells.size():
+		_rebuild_cells(current, maximum)
+	else:
+		for index: int in maximum:
+			var full: bool = index < current
+			if not full and index < _shown_hp:
+				_blink_cell(index)
+			elif full:
+				_stop_blink(index)
+				_cells[index].texture = _cell_full
+	_shown_hp = current
+	_place_shield()
+
+
+func _rebuild_cells(current: int, maximum: int) -> void:
+	for index: int in _cell_tweens.keys():
+		_stop_blink(index)
+	for cell: TextureRect in _cells:
+		cell.queue_free()
+	_cells.clear()
+	for index: int in maximum:
+		var cell: TextureRect = TextureRect.new()
+		cell.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		cell.texture = _cell_full if index < current else _cell_empty
+		cell.position = CELL_POSITION + Vector2(CELL_STEP * index, 0.0)
+		_cells_root.add_child(cell)
+		_cells.append(cell)
+	# Regla de siempre: la vida se ve solo con más de 1 punto de golpe máximo.
+	_cells_root.visible = maximum > 1
+	_place_shield()
+
+
+# Parpadea la celda perdida y la deja vacía.
+func _blink_cell(index: int) -> void:
+	_stop_blink(index)
+	var cell: TextureRect = _cells[index]
+	var tween: Tween = create_tween()
+	for i: int in CELL_BLINK_COUNT:
+		tween.tween_callback(func() -> void: cell.texture = _cell_empty)
+		tween.tween_interval(CELL_BLINK_HALF)
+		tween.tween_callback(func() -> void: cell.texture = _cell_full)
+		tween.tween_interval(CELL_BLINK_HALF)
+	tween.tween_callback(func() -> void: cell.texture = _cell_empty)
+	_cell_tweens[index] = tween
+
+
+func _stop_blink(index: int) -> void:
+	var tween: Tween = _cell_tweens.get(index) as Tween
+	if tween != null and tween.is_valid():
+		tween.kill()
+	_cell_tweens.erase(index)
+
+
+func _on_shield_changed(active: bool) -> void:
+	_shield_icon.visible = active
+	_place_shield()
+
+
+# A continuación de las celdas visibles (o en su lugar si no se ven), centrado en su altura.
+func _place_shield() -> void:
+	var cell_count: int = _cells.size() if _cells_root.visible else 0
+	var x: float = CELL_POSITION.x
+	if cell_count > 0:
+		x += CELL_STEP * (cell_count - 1) + float(_cell_full.get_width()) + SHIELD_GAP
+	var cell_h: float = float(_cell_full.get_height())
+	var y: float = CELL_POSITION.y + floorf((cell_h - float(_shield_icon.texture.get_height())) * 0.5)
+	_shield_icon.position = Vector2(x, y)

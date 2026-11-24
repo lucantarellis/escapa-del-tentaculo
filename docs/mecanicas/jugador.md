@@ -99,7 +99,7 @@ Player (CharacterBody2D, grupo "player", capa 2, máscara 1)
 ├── GasVent (Marker2D, punto de salida del gas del jetpack)
 ├── Light (PointLight2D creada en código: luz principal de la nave oscura, ver iluminacion.md)
 ├── CollisionShape2D (RectangleShape2D 16×24)
-└── DashCooldownBar (Node2D con `DashCooldownBar`, 16×3 px sobre la cabeza, blanco azulado; solo visible durante el enfriamiento)
+└── DashCooldownBar (Node2D con `DashCooldownBar`, `hud_dash_under/progress` de 18×5 px sobre la cabeza; solo visible durante el enfriamiento)
 ```
 
 ## Cómo probarlo

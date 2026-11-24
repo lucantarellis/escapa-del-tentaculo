@@ -6,34 +6,72 @@
 layer = 80
 script = ExtResource("1_hud")
 
-[node name="FuelTrack" type="ColorRect" parent="."]
+[node name="Bars" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
 mouse_filter = 2
 
-[node name="FuelFill" type="ColorRect" parent="."]
+[node name="FuelBar" type="TextureProgressBar" parent="Bars"]
+layout_mode = 0
 mouse_filter = 2
 
-[node name="ProgressTrack" type="ColorRect" parent="."]
+[node name="FuelIcon" type="TextureRect" parent="Bars"]
+layout_mode = 0
+mouse_filter = 2
+texture_filter = 1
+
+[node name="ProgressBar" type="TextureProgressBar" parent="Bars"]
+layout_mode = 0
 mouse_filter = 2
 
-[node name="GoalMark" type="ColorRect" parent="."]
+[node name="GoalIcon" type="TextureRect" parent="Bars"]
+layout_mode = 0
+mouse_filter = 2
+texture_filter = 1
+
+[node name="Lines" type="Control" parent="Bars"]
+layout_mode = 3
+anchors_preset = 0
 mouse_filter = 2
 
-[node name="TierMarks" type="Control" parent="."]
-mouse_filter = 2
-
-[node name="RecordMarker" type="ColorRect" parent="."]
+[node name="RecordIcon" type="TextureRect" parent="Bars"]
 visible = false
+layout_mode = 0
 mouse_filter = 2
+texture_filter = 1
 
-[node name="TentacleMarker" type="ColorRect" parent="."]
-mouse_filter = 2
-
-[node name="ProgressMarker" type="ColorRect" parent="."]
-mouse_filter = 2
-
-[node name="CoinLabel" type="Label" parent="."]
-mouse_filter = 2
-
-[node name="HitLabel" type="Label" parent="."]
+[node name="SkullIcon" type="TextureRect" parent="Bars"]
 visible = false
+layout_mode = 0
+mouse_filter = 2
+texture_filter = 1
+
+[node name="PlayerIcon" type="TextureRect" parent="Bars"]
+layout_mode = 0
+mouse_filter = 2
+texture_filter = 1
+
+[node name="Status" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+texture_filter = 1
+
+[node name="CoinIcon" type="TextureRect" parent="Status"]
+layout_mode = 0
+mouse_filter = 2
+
+[node name="CoinLabel" type="Label" parent="Status"]
+layout_mode = 0
+mouse_filter = 2
+
+[node name="Cells" type="Control" parent="Status"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+
+[node name="ShieldIcon" type="TextureRect" parent="Status"]
+visible = false
+layout_mode = 0
 mouse_filter = 2
