@@ -33,7 +33,7 @@ Entrar al juego caminando por la nave **intacta e iluminada** (contraste con la 
 | Ambiente | `fill_light_energy` / `fill_light_radius` | 0,35 / 260 | energía, px | Luz suave general desde abajo |
 | Puertas | `door_trigger_width` | 90 | px | Área delante de la puerta que la abre |
 | Puertas | `door_light_energy` / `door_light_range` / `door_light_flicker` | 0,9 / 110 / 0,05 | energía, px, fracción | Luz al abrirse |
-| Puertas | `door_base_mask_alpha` | 0,6 | alfa | Máscara aditiva (leída del frame abierto) sobre el borde interior y el triángulo de la base del marco, que el cono y el haz no alcanzan; el haz arranca donde termina el borde, sin corte |
+| Puertas | `door_base_mask_alpha` | 0,6 | alfa | Máscara aditiva (leída del frame abierto) sobre el borde interior de 2 px del marco; el haz arranca donde termina el borde, sin corte. El triángulo de la base se pinta aparte (`BaseFill`, color de la puerta × su nivel) para que el vidrio baje recto hasta el piso sin la diagonal |
 | Puertas | `door_beam_alpha` / `door_beam_length` / `door_beam_height` / `door_beam_falloff` | 0,9 / 80 / 74 / 2 | alfa, px, px, exponente | Haz visible: arranca tan brillante como el vidrio de la puerta (sin corte) y se apaga con `(1−t)^falloff`; su borde de arriba es duro en la puerta y se difumina |
 | Puertas | `door_fade_time` | 0,25 | s | Fundido al entrar y salir |
 | Puertas | `door_walk_time` | 0,6 | s | Lo que camina el jugador al salir de la puerta (del hueco al piso) |
