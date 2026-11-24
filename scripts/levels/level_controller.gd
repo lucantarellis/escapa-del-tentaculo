@@ -26,6 +26,8 @@ const DEATH_TEXTS: Dictionary = {
 	&"tentacle": "CAPTURADO — pulsá R para reiniciar",
 	&"fell": "CAPTURADO — pulsá R para reiniciar",
 	&"obstacle": "GOLPEADO — pulsá R para reiniciar",
+	&"pulse": "GOLPEADO — pulsá R para reiniciar",
+	&"lethal": "GOLPEADO — pulsá R para reiniciar",
 	&"trap": "GOLPEADO — pulsá R para reiniciar",
 	&"debris": "GOLPEADO — pulsá R para reiniciar",
 	&"meteor": "GOLPEADO — pulsá R para reiniciar",

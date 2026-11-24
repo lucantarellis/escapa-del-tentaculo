@@ -104,7 +104,9 @@ const FIRE_PADDING: float = 14.0
 ## Textura (tira) y SpriteFrames ya armados por nombre de módulo, compartidos entre instancias.
 static var _fire_frames_cache: Dictionary = {}
 ## Hoja de sprites de la nave por tipo (ver [PlatformSkin] y `docs/arte/plataformas-nave.md`). Los
-## tipos que no están acá (LETHAL sin fuego, PROJECTILE) siguen con el bloque de color.
+## tipos que no están acá (PROJECTILE) siguen con el bloque de color. LETHAL usa la hoja del pulso
+## siempre en `on` (rayo fijo), pero solo si el alto es SKIN_HEIGHT: los letales altos o cuadrados
+## siguen con el bloque de color para no cambiar su colisión.
 ## Estructural.
 const SKIN_SHEETS: Dictionary = {
 	PlatformType.STATIC: "platform_static",
@@ -112,6 +114,7 @@ const SKIN_SHEETS: Dictionary = {
 	PlatformType.BREAKABLE: "platform_breakable",
 	PlatformType.TIMED: "platform_timed",
 	PlatformType.PULSE: "platform_pulse",
+	PlatformType.LETHAL: "platform_pulse",
 }
 ## Filas transparentes arriba de la viga en la hoja (la rompible deja lugar a los pedazos que
 ## caen). Estructural. Unidad: px.
@@ -139,8 +142,9 @@ const SKIN_MIN_WIDTH: float = 20.0
 		size = size
 		_apply_type()
 		queue_redraw()
-## Causa que se pasa a [method Player.die] cuando el tipo es letal (LETHAL, o PULSE en ON).
-## Sin efecto en los demás tipos.
+## Causa que se pasa a [method Player.die] cuando el tipo es letal (LETHAL, o PULSE en ON). Con el
+## valor por defecto (`obstacle`) se usa la de cada tipo: `lethal` (LETHAL) o `pulse` (PULSE).
+## Un valor distinto lo pisa. Sin efecto en los demás tipos (el PROJECTILE usa el valor tal cual).
 @export var cause: StringName = &"obstacle"
 
 @export_group("Movimiento")
@@ -646,10 +650,24 @@ func _try_hit(body: Node2D) -> void:
 	print("[Platform] '%s' (%s) golpeó al jugador en %s (jugador en %s)" % [
 		name, PlatformType.keys()[platform_type], str(global_position), str(player.global_position),
 	])
-	player_hit.emit(cause)
-	player.die(cause)
+	var death_cause: StringName = _death_cause()
+	player_hit.emit(death_cause)
+	player.die(death_cause)
 	if platform_type == PlatformType.PROJECTILE:
 		_start_explosion()
+
+
+# Causa de muerte: la configurada si no es la de por defecto; si no, la del tipo (el PULSE y el
+# LETHAL tienen la suya para la pantalla de derrota).
+func _death_cause() -> StringName:
+	if cause != &"obstacle":
+		return cause
+	match platform_type:
+		PlatformType.PULSE:
+			return &"pulse"
+		PlatformType.LETHAL:
+			return &"lethal"
+	return cause
 
 
 # --- PROJECTILE -------------------------------------------------------------------------------
@@ -867,7 +885,7 @@ func _draw_projectile_preview(half: Vector2) -> void:
 
 # Devuelve true si la piel de fuego debe dibujarse: solo en LETHAL con `fire_skin` activo.
 func _fire_active() -> bool:
-	return fire_skin and platform_type == PlatformType.LETHAL
+	return fire_skin and platform_type == PlatformType.LETHAL and not _skin_active()
 
 
 # Con `fire_skin` el tamaño se ajusta a módulos enteros (mínimo FIRE_MIN_MODULES) y alto fijo.
@@ -988,14 +1006,17 @@ func _on_fire_entry_finished(sprite: AnimatedSprite2D, start_frame: int) -> void
 # true si la plataforma se dibuja con los sprites de la nave: el tipo tiene hoja y el tier no le
 # puso un color (el espacio y el alien siguen con el bloque de color).
 func _skin_active() -> bool:
-	return SKIN_SHEETS.has(platform_type) and _tint.a <= 0.0
+	if not SKIN_SHEETS.has(platform_type) or _tint.a > 0.0:
+		return false
+	# El rayo fijo (LETHAL) solo con el alto de la viga: no deforma colisiones de otros tamaños.
+	return platform_type != PlatformType.LETHAL or is_equal_approx(size.y, SKIN_HEIGHT)
 
 
 # Al editar en el editor, el ancho de las plataformas con sprites se ajusta a módulos de 10 px
 # (mínimo 20) y el alto a 12. Al cargar una escena no se toca nada (el tipo todavía no está
 # asignado cuando se asigna `size`).
 func _snap_skin_size(value: Vector2) -> Vector2:
-	if not Engine.is_editor_hint() or not is_node_ready() or not SKIN_SHEETS.has(platform_type):
+	if not Engine.is_editor_hint() or not is_node_ready() or not SKIN_SHEETS.has(platform_type) or platform_type == PlatformType.LETHAL:
 		return value
 	var width: float = maxf(SKIN_MIN_WIDTH, roundf(value.x / SKIN_MODULE_WIDTH) * SKIN_MODULE_WIDTH)
 	return Vector2(width, SKIN_HEIGHT)
@@ -1036,7 +1057,7 @@ func _rebuild_lights() -> void:
 	var cfg: LightingConfig = LevelLighting.get_config()
 	if platform_type == PlatformType.TIMED:
 		_light = LevelLighting.make_light(cfg.timed_color, 0.0, cfg.timed_radius)
-	elif platform_type == PlatformType.PULSE:
+	elif platform_type == PlatformType.PULSE or platform_type == PlatformType.LETHAL:
 		_light = LevelLighting.make_light(cfg.pulse_color, 0.0, cfg.pulse_radius)
 	if _light != null:
 		add_child(_light)
@@ -1087,6 +1108,8 @@ func _play_skin_initial() -> void:
 				_skin.play(&"off")
 		PlatformType.PULSE:
 			_play_skin_pulse()
+		PlatformType.LETHAL:
+			_skin.play(&"on", true, true)
 
 
 func _play_skin_pulse() -> void:

@@ -54,7 +54,7 @@ Una plataforma `LETHAL` puede dibujarse con fuego animado en vez del bloque de c
 
 ## Sprites de la nave
 
-`STATIC`, `ONE_WAY`, `BREAKABLE`, `TIMED` y `PULSE` se dibujan con los módulos de la nave en lugar del bloque de color (arte y hojas: `docs/arte/plataformas-nave.md`). `LETHAL` sin fuego y `PROJECTILE` siguen con el bloque de color.
+`STATIC`, `ONE_WAY`, `BREAKABLE`, `TIMED` y `PULSE` se dibujan con los módulos de la nave en lugar del bloque de color (arte y hojas: `docs/arte/plataformas-nave.md`). `LETHAL` también usa la hoja del pulso, siempre en el tag `on` (rayo fijo, con la luz del pulso encendida), pero solo cuando su alto es 12 px (el de la viga): los letales de otro alto (altos, cuadrados) siguen con el bloque de color para no cambiar su colisión, y con piel de nave anulan a `fire_skin`. El editor no ajusta el tamaño de los LETHAL. `PROJECTILE` y el espacio / el alien (tier con color) siguen con el bloque de color.
 
 - **Cómo se dibuja:** un hijo `Skin` (`scripts/platforms/platform_skin.gd`, clase `PlatformSkin`) dibuja tapa izquierda + centros al azar + tapa derecha, de 10 px cada uno, todos en el mismo cuadro. Su hijo `Emissive` dibuja lo que emite luz con material sin sombreado. Texturas `CanvasTexture` con relieve, compartidas entre instancias; duración de cada cuadro y tags desde el JSON de Aseprite. Los centros salen de una semilla por nombre y posición (estables).
 - **Tamaño:** al editar en el editor, el ancho se ajusta a múltiplos de 10 (mínimo 20) y el alto a 12. Al cargar una escena no se ajusta nada; si un ancho no es múltiplo de 10, el dibujo usa el múltiplo más cercano (centrado) y la colisión queda como está.
@@ -77,7 +77,7 @@ Una plataforma `LETHAL` puede dibujarse con fuego animado en vez del bloque de c
 |---|---|---|---|---|
 | `size` | Vector2 | (80, 12) | px | Tamaño del bloque |
 | `platform_type` | enum | `STATIC` | — | Tipología (ver tabla arriba) |
-| `cause` | StringName | `&"obstacle"` | — | Causa que recibe `Player.die` (solo LETHAL / PULSE en ON) |
+| `cause` | StringName | `&"obstacle"` | — | Causa que recibe `Player.die` (LETHAL / PULSE en ON). Con el valor por defecto se usa `&"lethal"` (LETHAL) o `&"pulse"` (PULSE); otro valor lo pisa. PROJECTILE usa el valor tal cual |
 | `moves` | bool | false | — | Si va y viene entre su posición inicial y `inicial + travel` |
 | `travel` | Vector2 | (120, 0) | px | Desplazamiento del extremo final (solo si `moves`) |
 | `projectile_trigger` | enum | `CAMERA` | — | Solo `PROJECTILE`: qué lo dispara (`CAMERA` o `DISTANCE`) |
