@@ -99,7 +99,13 @@ Player (CharacterBody2D, grupo "player", capa 2, máscara 1)
 ├── GasVent (Marker2D, punto de salida del gas del jetpack)
 ├── Light (PointLight2D creada en código: luz principal de la nave oscura, ver iluminacion.md)
 ├── CollisionShape2D (RectangleShape2D 16×24)
-└── DashCooldownBar (Node2D con `DashCooldownBar`, `hud_dash_under/progress` de 18×5 px sobre la cabeza; solo visible durante el enfriamiento)
+├── DashCooldownBar (Node2D con `DashCooldownBar`, `hud_dash_under/progress` de 18×5 px sobre la cabeza; solo visible durante el enfriamiento)
+└── En código (`_setup_fx`; arte en `docs/arte/efectos.md`):
+    ├── ShieldFx (SheetSprite `player_shield`, en SHIELD_CENTER): `loop` mientras dura el escudo, `pop` al romperse o vencer
+    ├── RepairFx (SheetSprite `player_repair`, en (0, −8)): una vez por cada `heal()` que cura; además `shaders/repair_flash.gdshader` sobre `Body/Sprite` 0,6 s (banda cian de abajo hacia arriba + tramado al principio) y vuelve a su material
+    ├── RespawnFx (SheetSprite `player_respawn`, en (0, −16)): `respawn` al reaparecer; el astronauta aparece con fundido desde el 3.er cuadro y después parpadea como siempre. `vanish` va en un nodo suelto del nivel, donde iba a morir
+    ├── LeakA/B/C (CPUParticles2D, `gas_puff_a/b/c` con `shaders/suit_leak.gdshader`) + LeakTimer: fuga del traje con 1 punto de golpe de varios. Ráfagas de 2–4 bocanadas cada 0,5–0,9 s desde el borde del traje, cada una a más de 60° de la anterior; se corta al curarse, morir o reiniciar
+    └── Rastro del dash: hasta 4 copias cian del cuadro del cuerpo cada 0,03 s, en el nivel detrás del jugador, que se desvanecen en 0,2 s
 ```
 
 ## Cómo probarlo

@@ -45,17 +45,45 @@ const BLINK_RATE: float = 12.0
 ## Múltiplos de `respawn_height` donde se busca un lugar libre al reaparecer. Estructural.
 const RESPAWN_SEARCH_SCALES: Array[float] = [1.0, 0.75, 0.5, 1.25, 1.5, 0.25]
 ## Máximo de plataformas rompibles que un mismo paso del dash puede romper en fila. Estructural.
-## Escudo del botiquín: óvalo vertical que cubre al astronauta entero más la llama del jetpack.
-## Color del aro (cian de recogible), color del relleno translúcido, tamaño del óvalo (ancho y alto,
-## px), centro respecto del origen del jugador (px), grosor del aro (px), cantidad de puntos y cuánto
-## antes de terminar empieza a parpadear (s). Solo visual.
-const SHIELD_COLOR: Color = Color("#63D6C5")
-const SHIELD_FILL_COLOR: Color = Color(0.388, 0.839, 0.773, 0.14)
-const SHIELD_SIZE: Vector2 = Vector2(34.0, 54.0)
+## Carpeta de las hojas de efectos del jugador (PNG + JSON de Aseprite). Estructural.
+const FX_DIR: String = "res://assets/sprites/fx/"
+## Escudo del botiquín (`player_shield`, óvalo que cubre al astronauta entero más la llama): centro
+## respecto del origen del jugador (px) y cuánto antes de terminar empieza a parpadear (s). Solo
+## visual.
 const SHIELD_CENTER: Vector2 = Vector2(0.0, 7.0)
-const SHIELD_RING_WIDTH: float = 2.0
-const SHIELD_RING_POINTS: int = 32
 const SHIELD_BLINK_TIME: float = 1.0
+## Centro del cuerpo respecto del origen del jugador: ahí van la reparación (`player_repair`, misma
+## celda que `Body/Sprite`) y el centro de la fuga del traje (px). Solo visual.
+const BODY_CENTER: Vector2 = Vector2(0.0, -8.0)
+## Destello de reparación sobre el cuerpo (`shaders/repair_flash.gdshader`): duración (s). Solo
+## visual.
+const REPAIR_FLASH_TIME: float = 0.6
+## Reaparición (`player_respawn`): posición respecto del jugador (px; las 40 filas de abajo coinciden
+## con la celda del astronauta) y desde qué cuadro de `respawn` (0 = primero) aparece el astronauta
+## con fundido. Solo visual.
+const RESPAWN_FX_OFFSET: Vector2 = Vector2(0.0, -16.0)
+const RESPAWN_FADE_FROM_FRAME: int = 2
+## Rastro del dash: cada cuánto se deja un "fantasma" (s), máximo por dash, tinte, alfa inicial y
+## duración del desvanecimiento (s). Solo visual.
+const DASH_GHOST_INTERVAL: float = 0.03
+const DASH_GHOST_MAX: int = 4
+const DASH_GHOST_COLOR: Color = Color("63D6C5")
+const DASH_GHOST_ALPHA: float = 0.5
+const DASH_GHOST_FADE: float = 0.2
+## Fuga del traje con 1 punto de golpe: semiejes del borde del traje desde [constant BODY_CENTER]
+## (px), separación mínima entre ráfagas seguidas (grados), apertura de cada ráfaga (grados),
+## partículas por ráfaga, espera entre ráfagas (s), vida (s), velocidad (px/s) y freno. Solo visual.
+const LEAK_RADIUS: Vector2 = Vector2(10.0, 13.0)
+const LEAK_MIN_TURN_DEG: float = 60.0
+const LEAK_SPREAD_DEG: float = 15.0
+const LEAK_AMOUNT_MIN: int = 2
+const LEAK_AMOUNT_MAX: int = 4
+const LEAK_INTERVAL_MIN: float = 0.5
+const LEAK_INTERVAL_MAX: float = 0.9
+const LEAK_LIFETIME: float = 0.4
+const LEAK_SPEED_MIN: float = 40.0
+const LEAK_SPEED_MAX: float = 70.0
+const LEAK_DAMPING: float = 140.0
 const DASH_BREAK_MAX_CHAIN: int = 4
 ## Sufijo de la animación según los golpes recibidos: el índice es la cantidad de golpes y el último
 ## vale para 2 o más (`idle`, `idle_dano_1`, `idle_dano_2`). Solo visual.
@@ -152,8 +180,24 @@ var _instakill: Array[StringName] = []
 ## Tiempo que le queda al escudo del botiquín. Mientras es mayor que 0 absorbe un golpe común.
 ## Unidad: s.
 var _shield_left: float = 0.0
-## Aro placeholder que se ve mientras hay escudo (se crea la primera vez que hace falta).
-var _shield_ring: Line2D = null
+## Efectos del jugador (hojas de `assets/sprites/fx/`), creados en `_setup_fx`.
+var _shield_fx: SheetSprite
+var _repair_fx: SheetSprite
+var _respawn_fx: SheetSprite
+var _repair_material: ShaderMaterial
+var _repair_tween: Tween
+## Material que tenía `Body/Sprite` antes del destello de reparación (se restaura al terminar).
+var _sprite_material: Material
+## Fundido del astronauta al reaparecer: mientras dura, el parpadeo de invulnerabilidad espera.
+var _respawn_fade_tween: Tween
+var _respawn_fading: bool = false
+## Rastro del dash: tiempo hasta el próximo fantasma y cuántos dejó el dash en curso.
+var _ghost_left: float = 0.0
+var _ghost_count: int = 0
+## Fuga del traje: un emisor por forma de bocanada, el temporizador de ráfagas y el último ángulo.
+var _leak_emitters: Array[CPUParticles2D] = []
+var _leak_timer: Timer
+var _leak_angle: float = 0.0
 ## Causas de muerte de las que Reaparecer no salva (los perseguidores).
 var _no_respawn: Array[StringName] = []
 ## Mejora Reaparecer: si está comprada, si ya se usó en esta partida y cómo reaparece.
@@ -183,6 +227,8 @@ func _ready() -> void:
 	_was_empty = is_fuel_empty()
 	_setup_sprites()
 	_setup_light()
+	_setup_fx()
+	hit_points_changed.connect(_on_own_hit_points_changed)
 	_update_visuals(Vector2.ZERO)
 	_update_cooldown_bar()
 	fuel_changed.emit(_fuel, config.max_fuel)
@@ -203,11 +249,14 @@ func _physics_process(delta: float) -> void:
 		_shield_left = maxf(_shield_left - delta, 0.0)
 		_update_shield_visual()
 		if _shield_left <= 0.0:
+			_pop_shield()
 			shield_changed.emit(false)
 	if _hit_invuln_left > 0.0:
 		_hit_invuln_left = maxf(_hit_invuln_left - delta, 0.0)
-		var low: bool = _hit_invuln_left > 0.0 and int(_hit_invuln_left * BLINK_RATE) % 2 == 0
-		_body.modulate.a = BLINK_ALPHA if low else 1.0
+		# Mientras el astronauta aparece con fundido (Reaparecer), el parpadeo espera.
+		if not _respawn_fading:
+			var low: bool = _hit_invuln_left > 0.0 and int(_hit_invuln_left * BLINK_RATE) % 2 == 0
+			_body.modulate.a = BLINK_ALPHA if low else 1.0
 	# Terminado el dash, las plataformas que rompió vuelven a poder chocar con el jugador.
 	if _dash_distance_left <= 0.0 and not _dash_excepted.is_empty():
 		_clear_dash_exceptions()
@@ -357,7 +406,7 @@ func die(cause: StringName) -> void:
 		# parpadeo ni invulnerabilidad: el golpe no cuenta como golpe recibido.
 		if _shield_left > 0.0:
 			_shield_left = 0.0
-			_update_shield_visual()
+			_pop_shield()
 			shield_changed.emit(false)
 			return
 		# Con puntos de más, el golpe resta uno y no mata.
@@ -379,6 +428,7 @@ func die(cause: StringName) -> void:
 	_set_thrusting(false)
 	_show_thrust(false)
 	_update_cooldown_bar()
+	_update_leak()
 	died.emit(cause)
 
 
@@ -392,6 +442,7 @@ func heal(amount: int) -> int:
 	if healed > 0:
 		_hp += healed
 		hit_points_changed.emit(_hp, _max_hp)
+		_play_repair()
 	return healed
 
 
@@ -539,6 +590,7 @@ func reset(spawn_position: Vector2) -> void:
 	_hit_invuln_left = 0.0
 	_shield_left = 0.0
 	_update_shield_visual()
+	_reset_fx()
 	_respawn_used = false
 	_body.modulate.a = 1.0
 	_facing = 1.0
@@ -602,6 +654,7 @@ func _exit_tree() -> void:
 # de donde murió, queda quieto con `respawn_hp` puntos y con la invulnerabilidad de un golpe.
 func _respawn(_cause: StringName) -> void:
 	var origin: Vector2 = global_position
+	_spawn_vanish(origin)
 	var target: Vector2 = origin + Vector2(0.0, -_respawn_height)
 	for scale_factor: float in RESPAWN_SEARCH_SCALES:
 		var candidate: Vector2 = origin + Vector2(0.0, -_respawn_height * scale_factor)
@@ -616,6 +669,7 @@ func _respawn(_cause: StringName) -> void:
 	_hit_invuln_left = _hit_invuln_time
 	_update_visuals(Vector2.ZERO)
 	_update_cooldown_bar()
+	_play_respawn()
 	hit_points_changed.emit(_hp, _max_hp)
 	respawned.emit(target)
 
@@ -653,6 +707,8 @@ func _start_dash(direction: Vector2) -> void:
 	_set_fuel(_fuel - config.dash_fuel_cost)
 	_set_thrusting(false)
 	_update_cooldown_bar()
+	_ghost_count = 0
+	_ghost_left = 0.0
 
 
 # Avanza el dash en curso un frame, en línea recta. No pasa por `_move_with_bounce`: contra una
@@ -663,6 +719,7 @@ func _process_dash(delta: float) -> void:
 	if _dash_breaks:
 		_break_platforms_ahead(_dash_direction * step)
 	velocity = _dash_direction * (step / delta)
+	_tick_dash_ghosts(delta)
 	move_and_slide()
 	_dash_distance_left -= step
 	_dash_time += delta
@@ -916,23 +973,256 @@ func _show_thrust(on: bool) -> void:
 
 # Muestra u oculta el escudo (placeholder: óvalo cian con relleno translúcido). Parpadea el último segundo.
 func _update_shield_visual() -> void:
-	if _shield_ring == null:
-		if _shield_left <= 0.0:
-			return
-		_shield_ring = Line2D.new()
-		_shield_ring.width = SHIELD_RING_WIDTH
-		_shield_ring.default_color = SHIELD_COLOR
-		_shield_ring.position = SHIELD_CENTER
-		_shield_ring.closed = true
-		var points: PackedVector2Array = PackedVector2Array()
-		for i: int in SHIELD_RING_POINTS:
-			points.append(Vector2.from_angle(TAU * float(i) / float(SHIELD_RING_POINTS)) * SHIELD_SIZE * 0.5)
-		_shield_ring.points = points
-		var fill: Polygon2D = Polygon2D.new()
-		fill.color = SHIELD_FILL_COLOR
-		fill.polygon = points
-		_shield_ring.add_child(fill)
-		add_child(_shield_ring)
-	_shield_ring.visible = _shield_left > 0.0
-	var blinking: bool = _shield_left > 0.0 and _shield_left < SHIELD_BLINK_TIME and int(_shield_left * BLINK_RATE) % 2 == 0
-	_shield_ring.modulate.a = BLINK_ALPHA if blinking else 1.0
+	if _shield_fx == null:
+		return
+	if _shield_left > 0.0:
+		if not _shield_fx.visible or _shield_fx.get_tag() != &"loop":
+			_shield_fx.visible = true
+			_shield_fx.play(&"loop", true)
+		var blinking: bool = _shield_left < SHIELD_BLINK_TIME and int(_shield_left * BLINK_RATE) % 2 == 0
+		_shield_fx.modulate.a = BLINK_ALPHA if blinking else 1.0
+	elif _shield_fx.get_tag() != &"pop":
+		_shield_fx.visible = false
+
+
+# El escudo se rompe (absorbió un golpe o venció): `pop` una vez y se oculta al terminar.
+func _pop_shield() -> void:
+	if _shield_fx == null:
+		return
+	_shield_fx.modulate.a = 1.0
+	_shield_fx.visible = true
+	_shield_fx.play(&"pop")
+
+
+# Hoja de efecto (PNG + JSON de Aseprite) sin sombreado: la capa emisiva de estos efectos es copia
+# del color, así que todo el efecto brilla.
+static func _make_fx(sheet: String) -> SheetSprite:
+	var fx: SheetSprite = SheetSprite.new()
+	fx.texture = load(FX_DIR + sheet + ".png")
+	fx.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	var unshaded: CanvasItemMaterial = CanvasItemMaterial.new()
+	unshaded.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	fx.material = unshaded
+	fx.load_sheet(FX_DIR + sheet + ".json")
+	fx.visible = false
+	return fx
+
+
+func _setup_fx() -> void:
+	_shield_fx = _make_fx("player_shield")
+	_shield_fx.name = "ShieldFx"
+	_shield_fx.position = SHIELD_CENTER
+	_shield_fx.finished.connect(_on_shield_fx_finished)
+	add_child(_shield_fx)
+	_repair_fx = _make_fx("player_repair")
+	_repair_fx.name = "RepairFx"
+	_repair_fx.position = BODY_CENTER
+	_repair_fx.finished.connect(func(_tag: StringName) -> void: _repair_fx.visible = false)
+	add_child(_repair_fx)
+	_respawn_fx = _make_fx("player_respawn")
+	_respawn_fx.name = "RespawnFx"
+	_respawn_fx.position = RESPAWN_FX_OFFSET
+	_respawn_fx.finished.connect(func(_tag: StringName) -> void: _respawn_fx.visible = false)
+	add_child(_respawn_fx)
+	_repair_material = ShaderMaterial.new()
+	_repair_material.shader = load("res://shaders/repair_flash.gdshader")
+	_setup_leak()
+
+
+func _on_shield_fx_finished(tag: StringName) -> void:
+	if tag == &"pop" and _shield_left <= 0.0:
+		_shield_fx.visible = false
+
+
+# Deja los efectos como al empezar (reinicio): sin escudo, reparación, reaparición ni fuga.
+func _reset_fx() -> void:
+	if _shield_fx == null:
+		return
+	_shield_fx.visible = false
+	_shield_fx.play(&"loop", true)
+	_repair_fx.visible = false
+	_respawn_fx.visible = false
+	_stop_repair_flash()
+	if _respawn_fade_tween != null and _respawn_fade_tween.is_valid():
+		_respawn_fade_tween.kill()
+	_respawn_fading = false
+	_update_leak()
+
+
+# Reparación: la cruz con chispas (`repair`) y el barrido cian sobre el cuerpo.
+func _play_repair() -> void:
+	if _repair_fx == null:
+		return
+	_repair_fx.visible = true
+	_repair_fx.play(&"repair")
+	_play_repair_flash()
+
+
+# Pone el shader de destello en `Body/Sprite` y anima `progress` 0 → 1; al terminar devuelve el
+# material de antes, así fuera del efecto no cambia nada.
+func _play_repair_flash() -> void:
+	_stop_repair_flash()
+	_sprite_material = _sprite.material
+	var frame: Texture2D = _sprite.sprite_frames.get_frame_texture(_sprite.animation, _sprite.frame)
+	var half: float = float(frame.get_height()) * 0.5 if frame != null else 20.0
+	_repair_material.set_shader_parameter("frame_top", _sprite.offset.y - half)
+	_repair_material.set_shader_parameter("frame_bottom", _sprite.offset.y + half)
+	_repair_material.set_shader_parameter("progress", 0.0)
+	_sprite.material = _repair_material
+	_repair_tween = create_tween()
+	_repair_tween.tween_method(func(value: float) -> void: _repair_material.set_shader_parameter("progress", value), 0.0, 1.0, REPAIR_FLASH_TIME)
+	_repair_tween.tween_callback(_stop_repair_flash)
+
+
+func _stop_repair_flash() -> void:
+	if _repair_tween != null and _repair_tween.is_valid():
+		_repair_tween.kill()
+	_repair_tween = null
+	if _sprite.material == _repair_material:
+		_sprite.material = _sprite_material
+
+
+# Destello donde el jugador iba a morir: nodo suelto en el nivel que se libera al terminar.
+func _spawn_vanish(at: Vector2) -> void:
+	var parent: Node = get_parent()
+	if parent == null:
+		return
+	var fx: SheetSprite = _make_fx("player_respawn")
+	fx.name = "VanishFx"
+	parent.add_child(fx)
+	fx.global_position = at + RESPAWN_FX_OFFSET
+	fx.visible = true
+	fx.finished.connect(func(_tag: StringName) -> void: fx.queue_free())
+	fx.play(&"vanish")
+
+
+# Haz en la nueva posición y fundido del astronauta desde el cuadro RESPAWN_FADE_FROM_FRAME de
+# `respawn`; después sigue el parpadeo de invulnerabilidad de siempre.
+func _play_respawn() -> void:
+	if _respawn_fx == null:
+		return
+	_respawn_fx.visible = true
+	_respawn_fx.play(&"respawn")
+	var sheet: Dictionary = SheetSprite.get_sheet(FX_DIR + "player_respawn.json")
+	var range_: Vector2i = sheet.tags[&"respawn"]
+	var durations: PackedFloat32Array = sheet.durations
+	var wait: float = 0.0
+	var fade: float = 0.0
+	for index: int in range(range_.x, range_.y + 1):
+		if index - range_.x < RESPAWN_FADE_FROM_FRAME:
+			wait += durations[index]
+		else:
+			fade += durations[index]
+	if _respawn_fade_tween != null and _respawn_fade_tween.is_valid():
+		_respawn_fade_tween.kill()
+	_respawn_fading = true
+	_body.modulate.a = 0.0
+	_respawn_fade_tween = create_tween()
+	_respawn_fade_tween.tween_interval(wait)
+	_respawn_fade_tween.tween_property(_body, "modulate:a", 1.0, maxf(fade, 0.01))
+	_respawn_fade_tween.tween_callback(func() -> void: _respawn_fading = false)
+
+
+# Rastro del dash: cada DASH_GHOST_INTERVAL deja una copia del cuadro actual del cuerpo, cian y
+# semitransparente, que se desvanece sola.
+func _tick_dash_ghosts(delta: float) -> void:
+	_ghost_left -= delta
+	if _ghost_left > 0.0 or _ghost_count >= DASH_GHOST_MAX:
+		return
+	_ghost_left = DASH_GHOST_INTERVAL
+	_ghost_count += 1
+	var parent: Node = get_parent()
+	var frame: Texture2D = _sprite.sprite_frames.get_frame_texture(_sprite.animation, _sprite.frame)
+	if parent == null or frame == null:
+		return
+	var ghost: Sprite2D = Sprite2D.new()
+	ghost.texture = frame
+	ghost.flip_h = _sprite.flip_h
+	ghost.offset = _sprite.offset
+	ghost.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	var unshaded: CanvasItemMaterial = CanvasItemMaterial.new()
+	unshaded.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	ghost.material = unshaded
+	ghost.modulate = Color(DASH_GHOST_COLOR, DASH_GHOST_ALPHA)
+	parent.add_child(ghost)
+	# Detrás del jugador.
+	parent.move_child(ghost, get_index())
+	ghost.global_position = _sprite.global_position
+	var tween: Tween = ghost.create_tween()
+	tween.tween_property(ghost, "modulate:a", 0.0, DASH_GHOST_FADE)
+	tween.tween_callback(ghost.queue_free)
+
+
+# Fuga del traje: un emisor por forma de bocanada (`gas_puff_a/b/c`) con el shader de recolor, y un
+# temporizador que dispara ráfagas cortas.
+func _setup_leak() -> void:
+	var leak_material: ShaderMaterial = ShaderMaterial.new()
+	leak_material.shader = load("res://shaders/suit_leak.gdshader")
+	var ramp := Gradient.new()
+	ramp.set_color(0, Color(1.0, 1.0, 1.0, 1.0))
+	ramp.set_color(1, Color(1.0, 1.0, 1.0, 0.0))
+	for shape: String in ["a", "b", "c"]:
+		var leak: CPUParticles2D = CPUParticles2D.new()
+		leak.name = "Leak" + shape.to_upper()
+		leak.texture = load(FX_DIR + "gas_puff_%s.png" % shape)
+		leak.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		leak.material = leak_material
+		leak.emitting = false
+		leak.one_shot = true
+		leak.explosiveness = 0.6
+		leak.local_coords = false
+		leak.lifetime = LEAK_LIFETIME
+		leak.spread = LEAK_SPREAD_DEG
+		leak.gravity = Vector2.ZERO
+		leak.initial_velocity_min = LEAK_SPEED_MIN
+		leak.initial_velocity_max = LEAK_SPEED_MAX
+		leak.damping_min = LEAK_DAMPING
+		leak.damping_max = LEAK_DAMPING
+		leak.anim_speed_min = 1.0
+		leak.anim_speed_max = 1.0
+		leak.color_ramp = ramp
+		add_child(leak)
+		_leak_emitters.append(leak)
+	_leak_timer = Timer.new()
+	_leak_timer.name = "LeakTimer"
+	_leak_timer.one_shot = true
+	_leak_timer.timeout.connect(_on_leak_timer)
+	add_child(_leak_timer)
+	_leak_angle = randf() * TAU
+
+
+func _on_own_hit_points_changed(_current: int, _maximum: int) -> void:
+	_update_leak()
+
+
+# La fuga se ve mientras queda 1 punto de golpe de varios (con un solo punto máximo el traje está
+# entero) y el jugador está vivo.
+func _update_leak() -> void:
+	if _leak_timer == null:
+		return
+	var leaking: bool = _is_alive and _hp == 1 and _max_hp > 1
+	if leaking and _leak_timer.is_stopped():
+		_leak_timer.start(randf_range(LEAK_INTERVAL_MIN, LEAK_INTERVAL_MAX))
+	elif not leaking:
+		_leak_timer.stop()
+
+
+func _on_leak_timer() -> void:
+	_burst_leak()
+	_update_leak()
+
+
+# Una ráfaga desde un punto nuevo del borde del traje, a más de LEAK_MIN_TURN_DEG de la anterior.
+func _burst_leak() -> void:
+	var angle: float = _leak_angle
+	for attempt: int in 8:
+		angle = randf() * TAU
+		if absf(angle_difference(angle, _leak_angle)) > deg_to_rad(LEAK_MIN_TURN_DEG):
+			break
+	_leak_angle = angle
+	var leak: CPUParticles2D = _leak_emitters[randi() % _leak_emitters.size()]
+	leak.position = BODY_CENTER + Vector2(LEAK_RADIUS.x * cos(angle), LEAK_RADIUS.y * sin(angle))
+	leak.direction = Vector2.from_angle(angle)
+	leak.amount = randi_range(LEAK_AMOUNT_MIN, LEAK_AMOUNT_MAX)
+	leak.restart()
+	leak.emitting = true

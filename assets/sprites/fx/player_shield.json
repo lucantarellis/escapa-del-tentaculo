@@ -1,0 +1,137 @@
+{ "frames": [
+   {
+    "filename": "player_shield 0.aseprite",
+    "frame": { "x": 0, "y": 0, "w": 54, "h": 74 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 74 },
+    "sourceSize": { "w": 54, "h": 74 },
+    "duration": 90
+   },
+   {
+    "filename": "player_shield 1.aseprite",
+    "frame": { "x": 54, "y": 0, "w": 54, "h": 74 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 74 },
+    "sourceSize": { "w": 54, "h": 74 },
+    "duration": 90
+   },
+   {
+    "filename": "player_shield 2.aseprite",
+    "frame": { "x": 108, "y": 0, "w": 54, "h": 74 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 74 },
+    "sourceSize": { "w": 54, "h": 74 },
+    "duration": 90
+   },
+   {
+    "filename": "player_shield 3.aseprite",
+    "frame": { "x": 162, "y": 0, "w": 54, "h": 74 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 74 },
+    "sourceSize": { "w": 54, "h": 74 },
+    "duration": 90
+   },
+   {
+    "filename": "player_shield 4.aseprite",
+    "frame": { "x": 216, "y": 0, "w": 54, "h": 74 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 74 },
+    "sourceSize": { "w": 54, "h": 74 },
+    "duration": 90
+   },
+   {
+    "filename": "player_shield 5.aseprite",
+    "frame": { "x": 270, "y": 0, "w": 54, "h": 74 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 74 },
+    "sourceSize": { "w": 54, "h": 74 },
+    "duration": 90
+   },
+   {
+    "filename": "player_shield 6.aseprite",
+    "frame": { "x": 324, "y": 0, "w": 54, "h": 74 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 74 },
+    "sourceSize": { "w": 54, "h": 74 },
+    "duration": 90
+   },
+   {
+    "filename": "player_shield 7.aseprite",
+    "frame": { "x": 378, "y": 0, "w": 54, "h": 74 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 74 },
+    "sourceSize": { "w": 54, "h": 74 },
+    "duration": 90
+   },
+   {
+    "filename": "player_shield 8.aseprite",
+    "frame": { "x": 432, "y": 0, "w": 54, "h": 74 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 74 },
+    "sourceSize": { "w": 54, "h": 74 },
+    "duration": 60
+   },
+   {
+    "filename": "player_shield 9.aseprite",
+    "frame": { "x": 486, "y": 0, "w": 54, "h": 74 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 74 },
+    "sourceSize": { "w": 54, "h": 74 },
+    "duration": 60
+   },
+   {
+    "filename": "player_shield 10.aseprite",
+    "frame": { "x": 540, "y": 0, "w": 54, "h": 74 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 74 },
+    "sourceSize": { "w": 54, "h": 74 },
+    "duration": 60
+   },
+   {
+    "filename": "player_shield 11.aseprite",
+    "frame": { "x": 594, "y": 0, "w": 54, "h": 74 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 74 },
+    "sourceSize": { "w": 54, "h": 74 },
+    "duration": 60
+   },
+   {
+    "filename": "player_shield 12.aseprite",
+    "frame": { "x": 648, "y": 0, "w": 54, "h": 74 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 74 },
+    "sourceSize": { "w": 54, "h": 74 },
+    "duration": 60
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.3.18.6-x64",
+  "image": "player_shield.png",
+  "format": "RGBA8888",
+  "size": { "w": 702, "h": 74 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "loop", "from": 0, "to": 7, "direction": "forward", "color": "#000000ff" },
+   { "name": "pop", "from": 8, "to": 12, "direction": "forward", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "color", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}
