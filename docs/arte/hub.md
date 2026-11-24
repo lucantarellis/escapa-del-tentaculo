@@ -4,7 +4,7 @@ La nave **intacta** (sin ataque) como menú: el jugador camina y vuela con el je
 
 ## Puertas (Ajustes y Mercado)
 
-Editables: `assets/aseprite/environment/hub_doors/door_settings.aseprite`, `door_market.aseprite`.
+Editables: `assets/aseprite/environment/hub_doors/door_settings.aseprite`, `door_market.aseprite`. El marco negro (`#050609`) que rodeaba la luz del hueco se quitó el 24/11/2026 en los cuadros con la puerta abierta (capas `color` y `emissive`; la `normal` no se tocó): los costados y el borde de arriba son ahora luz, y arriba y abajo queda el marco azul.
 Exportadas: `assets/sprites/environment/hub_doors/door_{settings,market}.png`, `_emissive.png`, `_normal.png` (tiras horizontales de 16 cuadros de 25×125) y `.json` (duraciones y tags).
 
 ### Forma
@@ -29,8 +29,8 @@ Exportadas: `assets/sprites/environment/hub_doors/door_{settings,market}.png`, `
 | `closing` | 11–16 | 60 ms c/u | inverso de `opening` |
 
 ### Comportamiento (código)
-- Se abre sola cuando el jugador entra en un área de ~48 px delante de la puerta (y en el piso); se cierra al salir del área.
-- **Entrar:** con la puerta abierta, si el jugador sigue caminando hacia la pared (input hacia la pared ~0,15 s contra el borde), fundido a negro y se abre Ajustes o Mercado.
+- Se abre sola cuando el jugador entra en un área de 90 px delante de la puerta (y en el piso); se cierra al salir del área.
+- **Entrar:** con la puerta abierta el jugador camina hacia adentro (no hay pared en el hueco); al llegar al centro, fundido a negro y se abre Ajustes o Mercado. Ver `docs/mecanicas/hub.md`.
 
 ### Iluminación al abrir (todo en Godot, sin arte)
 Misma lógica que la luz de la escotilla (brief 08, sección 1): luz real + haz visible aditivo, con la intensidad atada al estado.

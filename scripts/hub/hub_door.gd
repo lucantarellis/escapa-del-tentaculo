@@ -31,6 +31,15 @@ const LIGHT_INSET: float = 10.0
 ## de pared que el [Hub] deja sin pintar). Estructural.
 const HOLE_TOP: float = 78.0
 const HOLE_BOTTOM: float = 126.0
+## Distancia del centro del hueco al punto donde queda el jugador al volver (px). Solo visual.
+const RETURN_DISTANCE: float = 32.0
+## Fila del sprite en la que termina el haz (y 640: el borde de abajo de la pantalla, así cubre todo
+## el piso) y cuánto baja su borde de arriba en el extremo lejano (px). Solo visual.
+const BEAM_BOTTOM_ROW: float = 154.0
+const BEAM_TOP_DROP: float = 37.0
+## Desde qué fracción de la animación `opening` se puede pasar (el bloqueo se quita antes de que la
+## puerta termine de abrirse, así correr hacia ella no frena). Solo visual.
+const PASS_FROM_OPENING: float = 0.5
 ## Altura del centro del hueco sobre el borde de atrás del piso (px). Solo visual.
 const GAP_CENTER_HEIGHT: float = 36.0
 ## Velocidad del titileo de la luz abierta (rad/s). Solo visual.
@@ -56,6 +65,7 @@ var _player_inside: bool = false
 var _progress: float = 0.0
 var _entered_latch: bool = false
 var _blocker_shape: CollisionShape2D
+var _opening_time: float = 0.0
 var _level: float = 0.0
 var _level_tween: Tween
 var _time: float = 0.0
@@ -145,7 +155,7 @@ func get_state() -> StringName:
 ## Punto del piso delante de la puerta, para dejar al jugador al volver (global).
 func get_return_point() -> Vector2:
 	var inward: float = _inward()
-	var x: float = _gap_x() + inward * (config.door_trigger_width * 0.5 + 8.0)
+	var x: float = _gap_x() + inward * RETURN_DISTANCE
 	return Vector2(x, global_position.y + FLOOR_ROW)
 
 
@@ -158,7 +168,15 @@ func _process(delta: float) -> void:
 	_light.visible = _level > 0.001
 	_beam.modulate.a = config.door_beam_alpha * _level * flicker
 	_beam.visible = _level > 0.001
+	_opening_time = _opening_time + delta if _sprite.get_tag() == &"opening" else 0.0
 	_update_entry()
+
+
+# La puerta está abierta, o ya casi (pasada la mitad de `opening`).
+func _can_pass() -> bool:
+	if is_open():
+		return true
+	return _sprite.get_tag() == &"opening" and _opening_time >= _sprite.get_tag_duration(&"opening") * PASS_FROM_OPENING
 
 
 # Cuánto entró el jugador: 0 en el borde de la pared, 1 en el centro del hueco (solo a la altura
@@ -178,7 +196,7 @@ func _update_entry() -> void:
 	var progress: float = _entry_progress() if _enabled else 0.0
 	var want_open: bool = _enabled and (_player_inside or _held or progress > 0.0)
 	_set_open(want_open)
-	_blocker_shape.set_deferred("disabled", want_open and is_open())
+	_blocker_shape.set_deferred("disabled", want_open and _can_pass())
 	if not is_equal_approx(progress, _progress):
 		_progress = progress
 		progress_changed.emit(progress)
@@ -225,7 +243,7 @@ func _setup_light() -> void:
 	_beam.material = beam_material
 	_beam.self_modulate = color
 	_beam.modulate.a = 0.0
-	var floor_y: float = FLOOR_ROW + 7.0
+	var floor_y: float = BEAM_BOTTOM_ROW
 	var start_x: float = FRAME_SIZE.x if inward > 0.0 else 0.0
 	var beam_x: float = start_x if inward > 0.0 else start_x - config.door_beam_length
 	_beam.position = Vector2(beam_x, floor_y - config.door_beam_height)
@@ -334,7 +352,7 @@ func _make_beam_texture(inward: float) -> Texture2D:
 		var t: float = float(x) / float(maxi(w - 1, 1))
 		# El borde de arriba arranca en la esquina de arriba del hueco y baja hacia la sala; el de
 		# abajo queda en el piso.
-		var top: float = lerpf(0.0, float(h) * 0.55, t)
+		var top: float = lerpf(0.0, BEAM_TOP_DROP, t)
 		for y: int in h:
 			var v: float = 0.0
 			if float(y) >= top:
