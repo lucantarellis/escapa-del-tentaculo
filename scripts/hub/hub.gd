@@ -7,8 +7,8 @@ extends Node2D
 ## Pantalla fija de 360×640: fondo animado (`hub_bg`), espacio por los ventanales (shader que
 ## deriva y rota despacio), paredes de la nave sin daño pintadas por terreno, techo con el hueco del
 ## ascensor, piso `floor_ship`, lámparas con su luz, puertas ([HubDoor]) y ascensor
-## ([HubElevator]). Al entrar por la puerta del Mercado hay fundido a negro y se abre el [Market];
-## al cerrarlo, el jugador vuelve delante de la puerta. Al soltar el ascensor la cámara lo sigue por
+## ([HubElevator]). Al entrar por una puerta hay fundido a negro y se abre [SettingsScreen] o
+## [Market]; al cerrarlo, el jugador vuelve delante de esa puerta. Al soltar el ascensor la cámara lo sigue por
 ## el hueco, el ambiente se oscurece hacia el de la partida y, al terminar la subida, fundido a negro
 ## y emite [signal launch_finished] (lo atiende [Main], que arranca la intro de la escotilla).
 ## Ver `docs/mecanicas/hub.md` y `docs/arte/hub.md`.
@@ -76,6 +76,7 @@ var _busy: bool = false
 @onready var _player: Player = $Player
 @onready var _camera: Camera2D = $Camera
 @onready var _market: Market = $Ui/Market
+@onready var _settings: SettingsScreen = $Ui/Settings
 @onready var _fade: ColorRect = $Ui/Fade
 
 
@@ -98,7 +99,8 @@ func _ready() -> void:
 	_player.global_position = PLAYER_SPAWN
 	_camera.position = SCREEN_SIZE * 0.5
 	_camera.make_current()
-	_market.closed.connect(_on_market_closed)
+	_market.closed.connect(_on_room_closed.bind(&"market"))
+	_settings.closed.connect(_on_room_closed.bind(&"settings"))
 	_fade.color = Color(0.0, 0.0, 0.0, 0.0)
 	_flip_rotation_timer()
 
@@ -305,23 +307,25 @@ func _build_elevator() -> void:
 
 # --- puertas --------------------------------------------------------------------------------
 
+# Fundido a negro, el jugador se congela y se abre Ajustes o el Mercado.
 func _on_door_entered(kind: StringName) -> void:
 	if _busy or _riding:
-		return
-	# Ajustes llega en el paso 8c del brief 08: por ahora la puerta solo se abre.
-	if kind != &"market":
 		return
 	_busy = true
 	_set_doors_enabled(false)
 	await _fade_to(1.0, config.door_fade_time)
 	_player.set_frozen(true)
-	_market.open()
+	if kind == &"market":
+		_market.open()
+	else:
+		_settings.open()
 	await _fade_to(0.0, config.door_fade_time)
 
 
-func _on_market_closed() -> void:
+# Al cerrar la pantalla, fundido y el jugador vuelve delante de esa puerta.
+func _on_room_closed(kind: StringName) -> void:
 	await _fade_to(1.0, config.door_fade_time)
-	var door: HubDoor = _doors[&"market"]
+	var door: HubDoor = _doors[kind]
 	_player.set_frozen(false)
 	_player.velocity = Vector2.ZERO
 	_player.global_position = door.get_return_point() - Vector2(0.0, PLAYER_HALF_HEIGHT)

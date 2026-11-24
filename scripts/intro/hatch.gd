@@ -49,6 +49,11 @@ const DEBRIS_SPIN: float = 8.0
 ## Apertura del cono del gas. Solo visual. Unidad: grados.
 const GAS_SPREAD_DEG: float = 35.0
 
+## Vibración del celular en cada golpe y en la ruptura (si está activa en Ajustes). Unidad: ms.
+## Solo visual.
+const HIT_VIBRATION_MS: int = 80
+const BREAK_VIBRATION_MS: int = 250
+
 ## Se emite cuando termina la animación de apertura de [method break_open].
 signal break_finished
 
@@ -110,6 +115,7 @@ func hit(strength: float) -> void:
 	_light_tween.tween_method(_apply_levels, level * (1.0 + _get_config().hatch_hit_flash), level, _get_config().hatch_light_fade)
 	_shake_visual(strength)
 	_burst_gas(roundi(_get_config().gas_amount * strength))
+	GameSettings.vibrate(HIT_VIBRATION_MS)
 
 
 ## Rompe la escotilla con animación: ráfaga grande de gas (`break_gas_amount`), fragmentos que
@@ -121,6 +127,7 @@ func break_open() -> void:
 		return
 	var cfg: IntroConfig = _get_config()
 	_broken = true
+	GameSettings.vibrate(BREAK_VIBRATION_MS)
 	if _shake_tween != null:
 		_shake_tween.kill()
 	_visual.position = Vector2.ZERO

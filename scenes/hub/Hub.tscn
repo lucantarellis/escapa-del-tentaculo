@@ -4,6 +4,7 @@
 [ext_resource type="Resource" path="res://resources/configs/hub_config.tres" id="2_cfg"]
 [ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="3_player"]
 [ext_resource type="PackedScene" path="res://scenes/ui/Market.tscn" id="4_market"]
+[ext_resource type="PackedScene" path="res://scenes/ui/Settings.tscn" id="5_settings"]
 
 [node name="Hub" type="Node2D"]
 script = ExtResource("1_hub")
@@ -17,6 +18,8 @@ config = ExtResource("2_cfg")
 layer = 90
 
 [node name="Market" parent="Ui" instance=ExtResource("4_market")]
+
+[node name="Settings" parent="Ui" instance=ExtResource("5_settings")]
 
 [node name="Fade" type="ColorRect" parent="Ui"]
 anchors_preset = 15

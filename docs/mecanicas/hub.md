@@ -13,7 +13,7 @@ Entrar al juego caminando por la nave **intacta e iluminada** (contraste con la 
 - **Combustible infinito:** el hub recarga el tanque en cada cuadro.
 - **Puertas (`HubDoor`):** se abren solas al entrar en el área de 48 px delante y se cierran al salir. Con la puerta abierta, caminar contra la pared 0,15 s entra. Al abrirse iluminan la sala (cian en Ajustes, ámbar en Mercado) con una luz en cono y un haz aditivo, con la intensidad atada a la animación y un titileo leve.
   - **Mercado:** fundido a negro, el jugador se congela y se abre el `Market`; al cerrarlo, fundido y el jugador vuelve delante de la puerta.
-  - **Ajustes:** por ahora solo se abre (la pantalla llega con el paso 8c del brief 08).
+  - **Ajustes:** igual, con la pantalla de Ajustes y créditos (`SettingsScreen`, ver `ajustes.md`).
 - **Ascensor (`HubElevator`):** plataforma a media pantalla (a ~280 px del piso: no se arranca sin querer) y dos mordazas con baliza. Parado encima 1 s → `arming` (ámbar); si se baja antes vuelve a `idle` (roja, late con el giro). Al completarse: `launched`, las mordazas se sueltan (`open`, verde) y se separan 6 px en 0,24 s; recién entonces se prenden las 4 llamas y la plataforma sube acelerando hasta 400 px/s con el jugador pegado (sin física ni input). La cámara la sigue por el hueco, y ambiente y lámparas se interpolan hacia la oscuridad de la partida. A los 560 px, fundido a negro y `launch_finished`.
 
 ## Flujo con `Main`
@@ -48,6 +48,6 @@ Entrar al juego caminando por la nave **intacta e iluminada** (contraste con la 
 
 1. F5: aparece el hub iluminado, con el fondo y el espacio moviéndose por los ventanales.
 2. Caminar hacia la derecha: la puerta del mercado se abre y tiñe la sala de ámbar. Seguir contra la pared: fundido y mercado. Volver: el jugador queda delante de la puerta.
-3. A la izquierda, la puerta de Ajustes se abre (cian) pero todavía no lleva a ninguna pantalla.
+3. A la izquierda, la puerta de Ajustes se abre (cian) y lleva a Ajustes.
 4. Volar hasta la plataforma: tras 1 s parado se arma (ámbar); bajarse la desarma. Quedarse: se sueltan las mordazas, se prenden las llamas, sube con la cámara y arranca la intro de la escotilla.
 5. Perder y Escape: vuelve al hub.

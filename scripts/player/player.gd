@@ -45,6 +45,10 @@ const BLINK_RATE: float = 12.0
 ## Múltiplos de `respawn_height` donde se busca un lugar libre al reaparecer. Estructural.
 const RESPAWN_SEARCH_SCALES: Array[float] = [1.0, 0.75, 0.5, 1.25, 1.5, 0.25]
 ## Máximo de plataformas rompibles que un mismo paso del dash puede romper en fila. Estructural.
+## Vibración del celular al recibir un golpe y al morir (si está activa en Ajustes). Unidad: ms.
+## Solo visual.
+const HIT_VIBRATION_MS: int = 80
+const DEATH_VIBRATION_MS: int = 200
 ## Carpeta de las hojas de efectos del jugador (PNG + JSON de Aseprite). Estructural.
 const FX_DIR: String = "res://assets/sprites/fx/"
 ## Escudo del botiquín (`player_shield`, óvalo que cubre al astronauta entero más la llama): centro
@@ -416,6 +420,7 @@ func die(cause: StringName) -> void:
 			_update_visuals(_last_thrust_direction)
 			hit_points_changed.emit(_hp, _max_hp)
 			hit_taken.emit(cause)
+			GameSettings.vibrate(HIT_VIBRATION_MS)
 			return
 	# Mejora Reaparecer: una vez por partida, en lugar de morir se vuelve más arriba.
 	if _can_respawn and not _respawn_used and not _no_respawn.has(cause):
@@ -429,6 +434,7 @@ func die(cause: StringName) -> void:
 	_show_thrust(false)
 	_update_cooldown_bar()
 	_update_leak()
+	GameSettings.vibrate(DEATH_VIBRATION_MS)
 	died.emit(cause)
 
 
