@@ -13,21 +13,21 @@ position = Vector2(268, -17)
 
 [node name="Platform2" parent="." unique_id=1297737392 instance=ExtResource("2_e3xlj")]
 position = Vector2(506, -99)
-size = Vector2(300, 30)
+size = Vector2(300, 12)
 platform_type = 4
 moves = true
 travel = Vector2(-180, 0)
 
 [node name="Platform3" parent="." unique_id=1757909525 instance=ExtResource("2_e3xlj")]
 position = Vector2(-154, -175)
-size = Vector2(300, 30)
+size = Vector2(300, 12)
 platform_type = 4
 moves = true
 travel = Vector2(180, 0)
 
 [node name="Platform4" parent="." unique_id=372161177 instance=ExtResource("2_e3xlj")]
 position = Vector2(504, -267)
-size = Vector2(300, 30)
+size = Vector2(300, 12)
 platform_type = 4
 moves = true
 travel = Vector2(-180, 0)
@@ -59,7 +59,7 @@ tile_map_data = PackedByteArray("AAAAAND/AAAMAAgAAAAAANH/AAAuAAAAAAAAANL/AAAuAAc
 
 [node name="Up1" parent="." instance=ExtResource("2_e3xlj")]
 position = Vector2(-154, -420)
-size = Vector2(300, 30)
+size = Vector2(300, 12)
 platform_type = 4
 moves = true
 travel = Vector2(180, 0)
@@ -71,7 +71,7 @@ platform_type = 1
 
 [node name="Up3" parent="." instance=ExtResource("2_e3xlj")]
 position = Vector2(504, -530)
-size = Vector2(300, 30)
+size = Vector2(300, 12)
 platform_type = 4
 moves = true
 travel = Vector2(-180, 0)

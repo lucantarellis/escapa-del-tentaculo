@@ -25,13 +25,13 @@ platform_type = 3
 [node name="Blink2" parent="." unique_id=1178747864 instance=ExtResource("plat")]
 position = Vector2(234, -138)
 rotation = 1.5707964
-size = Vector2(107.205, 12)
+size = Vector2(110, 12)
 platform_type = 4
 
 [node name="Blink3" parent="." unique_id=1054191267 instance=ExtResource("plat")]
 position = Vector2(114, -138)
 rotation = 1.5707964
-size = Vector2(60.34, 12)
+size = Vector2(60, 12)
 platform_type = 4
 
 [node name="FuelTank1" parent="." unique_id=557253307 instance=ExtResource("tank")]
@@ -50,7 +50,7 @@ platform_type = 3
 
 [node name="Up2" parent="." instance=ExtResource("plat")]
 position = Vector2(280, -470)
-size = Vector2(16, 50)
+size = Vector2(20, 12)
 platform_type = 4
 
 [node name="Up3" parent="." instance=ExtResource("plat")]

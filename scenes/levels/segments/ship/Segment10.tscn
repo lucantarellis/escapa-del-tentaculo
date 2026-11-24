@@ -20,7 +20,7 @@ platform_type = 0
 
 [node name="SweeperA" parent="." instance=ExtResource("plat")]
 position = Vector2(30, -190)
-size = Vector2(36, 18)
+size = Vector2(40, 12)
 platform_type = 4
 moves = true
 travel = Vector2(220, 0)
@@ -32,7 +32,7 @@ platform_type = 1
 
 [node name="SweeperB" parent="." instance=ExtResource("plat")]
 position = Vector2(280, -250)
-size = Vector2(36, 18)
+size = Vector2(40, 12)
 platform_type = 4
 moves = true
 travel = Vector2(-220, 0)
@@ -60,7 +60,7 @@ platform_type = 0
 
 [node name="Up2" parent="." instance=ExtResource("plat")]
 position = Vector2(30, -460)
-size = Vector2(36, 18)
+size = Vector2(40, 12)
 platform_type = 4
 moves = true
 travel = Vector2(220, 0)

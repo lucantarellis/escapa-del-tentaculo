@@ -1016,7 +1016,7 @@ func _skin_active() -> bool:
 # (mínimo 20) y el alto a 12. Al cargar una escena no se toca nada (el tipo todavía no está
 # asignado cuando se asigna `size`).
 func _snap_skin_size(value: Vector2) -> Vector2:
-	if not Engine.is_editor_hint() or not is_node_ready() or not SKIN_SHEETS.has(platform_type) or platform_type == PlatformType.LETHAL:
+	if not Engine.is_editor_hint() or not is_node_ready() or not SKIN_SHEETS.has(platform_type):
 		return value
 	var width: float = maxf(SKIN_MIN_WIDTH, roundf(value.x / SKIN_MODULE_WIDTH) * SKIN_MODULE_WIDTH)
 	return Vector2(width, SKIN_HEIGHT)

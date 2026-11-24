@@ -27,7 +27,7 @@ travel = Vector2(140, 0)
 
 [node name="Guard" parent="." instance=ExtResource("plat")]
 position = Vector2(300, -228)
-size = Vector2(16, 55)
+size = Vector2(20, 12)
 platform_type = 4
 
 [node name="BonusCrumble" parent="." instance=ExtResource("plat")]
@@ -63,7 +63,7 @@ travel = Vector2(140, 0)
 
 [node name="Up3" parent="." instance=ExtResource("plat")]
 position = Vector2(300, -510)
-size = Vector2(16, 55)
+size = Vector2(20, 12)
 platform_type = 4
 
 [node name="Up4" parent="." instance=ExtResource("plat")]
