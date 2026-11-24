@@ -49,6 +49,9 @@ extends Resource
 ## Energía de las alarmas rotas.
 @export var alarm_broken_energy: float = 0.3
 @export var alarm_radius: float = 50.0
+## Ajuste fino de la fase entre la luz y el tile de la alarma. Tendría que quedar en 0: la luz y el
+## tile comparten reloj. Si en pantalla la luz va adelantada o atrasada, mover de a 0,05. Unidad: s.
+@export_range(-1.0, 1.0, 0.01) var alarm_phase_offset: float = 0.0
 
 @export_group("Plataformas")
 ## Temporizada encendida (en el aviso parpadea; apagada no ilumina).

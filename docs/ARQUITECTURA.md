@@ -89,7 +89,8 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 |---|---|---|
 | `TentacleSea` | `scripts/tentacle/tentacle_sea.gd` (+ `tentacle_sea_config.gd`) | Mar de tentáculos del perseguidor en la nave. Ver `docs/mecanicas/tentaculo.md` |
 | `EmissiveMirror` | `scripts/levels/emissive_mirror.gd` | Capa emisiva de una capa de paredes: copia sus celdas con el tileset `*_emissive` sin sombreado |
-| `WallLights` | `scripts/levels/wall_lights.gd` | Luces de grietas y alarmas de las paredes de la nave |
+| `WallLights` | `scripts/levels/wall_lights.gd` | Luces de grietas y alarmas de las paredes de la nave (las alarmas siguen el cuadro del tile con `AlarmClock`) |
+| `AlarmClock` (autoload) | `scripts/managers/alarm_clock.gd` | Reloj compartido entre los tiles de alarma y sus luces |
 | `PlatformSkin` | `scripts/platforms/platform_skin.gd` | Módulos de sprites de las plataformas de la nave, animación por estado y propulsores |
 | `PickupSkin` | `scripts/pickups/pickup_skin.gd` | Aura, ítem y emisivo de los recogibles; `idle` y `collect` |
 | `ShipBackground` | `scripts/levels/ship_background.gd` (+ `ship_background_config.gd`, `shaders/background_layer.gdshader`) | Fondo en parallax de la nave. Ver `docs/arte/fondo-nave.md` |
