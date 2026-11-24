@@ -15,7 +15,7 @@ Entrar al juego caminando por la nave **intacta e iluminada** (contraste con la 
 - **Puertas (`HubDoor`):** se abren solas al entrar en el área de 90 px delante (la puerta ya está abierta cuando el jugador llega: el bloqueo del hueco se quita pasada la mitad de `opening`) y se cierran al salir. El hueco de la pared no tiene tiles ni colisión (`DOOR_HOLE_ROWS`, filas 47–50): un `Blocker` de la puerta lo tapa mientras no esté abierta del todo, así con la puerta abierta el jugador camina hacia adentro con su propio control. Pasado el borde de la pared se va desvaneciendo (`progress_changed`) y al llegar al centro del hueco entra (`entered`). Al abrirse iluminan la sala (cian en Ajustes, ámbar en Mercado) con una luz en cono y un haz aditivo, con la intensidad atada a la animación y un titileo leve.
   - **Mercado:** el jugador camina hasta el centro del hueco y se pierde en él; recién ahí funde a negro y se abre el `Market`. Al cerrarlo hay un solo fundido (la pantalla sigue a la vista hasta que está en negro y recién ahí se oculta), el jugador sale caminando del hueco y se funde de vuelta a la vista.
   - **Ajustes:** igual, con la pantalla de Ajustes y créditos (`SettingsScreen`, ver `ajustes.md`).
-- **Ascensor (`HubElevator`):** plataforma a media pantalla (a ~280 px del piso: no se arranca sin querer) y dos mordazas con baliza. Parado encima 1 s → `arming` (ámbar); si se baja antes vuelve a `idle` (roja, late con el giro). Al completarse: `launched`, las mordazas se sueltan (`open`, verde) y se separan 6 px en 0,24 s; recién entonces se prenden las 4 llamas y la plataforma sube acelerando hasta 400 px/s con el jugador pegado (sin física ni input). La cámara la sigue por el hueco, y ambiente y lámparas se interpolan hacia la oscuridad de la partida. A los 560 px, fundido a negro y `launch_finished`.
+- **Ascensor (`HubElevator`):** plataforma a media pantalla (a ~280 px del piso: no se arranca sin querer) y dos mordazas con baliza. Parado encima 1 s → `arming` (ámbar); si se baja antes vuelve a `idle` (roja, late con el giro). Al completarse: `launched`, las mordazas se sueltan (`open`, verde) y se separan 6 px en 0,24 s; recién entonces se prenden las 4 llamas y la plataforma sube acelerando hasta 400 px/s con el jugador pegado (sin física ni input). La **cámara queda fija** (antes seguía al ascensor y por arriba del hub se veía el fondo gris). A los 110 px (`elevator_ride_distance`) **golpea el alien**: el ascensor se traba (`stall`: baja 6 px y vuelve a la mitad, las llamas fallan, balizas rojas titilando), sacudón de cámara de 6 px que se calma a un temblor de 1,2 px, destello rojo de alarma en pantalla, ambiente más oscuro y las lámparas titilan teñidas de rojo, cada vez más apagadas. A los 1,8 s, **apagón** (`shut_down`; ambiente, lámparas y astronauta a negro en 0,1 s), fundido a negro, 0,5 s en negro y `launch_finished`. El apagón real de la partida queda para la escotilla.
 
 ## Flujo con `Main`
 
@@ -41,8 +41,15 @@ Entrar al juego caminando por la nave **intacta e iluminada** (contraste con la 
 | Ascensor | `elevator_arm_time` | 1,0 | s | Tiempo parado encima para armarlo |
 | Ascensor | `clamp_open_offset` / `clamp_open_time` | 6 / 0,24 | px, s | Apertura de las mordazas |
 | Ascensor | `elevator_max_speed` / `elevator_accel_time` | 400 / 1,2 | px/s, s | Subida |
-| Ascensor | `elevator_ride_distance` | 560 | px | Distancia hasta el fundido |
-| Ascensor | `launch_fade_time` | 0,3 | s | Fundido al terminar la subida |
+| Ascensor | `elevator_ride_distance` | 110 | px | Distancia que sube hasta el golpe del alien (la plataforma tiene que seguir en pantalla) |
+| Ascensor | `launch_fade_time` | 0,3 | s | Fundido a negro después del apagón |
+| Evento del alien | `alien_event_time` | 1,8 | s | Del golpe al apagón |
+| Evento del alien | `alien_hit_shake` / `alien_shake_decay` / `alien_rumble` | 6 / 5 / 1,2 | px, 1/s, px | Sacudón del golpe, cuánto tarda en calmarse y temblor que queda |
+| Evento del alien | `alien_stall_sag` | 6 | px | Cuánto baja la plataforma al trabarse |
+| Evento del alien | `alien_alarm_color` / `alien_alarm_period` / `alien_alarm_alpha` / `alien_lamp_red` | rojo / 0,6 / 0,12 / 0,7 | color, s, 0–1, 0–1 | Alarma: latido, destello de pantalla y tinte rojo de las lámparas |
+| Evento del alien | `alien_ambient_color` / `alien_ambient_time` | (0,42, 0,38, 0,44) / 0,3 | color, s | Ambiente durante el evento |
+| Evento del alien | `alien_flicker_min` / `_max` / `alien_flicker_off_start` / `_end` | 0,04 / 0,18 / 0,15 / 0,65 | s, 0–1 | Titileo de las lámparas: tiempo entre cambios y probabilidad de apagarse (sube hacia el apagón) |
+| Evento del alien | `alien_blackout_time` / `alien_black_hold` | 0,1 / 0,5 | s | Apagón y tiempo en negro antes de la partida |
 | Ascensor | `beacon_energy` / `beacon_radius` / `beacon_low_energy` | 0,8 / 60 / 0,25 | energía, px | Luz de las balizas |
 | Espacio | `space_drift_speed` / `space_drift_turn` | 3 / 0,05 | px/s, rad/s | Deriva |
 | Espacio | `space_rotation_speed` / `space_rotation_flip_min` / `_max` | 0 / 20 / 45 | °/s, s | Rotación (apagada: girar píxel art con muestreo exacto hacía píxeles más gordos y más finos en patrón de cuadrícula) |

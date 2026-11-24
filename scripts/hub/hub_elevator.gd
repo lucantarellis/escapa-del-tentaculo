@@ -6,8 +6,10 @@ extends Node2D
 ## (si se baja antes, vuelve a `idle`); al completarse, `launched`, las mordazas pasan a `open` y se
 ## separan con un tween; recién entonces se prenden las 4 llamas, emite [signal launch_started] y
 ## la plataforma sube acelerando hasta [member HubConfig.elevator_max_speed]. Al recorrer
-## [member HubConfig.elevator_ride_distance] emite [signal ride_finished]. El jugador no se mueve
-## solo durante la subida: el [Hub] lo lleva pegado a la plataforma. El origen del nodo es (0, 0)
+## [member HubConfig.elevator_ride_distance] emite [signal ride_finished] (el golpe del alien): el
+## [Hub] la traba con [method stall] (baja un poco, las llamas fallan y las balizas titilan en rojo)
+## y en el apagón la apaga con [method shut_down]. El jugador no se mueve solo durante la subida: el
+## [Hub] lo lleva pegado a la plataforma. El origen del nodo es (0, 0)
 ## del hub; las posiciones son las de `docs/arte/hub.md`.
 
 ## Hojas del ascensor y de las llamas. Estructural.
@@ -40,12 +42,16 @@ const THRUSTER_XS: Array[float] = [12.0, 28.0, 46.0, 62.0]
 const THRUSTER_Y: float = 17.0
 ## Margen para considerar que el jugador está parado encima (px). Estructural.
 const STAND_TOLERANCE: float = 3.0
+## Trabada: probabilidad por cuadro de que cada llama falle (se apague o vuelva) y período del
+## titileo rojo de las balizas (s). Solo visual.
+const SPUTTER_CHANCE: float = 0.18
+const STALL_BEACON_PERIOD: float = 0.25
 
-enum Phase { IDLE, ARMING, OPENING, RISING, DONE }
+enum Phase { IDLE, ARMING, OPENING, RISING, DONE, STALLED, OFF }
 
 ## Se soltaron las mordazas y la plataforma empieza a subir.
 signal launch_started
-## La plataforma recorrió la distancia de la subida.
+## La plataforma recorrió la distancia de la subida (momento del golpe del alien).
 signal ride_finished
 
 @export var config: HubConfig
@@ -162,7 +168,29 @@ func _physics_process(delta: float) -> void:
 			if _risen >= config.elevator_ride_distance:
 				_phase = Phase.DONE
 				ride_finished.emit()
+		Phase.STALLED:
+			for flame: SheetSprite in _thrusters:
+				if randf() < SPUTTER_CHANCE:
+					flame.visible = not flame.visible
 	_update_beacons()
+
+
+## Golpe del alien: la plataforma se frena de golpe, baja [member HubConfig.alien_stall_sag] px y
+## vuelve a la mitad; las llamas fallan y las balizas titilan en rojo.
+func stall() -> void:
+	_phase = Phase.STALLED
+	_speed = 0.0
+	var y: float = _car.position.y
+	var tween: Tween = create_tween()
+	tween.tween_property(_car, "position:y", y + config.alien_stall_sag, 0.08).set_ease(Tween.EASE_OUT)
+	tween.tween_property(_car, "position:y", y + config.alien_stall_sag * 0.5, 0.35).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+
+
+## Apagón: llamas y balizas apagadas.
+func shut_down() -> void:
+	_phase = Phase.OFF
+	for flame: SheetSprite in _thrusters:
+		flame.visible = false
 
 
 func _start_arming() -> void:
@@ -212,6 +240,11 @@ func _update_beacons() -> void:
 			energy = config.beacon_energy if strong else config.beacon_low_energy
 		Phase.ARMING:
 			color = BEACON_AMBER
+		Phase.STALLED:
+			var on: bool = fposmod(_time, STALL_BEACON_PERIOD) < STALL_BEACON_PERIOD * 0.5
+			energy = config.beacon_energy if on else 0.0
+		Phase.OFF:
+			energy = 0.0
 		_:
 			color = BEACON_GREEN
 	for beacon: PointLight2D in _beacons:

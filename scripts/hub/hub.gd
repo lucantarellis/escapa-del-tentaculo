@@ -8,9 +8,10 @@ extends Node2D
 ## deriva y rota despacio), paredes de la nave sin daño pintadas por terreno, techo con el hueco del
 ## ascensor, piso `floor_ship`, lámparas con su luz, puertas ([HubDoor]) y ascensor
 ## ([HubElevator]). Al entrar por una puerta hay fundido a negro y se abre [SettingsScreen] o
-## [Market]; al cerrarlo, el jugador vuelve delante de esa puerta. Al soltar el ascensor la cámara lo sigue por
-## el hueco, el ambiente se oscurece hacia el de la partida y, al terminar la subida, fundido a negro
-## y emite [signal launch_finished] (lo atiende [Main], que arranca la intro de la escotilla).
+## [Market]; al cerrarlo, el jugador vuelve delante de esa puerta. Al soltar el ascensor la plataforma
+## sube (la cámara queda fija) hasta que golpea el alien: se traba, tiembla todo, las lámparas titilan
+## en rojo con alarma y se corta la luz; en negro emite [signal launch_finished] (lo atiende [Main],
+## que arranca la intro de la escotilla).
 ## Ver `docs/mecanicas/hub.md` y `docs/arte/hub.md`.
 
 ## Carpetas del arte. Estructural.
@@ -75,6 +76,17 @@ var _space_rot_dir: float = 1.0
 var _space_flip_left: float = 30.0
 var _lamp_lights: Array[PointLight2D] = []
 var _lamp_energies: PackedFloat32Array = PackedFloat32Array()
+var _lamp_colors: Array[Color] = []
+var _lamp_emissives: Array[Sprite2D] = []
+## Evento del alien: activo, segundos desde el golpe, temblor del sacudón que queda, nivel de cada
+## lámpara (0–1) y cuándo cambia, y factor de luz general (1 = normal, 0 = apagón).
+var _event_active: bool = false
+var _event_time: float = 0.0
+var _jolt: float = 0.0
+var _lamp_levels: PackedFloat32Array = PackedFloat32Array()
+var _lamp_next: PackedFloat32Array = PackedFloat32Array()
+var _power: float = 1.0
+var _alarm: ColorRect
 var _doors: Dictionary = {}
 var _floor_columns: PackedInt32Array = PackedInt32Array()
 var _elevator: HubElevator
@@ -113,6 +125,7 @@ func _ready() -> void:
 	_market.closed.connect(_on_room_closed.bind(&"market"))
 	_settings.closed.connect(_on_room_closed.bind(&"settings"))
 	_fade.color = Color(0.0, 0.0, 0.0, 0.0)
+	_build_alarm()
 	_flip_rotation_timer()
 	if show_start_screen:
 		_show_start_screen()
@@ -152,16 +165,14 @@ func _process(delta: float) -> void:
 	_update_space(delta)
 	_update_player_tint()
 	if _riding:
+		# La cámara queda fija: la plataforma no sale de pantalla antes del apagón.
 		_player.global_position = _elevator.get_car_position() + _ride_offset
-		_camera.position.y = SCREEN_SIZE.y * 0.5 + (_elevator.get_car_position().y - HubElevator.PLATFORM_POSITION.y)
-		var t: float = _elevator.get_ride_ratio()
-		_ambient.color = config.ambient_color.lerp(LevelLighting.get_config().ambient_color, t)
-		for index: int in _lamp_lights.size():
-			_lamp_lights[index].energy = _lamp_energies[index] * (1.0 - t)
+	if _event_active:
+		_update_alien_event(delta)
 
 
-# El astronauta se dibuja sin sombreado: lo tiñe la luz del hub (tono base y puertas abiertas). Al
-# subir en el ascensor el tono vuelve a blanco, como en la partida.
+# El astronauta se dibuja sin sombreado: lo tiñe la luz del hub (tono base y puertas abiertas; las
+# lámparas las suma el propio [Player]). En el apagón se oscurece con el resto.
 func _update_player_tint() -> void:
 	var tint: Color = config.player_shade
 	var player_point: Vector2 = _player.global_position
@@ -171,9 +182,7 @@ func _update_player_tint() -> void:
 		var strength: float = door.get_light_strength(player_point) * config.player_door_tint
 		if strength > 0.0:
 			tint = tint.lerp(door.get_light_color() * 1.15, strength)
-	if _riding:
-		tint = tint.lerp(Color.WHITE, _elevator.get_ride_ratio())
-	_player.set_environment_tint(tint)
+	_player.set_environment_tint(Color(tint.r * _power, tint.g * _power, tint.b * _power, tint.a))
 
 
 func _exit_tree() -> void:
@@ -317,6 +326,7 @@ func _add_lamp(sheet: String, at: Vector2, flip: bool) -> void:
 	emissive.flip_h = flip
 	lamp.add_child(emissive)
 	add_child(lamp)
+	_lamp_emissives.append(emissive)
 
 
 func _add_light(color: Color, energy: float, radius: float, at: Vector2) -> void:
@@ -326,6 +336,7 @@ func _add_light(color: Color, energy: float, radius: float, at: Vector2) -> void
 	add_child(light)
 	_lamp_lights.append(light)
 	_lamp_energies.append(energy)
+	_lamp_colors.append(color)
 
 
 func _build_floor() -> void:
@@ -456,9 +467,83 @@ func _on_launch_started() -> void:
 	_ride_offset = _player.global_position - _elevator.get_car_position()
 
 
+# Golpe del alien al llegar arriba: ascensor trabado, temblor, alarma y titileo; al terminar,
+# apagón y negro.
 func _on_ride_finished() -> void:
+	_elevator.stall()
+	_event_active = true
+	_event_time = 0.0
+	_jolt = config.alien_hit_shake
+	_lamp_levels.resize(_lamp_lights.size())
+	_lamp_levels.fill(1.0)
+	_lamp_next.resize(_lamp_lights.size())
+	for index: int in _lamp_next.size():
+		_lamp_next[index] = randf_range(config.alien_flicker_min, config.alien_flicker_max)
+	var dim: Tween = create_tween()
+	dim.tween_property(_ambient, "color", config.alien_ambient_color, maxf(config.alien_ambient_time, 0.01))
+	await get_tree().create_timer(config.alien_event_time).timeout
+	await _blackout()
 	await _fade_to(1.0, config.launch_fade_time)
+	await get_tree().create_timer(config.alien_black_hold).timeout
 	launch_finished.emit()
+
+
+# Se corta la luz: lámparas, alarma, balizas y llamas apagadas; el ambiente y el astronauta a negro.
+func _blackout() -> void:
+	_elevator.shut_down()
+	var tween: Tween = create_tween().set_parallel(true)
+	var time: float = maxf(config.alien_blackout_time, 0.01)
+	tween.tween_property(_ambient, "color", Color.BLACK, time)
+	tween.tween_property(self, "_power", 0.0, time)
+	await tween.finished
+	_event_active = false
+	_camera.offset = Vector2.ZERO
+	_alarm.visible = false
+	for light: PointLight2D in _lamp_lights:
+		light.energy = 0.0
+	for emissive: Sprite2D in _lamp_emissives:
+		emissive.visible = false
+
+
+# Temblor, latido de la alarma y titileo de las lámparas (cada vez más apagadas hacia el apagón).
+func _update_alien_event(delta: float) -> void:
+	_event_time += delta
+	var progress: float = clampf(_event_time / maxf(config.alien_event_time, 0.01), 0.0, 1.0)
+	_jolt *= exp(-config.alien_shake_decay * delta)
+	var shake: float = (config.alien_rumble + _jolt) * _power
+	_camera.offset = Vector2(randf_range(-shake, shake), randf_range(-shake, shake)).round()
+	var pulse: float = 0.5 + 0.5 * sin(_event_time * TAU / maxf(config.alien_alarm_period, 0.01))
+	_alarm.visible = true
+	_alarm.color = Color(config.alien_alarm_color, config.alien_alarm_alpha * pulse * _power)
+	var off_chance: float = lerpf(config.alien_flicker_off_start, config.alien_flicker_off_end, progress)
+	for index: int in _lamp_lights.size():
+		_lamp_next[index] -= delta
+		if _lamp_next[index] <= 0.0:
+			_lamp_next[index] = randf_range(config.alien_flicker_min, config.alien_flicker_max)
+			var roll: float = randf()
+			_lamp_levels[index] = 0.0 if roll < off_chance else (0.35 if roll < off_chance + 0.2 else 1.0)
+		var level: float = _lamp_levels[index] * _power
+		var red: Color = _lamp_colors[index].lerp(config.alien_alarm_color, config.alien_lamp_red * pulse)
+		_lamp_lights[index].energy = _lamp_energies[index] * level
+		_lamp_lights[index].color = red
+		var emissive: Sprite2D = _lamp_emissives[index] if index < _lamp_emissives.size() else null
+		if emissive != null:
+			emissive.modulate = Color(Color.WHITE.lerp(config.alien_alarm_color, config.alien_lamp_red * pulse), level)
+
+
+# Destello rojo de la alarma: rectángulo aditivo a pantalla completa debajo del fundido.
+func _build_alarm() -> void:
+	_alarm = ColorRect.new()
+	_alarm.name = "Alarm"
+	_alarm.size = SCREEN_SIZE
+	_alarm.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_alarm.color = Color(config.alien_alarm_color, 0.0)
+	var additive: CanvasItemMaterial = CanvasItemMaterial.new()
+	additive.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	_alarm.material = additive
+	_alarm.visible = false
+	$Ui.add_child(_alarm)
+	$Ui.move_child(_alarm, _fade.get_index())
 
 
 func _fade_to(alpha: float, duration: float) -> void:

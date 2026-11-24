@@ -68,11 +68,11 @@ Pantalla fija de **360×640** (cámara quieta mientras el jugador está en el hu
 1. El jugador llega a la plataforma con el jetpack (está a ~280 px del piso, a propósito: no se arranca una partida sin querer).
 2. **Parado encima ~1 s** → `arming`. Si se baja antes, vuelve a `idle` (la tira se vacía).
 3. Al completar: `launched`; las mordazas pasan a `open` y **se separan con transición**: tween de 6 px hacia afuera en 0,24 s (ease-out), no de golpe. Recién cuando terminan de abrirse se prenden las 4 llamas y la plataforma arranca.
-4. La plataforma sube acelerando (ease-in hasta ~400 px/s) con el jugador encima (bloquear input). La **cámara la sigue** por el hueco; las luces del hub quedan abajo y el ambiente pasa a la oscuridad de la partida.
-5. Al llegar al nivel de la escotilla, fundido corto y arranca la intro (golpes) en el piso de inicio, como hoy.
+4. La plataforma sube acelerando (ease-in hasta ~400 px/s) con el jugador encima (bloquear input). La **cámara queda fija** (implementado así: seguirla mostraba el fondo gris por arriba del hub).
+5. A los ~110 px golpea el alien: el ascensor se traba, tiembla todo, alarma roja y las lámparas titilan; se corta la luz, fundido a negro y arranca la intro (golpes) en el piso de inicio. Ver `docs/mecanicas/hub.md`.
 
 ### Iluminación del hub (Godot)
 - La nave está intacta y **iluminada**, para contrastar con la partida a oscuras: `CanvasModulate` del hub mucho más claro que `dark_ambient` (p. ej. ~70–80 % de brillo, levemente frío) y menos niebla sobre el fondo.
 - `PointLight2D` por lámpara (las lámparas del arte son solo el emisivo): techo `#E7EFF2` (radio ~170 px), apliques `#C8E7EA` (radio ~90 px, más tenues); una luz suave general desde abajo-centro. Estas luces son las que se reflejan en el vidrio de los ventanales (`hub_window_glass`).
-- Al subir el ascensor, interpolar ambiente y luces hacia los valores de la partida.
+- Al subir el ascensor: evento del alien (titileo rojo y apagón), ver `docs/mecanicas/hub.md`.
 - Valores en un config del hub (`hub_config.tres` o en `LightingConfig`).

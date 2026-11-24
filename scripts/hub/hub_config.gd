@@ -52,14 +52,47 @@ extends Resource
 ## Velocidad máxima de la subida (px/s) y tiempo hasta alcanzarla (s).
 @export var elevator_max_speed: float = 400.0
 @export var elevator_accel_time: float = 1.2
-## Distancia que sube antes del fundido a la partida (px).
-@export var elevator_ride_distance: float = 560.0
-## Fundido a negro al terminar la subida. Unidad: s.
+## Distancia que sube hasta el golpe del alien (px). La cámara no se mueve: la plataforma tiene que
+## seguir en pantalla (reposo en y 316).
+@export var elevator_ride_distance: float = 110.0
+## Fundido a negro después del apagón, antes de pasar a la partida. Unidad: s.
 @export var launch_fade_time: float = 0.3
 ## Luz de cada baliza de las mordazas: energía, radio (px) y energía baja del latido rojo.
 @export var beacon_energy: float = 0.8
 @export var beacon_radius: float = 60.0
 @export var beacon_low_energy: float = 0.25
+
+@export_group("Evento del alien")
+## Al llegar a `elevator_ride_distance` el alien golpea la nave: el ascensor se traba, tiembla todo,
+## las lámparas titilan en rojo y se corta la luz; recién entonces se pasa a la partida.
+## Cuánto dura desde el golpe hasta el apagón. Unidad: s.
+@export var alien_event_time: float = 1.8
+## Temblor de la cámara: sacudón del golpe (px), cuánto tarda en calmarse (1/s, más = más rápido) y
+## temblor que queda mientras dura el evento (px).
+@export var alien_hit_shake: float = 6.0
+@export var alien_shake_decay: float = 5.0
+@export var alien_rumble: float = 1.2
+## Cuánto baja la plataforma al trabarse (px).
+@export var alien_stall_sag: float = 6.0
+## Alarma: color, período del latido (s), alfa máximo del destello rojo de pantalla (0–1) y cuánto
+## se tiñen de rojo las lámparas (0–1).
+@export var alien_alarm_color: Color = Color("F62A19")
+@export var alien_alarm_period: float = 0.6
+@export_range(0.0, 1.0, 0.01) var alien_alarm_alpha: float = 0.12
+@export_range(0.0, 1.0, 0.05) var alien_lamp_red: float = 0.7
+## Ambiente durante el evento (más oscuro que `ambient_color`) y en cuánto baja (s).
+@export var alien_ambient_color: Color = Color(0.42, 0.38, 0.44)
+@export var alien_ambient_time: float = 0.3
+## Titileo de las lámparas: tiempo entre cambios (s, mín. y máx.) y probabilidad de apagarse al
+## principio y al final del evento (0–1; sube de a poco hasta el apagón).
+@export var alien_flicker_min: float = 0.04
+@export var alien_flicker_max: float = 0.18
+@export_range(0.0, 1.0, 0.05) var alien_flicker_off_start: float = 0.15
+@export_range(0.0, 1.0, 0.05) var alien_flicker_off_end: float = 0.65
+## Apagón: en cuánto se va todo a negro (s) y cuánto se queda en negro antes de pasar a la partida
+## (s, después de `launch_fade_time`).
+@export var alien_blackout_time: float = 0.1
+@export var alien_black_hold: float = 0.5
 
 @export_group("Espacio")
 ## Opacidad del reflejo de las lámparas en el vidrio de los ventanales (0–1): más baja = más
