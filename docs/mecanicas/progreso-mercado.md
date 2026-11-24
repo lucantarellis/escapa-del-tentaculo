@@ -4,7 +4,7 @@
 
 ## Propósito
 
-Que el juego sea progresivo. Sin compras el jugador arranca con lo mínimo (100 de combustible, tanques de 60 y sin dash), y terminar los tres tiers es casi imposible. En cada partida junta monedas; con ellas compra nodos de un **árbol de talentos** en el mercado del título y la próxima partida es más alcanzable.
+Que el juego sea progresivo. Sin compras el jugador arranca con lo mínimo (100 de combustible, tanques de 60 y sin dash), y terminar los tres tiers es casi imposible. En cada partida junta monedas; con ellas compra nodos de un **árbol de talentos** en el mercado del hub y la próxima partida es más alcanzable.
 
 ## Modelo
 
@@ -12,7 +12,7 @@ Que el juego sea progresivo. Sin compras el jugador arranca con lo mínimo (100 
 - **Valores base** (`ProgressConfig`): combustible máximo e inicial 100 u, dash 0 px (sin dash; `can_dash()` da `false`). Los tanques dan lo que diga `fuel_tank_config.tres` (60) o más, según la carga comprada. Las monedas valen lo de `coin_config.tres` (1) o más, según la mejora.
 - **Monedas.** Se reparten solas en los segmentos intermedios (`CoinSpawner`, llamado por `LevelBuilder`) y se juntan tocándolas. Las de la partida se suman a las guardadas cuando termina (ganar, perder o R) o se cierra el juego; nunca se suman dos veces.
 - **Guardado:** `user://progress.cfg` (monedas y nodos comprados; los regalados no se guardan). Lleva `meta/tree_version`: si el archivo es de otra versión del árbol, se empieza de cero una sola vez. Los récords siguen en `user://records.cfg`.
-- **Compras con el nivel ya armado.** El `Player` escucha `upgrade_purchased` y reaplica el progreso (así lo comprado en el mercado del título vale en la primera partida).
+- **Compras con el nivel ya armado.** El `Player` escucha `upgrade_purchased` y reaplica el progreso (así lo comprado vale aunque el jugador ya esté creado).
 
 ## Árbol de talentos
 
@@ -121,11 +121,11 @@ El valor de cada moneda (`CoinConfig.value`, 1) y el vaivén están en `coin_con
 - `Coin.collected(value)`: `CoinSpawner` la conecta con `PlayerProgress.add_run_coins`.
 - `Player.is_dash_invulnerable()`, `get_hit_points()`, `get_max_hit_points()`, `is_hit_invulnerable()`, `can_respawn()`; señales `hit_points_changed(current, maximum)`, `hit_taken(cause)` y `respawned(at)`.
 - `PlayerProgress.progress_reset()`: se emite al hacer `reset_all()`; el `Player` vuelve a su config sin compras.
-- `Market.closed`, `Market.open()`, `Market.close()`, `Market.show_branch(id)`, `Market.get_node_button(id)`. El `TitleMenu` lo contiene y lo abre con su botón MERCADO; el HUD muestra las monedas de la partida arriba a la izquierda.
+- `Market.closed`, `Market.open()`, `Market.close()`, `Market.show_branch(id)`, `Market.get_node_button(id)`. El `Hub` lo contiene (`Ui/Market`) y lo abre al entrar por la puerta del Mercado; el HUD muestra las monedas de la partida arriba a la izquierda.
 
 ## Nodos
 
-`TitleMenu` → `Center/Box/MarketButton` y `Market` (pantalla completa, oculta). `Market` se arma por código (`scripts/ui/market.gd`; arte y medidas en `docs/arte/mercado.md`):
+`Hub` → `Ui/Market` (pantalla completa, oculta). `Market` se arma por código (`scripts/ui/market.gd`; arte y medidas en `docs/arte/mercado.md`):
 - **Arriba (y 0–207):** el puesto `market_booth` (tag `ambient` en bucle) y la cara del vendedor `market_face` en (134, 59), con una `PointLight2D` cian sobre la pantalla (roja durante `deny`). La cara reacciona: `enter` al abrir, `browse` mientras se mueve el foco por la lista (vuelve a `idle` tras 2 s quieto), `buy` al comprar, `deny` al tocar COMPRAR sin monedas y `exit` al salir (el mercado se cierra y emite `closed` cuando termina).
 - **Barra superior:** moneda + monedas guardadas, `+N compra gratis` y el botón **RESET**: el primer toque pide confirmación (`¿SÍ?` en rojo, se cancela a los 3 s o al salir del botón) y el segundo borra monedas y compras (los nodos regalados siguen).
 - **Solapas:** Movimiento (Dash y Velocidad), Supervivencia (Vida, Reparación y Tanque) y Economía (Monedas). Una rama nueva que no figure en `Market.TABS` va a la última solapa.
@@ -136,9 +136,9 @@ El valor de cada moneda (`CoinConfig.value`, 1) y el vaivén están en `coin_con
 ## Cómo probarlo
 
 1. Con el juego cerrado, poner `debug_min_coins = 200` en `progress_config.tres` para tener monedas de entrada (volver a 0 después).
-2. F5: en el título, MERCADO. La cara se prende y saluda. Cambiar de solapa, recorrer la lista (la cara mira la lista) y ver el detalle ("Te faltan N", "Requiere: …"). COMPRAR con monedas: la cara festeja; sin monedas: la pantalla se pone roja. Escape o Volver: la cara se apaga y se cierra.
+2. F5: en el hub, entrar por la puerta del Mercado (derecha). La cara se prende y saluda. Cambiar de solapa, recorrer la lista (la cara mira la lista) y ver el detalle ("Te faltan N", "Requiere: …"). COMPRAR con monedas: la cara festeja; sin monedas: la pantalla se pone roja. Escape o Volver: la cara se apaga y se cierra.
 3. JUGAR: sin compras, combustible 100 en la barra y Shift no hace nada. Con dash comprado, Shift lanza el dash (90 o 130 px). Con Propulsión veloz se acelera más rápido y se llega a 210 px/s. Con Dash gratis la barra de combustible no baja al dashear.
-4. Juntar monedas durante la partida (contador arriba a la izquierda); perder o ganar las guarda. Tras terminar, Escape vuelve al título y MERCADO muestra las monedas guardadas.
+4. Juntar monedas durante la partida (contador arriba a la izquierda); perder o ganar las guarda. Tras terminar, Escape vuelve al hub y el Mercado muestra las monedas guardadas.
 5. Con la invulnerabilidad: dashear contra un obstáculo o una trampa durante los primeros 2/3 del dash debería salvarte; el tentáculo y la caída siguen matando.
 6. Para jugar como antes: `enabled = false`.
 7. Compras gratis: con `debug_set_free_buys = 2` en `progress_config.tres` (volver a -1 después) el mercado muestra `+2 compras gratis` y los nodos dicen GRATIS; al comprar uno baja a 1 y no se gastan monedas. Jugando de verdad: cruzar al espacio (o al alien) por primera vez muestra el aviso y suma 1. RESET devuelve las gratis.
@@ -146,6 +146,6 @@ El valor de cada moneda (`CoinConfig.value`, 1) y el vaivén están en `coin_con
 
 ## Limitaciones conocidas
 
-- El mercado solo se abre desde el título. Tras ganar o perder, Escape vuelve al título y R repite la partida directo (sin título). No hay pausa durante la partida.
+- El mercado solo se abre desde el hub. Tras ganar o perder, Escape vuelve al hub y R repite la partida directo. No hay pausa durante la partida.
 - Reparador I, II y III ya funcionan (ver `reparadores.md`). Escudo 10 s y Escudo eterno (rama Repara) también funcionan.
 - Las monedas se reparten automáticamente y no hay forma de ubicarlas a mano en un segmento.

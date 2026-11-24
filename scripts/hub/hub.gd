@@ -18,6 +18,7 @@ const HUB_DIR: String = "res://assets/sprites/environment/hub/"
 const DOORS_DIR: String = "res://assets/sprites/environment/hub_doors/"
 const WALLS_SCENE: PackedScene = preload("res://scenes/levels/WallsShip.tscn")
 const SPACE_SHADER: Shader = preload("res://shaders/hub_space.gdshader")
+const START_SCREEN_SCRIPT: Script = preload("res://scripts/ui/start_screen.gd")
 ## Tamaño de la pantalla (px). Estructural.
 const SCREEN_SIZE: Vector2 = Vector2(360.0, 640.0)
 ## Paredes en celdas de 12 px: columnas de cada pared lateral, columnas del techo (a los lados del
@@ -56,6 +57,9 @@ const PLAYER_HALF_HEIGHT: float = 12.0
 signal launch_finished
 
 @export var config: HubConfig
+## Si es true, el hub arranca con la pantalla de inicio encima ([StartScreen]) y el jugador sin
+## control hasta tocar. [Main] la pide solo al abrir el juego.
+@export var show_start_screen: bool = false
 
 var _ambient: CanvasModulate
 var _space: ColorRect
@@ -103,6 +107,25 @@ func _ready() -> void:
 	_settings.closed.connect(_on_room_closed.bind(&"settings"))
 	_fade.color = Color(0.0, 0.0, 0.0, 0.0)
 	_flip_rotation_timer()
+	if show_start_screen:
+		_show_start_screen()
+
+
+# Pantalla de inicio encima del hub en vivo; el jugador queda quieto (visible) hasta tocar.
+func _show_start_screen() -> void:
+	_busy = true
+	_player.set_physics_process(false)
+	var start: StartScreen = START_SCREEN_SCRIPT.new() as StartScreen
+	start.name = "StartScreen"
+	$Ui.add_child(start)
+	$Ui.move_child(start, _fade.get_index())
+	start.started.connect(_on_start_screen_started.bind(start))
+
+
+func _on_start_screen_started(start: StartScreen) -> void:
+	start.queue_free()
+	_player.set_physics_process(true)
+	_busy = false
 
 
 func _physics_process(_delta: float) -> void:
@@ -130,6 +153,11 @@ func get_player() -> Player:
 ## Devuelve la puerta `settings` o `market`. Sirve para pruebas.
 func get_door(kind: StringName) -> HubDoor:
 	return _doors.get(kind) as HubDoor
+
+
+## Devuelve la pantalla de inicio si se está mostrando (null si no). Sirve para pruebas.
+func get_start_screen() -> StartScreen:
+	return get_node_or_null("Ui/StartScreen") as StartScreen
 
 
 ## Devuelve el ascensor. Sirve para pruebas.

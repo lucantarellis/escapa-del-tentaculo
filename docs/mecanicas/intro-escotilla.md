@@ -9,7 +9,7 @@ Darle contexto al arranque: al pulsar JUGAR el astronauta todavía no está en e
 
 ## Línea de tiempo (valores de `IntroConfig` por defecto)
 
-Tiempos medidos desde el fin del fundido del título (`TitleMenu.faded_out`), cuando `Main` llama a `LevelController.play_intro()`.
+Tiempos medidos desde que `Main` llama a `LevelController.play_intro()` (al terminar la subida del ascensor del hub).
 
 | t (s) | Qué pasa |
 |---|---|
@@ -52,7 +52,7 @@ Quedan quietos la cámara (posición), el tentáculo (además oculto e inofensiv
 
 ## Cuándo NO se reproduce
 
-La intro corre cuando alguien llama a `LevelController.play_intro()`: `Main` al pulsar JUGAR y **también con cada R** (el nivel nuevo arranca en pausa y repite la intro, sin título). En `Level.tscn` solo (F6) no hay nadie que la llame: el nivel arranca con `autostart = true` y sin intro:
+La intro corre cuando alguien llama a `LevelController.play_intro()`: `Main` al terminar la subida del ascensor del hub y **también con cada R** (el nivel nuevo arranca en pausa y repite la intro, sin título). En `Level.tscn` solo (F6) no hay nadie que la llame: el nivel arranca con `autostart = true` y sin intro:
 
 - **`Level.tscn` con F6** (R recarga la escena, igual que antes).
 - La escotilla queda ya **rota** (`set_broken(true)`), el tentáculo activo desde el primer frame y el jugador aparece en el `PlayerSpawn` como antes (no se lo lanza). 

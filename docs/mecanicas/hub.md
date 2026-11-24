@@ -5,7 +5,7 @@
 
 ## Propósito
 
-Entrar al juego caminando por la nave **intacta e iluminada** (contraste con la partida a oscuras): Ajustes a la izquierda, Mercado a la derecha y el ascensor que lleva a la partida. Reemplaza al `TitleMenu` como entrada (`Main`).
+Entrar al juego caminando por la nave **intacta e iluminada** (contraste con la partida a oscuras): Ajustes a la izquierda, Mercado a la derecha y el ascensor que lleva a la partida. Reemplaza al `TitleMenu` como entrada (`Main`). Al abrir el juego se muestra con la pantalla de inicio encima (ver `pantalla-titulo.md`).
 
 ## Qué hay
 

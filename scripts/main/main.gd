@@ -3,7 +3,7 @@ extends Node
 ## Escena principal del juego: el hub (la nave intacta como menú) y, al subir el ascensor, la
 ## partida.
 ##
-## Al abrir muestra el [Hub]. Cuando el ascensor termina de subir (pantalla en negro), libera el
+## Al abrir muestra el [Hub] con la pantalla de inicio ([StartScreen]) encima. Cuando el ascensor termina de subir (pantalla en negro), libera el
 ## hub, instancia el nivel con [member LevelController.autostart] en `false`, llama a
 ## [method LevelController.play_intro] (intro de la escotilla: al romperse, el nivel empieza solo) y
 ## aclara la pantalla. Con R ([signal GameManager.restart_requested]) reconstruye solo el nivel y
@@ -30,7 +30,7 @@ var _going_to_hub: bool = false
 
 func _ready() -> void:
 	_fade.color = Color(0.0, 0.0, 0.0, 0.0)
-	_show_hub()
+	_show_hub(true)
 	GameManager.restart_requested.connect(_on_restart_requested)
 
 
@@ -72,8 +72,10 @@ func _spawn_level(autostart: bool) -> LevelController:
 	return level
 
 
-func _show_hub() -> void:
+# [param with_start] muestra la pantalla de inicio encima (solo al abrir el juego).
+func _show_hub(with_start: bool = false) -> void:
 	_hub = HUB_SCENE.instantiate() as Hub
+	_hub.show_start_screen = with_start
 	_hub_holder.add_child(_hub)
 	_hub.launch_finished.connect(_on_hub_launch_finished)
 

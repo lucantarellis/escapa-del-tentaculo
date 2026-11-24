@@ -18,9 +18,9 @@ Abrir la carpeta del proyecto desde Godot (Project Manager → Import → selecc
 
 Prototipo jugable con el arte final de la fase de la nave (astronauta, tentáculos, paredes, plataformas, fondo, recogibles, escotilla, ventanal e iluminación; el espacio y el alien siguen con placeholders): jugador con jetpack, plataformas, paredes con tiles, niveles armados por segmentos de 360 × 640 en tiers, intro de la escotilla, HUD y récord. El estado detallado está en `docs/ROADMAP.md`.
 
-`scenes/main/Main.tscn` es la escena principal (`run/main_scene`): muestra la pantalla de título (nombre del juego y un botón **JUGAR**) sobre el nivel ya armado y quieto (`scenes/levels/Level.tscn`). Al pulsar JUGAR el título se disuelve, una escotilla golpea tres veces (vibración de cámara y gas), se rompe, el jugador sale disparado hacia arriba, arranca el gameplay y poco después entra el tentáculo (ver `docs/mecanicas/intro-escotilla.md`); R reinicia directo al juego, repitiendo la intro (sin título). Ver `docs/mecanicas/pantalla-titulo.md`.
+`scenes/main/Main.tscn` es la escena principal (`run/main_scene`): muestra la pantalla de inicio (logo "RISE OR DIE", "TOCÁ PARA EMPEZAR") sobre el **hub**, la nave intacta como menú navegable (`scenes/hub/Hub.tscn`). En el hub el jugador camina y vuela: Ajustes a la izquierda, Mercado a la derecha y el ascensor a media pantalla, que sube y arranca la partida (`scenes/levels/Level.tscn`): una escotilla golpea tres veces, se rompe, el jugador sale disparado hacia arriba y poco después entra el tentáculo (ver `docs/mecanicas/intro-escotilla.md`). R reinicia directo al juego, repitiendo la intro. Ver `docs/mecanicas/hub.md` y `docs/mecanicas/pantalla-titulo.md`.
 
-El título tiene un botón **MERCADO** donde se gastan las monedas juntadas en mejoras permanentes (árbol de talentos: dash, dash invulnerable y gratis, tanques y cargas, propulsión veloz, monedas que valen más). Sin mejoras el jugador arranca con 100 de combustible y sin dash. Ver `docs/mecanicas/progreso-mercado.md`.
+El hub tiene la puerta del **Mercado**, donde se gastan las monedas juntadas en mejoras permanentes (árbol de talentos: dash, dash invulnerable y gratis, tanques y cargas, propulsión veloz, monedas que valen más). Sin mejoras el jugador arranca con 100 de combustible y sin dash. Ver `docs/mecanicas/progreso-mercado.md`.
 
 Durante la partida hay un HUD mínimo (barra de combustible a la izquierda y progreso del nivel a la derecha). Ver `docs/mecanicas/hud.md`.
 
@@ -31,7 +31,7 @@ Durante la partida hay un HUD mínimo (barra de combustible a la izquierda y pro
 | Propulsar (izquierda / derecha / arriba / abajo) | A D W S o flechas |
 | Saltar (solo sin combustible y apoyado en una superficie) | Espacio |
 | Dash lateral (gasta combustible, tiene enfriamiento) | Shift |
-| Reiniciar (directo al juego, sin volver al título) | R |
+| Reiniciar (directo al juego, sin volver al hub) | R |
 | Mostrar u ocultar el overlay de debug | F3 |
 
 ## Documentación
@@ -68,7 +68,7 @@ escapa-del-tentaculo/
 │   ├── goal/                # puerta de meta
 │   ├── pickups/
 │   ├── tentacle/
-│   ├── ui/                  # DebugOverlay, TitleMenu, Hud
+│   ├── ui/                  # DebugOverlay, Hud, Market, Settings
 │   └── levels/               # niveles jugables: Level.tscn (por segmentos)
 │       └── segments/         # segmentos (piezas de nivel reutilizables)
 ├── scripts/
@@ -77,10 +77,10 @@ escapa-del-tentaculo/
 │   ├── goal/
 │   ├── pickups/
 │   ├── tentacle/
-│   ├── main/                # main.gd (escena principal: título + nivel)
+│   ├── main/                # main.gd (escena principal: hub + nivel)
 │   ├── managers/            # game_manager.gd (autoload GameManager)
 │   ├── levels/              # level_controller.gd, level_builder.gd, level_segment.gd, level_config.gd
-│   └── ui/                  # debug_overlay.gd, title_menu.gd, title_config.gd, hud.gd
+│   └── ui/                  # debug_overlay.gd, hud.gd, market.gd, settings_screen.gd, start_screen.gd, ui_kit.gd
 ├── resources/
 │   ├── configs/            # Resource de configuración (.tres) con los valores de gameplay
 │   └── tilesets/

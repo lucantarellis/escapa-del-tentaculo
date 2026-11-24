@@ -1,59 +1,19 @@
-# Mecánica: pantalla de título y transición al juego
+# Mecánica: pantalla de inicio
 
-**Archivos:** `scenes/main/Main.tscn` + `scripts/main/main.gd` (`Main`), `scenes/ui/TitleMenu.tscn` + `scripts/ui/title_menu.gd` (`TitleMenu`), `scripts/ui/title_config.gd` (`TitleConfig`), `resources/configs/title_config.tres`.
-**Depende de:** `LevelController.autostart` / `begin()`, `GameManager.restart_requested`.
+**Archivos:** `scripts/ui/start_screen.gd` (`StartScreen`), `shaders/start_backdrop.gdshader`. La crea el `Hub` (`show_start_screen = true`) dentro de su capa `Ui`. Arte y medidas: `docs/arte/titulo.md`. Reemplaza al `TitleMenu` (borrado en el brief 08, 8d).
 
-## Propósito
+## Qué hace
 
-Que al abrir el juego (F5) se vea el título con un botón grande de jugar **sobre el nivel ya armado y quieto**; al pulsarlo el menú se disuelve y la partida arranca. R reinicia directo al juego, sin volver al título.
+Al abrir el juego, `Main` muestra el hub con la pantalla de inicio encima. El hub sigue vivo detrás (fondo animado, espacio por los ventanales), oscurecido, desenfocado ~1 px y con viñeta (shader sobre la pantalla: mezcla con `#0E1632` al 65 %). El jugador se ve pero no se mueve.
 
-## Flujo
+1. **Entrada:** `title_letters` baja desde y −220 hasta su lugar (0,5 s ease-out cúbica pasándose 10 px y 0,2 s de vuelta). Al llegar, `title_tentacles_back` y `title_tentacles_front` reproducen `emerge` (sale el humo y de ahí los tentáculos) y pasan a `idle` en bucle.
+2. **"TOCÁ PARA EMPEZAR"** (Tiny5 16 px `#E7EFF2`, centrado en (180, 520)) aparece y parpadea 0,6 s / 0,6 s. La versión (`v` + `application/config/version`) va abajo a la derecha en `#6689B7`.
+3. **Al tocar** (tecla, botón del joystick, toque o clic): el texto se oculta, todo se funde en 0,5 s, se libera y el jugador toma el control en el hub.
 
-1. **Abrir el juego.** `Main` (escena principal, `run/main_scene`) instancia `Level.tscn` con `autostart = false`: el nivel se arma (segmentos, jugador en el spawn, tope de cámara) pero queda **en pausa** (`process_mode = DISABLED` en su nodo raíz: no corren `_process`, física, timers ni tweens, así que no se mueven ni la cámara, ni el tentáculo, ni obstáculos y trampas). El `GameManager` sigue en `READY`. Encima se dibuja el `TitleMenu`. El overlay F3 sigue funcionando (se marca `PROCESS_MODE_ALWAYS` mientras el nivel está en pausa).
-1b. **MERCADO.** Un botón secundario (azul frío) abre el [`Market`](progreso-mercado.md) encima del título; VOLVER o Escape lo cierran y el foco vuelve a ese botón. Se oculta si `ProgressConfig.enabled` es `false`. Es la única forma de llegar al mercado: R no vuelve al título.
-2. **Pulsar JUGAR** (clic, Enter o Espacio; el botón tiene el foco al abrir). El botón se deshabilita (no se puede pulsar dos veces), pasa `fade_delay`, y el menú baja su opacidad a 0 en `fade_duration`. Al terminar emite `faded_out`.
-3. **Arranque.** `Main` elimina el menú y llama a `LevelController.play_intro()`: se reproduce la intro de la escotilla (tres golpes de cámara con gas; el nivel sigue en pausa y el `GameManager` en `READY`). En la ruptura de la escotilla el propio nivel empieza la partida (el equivalente a `LevelController.begin()`, sin activar todavía el tentáculo, que entra unos segundos después): se reanuda (`PROCESS_MODE_INHERIT`) y se llama a `GameManager.start_run(seed)` (`PLAYING`). La cuenta de `start_delay` de la cámara empieza recién ahí. Ver `docs/mecanicas/intro-escotilla.md`.
-4. **Reinicio (R).** `GameManager.restart()` pasa a `READY` y emite `restart_requested`. `Main` está conectado: saca el nivel actual del árbol, lo libera e instancia uno nuevo con `autostart = false` (seed nueva si `level_config.seed` = 0) y llama de inmediato a `play_intro()`: el nivel **repite la intro de la escotilla**, sin menú ni fundido. R **no hace nada** mientras el estado es `READY` (título o intro, hasta la ruptura).
-4b. **Volver al título (Escape).** Solo con la partida terminada (`WON` o `LOST`), la acción `ui_cancel` (Escape) hace que `Main` pida `GameManager.restart()` marcando que el reinicio es "al título": reconstruye el nivel (quieto, `autostart = false`, sin intro) y vuelve a instanciar un `TitleMenu` en `TitleLayer`. Desde ahí se puede abrir el mercado o volver a JUGAR (fundido, intro, partida). Durante la partida Escape no hace nada: no hay pausa. El mensaje de fin avisa de las dos opciones (R para repetir, Escape para el menú) gracias a `LevelController.show_menu_hint`, que solo activa `Main`.
-5. **Sin `Main`.** `Level.tscn` (F6) no tiene a nadie conectado a `restart_requested`: `restart()` recarga la escena como antes y arrancan solos (`autostart = true` por defecto).
-
-## Árbol de nodos de `Main`
-
-```
-Main (Node)                          scripts/main/main.gd
-├── LevelHolder (Node)               aquí vive la instancia de Level.tscn
-└── TitleLayer (CanvasLayer, capa 95)   encima del juego (HUD 80, mensaje de fin 90), debajo del overlay F3 (100)
-    └── TitleMenu (Control)          scenes/ui/TitleMenu.tscn
-        ├── Dim (ColorRect)          fondo oscuro semitransparente, para leer el título sin tapar el nivel
-        ├── Center → Box (VBox) → TitleLabel (Label) + PlayButton (Button) + MarketButton (Button)
-        └── Market (Control)         scenes/ui/Market.tscn, pantalla completa y oculta hasta pulsar MERCADO
-```
-
-## Configuración (`TitleConfig`, `resources/configs/title_config.tres`)
-
-| Grupo | Variable | Valor inicial | Unidad | Efecto |
-|---|---|---|---|---|
-| Transición | `fade_duration` | 0.8 | s | Duración del fundido del menú a transparente |
-| Transición | `fade_delay` | 0.0 | s | Espera entre pulsar el botón y empezar el fundido |
-| Textos | `title_text` | "Rise or Die" | — | Título del juego |
-| Textos | `play_text` | "JUGAR" | — | Texto del botón |
-
-Los textos no son gameplay; se dejan editables desde el inspector. Colores, tamaños de fuente y del botón son `const` visuales en `title_menu.gd`.
-
-## Señales y API
-
-| Elemento | Descripción |
-|---|---|
-| `TitleMenu.play_pressed` | Se pulsó el botón (una sola vez) |
-| `TitleMenu.faded_out` | Terminó el fundido. El menú no se elimina solo: lo hace `Main` |
-| `LevelController.autostart` (`@export`) | `false` = armar el nivel pero dejarlo en pausa. Asignar **antes** de `add_child` |
-| `LevelController.play_intro()` | Reproduce la intro de la escotilla y al terminar llama a `begin()`. Lo usa `Main` tras el fundido |
-| `LevelController.begin()` | Reanuda el nivel y llama a `GameManager.start_run()`. Idempotente. Deja el tentáculo activo y al jugador descongelado (empezar sin intro) |
-| `GameManager.restart_requested` | Se pidió reiniciar; si hay alguien conectado, el manager no recarga la escena |
+Tocar durante la entrada la saltea (queda en `idle` con el texto). Al volver de una partida (Escape tras ganar o perder) se vuelve al hub sin la pantalla de inicio.
 
 ## Cómo probarlo
 
-1. F5: se ve el título y el botón sobre el nivel; nada se mueve.
-2. Clic (o Enter/Espacio) en JUGAR: el menú se disuelve, la escotilla golpea tres veces con gas y luego la partida arranca y la cámara empieza a subir. Pulsar varias veces rápido no rompe nada.
-3. R durante la partida, tras ganar y tras perder: nivel nuevo con la intro de la escotilla, sin título. R en el título o durante la intro no hace nada.
-4. `Level.tscn` con F6: arranca solo y R lo recarga.
+1. F5: el logo cae con rebote, salen los tentáculos del humo y aparece el texto parpadeando; atrás se ve el hub oscuro.
+2. Tocar o apretar una tecla: se funde y se puede caminar.
+3. F5 y tocar enseguida: la entrada se saltea.
