@@ -27,10 +27,12 @@ extends Resource
 @export var door_light_flicker: float = 0.05
 ## Máscara aditiva del borde y el triángulo de la base del marco: alfa en la puerta abierta.
 @export_range(0.0, 1.0, 0.05) var door_base_mask_alpha: float = 0.6
-## Haz visible: alfa en la puerta, largo hacia la sala y alto en el hueco (px).
-@export var door_beam_alpha: float = 0.35
+## Haz visible: alfa en la puerta (cerca de 1 = tan brillante como el vidrio, así no hay corte),
+## largo hacia la sala y alto en el hueco (px), y cuán rápido se apaga (1 = lineal, más = más rápido).
+@export var door_beam_alpha: float = 0.9
 @export var door_beam_length: float = 80.0
 @export var door_beam_height: float = 74.0
+@export_range(1.0, 4.0, 0.1) var door_beam_falloff: float = 2.0
 ## Fundido a negro al entrar o salir de Ajustes / Mercado. Unidad: s.
 @export var door_fade_time: float = 0.25
 ## Cuánto camina el astronauta al salir de la puerta (del hueco al piso). Unidad: s.

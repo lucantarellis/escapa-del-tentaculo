@@ -420,11 +420,15 @@ func _make_beam_texture(inward: float) -> Texture2D:
 		# El borde de arriba arranca en la esquina de arriba del hueco y baja hacia la sala; el de
 		# abajo queda en el piso.
 		var top: float = lerpf(0.0, BEAM_TOP_DROP, t)
+		# Brillo a lo largo: 1 en la puerta (igual que el vidrio) y cae hasta 0. El borde de arriba
+		# es duro pegado a la puerta y se difumina al alejarse.
+		var along: float = pow(1.0 - t, config.door_beam_falloff)
+		var soft: float = lerpf(1.0, 6.0, t)
 		for y: int in h:
 			var v: float = 0.0
 			if float(y) >= top:
-				var edge: float = clampf((float(y) - top) / 6.0, 0.0, 1.0)
-				v = (1.0 - t) * edge
+				var edge: float = clampf((float(y) - top + 1.0) / soft, 0.0, 1.0)
+				v = along * edge
 			var px: int = x if inward > 0.0 else w - 1 - x
 			image.set_pixel(px, y, Color(1.0, 1.0, 1.0, v))
 	return ImageTexture.create_from_image(image)
