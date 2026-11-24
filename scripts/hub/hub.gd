@@ -150,6 +150,7 @@ func _physics_process(_delta: float) -> void:
 
 func _process(delta: float) -> void:
 	_update_space(delta)
+	_update_player_tint()
 	if _riding:
 		_player.global_position = _elevator.get_car_position() + _ride_offset
 		_camera.position.y = SCREEN_SIZE.y * 0.5 + (_elevator.get_car_position().y - HubElevator.PLATFORM_POSITION.y)
@@ -157,6 +158,27 @@ func _process(delta: float) -> void:
 		_ambient.color = config.ambient_color.lerp(LevelLighting.get_config().ambient_color, t)
 		for index: int in _lamp_lights.size():
 			_lamp_lights[index].energy = _lamp_energies[index] * (1.0 - t)
+
+
+# El astronauta se dibuja sin sombreado: lo tiñe la luz del hub (tono base y puertas abiertas). Al
+# subir en el ascensor el tono vuelve a blanco, como en la partida.
+func _update_player_tint() -> void:
+	var tint: Color = config.player_shade
+	var player_point: Vector2 = _player.global_position
+	for door: HubDoor in [_doors.get(&"settings"), _doors.get(&"market")]:
+		if door == null:
+			continue
+		var strength: float = door.get_light_strength(player_point) * config.player_door_tint
+		if strength > 0.0:
+			tint = tint.lerp(door.get_light_color() * 1.15, strength)
+	if _riding:
+		tint = tint.lerp(Color.WHITE, _elevator.get_ride_ratio())
+	_player.set_environment_tint(tint)
+
+
+func _exit_tree() -> void:
+	if is_instance_valid(_player):
+		_player.set_environment_tint(Color.WHITE)
 
 
 ## Devuelve el jugador del hub. Sirve para pruebas.

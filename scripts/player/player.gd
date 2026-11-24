@@ -1117,6 +1117,14 @@ func set_scripted(active: bool, direction: float = 0.0) -> void:
 	_update_visuals(Vector2.ZERO)
 
 
+## Tono con el que se dibuja el astronauta (multiplica sus sprites; blanco = su color). Como no se
+## sombrea (ver `LightingConfig.player_self_lit`), el [Hub] lo usa para que lo afecte la luz del
+## entorno, p. ej. la de una puerta abierta.
+func set_environment_tint(tint: Color) -> void:
+	_sprite.self_modulate = tint
+	_visor.self_modulate = tint
+
+
 ## Opacidad del cuerpo (0–1). La usa el [Hub] para que el astronauta se pierda en el hueco de la
 ## puerta.
 func set_body_alpha(alpha: float) -> void:

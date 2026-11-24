@@ -196,6 +196,22 @@ func _process(delta: float) -> void:
 	_update_entry()
 
 
+## Cuánto ilumina la puerta el punto [param point] (0–1, ya con su nivel y su parpadeo): 1 pegado al
+## hueco, baja linealmente hasta 0 al largo del haz, y 0 del lado de la pared. Es solo para teñir al
+## astronauta, que se dibuja sin sombreado.
+func get_light_strength(point: Vector2) -> float:
+	var distance: float = (point.x - _gap_x()) * _inward()
+	if distance < 0.0 or _level <= 0.001:
+		return 0.0
+	var flicker: float = 1.0 + config.door_light_flicker * sin(_time * FLICKER_SPEED) if is_open() else 1.0
+	return clampf(1.0 - distance / config.door_beam_length, 0.0, 1.0) * _level * flicker
+
+
+## Color de la luz de la puerta.
+func get_light_color() -> Color:
+	return Color("89D9EB") if kind == &"settings" else Color("F8B842")
+
+
 # La puerta está abierta, o ya casi (pasada la mitad de `opening`).
 func _can_pass() -> bool:
 	if is_open():

@@ -6,6 +6,11 @@ extends Resource
 @export_group("Ambiente")
 ## Color por el que se multiplica el hub (mucho más claro que la partida, levemente frío).
 @export var ambient_color: Color = Color(0.74, 0.77, 0.84)
+## Luz sobre el astronauta (se dibuja sin sombreado, ver `player_self_lit`): tono base en el hub
+## (parecido al ambiente, para que no resalte más que la sala) y cuánto lo tiñe la luz de una puerta
+## abierta (0–1) a medida que se acerca a ella.
+@export var player_shade: Color = Color(0.9, 0.93, 1.0)
+@export_range(0.0, 1.0, 0.05) var player_door_tint: float = 0.7
 ## Luces de techo: color, energía y radio (px).
 @export var ceiling_light_color: Color = Color("E7EFF2")
 @export var ceiling_light_energy: float = 0.9
