@@ -14,7 +14,8 @@ platform_type = 5
 
 [node name="Guard" parent="." unique_id=273032381 instance=ExtResource("plat")]
 position = Vector2(179, -295)
-size = Vector2(20, 12)
+rotation = 1.5707964
+size = Vector2(50, 12)
 platform_type = 4
 
 [node name="FuelTank1" parent="." unique_id=326663111 instance=ExtResource("tank")]

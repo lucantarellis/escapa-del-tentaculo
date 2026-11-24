@@ -22,7 +22,8 @@ travel = Vector2(180, 0)
 
 [node name="Guard" parent="." instance=ExtResource("plat")]
 position = Vector2(335, -135)
-size = Vector2(20, 12)
+rotation = 1.5707964
+size = Vector2(60, 12)
 platform_type = 4
 
 [node name="End" parent="." instance=ExtResource("plat")]
@@ -45,7 +46,8 @@ travel = Vector2(180, 0)
 
 [node name="Up2" parent="." instance=ExtResource("plat")]
 position = Vector2(335, -470)
-size = Vector2(20, 12)
+rotation = 1.5707964
+size = Vector2(60, 12)
 platform_type = 4
 
 [node name="Up3" parent="." instance=ExtResource("plat")]
