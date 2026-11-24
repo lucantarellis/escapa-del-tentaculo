@@ -62,11 +62,16 @@ extends Resource
 @export var beacon_low_energy: float = 0.25
 
 @export_group("Espacio")
+## Opacidad del reflejo de las lámparas en el vidrio de los ventanales (0–1): más baja = más
+## translúcido y solo se nota donde llega la luz.
+@export_range(0.0, 1.0, 0.05) var window_glass_alpha: float = 0.35
 ## Velocidad de la deriva del espacio por los ventanales (px/s) y qué tan rápido cambia su
 ## dirección (rad/s).
 @export var space_drift_speed: float = 3.0
 @export var space_drift_turn: float = 0.05
 ## Rotación de la vista (grados por segundo) y cada cuánto puede cambiar de sentido (s, mín. y máx.).
-@export var space_rotation_speed: float = 0.25
+## En 0 (por defecto) no rota: girar píxel art con muestreo exacto hace píxeles más gordos y más
+## finos que se mueven en patrón de cuadrícula.
+@export var space_rotation_speed: float = 0.0
 @export var space_rotation_flip_min: float = 20.0
 @export var space_rotation_flip_max: float = 45.0

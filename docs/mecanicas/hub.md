@@ -9,7 +9,7 @@ Entrar al juego caminando por la nave **intacta e iluminada** (contraste con la 
 
 ## Qué hay
 
-- **Sala fija de 360×640**: fondo animado `hub_bg`, espacio por los dos ventanales (shader: se repite, deriva ~3 px/s en una dirección que cambia despacio y rota ~0,25°/s cambiando de sentido cada 20–45 s), reflejo de las lámparas en el vidrio (`LIGHT_ONLY`), paredes de 24 px y techo con el hueco del ascensor pintados por código con el terreno de la nave (sin daño), piso `floor_ship` (fila 0 en y 596), lámparas con su `PointLight2D` y `CanvasModulate` claro (`ambient_color`).
+- **Sala fija de 360×640**: fondo animado `hub_bg`, espacio por los dos ventanales (shader: se repite, deriva ~3 px/s en una dirección que cambia despacio sin rotación: girar píxel art lo deformaba), reflejo de las lámparas en el vidrio (`LIGHT_ONLY`), paredes de 24 px y techo con el hueco del ascensor pintados por código con el terreno de la nave (sin daño), piso `floor_ship` (fila 0 en y 596), lámparas con su `PointLight2D` y `CanvasModulate` claro (`ambient_color`).
 - **Piso hasta el borde:** `ShipFloor` tiene la cara superior en y 596 y el frente alargado `FLOOR_EXTRA_DEPTH` (17 px) con la fila lisa `STRETCH_ROW` de `floor_ship` repetida, así llega a y 640 y no se ve fondo debajo. La colisión sigue en y 603. Las paredes laterales terminan detrás del piso (`WALL_LAST_ROW` 50).
 - **Combustible infinito:** el hub recarga el tanque en cada cuadro.
 - **Puertas (`HubDoor`):** se abren solas al entrar en el área de 90 px delante (la puerta ya está abierta cuando el jugador llega: el bloqueo del hueco se quita pasada la mitad de `opening`) y se cierran al salir. El hueco de la pared no tiene tiles ni colisión (`DOOR_HOLE_ROWS`, filas 47–50): un `Blocker` de la puerta lo tapa mientras no esté abierta del todo, así con la puerta abierta el jugador camina hacia adentro con su propio control. Pasado el borde de la pared se va desvaneciendo (`progress_changed`) y al llegar al centro del hueco entra (`entered`). Al abrirse iluminan la sala (cian en Ajustes, ámbar en Mercado) con una luz en cono y un haz aditivo, con la intensidad atada a la animación y un titileo leve.
@@ -45,7 +45,8 @@ Entrar al juego caminando por la nave **intacta e iluminada** (contraste con la 
 | Ascensor | `launch_fade_time` | 0,3 | s | Fundido al terminar la subida |
 | Ascensor | `beacon_energy` / `beacon_radius` / `beacon_low_energy` | 0,8 / 60 / 0,25 | energía, px | Luz de las balizas |
 | Espacio | `space_drift_speed` / `space_drift_turn` | 3 / 0,05 | px/s, rad/s | Deriva |
-| Espacio | `space_rotation_speed` / `space_rotation_flip_min` / `_max` | 0,25 / 20 / 45 | °/s, s | Rotación |
+| Espacio | `space_rotation_speed` / `space_rotation_flip_min` / `_max` | 0 / 20 / 45 | °/s, s | Rotación (apagada: girar píxel art con muestreo exacto hacía píxeles más gordos y más finos en patrón de cuadrícula) |
+| Espacio | `window_glass_alpha` | 0,35 | 0–1 | Opacidad del reflejo de las lámparas en el vidrio (la grilla de puntos de `hub_window_glass`) |
 
 ## Cómo probarlo
 

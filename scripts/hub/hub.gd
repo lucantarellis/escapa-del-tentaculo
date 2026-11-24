@@ -254,6 +254,7 @@ func _build_windows() -> void:
 		glass.name = "Glass"
 		glass.z_index = -8
 		glass.material = glass_material
+		glass.modulate.a = config.window_glass_alpha
 		add_child(glass)
 
 
