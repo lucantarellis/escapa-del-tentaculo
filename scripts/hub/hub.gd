@@ -35,6 +35,10 @@ const WALL_LAST_ROW: int = 52
 ## Piso: origen de `ShipFloor` (borde inferior; su fila 0 queda en y 596) y semilla. Estructural.
 const FLOOR_ORIGIN_Y: float = 623.0
 const FLOOR_SEED: int = 7
+## Segunda fila de piso debajo de la primera: tapa lo que queda hasta el borde de la pantalla (si no,
+## se ven las paredes y el fondo por debajo). Alto de un módulo y semilla propia. Estructural.
+const FLOOR_FILL_HEIGHT: float = 27.0
+const FLOOR_FILL_SEED: int = 11
 ## Ventanales, reflejo del vidrio (esquina superior izquierda). Estructural.
 const WINDOW_POSITIONS: Array[Vector2] = [Vector2(31.0, 46.0), Vector2(241.0, 46.0)]
 const GLASS_POSITIONS: Array[Vector2] = [Vector2(36.0, 51.0), Vector2(246.0, 51.0)]
@@ -317,6 +321,13 @@ func _build_floor() -> void:
 	floor_visual.floor_seed = FLOOR_SEED
 	body.add_child(floor_visual)
 	add_child(body)
+	var fill: ShipFloor = ShipFloor.new()
+	fill.name = "ShipFloorFill"
+	fill.hatch_x = -1.0
+	fill.width = SCREEN_SIZE.x
+	fill.floor_seed = FLOOR_FILL_SEED
+	fill.position = Vector2(0.0, FLOOR_ORIGIN_Y + FLOOR_FILL_HEIGHT)
+	add_child(fill)
 
 
 func _build_doors() -> void:
