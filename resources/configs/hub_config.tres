@@ -1,6 +1,10 @@
-[gd_resource type="Resource" script_class="HubConfig" format=3]
+[gd_resource type="Resource" script_class="HubConfig" format=3 uid="uid://0tgnvswi7kgm"]
 
-[ext_resource type="Script" path="res://scripts/hub/hub_config.gd" id="1_cfg"]
+[ext_resource type="Script" uid="uid://c3m6a4vffrss7" path="res://scripts/hub/hub_config.gd" id="1_cfg"]
 
 [resource]
 script = ExtResource("1_cfg")
+window_glass_alpha = 0.0
+space_drift_speed = 20.0
+space_drift_turn = 0.5
+space_rotation_speed = 1.0
