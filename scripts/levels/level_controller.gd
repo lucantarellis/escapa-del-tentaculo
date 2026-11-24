@@ -146,6 +146,10 @@ func _ready() -> void:
 		_player.set_frozen(true)
 		if _hatch != null:
 			_hatch.set_broken(false)
+			# Con intro la nave arranca con la luz encendida: los golpes la desestabilizan y la
+			# ruptura la apaga.
+			if _lighting != null and intro_config != null:
+				_lighting.set_lit(intro_config.intro_ambient_color)
 		# Nivel quieto: sin `_process`, física, timers ni tweens. El overlay F3 sigue activo.
 		process_mode = Node.PROCESS_MODE_DISABLED
 		if _debug_overlay != null:
@@ -194,12 +198,31 @@ func play_intro() -> void:
 	_intro_director = IntroDirector.new()
 	_intro_director.config = intro_config
 	add_child(_intro_director)
+	_intro_director.hit.connect(_on_intro_hit)
 	_intro_director.broken.connect(_on_intro_broken)
 	_intro_director.play(_hatch, _camera, _player, _tentacle)
 
 
-# La ruptura empieza la partida. El tentáculo sigue inactivo: lo hace entrar el director.
+# Cada golpe baja un poco la luz de base y la hace titilar (más fuerte cuanto más golpes) hasta el
+# golpe siguiente o, en el último, hasta la ruptura.
+func _on_intro_hit(index: int) -> void:
+	if _lighting == null:
+		return
+	var cfg: IntroConfig = intro_config
+	var dark: Color = LevelLighting.get_config().ambient_color
+	var drop: float = minf(cfg.light_drop_per_hit * float(index + 1), 1.0)
+	_lighting.fade_base(cfg.intro_ambient_color.lerp(dark, drop), cfg.light_drop_time)
+	var depth: float = minf(cfg.flicker_depth * pow(cfg.hit_escalation, float(index)), 1.0)
+	var last: bool = index >= cfg.hit_count - 1
+	var duration: float = cfg.pre_break_pause if last else cfg.hit_interval
+	_lighting.flicker(depth, duration, cfg.flicker_step_min, cfg.flicker_step_max)
+
+
+# La ruptura apaga la luz de golpe y empieza la partida. El tentáculo sigue inactivo: lo hace entrar
+# el director.
 func _on_intro_broken() -> void:
+	if _lighting != null:
+		_lighting.power_off(intro_config.power_off_time)
 	_begin(false)
 
 

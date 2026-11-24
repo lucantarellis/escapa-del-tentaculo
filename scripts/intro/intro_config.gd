@@ -64,6 +64,24 @@ extends Resource
 ## Duración de la subida del tentáculo desde fuera de pantalla hasta su posición. Unidad: s.
 @export var tentacle_entry_duration: float = 1.0
 
+@export_group("Luz del nivel")
+## El nivel arranca con la luz de la nave encendida (como el hub), cada golpe de la escotilla la
+## desestabiliza y la ruptura la apaga: queda la oscuridad de la nave (`LightingConfig.ambient_color`).
+## Color por el que se multiplica el mundo al arrancar la intro (el del hub).
+@export var intro_ambient_color: Color = Color(0.74, 0.77, 0.84)
+## Cuánto se apaga de base la luz con cada golpe (0–1: 0 = nada, 1 = hasta la oscuridad de la nave)
+## y en cuánto tarda. Unidad: s.
+@export_range(0.0, 1.0, 0.01) var light_drop_per_hit: float = 0.12
+@export var light_drop_time: float = 0.15
+## Titileo de cada golpe: cuánto cae la luz (0–1) en el primer golpe, se multiplica por
+## `hit_escalation` en cada golpe (tope 1), y tiempo entre cambios bruscos (mín. y máx.). Unidad: s.
+## El del último golpe dura hasta la ruptura y los demás hasta el golpe siguiente.
+@export_range(0.0, 1.0, 0.01) var flicker_depth: float = 0.35
+@export var flicker_step_min: float = 0.03
+@export var flicker_step_max: float = 0.12
+## Corte de luz de la ruptura: en cuánto se va a la oscuridad de la nave. Unidad: s.
+@export var power_off_time: float = 0.08
+
 @export_group("Luz de la escotilla")
 ## La escotilla tiene tres luces que siguen el estado (cerrada → cada golpe → ruptura → rota):
 ## la luz que ilumina el entorno (piso, paredes, astronauta), un halo rojo visible alrededor y un

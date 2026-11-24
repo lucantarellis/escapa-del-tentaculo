@@ -4,7 +4,7 @@
 
 ## Modelo
 
-- **Oscuridad:** `Lighting` es un `CanvasModulate`. En los tiers con `SegmentTier.dark_ambient = true` (hoy "La nave") multiplica el mundo por `ambient_color` (~45 %); en los demás vuelve a blanco, con el mismo fundido que el fondo. Al romperse el ventanal de la salida se aclara junto con el cambio de fondo.
+- **Oscuridad:** `Lighting` es un `CanvasModulate`. En los tiers con `SegmentTier.dark_ambient = true` (hoy "La nave") multiplica el mundo por `ambient_color` (~45 %); en los demás vuelve a blanco, con el mismo fundido que el fondo. Al romperse el ventanal de la salida se aclara junto con el cambio de fondo. **Intro de la escotilla:** el nivel arranca con la luz encendida (`set_lit`, `IntroConfig.intro_ambient_color`), cada golpe la baja un poco y la hace titilar (`flicker`) y la ruptura la apaga (`power_off`) hasta la oscuridad de la nave. Con `autostart` (sin intro) arranca oscuro como siempre.
 - **Qué no se oscurece:** el fondo en parallax y las estrellas (`LevelBackground`, otra capa), el HUD y los menús (`CanvasLayer`), y todo lo que tiene material sin sombreado: capas emisivas de paredes, plataformas, piso, escotilla, recogibles y el aura de los recogibles. Comprobado con render real.
 - **Relieve:** paredes, plataformas, piso, escotilla, fragmentos y ventanal usan `CanvasTexture` con normal map, así que las luces marcan biseles, juntas y roturas según de dónde vienen. Las luces tienen altura (`light_height`, 40 px): con altura 0 la luz llega rasante y no ilumina lo plano.
 - **Luces** (todas `PointLight2D` sin sombras, textura radial compartida de `LevelLighting.make_light`):
@@ -33,6 +33,6 @@ Color de la oscuridad, altura de las luces, y color, energía y radio de cada ti
 
 ## Cómo probar
 
-1. F5 → JUGAR: la nave arranca oscura; la escotilla tiñe de rojo el piso al romperse y el astronauta ilumina lo que tiene cerca.
+1. F5 → JUGAR: la nave arranca con luz; los golpes la hacen titilar y al romperse la escotilla se corta la luz (queda la oscuridad), la escotilla tiñe de rojo el piso y el astronauta ilumina lo que tiene cerca.
 2. Subir: pasar junto a una temporizada (luz cian que parpadea antes de apagarse) y una de pulso (luz que titila con el rayo).
 3. Al romperse el ventanal, el mundo vuelve a la luz normal del espacio.

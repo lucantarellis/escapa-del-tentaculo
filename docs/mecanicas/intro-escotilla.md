@@ -13,11 +13,11 @@ Tiempos medidos desde que `Main` llama a `LevelController.play_intro()` (al term
 
 | t (s) | Qué pasa |
 |---|---|
-| 0.0 | Se ve el nivel quieto, la escotilla cerrada, **sin tentáculo ni jugador**. Estado `READY` |
-| 0.6 | Golpe 1 (fuerza ×1): vibración de cámara de 8 px, escotilla sacudida y algo abombada, ráfaga de gas |
-| 1.6 | Golpe 2 (fuerza ×1,3): 10,4 px |
-| 2.6 | Golpe 3 (fuerza ×1,69): 13,5 px |
-| 3.3 | **Ruptura** (`pre_break_pause` tras el último golpe): vibración fuerte de cámara (16 px, 0,6 s), ráfaga grande de gas (80 partículas), 6 fragmentos despedidos y las hojas se abren con rebote (tag `break`, 0,41 s; la luz roja hace un pico y queda media). En ese mismo instante el jugador **aparece en el centro superior de la escotilla** con `velocity.y = −560` (`launch_speed`) y **sin control** durante 0,5 s (`control_lock_time`). Empieza la partida: `LevelController` reanuda el nivel, estado `PLAYING`, HUD visible. La cámara empieza a subir 2 s después (su `start_delay`, sin cambios) |
+| 0.0 | Se ve el nivel quieto, la escotilla cerrada, **sin tentáculo ni jugador**. Estado `READY`. **La luz de la nave está encendida** (ambiente del hub, `intro_ambient_color`), no oscura: contrasta con la subida del ascensor y con lo que viene |
+| 0.6 | Golpe 1 (fuerza ×1): vibración de cámara de 8 px, escotilla sacudida y algo abombada, ráfaga de gas. **La luz se desestabiliza**: baja un poco de base y titila (cambios bruscos al azar) hasta el golpe siguiente |
+| 1.6 | Golpe 2 (fuerza ×1,3): 10,4 px. La luz baja otro poco y titila más fuerte |
+| 2.6 | Golpe 3 (fuerza ×1,69): 13,5 px. La luz titila a fondo hasta la ruptura |
+| 3.3 | **Ruptura** (`pre_break_pause` tras el último golpe): **se corta la luz** (en `power_off_time`, 0,08 s, queda la oscuridad de la nave), vibración fuerte de cámara (16 px, 0,6 s), ráfaga grande de gas (80 partículas), 6 fragmentos despedidos y las hojas se abren con rebote (tag `break`, 0,41 s; la luz roja hace un pico y queda media). En ese mismo instante el jugador **aparece en el centro superior de la escotilla** con `velocity.y = −560` (`launch_speed`) y **sin control** durante 0,5 s (`control_lock_time`). Empieza la partida: `LevelController` reanuda el nivel, estado `PLAYING`, HUD visible. La cámara empieza a subir 2 s después (su `start_delay`, sin cambios) |
 | 3.8 | Vuelve el control al jugador (ya subió ~256 px) |
 | 4.8 | `tentacle_entry_delay` (1,5 s) tras la ruptura: el tentáculo empieza a entrar desde debajo de la pantalla y es letal donde esté su borde superior |
 | 5.8 | `tentacle_entry_duration` (1 s): el tentáculo llegó a su posición normal y sigue como siempre |
@@ -79,6 +79,11 @@ La intro corre cuando alguien llama a `LevelController.play_intro()`: `Main` al 
 | Lanzamiento | `control_lock_time` | 0.5 | s | Tiempo sin control tras el lanzamiento |
 | Cámara | `camera_follow_margin` | 120.0 | px | Distancia mínima entre el jugador y el borde superior de la pantalla durante el vuelo |
 | Cámara | `camera_follow_max_time` | 3.0 | s | Tiempo máximo de seguimiento tras el lanzamiento |
+| Luz del nivel | `intro_ambient_color` | (0,74, 0,77, 0,84) | color | Ambiente con el que arranca la intro (el del hub) |
+| Luz del nivel | `light_drop_per_hit` / `light_drop_time` | 0,12 / 0,15 | 0–1, s | Cuánto se apaga de base la luz con cada golpe y en cuánto tarda |
+| Luz del nivel | `flicker_depth` | 0,35 | 0–1 | Caída del titileo del primer golpe (× `hit_escalation` por golpe, tope 1) |
+| Luz del nivel | `flicker_step_min` / `flicker_step_max` | 0,03 / 0,12 | s | Tiempo entre cambios bruscos del titileo |
+| Luz del nivel | `power_off_time` | 0,08 | s | Corte de luz de la ruptura |
 | Tentáculo | `tentacle_entry_delay` | 1.5 | s | Espera entre la ruptura y el inicio de la entrada |
 | Tentáculo | `tentacle_entry_duration` | 1.0 | s | Duración de la subida del tentáculo hasta su posición |
 

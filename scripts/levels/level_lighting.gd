@@ -20,22 +20,99 @@ const LIGHT_GROUP: StringName = &"env_lights"
 static var _light_textures: Dictionary = {}
 
 var _tween: Tween
+## Color de base (sin titileo) y multiplicador de titileo (1 = sin efecto): el color final es la
+## base por el multiplicador. Los usa la intro de la escotilla ([method set_lit], [method flicker]).
+var _base: Color = Color.WHITE
+var _flicker_level: float = 1.0
+var _flicker_tween: Tween
 
 
 func _ready() -> void:
 	color = Color.WHITE
 
 
-## Oscurece ([param dark] `true`) o aclara el mundo en [param fade] s (0 = ya).
-func set_dark(dark: bool, fade: float) -> void:
+# Los tweens son del árbol (corren con el nivel en pausa): al salir se cancelan para que no llamen a
+# un nodo liberado.
+func _exit_tree() -> void:
 	if _tween != null:
 		_tween.kill()
-	var target: Color = get_config().ambient_color if dark else Color.WHITE
+	if _flicker_tween != null:
+		_flicker_tween.kill()
+
+
+## Oscurece ([param dark] `true`) o aclara el mundo en [param fade] s (0 = ya).
+func set_dark(dark: bool, fade: float) -> void:
+	_fade_to(get_config().ambient_color if dark else Color.WHITE, fade)
+
+
+## Pone el mundo con la luz de la nave encendida ([param lit_color], como el hub) de golpe. Es el
+## arranque de la intro de la escotilla: después los golpes la desestabilizan ([method flicker]) y la
+## ruptura la apaga ([method power_off]).
+func set_lit(lit_color: Color) -> void:
+	_stop_flicker()
+	_fade_to(lit_color, 0.0)
+
+
+## Lleva el color de base a [param target] en [param fade] s (0 = ya), sin tocar el titileo.
+func fade_base(target: Color, fade: float) -> void:
+	_fade_to(target, fade)
+
+
+## Corte de luz: el mundo pasa a la oscuridad de la nave en [param fade] s y se cancela el titileo.
+func power_off(fade: float) -> void:
+	_stop_flicker()
+	_fade_to(get_config().ambient_color, fade)
+
+
+## Titileo de la luz durante [param duration] s: la luz cae a [param depth] (0–1, 1 = se apaga del
+## todo) en cambios bruscos al azar, separados [param step_min]–[param step_max] s, y al final
+## vuelve a la normal. Corre aunque el nivel esté en pausa (la intro).
+func flicker(depth: float, duration: float, step_min: float, step_max: float) -> void:
+	_stop_flicker()
+	_flicker_tween = get_tree().create_tween()
+	_flicker_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	var elapsed: float = 0.0
+	while elapsed < duration:
+		var step: float = randf_range(step_min, step_max)
+		var level: float = 1.0 - depth * (1.0 if randf() < 0.5 else randf_range(0.3, 0.8))
+		_flicker_tween.tween_callback(_set_flicker.bind(level))
+		_flicker_tween.tween_interval(step)
+		elapsed += step
+	_flicker_tween.tween_callback(_set_flicker.bind(1.0))
+
+
+func _fade_to(target: Color, fade: float) -> void:
+	if _tween != null:
+		_tween.kill()
 	if fade <= 0.0:
-		color = target
+		_base = target
+		_apply()
 		return
-	_tween = create_tween()
-	_tween.tween_property(self, "color", target, fade)
+	_tween = get_tree().create_tween()
+	_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_tween.tween_method(_set_base, _base, target, fade)
+
+
+func _set_base(value: Color) -> void:
+	_base = value
+	_apply()
+
+
+func _set_flicker(level: float) -> void:
+	_flicker_level = level
+	_apply()
+
+
+func _stop_flicker() -> void:
+	if _flicker_tween != null:
+		_flicker_tween.kill()
+		_flicker_tween = null
+	_flicker_level = 1.0
+	_apply()
+
+
+func _apply() -> void:
+	color = Color(_base.r * _flicker_level, _base.g * _flicker_level, _base.b * _flicker_level, _base.a)
 
 
 ## Config de iluminación (se carga una vez).
