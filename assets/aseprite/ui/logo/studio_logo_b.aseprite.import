@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://b8u45ln1lxklf"
+path="res://.godot/imported/studio_logo_b.aseprite-ae97379009ee809be4783cba4c998893.res"
+
+[deps]
+
+source_file="res://assets/aseprite/ui/logo/studio_logo_b.aseprite"
+dest_files=["res://.godot/imported/studio_logo_b.aseprite-ae97379009ee809be4783cba4c998893.res"]
+
+[params]
+

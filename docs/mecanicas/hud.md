@@ -19,9 +19,11 @@ Mostrar, de forma discreta y con estética de display del traje, cuánto combust
 - **Monedas** (arriba a la izquierda): ícono `coin` (18×18) en (6, 6) y el número de monedas juntadas en la partida con Tiny5 16 px `#89D9EB` y sombra de 1 px `#050609`; borde superior de los dígitos en (27, 12). Sigue a `PlayerProgress.run_coins_changed`; se oculta con el progreso apagado. Ver `progreso-mercado.md`.
 - **Vida** (debajo de la moneda, y 28): una celda `cell_full` / `cell_empty` (11×8, cada 13 px) por punto de golpe máximo, solo si el máximo es mayor que 1. Al perder una, parpadea 3 veces antes de quedar vacía. Siguen a `Player.hit_points_changed`.
 - **Escudo:** ícono `shield` a continuación de las celdas (+2 px; en su lugar si no se ven) mientras está activo (`Player.shield_changed`).
+- **Escala de la esquina de estado:** monedas, celdas y escudo se dibujan a `HudConfig.status_scale` (2× por defecto, solo enteros); las posiciones de arriba son las de 1×, y el conjunto se corre para que la moneda siga a 6 px del borde.
+- **Alerta de combustible crítico** (estilo FTL): con el tanque por debajo de `fuel_alert_threshold` (25 %) aparece, centrada arriba (dígitos en y 84), "COMBUSTIBLE N%" en Tiny5 16 px `#F62A19` dentro de un recuadro oscuro con borde rojo; el texto parpadea (0,45 s visible / 0,2 s oculto). Con el tanque vacío dice "SIN COMBUSTIBLE". Se oculta al morir.
 - **Enfriamiento del dash:** no es parte del HUD; lo dibuja `DashCooldownBar` sobre el jugador con `hud_dash_under/progress` (18×5, de izquierda a derecha). Ver `jugador.md`.
 
-Barras, íconos y líneas con opacidad 0,7 (`HUD_ALPHA`); monedas, celdas y escudo 0,9 (`STATUS_ALPHA`). Todo a 1× con filtro nearest. Los valores son `const` visuales en `hud.gd`; no hay valores de gameplay, por eso no tiene `Resource` de configuración.
+Barras, íconos y líneas con opacidad 0,7 (`HUD_ALPHA`); monedas, celdas y escudo 0,9 (`STATUS_ALPHA`). Filtro nearest. Las posiciones y colores son `const` visuales en `hud.gd`; la escala de la esquina de estado y la alerta de combustible están en `HudConfig` (`resources/configs/hud_config.tres`): `status_scale` (2), `fuel_alert_threshold` (0,25; 0 la apaga), `fuel_alert_on_time` (0,45 s), `fuel_alert_off_time` (0,2 s), `fuel_alert_text` y `fuel_empty_text`.
 
 ## Cómo se calcula el progreso
 

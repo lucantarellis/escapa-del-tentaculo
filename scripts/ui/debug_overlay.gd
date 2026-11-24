@@ -1,6 +1,7 @@
 class_name DebugOverlay
 extends CanvasLayer
-## Overlay de depuración que muestra el estado del [Player]. Se alterna con `debug_toggle` (F3).
+## Overlay de depuración que muestra el estado del [Player]. Arranca oculto; se alterna con
+## `debug_toggle` (F3).
 
 ## Jugador a observar. Se asigna desde el inspector o desde la escena que lo instancia.
 @export var player: Player

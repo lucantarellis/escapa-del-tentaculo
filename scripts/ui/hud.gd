@@ -64,6 +64,12 @@ const COIN_GLYPH_HEIGHT: float = 10.0
 ## Colores del número y de su sombra de 1 px. Solo visual.
 const COIN_COLOR: Color = Color("89D9EB")
 const TEXT_SHADOW_COLOR: Color = Color("050609")
+## Alerta de combustible crítico: color y borde superior de los dígitos. Solo visual.
+const FUEL_ALERT_COLOR: Color = Color("F62A19")
+const FUEL_ALERT_TOP: float = 84.0
+const FUEL_ALERT_BOX_COLOR: Color = Color(0.0196, 0.0235, 0.0353, 0.75)
+## Margen del recuadro alrededor del texto (x, y). Solo visual. Unidad: px.
+const FUEL_ALERT_PADDING: Vector2 = Vector2(6.0, 4.0)
 ## Posición de la primera celda de vida y paso entre celdas (px). Solo visual.
 const CELL_POSITION: Vector2 = Vector2(6.0, 28.0)
 const CELL_STEP: float = 13.0
@@ -75,6 +81,8 @@ const CELL_BLINK_HALF: float = 0.08
 
 ## Jugador a observar. Se asigna desde la escena que instancia el HUD.
 @export var player: Player
+## Escala de la vida y las monedas, y alerta de combustible (ver [HudConfig]).
+@export var config: HudConfig
 ## Tentáculo a observar para el relleno rojo y la calavera. Opcional: si queda vacío, no se
 ## muestran.
 @export var tentacle: Tentacle
@@ -92,6 +100,9 @@ var _cell_empty: Texture2D
 var _cells: Array[TextureRect] = []
 var _shown_hp: int = 0
 var _cell_tweens: Dictionary = {}
+var _fuel_alert: Label
+var _fuel_alert_box: Panel
+var _fuel_alert_time: float = 0.0
 
 @onready var _bars: Control = $Bars
 @onready var _fuel_bar: TextureProgressBar = $Bars/FuelBar
@@ -113,6 +124,8 @@ func _ready() -> void:
 	_top = (VIEWPORT_SIZE.y - BAR_HEIGHT) * 0.5
 	_bars.modulate.a = HUD_ALPHA
 	_status.modulate.a = STATUS_ALPHA
+	_apply_status_scale()
+	_make_fuel_alert()
 	_setup_bars()
 	_setup_markers()
 	_setup_coins()
@@ -137,7 +150,8 @@ func _ready() -> void:
 	_refresh_progress()
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	_update_fuel_alert(delta)
 	_refresh_progress()
 
 
@@ -400,3 +414,63 @@ func _place_shield() -> void:
 	var cell_h: float = float(_cell_full.get_height())
 	var y: float = CELL_POSITION.y + floorf((cell_h - float(_shield_icon.texture.get_height())) * 0.5)
 	_shield_icon.position = Vector2(x, y)
+
+
+# La esquina de estado (monedas, vida, escudo) se escala entera y se corre para que el ícono de la
+# moneda siga a EDGE_MARGIN del borde.
+func _apply_status_scale() -> void:
+	var factor: float = float(config.status_scale) if config != null else 1.0
+	_status.scale = Vector2.ONE * factor
+	_status.position = Vector2.ONE * EDGE_MARGIN - COIN_ICON_POSITION * factor
+
+
+# Alerta de combustible crítico: texto rojo que parpadea, centrado arriba, debajo de la vida.
+func _make_fuel_alert() -> void:
+	_fuel_alert = Label.new()
+	_fuel_alert.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_fuel_alert.visible = false
+	var font: Font = load(FONT_PATH) as Font
+	_fuel_alert.add_theme_font_override("font", font)
+	_fuel_alert.add_theme_font_size_override("font_size", COIN_FONT_SIZE)
+	_fuel_alert.add_theme_color_override("font_color", FUEL_ALERT_COLOR)
+	_fuel_alert.add_theme_color_override("font_shadow_color", TEXT_SHADOW_COLOR)
+	_fuel_alert.add_theme_constant_override("shadow_offset_x", 1)
+	_fuel_alert.add_theme_constant_override("shadow_offset_y", 1)
+	_fuel_alert.add_theme_constant_override("shadow_outline_size", 0)
+	_fuel_alert.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_fuel_alert.size = Vector2(VIEWPORT_SIZE.x, 20.0)
+	_fuel_alert.position = Vector2(0.0, FUEL_ALERT_TOP - roundf(font.get_ascent(COIN_FONT_SIZE) - COIN_GLYPH_HEIGHT))
+	# Recuadro oscuro con borde rojo detrás del texto (se ajusta al ancho del texto).
+	_fuel_alert_box = Panel.new()
+	_fuel_alert_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_fuel_alert_box.visible = false
+	var box: StyleBoxFlat = StyleBoxFlat.new()
+	box.bg_color = FUEL_ALERT_BOX_COLOR
+	box.border_color = FUEL_ALERT_COLOR
+	box.set_border_width_all(1)
+	box.anti_aliasing = false
+	_fuel_alert_box.add_theme_stylebox_override("panel", box)
+	add_child(_fuel_alert_box)
+	add_child(_fuel_alert)
+
+
+func _update_fuel_alert(delta: float) -> void:
+	if _fuel_alert == null or player == null or config == null:
+		return
+	var empty: bool = player.is_fuel_empty()
+	var low: bool = config.fuel_alert_threshold > 0.0 and _fuel_ratio < config.fuel_alert_threshold
+	if not (low or empty) or not player.is_alive():
+		_fuel_alert.visible = false
+		_fuel_alert_box.visible = false
+		_fuel_alert_time = 0.0
+		return
+	_fuel_alert.text = config.fuel_empty_text if empty else config.fuel_alert_text % ceili(_fuel_ratio * 100.0)
+	var period: float = config.fuel_alert_on_time + config.fuel_alert_off_time
+	_fuel_alert.visible = fmod(_fuel_alert_time, period) < config.fuel_alert_on_time
+	# El recuadro queda fijo; solo parpadea el texto.
+	var width: float = (_fuel_alert.get_theme_font("font") as Font).get_string_size(_fuel_alert.text, HORIZONTAL_ALIGNMENT_LEFT, -1, COIN_FONT_SIZE).x
+	var box_w: float = roundf(width) + FUEL_ALERT_PADDING.x * 2.0
+	_fuel_alert_box.position = Vector2(floorf((VIEWPORT_SIZE.x - box_w) * 0.5), FUEL_ALERT_TOP - FUEL_ALERT_PADDING.y)
+	_fuel_alert_box.size = Vector2(box_w, COIN_GLYPH_HEIGHT + FUEL_ALERT_PADDING.y * 2.0 + 1.0)
+	_fuel_alert_box.visible = true
+	_fuel_alert_time += delta
