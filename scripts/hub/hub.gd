@@ -111,20 +111,27 @@ func _ready() -> void:
 		_show_start_screen()
 
 
-# Pantalla de inicio encima del hub en vivo; el jugador queda quieto (visible) hasta tocar.
+# Pantalla de inicio encima del hub en vivo; el jugador no está en escena hasta tocar: entonces
+# aparece con la animación de reaparición mientras se funde la pantalla.
 func _show_start_screen() -> void:
 	_busy = true
-	_player.set_physics_process(false)
+	_player.set_frozen(true)
 	var start: StartScreen = START_SCREEN_SCRIPT.new() as StartScreen
 	start.name = "StartScreen"
 	$Ui.add_child(start)
 	$Ui.move_child(start, _fade.get_index())
+	start.starting.connect(_on_start_screen_starting)
 	start.started.connect(_on_start_screen_started.bind(start))
+
+
+func _on_start_screen_starting() -> void:
+	_player.set_frozen(false)
+	_player.velocity = Vector2.ZERO
+	_player.play_appear()
 
 
 func _on_start_screen_started(start: StartScreen) -> void:
 	start.queue_free()
-	_player.set_physics_process(true)
 	_busy = false
 
 

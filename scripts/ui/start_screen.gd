@@ -3,17 +3,21 @@ extends Control
 ## Pantalla de inicio sobre el hub en vivo: logo "RISE OR DIE" con entrada animada, "TOCÁ PARA
 ## EMPEZAR" y la versión.
 ##
-## Entrada: las letras (`title_letters`) bajan con un rebote leve; al llegar, los tentáculos de atrás
+## Entrada: tras una pausa corta (`INTRO_DELAY`, para que se vea el hub antes), las letras (`title_letters`) bajan con un rebote leve; al llegar, los tentáculos de atrás
 ## y de adelante reproducen `emerge` (salen del humo) y pasan a `idle` en bucle; recién ahí aparece
 ## el texto, que parpadea. Cualquier tecla, botón o toque durante la entrada la saltea; después,
-## empieza: el texto se oculta, todo se funde en 0,5 s y emite [signal started] (el [Hub] le da el
-## control al jugador). El fondo es un shader que oscurece, desenfoca y viñetea el hub.
+## empieza: el texto se oculta y emite [signal starting] (el [Hub] hace aparecer al jugador con la
+## animación de reaparición), todo se funde en 0,5 s y emite [signal started] (el [Hub] le da el
+## control al jugador). Las teclas (incluida la barra espaciadora) se leen en `_input`, antes que la
+## interfaz, así ningún botón con foco las consume. El fondo es un shader que oscurece, desenfoca y viñetea el hub.
 ## Ver `docs/mecanicas/pantalla-titulo.md` y `docs/arte/titulo.md`.
 
 const K = preload("res://scripts/ui/ui_kit.gd")
 ## Arte. Estructural.
 const TITLE_DIR: String = "res://assets/sprites/ui/title/"
 const BACKDROP_SHADER: Shader = preload("res://shaders/start_backdrop.gdshader")
+## Pausa antes de que empiecen a bajar las letras. Solo visual. Unidad: s.
+const INTRO_DELAY: float = 0.5
 ## Esquina superior izquierda del logo (los tres sprites). Solo visual.
 const LOGO_POSITION: Vector2 = Vector2(0.0, 110.0)
 ## Entrada de las letras: desde qué Y bajan, cuánto se pasan (rebote) y tiempos (s). Solo visual.
@@ -31,7 +35,9 @@ const VERSION_CENTER_Y: float = 628.0
 ## Fundido al empezar. Solo visual. Unidad: s.
 const FADE_OUT_TIME: float = 0.5
 
-## El jugador tocó para empezar y terminó el fundido.
+## El jugador tocó para empezar (empieza el fundido).
+signal starting
+## Terminó el fundido.
 signal started
 
 var _letters: Sprite2D
@@ -89,11 +95,7 @@ func _process(delta: float) -> void:
 	_prompt.visible = fmod(_blink_time, PROMPT_BLINK * 2.0) < PROMPT_BLINK
 
 
-func _gui_input(event: InputEvent) -> void:
-	_handle_press(event)
-
-
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	_handle_press(event)
 
 
@@ -136,6 +138,7 @@ func _make_tentacles(sheet: String) -> SheetSprite:
 # Las letras bajan, se pasan un poco y vuelven; al llegar salen los tentáculos del humo.
 func _play_intro() -> void:
 	_intro_tween = create_tween()
+	_intro_tween.tween_interval(INTRO_DELAY)
 	_intro_tween.tween_property(_letters, "position:y", LETTERS_BOUNCE, LETTERS_DROP_TIME).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	_intro_tween.tween_property(_letters, "position:y", 0.0, LETTERS_SETTLE_TIME).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
 	_intro_tween.tween_callback(_emerge)
@@ -172,6 +175,7 @@ func _start() -> void:
 	_starting = true
 	_prompt.visible = false
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	starting.emit()
 	var tween: Tween = create_tween()
 	tween.tween_property(self, "modulate:a", 0.0, FADE_OUT_TIME)
 	tween.tween_callback(func() -> void: started.emit())

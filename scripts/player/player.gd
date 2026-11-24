@@ -1102,6 +1102,12 @@ func _spawn_vanish(at: Vector2) -> void:
 	fx.play(&"vanish")
 
 
+## Hace aparecer al jugador con la animación de reaparición (haz y fundido), sin tocar la vida ni la
+## posición. Lo usa el [Hub] al empezar, después de [method set_frozen].
+func play_appear() -> void:
+	_play_respawn()
+
+
 # Haz en la nueva posición y fundido del astronauta desde el cuadro RESPAWN_FADE_FROM_FRAME de
 # `respawn`; después sigue el parpadeo de invulnerabilidad de siempre.
 func _play_respawn() -> void:
