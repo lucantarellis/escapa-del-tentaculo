@@ -37,9 +37,12 @@ const RETURN_DISTANCE: float = 32.0
 ## baja su borde de arriba en el extremo lejano (px). Solo visual.
 const BEAM_BOTTOM_ROW: float = 124.0
 ## Altura (fila del sprite) de la luz de la base, que alumbra el triángulo del marco. Solo visual.
-## Triángulo de la base del marco: filas que cubre (desde la 113, 8 filas) y frame de la hoja
-## donde se lee (el primero de `open`). Estructural.
-const BASE_ROWS: Vector2i = Vector2i(113, 120)
+## Partes del marco que dan a la sala y que el cono y el haz no alcanzan: el borde (2 px) y el
+## triángulo de la base. La máscara cubre las filas `MASK_ROWS` (el triángulo está en `TRIANGLE_ROWS`)
+## y se lee del frame `BASE_FRAME` de la hoja (el primero de `open`). Estructural.
+const MASK_ROWS: Vector2i = Vector2i(48, 120)
+const TRIANGLE_ROWS: Vector2i = Vector2i(113, 120)
+const LIP_ROWS: Vector2i = Vector2i(48, 110)
 const BASE_FRAME: int = 8
 const BASE_COLOR: Color = Color("324370")
 const BEAM_TOP_DROP: float = 37.0
@@ -242,13 +245,13 @@ func _setup_light() -> void:
 	_light.energy = 0.0
 	_light.height = LevelLighting.get_config().light_height
 	add_child(_light)
-	# El triángulo de la base del marco queda fuera del cono y del haz: una máscara aditiva sobre
-	# esos píxeles lo ilumina con el mismo color y el mismo nivel que la puerta.
+	# El borde del marco y el triángulo de la base quedan fuera del cono y del haz: una máscara aditiva
+	# sobre esos píxeles los ilumina con el color y el nivel de la puerta, sin corte con el haz.
 	_base_mask = Sprite2D.new()
 	_base_mask.name = "BaseMask"
 	_base_mask.texture = _make_base_mask()
 	_base_mask.centered = false
-	_base_mask.position = Vector2(0.0, BASE_ROWS.x)
+	_base_mask.position = Vector2(0.0, MASK_ROWS.x)
 	var mask_material: CanvasItemMaterial = CanvasItemMaterial.new()
 	mask_material.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
 	mask_material.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
@@ -267,7 +270,8 @@ func _setup_light() -> void:
 	_beam.self_modulate = color
 	_beam.modulate.a = 0.0
 	var floor_y: float = BEAM_BOTTOM_ROW
-	var start_x: float = FRAME_SIZE.x if inward > 0.0 else 0.0
+	# El haz arranca en la primera columna libre, justo donde termina el borde que cubre la máscara.
+	var start_x: float = FRAME_SIZE.x - 1.0 if inward > 0.0 else 1.0
 	var beam_x: float = start_x if inward > 0.0 else start_x - config.door_beam_length
 	_beam.position = Vector2(beam_x, floor_y - config.door_beam_height)
 	add_child(_beam)
@@ -366,31 +370,44 @@ static func _make_cone_texture(inward: float) -> Texture2D:
 	return ImageTexture.create_from_image(image)
 
 
-# Máscara blanca con los píxeles del triángulo de la base del marco (color del marco, conectados al
-# borde exterior de la puerta), leídos del frame abierto de la hoja.
+# Máscara blanca con los píxeles del marco que dan a la sala (color del marco): el borde interior
+# de 2 px y el triángulo de la base, leídos del frame abierto de la hoja.
 func _make_base_mask() -> Texture2D:
-	var rows: int = BASE_ROWS.y - BASE_ROWS.x + 1
-	var mask: Image = Image.create(int(FRAME_SIZE.x), rows, false, Image.FORMAT_RGBA8)
+	var width: int = int(FRAME_SIZE.x)
+	var rows: int = MASK_ROWS.y - MASK_ROWS.x + 1
+	var mask: Image = Image.create(width, rows, false, Image.FORMAT_RGBA8)
 	var sheet: Texture2D = load(SHEET_DIR + "door_" + String(kind) + ".png")
 	if sheet == null:
 		return ImageTexture.create_from_image(mask)
 	var source: Image = sheet.get_image()
-	var offset_x: int = BASE_FRAME * int(FRAME_SIZE.x)
-	var seed_x: int = int(FRAME_SIZE.x) - 2 if _inward() > 0.0 else 1
-	var pending: Array[Vector2i] = [Vector2i(seed_x, BASE_ROWS.x + 3)]
+	var offset_x: int = BASE_FRAME * width
+	var inner: bool = _inward() > 0.0
+	# Borde: las dos columnas pegadas al lado de la sala.
+	var lip_columns: Array[int] = []
+	lip_columns.assign([width - 3, width - 2] if inner else [1, 2])
+	for y: int in range(LIP_ROWS.x, LIP_ROWS.y + 1):
+		for x: int in lip_columns:
+			if _is_frame_pixel(source, offset_x + x, y):
+				mask.set_pixel(x, y - MASK_ROWS.x, Color.WHITE)
+	# Triángulo: pixeles del marco conectados al borde exterior de la puerta.
+	var pending: Array[Vector2i] = [Vector2i(width - 2 if inner else 1, TRIANGLE_ROWS.x + 3)]
 	while not pending.is_empty():
 		var cell: Vector2i = pending.pop_back()
-		if cell.x < 0 or cell.x >= int(FRAME_SIZE.x) or cell.y < BASE_ROWS.x or cell.y > BASE_ROWS.y:
+		if cell.x < 0 or cell.x >= width or cell.y < TRIANGLE_ROWS.x or cell.y > TRIANGLE_ROWS.y:
 			continue
-		if mask.get_pixel(cell.x, cell.y - BASE_ROWS.x).a > 0.0:
+		if mask.get_pixel(cell.x, cell.y - MASK_ROWS.x).a > 0.0:
 			continue
-		var pixel: Color = source.get_pixel(offset_x + cell.x, cell.y)
-		if pixel.a < 0.5 or not pixel.is_equal_approx(BASE_COLOR):
+		if not _is_frame_pixel(source, offset_x + cell.x, cell.y):
 			continue
-		mask.set_pixel(cell.x, cell.y - BASE_ROWS.x, Color.WHITE)
+		mask.set_pixel(cell.x, cell.y - MASK_ROWS.x, Color.WHITE)
 		for step: Vector2i in [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]:
 			pending.append(cell + step)
 	return ImageTexture.create_from_image(mask)
+
+
+static func _is_frame_pixel(image: Image, x: int, y: int) -> bool:
+	var pixel: Color = image.get_pixel(x, y)
+	return pixel.a >= 0.5 and pixel.is_equal_approx(BASE_COLOR)
 
 
 # Haz visible: sale del hueco, se abre hacia la sala y cae al piso. Columna 0 en la puerta.

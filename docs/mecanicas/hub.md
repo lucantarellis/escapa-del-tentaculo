@@ -33,7 +33,7 @@ Entrar al juego caminando por la nave **intacta e iluminada** (contraste con la 
 | Ambiente | `fill_light_energy` / `fill_light_radius` | 0,35 / 260 | energía, px | Luz suave general desde abajo |
 | Puertas | `door_trigger_width` | 90 | px | Área delante de la puerta que la abre |
 | Puertas | `door_light_energy` / `door_light_range` / `door_light_flicker` | 0,9 / 110 / 0,05 | energía, px, fracción | Luz al abrirse |
-| Puertas | `door_base_mask_alpha` | 0,4 | alfa | Máscara aditiva (leída del frame abierto) sobre el triángulo de la base del marco, que el cono y el haz no alcanzan |
+| Puertas | `door_base_mask_alpha` | 0,6 | alfa | Máscara aditiva (leída del frame abierto) sobre el borde interior y el triángulo de la base del marco, que el cono y el haz no alcanzan; el haz arranca donde termina el borde, sin corte |
 | Puertas | `door_beam_alpha` / `door_beam_length` / `door_beam_height` | 0,35 / 80 / 74 | alfa, px, px | Haz visible |
 | Puertas | `door_fade_time` | 0,25 | s | Fundido al entrar y salir |
 | Puertas | `door_walk_time` | 0,6 | s | Lo que camina el jugador al salir de la puerta (del hueco al piso) |
