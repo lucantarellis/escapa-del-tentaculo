@@ -3,7 +3,7 @@ extends Node
 ## Escena principal del juego: el hub (la nave intacta como menú) y, al subir el ascensor, la
 ## partida.
 ##
-## Al abrir muestra el [Hub] con la pantalla de inicio ([StartScreen]) encima. Cuando el ascensor termina de subir (pantalla en negro), libera el
+## Al abrir muestra el logo del estudio ([StudioLogo]) y después el [Hub] con la pantalla de inicio ([StartScreen]) encima. Cuando el ascensor termina de subir (pantalla en negro), libera el
 ## hub, instancia el nivel con [member LevelController.autostart] en `false`, llama a
 ## [method LevelController.play_intro] (intro de la escotilla: al romperse, el nivel empieza solo) y
 ## aclara la pantalla. Con R ([signal GameManager.restart_requested]) reconstruye solo el nivel y
@@ -13,6 +13,10 @@ extends Node
 
 ## Escena del nivel jugable. Estructural.
 const LEVEL_SCENE: PackedScene = preload("res://scenes/levels/Level.tscn")
+## Logo del estudio, antes de la pantalla de inicio ([StudioLogo]). Estructural.
+const STUDIO_LOGO_SCENE: PackedScene = preload("res://scenes/ui/StudioLogo.tscn")
+## Capa del logo del estudio (encima de todo). Estructural.
+const STUDIO_LOGO_LAYER: int = 110
 ## Escena del hub. Estructural.
 const HUB_SCENE: PackedScene = preload("res://scenes/hub/Hub.tscn")
 ## Fundido desde negro al arrancar la partida. Solo visual. Unidad: s.
@@ -31,8 +35,26 @@ var _going_to_hub: bool = false
 
 func _ready() -> void:
 	_fade.color = Color(0.0, 0.0, 0.0, 0.0)
-	_show_hub(true)
 	GameManager.restart_requested.connect(_on_restart_requested)
+	var logo: StudioLogo = STUDIO_LOGO_SCENE.instantiate() as StudioLogo
+	if logo.config == null or not logo.config.enabled:
+		logo.free()
+		_show_hub(true)
+		return
+	var layer: CanvasLayer = CanvasLayer.new()
+	layer.name = "StudioLogoLayer"
+	layer.layer = STUDIO_LOGO_LAYER
+	add_child(layer)
+	layer.add_child(logo)
+	logo.finished.connect(_on_studio_logo_finished.bind(layer))
+
+
+# El logo del estudio terminó en negro: se cambia por el hub con la pantalla de inicio.
+func _on_studio_logo_finished(layer: CanvasLayer) -> void:
+	layer.queue_free()
+	_fade.color.a = 1.0
+	_show_hub(true)
+	create_tween().tween_property(_fade, "color:a", 0.0, LEVEL_FADE_IN)
 
 
 func _unhandled_input(event: InputEvent) -> void:
