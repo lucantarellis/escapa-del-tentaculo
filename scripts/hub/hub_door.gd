@@ -48,6 +48,7 @@ var _level: float = 0.0
 var _level_tween: Tween
 var _time: float = 0.0
 var _enabled: bool = true
+var _held: bool = false
 
 
 func _ready() -> void:
@@ -83,9 +84,35 @@ func set_enabled(enabled: bool) -> void:
 	_enabled = enabled
 	if not enabled:
 		_push_time = 0.0
+		_held = false
 		_set_open(false)
 	elif _player_inside:
 		_set_open(true)
+
+
+## Mantiene la puerta abierta aunque el jugador salga del área (mientras entra o sale caminando).
+## Con `false` suelta: se cierra si el jugador no está en el área.
+func set_held_open(held: bool) -> void:
+	_held = held
+	if held:
+		_set_open(true)
+	elif not _player_inside:
+		_set_open(false)
+
+
+## Hacia dónde camina el jugador para entrar: -1 izquierda, +1 derecha.
+func get_enter_direction() -> float:
+	return -_inward()
+
+
+## Hacia dónde sale el jugador de la puerta: +1 derecha, -1 izquierda.
+func get_exit_direction() -> float:
+	return _inward()
+
+
+## Punto del piso en el centro del hueco, adonde se pierde el jugador (global).
+func get_gap_point() -> Vector2:
+	return Vector2(_gap_x(), global_position.y + FLOOR_ROW)
 
 
 ## Devuelve true si la puerta está abierta del todo (`open`).
@@ -204,7 +231,8 @@ func _on_body_entered(body: Node) -> void:
 func _on_body_exited(body: Node) -> void:
 	if body is Player:
 		_player_inside = false
-		_set_open(false)
+		if not _held:
+			_set_open(false)
 
 
 func _set_open(open: bool) -> void:

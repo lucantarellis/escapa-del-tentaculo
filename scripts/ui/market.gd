@@ -8,7 +8,7 @@ extends Control
 ## tres solapas (Movimiento, Supervivencia, Economía), la lista de nodos con scroll agrupada por rama
 ## y el detalle del nodo elegido con VOLVER y COMPRAR. Las compras las hace [PlayerProgress]; esta
 ## pantalla solo las pide y se actualiza. Con Escape (`ui_cancel`) o VOLVER la cara se apaga
-## (`exit`) y al terminar se cierra y emite [signal closed].
+## (`exit`) y al terminar emite [signal closed] (quien lo abrió lo oculta).
 ## Ver `docs/mecanicas/progreso-mercado.md` y `docs/arte/mercado.md`.
 
 ## Carpetas del arte. Estructural.
@@ -205,7 +205,8 @@ func open() -> void:
 	_focus_first()
 
 
-## Cierra el mercado: la cara se apaga (`exit`) y al terminar se oculta y emite [signal closed].
+## Cierra el mercado: la cara se apaga (`exit`) y al terminar emite [signal closed]. No se oculta
+## solo: lo oculta quien lo abrió ([Hub]).
 func close() -> void:
 	if not visible or _closing:
 		return
@@ -689,8 +690,8 @@ func _on_face_finished(tag: StringName) -> void:
 		return
 	match tag:
 		&"exit":
-			visible = false
-			_closing = false
+			# Sigue visible (y `_closing`, hasta el próximo `open`): el [Hub] lo oculta cuando la
+			# pantalla ya está en negro, así no se ve el hub entre dos fundidos.
 			closed.emit()
 		&"buy", &"deny", &"enter":
 			_play_face(&"idle")

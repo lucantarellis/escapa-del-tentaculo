@@ -33,6 +33,8 @@ extends Resource
 @export var door_beam_height: float = 70.0
 ## Fundido a negro al entrar o salir de Ajustes / Mercado. Unidad: s.
 @export var door_fade_time: float = 0.25
+## Cuánto camina el astronauta hasta perderse en el hueco al entrar, y hasta salir al volver. Unidad: s.
+@export var door_walk_time: float = 0.6
 
 @export_group("Ascensor")
 ## Tiempo parado sobre la plataforma hasta que se arma (lo que dura `arming`). Unidad: s.

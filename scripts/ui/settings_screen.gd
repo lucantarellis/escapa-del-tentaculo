@@ -70,8 +70,11 @@ const CREDITS: Array = [
 	["Hecho con Godot", "name"],
 ]
 
-## Se cerró la pantalla (VOLVER o Escape desde Ajustes).
+## Se cerró la pantalla (VOLVER o Escape desde Ajustes). No se oculta sola: la oculta quien la abrió
+## ([Hub]), cuando la pantalla ya está en negro.
 signal closed
+
+var _closing: bool = false
 
 var _settings_page: Control
 var _credits_page: Control
@@ -126,15 +129,16 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ## Muestra Ajustes con el foco en la primera fila.
 func open() -> void:
+	_closing = false
 	visible = true
 	_show_settings()
 
 
-## Cierra la pantalla y emite [signal closed].
+## Emite [signal closed]. Una sola vez hasta el próximo [method open].
 func close() -> void:
-	if not visible:
+	if not visible or _closing:
 		return
-	visible = false
+	_closing = true
 	closed.emit()
 
 

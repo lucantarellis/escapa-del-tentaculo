@@ -1102,6 +1102,27 @@ func _spawn_vanish(at: Vector2) -> void:
 	fx.play(&"vanish")
 
 
+## Modo guionado: la física y el Input se apagan (la colisión sigue) y el astronauta camina en el
+## lugar mirando hacia [param direction] (-1 izquierda, +1 derecha) mientras quien lo llama le cambia
+## la posición. Con `false` vuelve al control normal. Lo usa el [Hub] para entrar y salir de las
+## puertas.
+func set_scripted(active: bool, direction: float = 0.0) -> void:
+	set_physics_process(not active)
+	if active:
+		_facing = signf(direction) if direction != 0.0 else _facing
+		_look_left = _facing < 0.0
+		velocity = Vector2(_facing * WALK_MIN_SPEED * 4.0, 0.0)
+	else:
+		velocity = Vector2.ZERO
+	_update_visuals(Vector2.ZERO)
+
+
+## Opacidad del cuerpo (0–1). La usa el [Hub] para que el astronauta se pierda en el hueco de la
+## puerta.
+func set_body_alpha(alpha: float) -> void:
+	_body.modulate.a = alpha
+
+
 ## Hace aparecer al jugador con la animación de reaparición (haz y fundido), sin tocar la vida ni la
 ## posición. Lo usa el [Hub] al empezar, después de [method set_frozen].
 func play_appear() -> void:

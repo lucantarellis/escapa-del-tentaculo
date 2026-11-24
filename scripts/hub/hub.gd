@@ -76,6 +76,8 @@ var _elevator: HubElevator
 var _riding: bool = false
 var _ride_offset: Vector2 = Vector2.ZERO
 var _busy: bool = false
+## Habitación abierta (`settings` o `market`); vacío si no hay ninguna.
+var _in_room: StringName = &""
 
 @onready var _player: Player = $Player
 @onready var _camera: Camera2D = $Camera
@@ -342,14 +344,28 @@ func _build_elevator() -> void:
 
 # --- puertas --------------------------------------------------------------------------------
 
-# Fundido a negro, el jugador se congela y se abre Ajustes o el Mercado.
+# Entrar: el jugador camina hasta el hueco de la puerta (que sigue abierta) y se pierde en él; recién
+# ahí se funde a negro y se abre Ajustes o el Mercado.
 func _on_door_entered(kind: StringName) -> void:
 	if _busy or _riding:
 		return
 	_busy = true
-	_set_doors_enabled(false)
+	_in_room = kind
+	var door: HubDoor = _doors[kind]
+	for other: HubDoor in _doors.values():
+		if other != door:
+			other.set_enabled(false)
+	door.set_held_open(true)
+	_player.set_scripted(true, door.get_enter_direction())
+	var gap: Vector2 = door.get_gap_point()
+	var walk: Tween = create_tween().set_parallel(true)
+	walk.tween_property(_player, "global_position:x", gap.x, config.door_walk_time)
+	walk.tween_method(_player.set_body_alpha, 1.0, 0.0, config.door_walk_time * 0.6).set_delay(config.door_walk_time * 0.4)
+	await walk.finished
 	await _fade_to(1.0, config.door_fade_time)
+	_player.set_scripted(false)
 	_player.set_frozen(true)
+	_set_doors_enabled(false)
 	if kind == &"market":
 		_market.open()
 	else:
@@ -357,14 +373,30 @@ func _on_door_entered(kind: StringName) -> void:
 	await _fade_to(0.0, config.door_fade_time)
 
 
-# Al cerrar la pantalla, fundido y el jugador vuelve delante de esa puerta.
+# Salir: un solo fundido a negro (la pantalla sigue a la vista hasta que está en negro); se oculta,
+# el jugador sale caminando del hueco de la puerta y se funde de vuelta.
 func _on_room_closed(kind: StringName) -> void:
+	if _in_room != kind:
+		return
+	_in_room = &""
 	await _fade_to(1.0, config.door_fade_time)
+	_market.visible = false
+	_settings.visible = false
 	var door: HubDoor = _doors[kind]
+	var gap: Vector2 = door.get_gap_point()
+	var out: Vector2 = door.get_return_point()
 	_player.set_frozen(false)
-	_player.velocity = Vector2.ZERO
-	_player.global_position = door.get_return_point() - Vector2(0.0, PLAYER_HALF_HEIGHT)
+	_player.set_scripted(true, door.get_exit_direction())
+	_player.set_body_alpha(0.0)
+	_player.global_position = gap - Vector2(0.0, PLAYER_HALF_HEIGHT)
+	door.set_held_open(true)
 	await _fade_to(0.0, config.door_fade_time)
+	var walk: Tween = create_tween().set_parallel(true)
+	walk.tween_property(_player, "global_position:x", out.x, config.door_walk_time)
+	walk.tween_method(_player.set_body_alpha, 0.0, 1.0, config.door_walk_time * 0.5)
+	await walk.finished
+	_player.set_scripted(false)
+	door.set_held_open(false)
 	_set_doors_enabled(true)
 	_busy = false
 

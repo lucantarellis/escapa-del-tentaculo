@@ -4,7 +4,7 @@
 
 ## Cómo se entra
 
-Por la puerta de Ajustes del hub (izquierda): fundido a negro y se abre la pantalla. **Volver** o Escape cierran; fundido y el jugador queda delante de la puerta. Desde Créditos, Volver o Escape vuelven a Ajustes; desde la confirmación, Escape cancela.
+Por la puerta de Ajustes del hub (izquierda): el jugador se pierde en el hueco, fundido a negro y se abre la pantalla. **Volver** o Escape cierran (un solo fundido; la pantalla no se oculta hasta estar en negro) y el jugador sale de la puerta. Desde Créditos, Volver o Escape vuelven a Ajustes; desde la confirmación, Escape cancela.
 
 ## Ajustes
 
