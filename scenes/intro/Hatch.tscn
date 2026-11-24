@@ -6,10 +6,6 @@
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_unshaded"]
 light_mode = 1
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_glow"]
-blend_mode = 1
-light_mode = 1
-
 [node name="Hatch" type="Node2D"]
 process_mode = 3
 script = ExtResource("1_hatch")
@@ -25,9 +21,6 @@ script = ExtResource("2_sheet")
 
 [node name="Emissive" type="Sprite2D" parent="Visual"]
 material = SubResource("CanvasItemMaterial_unshaded")
-
-[node name="Glow" type="Sprite2D" parent="Visual"]
-material = SubResource("CanvasItemMaterial_glow")
 
 [node name="GasParticles" type="CPUParticles2D" parent="."]
 emitting = false

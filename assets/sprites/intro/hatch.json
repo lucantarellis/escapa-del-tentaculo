@@ -324,11 +324,11 @@
   "scale": "1",
   "frameTags": [
    { "name": "closed", "from": 0, "to": 3, "direction": "forward", "color": "#000000ff" },
-   { "name": "hit_1", "from": 4, "to": 6, "direction": "forward", "color": "#000000ff" },
+   { "name": "hit_1", "from": 4, "to": 6, "direction": "forward", "repeat": "3", "color": "#000000ff" },
    { "name": "idle_1", "from": 7, "to": 10, "direction": "forward", "color": "#000000ff" },
-   { "name": "hit_2", "from": 11, "to": 13, "direction": "forward", "color": "#000000ff" },
+   { "name": "hit_2", "from": 11, "to": 13, "direction": "forward", "repeat": "3", "color": "#000000ff" },
    { "name": "idle_2", "from": 14, "to": 17, "direction": "forward", "color": "#000000ff" },
-   { "name": "hit_3", "from": 18, "to": 20, "direction": "forward", "color": "#000000ff" },
+   { "name": "hit_3", "from": 18, "to": 20, "direction": "forward", "repeat": "3", "color": "#000000ff" },
    { "name": "idle_3", "from": 21, "to": 24, "direction": "forward", "color": "#000000ff" },
    { "name": "break", "from": 25, "to": 30, "direction": "forward", "color": "#000000ff" },
    { "name": "broken", "from": 31, "to": 34, "direction": "forward", "color": "#000000ff" }

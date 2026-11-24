@@ -63,7 +63,6 @@ signal break_finished
 @onready var _visual: Node2D = $Visual
 @onready var _sprite: SheetSprite = $Visual/Sprite
 @onready var _emissive: Sprite2D = $Visual/Emissive
-@onready var _glow: Sprite2D = $Visual/Glow
 @onready var _light: PointLight2D = $Light
 @onready var _gas: CPUParticles2D = $GasParticles
 
@@ -173,17 +172,16 @@ func _leaf_half_width() -> float:
 	return FRAME_HALF_WIDTH - FRAME_BORDER
 
 
-# Tres sprites con el mismo cuadro: color con relieve, emisivo (sin sombreado) y resplandor (sin
-# sombreado, aditivo). El de color maneja la animación y los otros dos lo siguen.
+# Dos sprites con el mismo cuadro: color con relieve y emisivo (sin sombreado). El de color maneja
+# la animación y el emisivo lo sigue. La luz que se escapa es del haz y el halo de Godot.
 func _setup_sprites() -> void:
 	_sprite.set_sheet_textures(SHEET_DIR + "hatch.png", SHEET_DIR + "hatch_normal.png")
 	_emissive.texture = load(SHEET_DIR + "hatch_emissive.png")
-	_glow.texture = load(SHEET_DIR + "hatch_glow.png")
-	for sprite: Sprite2D in [_sprite, _emissive, _glow]:
+	for sprite: Sprite2D in [_sprite, _emissive]:
 		sprite.centered = true
 		sprite.offset = SPRITE_OFFSET
 		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	_sprite.followers = [_emissive, _glow]
+	_sprite.followers = [_emissive]
 	_sprite.load_sheet(SHEET_JSON)
 	_sprite.finished.connect(_on_sprite_finished)
 

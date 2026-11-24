@@ -13,8 +13,8 @@
 
 ## Escotilla (`hatch`)
 
-- Editable: `assets/aseprite/intro/hatch.aseprite` (capas `normal` oculta, `color`, `emissive`, `glow`).
-- Hojas verticales de **144×96** por cuadro: `assets/sprites/intro/hatch.png` (+ `hatch.json` con tags y duraciones), `hatch_normal.png`, `hatch_emissive.png`, `hatch_glow.png`.
+- Editable: `assets/aseprite/intro/hatch.aseprite` (capas `normal` oculta, `color`, `emissive`).
+- Hojas verticales de **144×96** por cuadro: `assets/sprites/intro/hatch.png` (+ `hatch.json` con tags y duraciones), `hatch_normal.png`, `hatch_emissive.png`.
 - **Origen:** el centro del borde superior del piso (línea de colisión) está en **(72, 64)** del cuadro. Con `centered = true`, `offset = (0, -16)`.
 - Medidas respecto del origen: marco de x −64 a +64; cara superior del marco de y −15 a −2; frente del marco de −1 a +5. Hojas abiertas hasta y ≈ −62.
 - Cambios para `hatch.gd`: `FRAME_TOP` pasa a **−15** (punto de salida del jugador). `FRAME_HALF_WIDTH` sigue en 64.
@@ -39,7 +39,8 @@
 
 - `color` con relieve (`CanvasTexture` con `hatch_normal.png`).
 - `emissive` encima, sin sombreado: rendija y hueco rojos, destello.
-- `glow` encima, **sin sombreado y en modo aditivo** (`CanvasItemMaterial.blend_mode = ADD`): la luz que se escapa hacia arriba (hilo en los golpes, cono en la ruptura, cono bajo que respira cuando está rota).
+- La luz que se escapa (haz y halo aditivos y sin sombreado) la dibuja Godot desde el desgarro central (`Hatch._setup_light`); el arte ya no trae capa `glow`.
+- La abolladura es un domo: reposo de 4, 8 y 12 px tras cada golpe; el desgarro en V crece con cada golpe.
 - Un `PointLight2D` rojo (≈ `#CD1417`) debajo de la escotilla, con energía según el estado: casi nula cerrada, sube con cada golpe, pico en la ruptura y queda media cuando está rota. Así la luz también ilumina el astronauta, el piso y las paredes. Valores en `IntroConfig`.
 
 ## Fragmentos (`hatch_debris`)

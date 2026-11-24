@@ -25,7 +25,7 @@ Level (Node2D)                        script: level_controller.gd
 │       └── Walls (TileMapLayer)       nave e inicio: scenes/levels/WallsShip.tscn (Emissive, Detalle, Dano, Lights); espacio, alien y final: scenes/levels/Walls.tscn (ver mecanicas/paredes.md)
 ├── ScrollCamera
 ├── Hatch (Node2D, ALWAYS)             scenes/intro/Hatch.tscn; escotilla de la intro, en el HatchAnchor del segmento de inicio
-│   └── Light, Visual (Sprite, Emissive, Glow), GasParticles
+│   └── Light, Visual (Sprite, Emissive), GasParticles
 ├── Player, Tentacle, DebugOverlay (muestra la seed)
 ├── IntroDirector (Node, ALWAYS)       creado por LevelController en play_intro(); vive mientras dura la intro
 ├── Hud (CanvasLayer, capa 80)         scenes/ui/Hud.tscn; barra de combustible y progreso (export: player)

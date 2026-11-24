@@ -92,8 +92,7 @@ Hatch (Node2D, ALWAYS)           origen = centro del borde superior del piso
 ├── Light (PointLight2D)         luz roja #CD1417 que ilumina el entorno; energía según el estado
 ├── Visual (Node2D)              se sacude con cada golpe
 │   ├── Sprite (SheetSprite)     hoja `hatch` con relieve; maneja la animación (tags del JSON de Aseprite)
-│   ├── Emissive (Sprite2D)      `hatch_emissive`, sin sombreado; sigue el cuadro de Sprite
-│   └── Glow (Sprite2D)          `hatch_glow`, sin sombreado y aditivo; sigue el cuadro de Sprite
+│   └── Emissive (Sprite2D)      `hatch_emissive`, sin sombreado; sigue el cuadro de Sprite
 ├── Beam (Sprite2D, en código)   haz rojo aditivo que sale de la rendija hacia arriba
 └── GasParticles (CPUParticles2D)  una sola ráfaga (one_shot), sin textura, blanco azulado con alfa
 ```

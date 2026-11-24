@@ -2,7 +2,7 @@
 
 Relevamiento del 15/11/2026 sobre `main-g` (997e813). La referencia de la línea nueva es la plataforma letal con fuego (`assets/sprites/environment/fire_platform/`). Los tamaños salen de colisiones y variables exportadas, no del arte. Entre paréntesis, en cuántos segmentos aparece (de 72).
 
-Marcar con `[x]` a medida que se termina.
+Marcar con `[x]` a medida que se termina. Última actualización: 23/11/2026 (brief 08: escotilla, tentáculo, HUD, mercado, gas y efectos).
 
 # Prioridad de ataque
 
@@ -65,31 +65,37 @@ Marcar con `[x]` a medida que se termina.
 
 ## Meta, intro y transiciones (P4)
 - [ ] Puerta, 48×72 (11 segmentos). En pausa: puede desaparecer si hay pelea con el jefe final.
-- [x] Escotilla de la intro: 3/4, cuadros de 144×96 con golpes, ruptura y rota; capas emisiva y `glow`; fragmentos aparte. `assets/sprites/intro/`.
-- [ ] Gas de la escotilla.
+- [x] Escotilla de la intro: 3/4, cuadros de 144×96 con golpes, ruptura y rota; abolladura en domo con desgarro en V; capas color, relieve y emisiva (la capa `glow` se eliminó: la luz es de Godot); fragmentos aparte. `assets/sprites/intro/`. Ver brief 08.
+- [x] Gas de la escotilla: 3 formas de bocanada de 14×14, 4 cuadros c/u (`gas_puff_a/b/c`). También se reutiliza para la fuga del traje a 1 golpe. `assets/aseprite/fx/gas_puff.aseprite`, guía `docs/arte/efectos.md`.
 - [x] Ventanal de la nave con vidrios (3 segmentos): 2D, `window_breach` + succión + vidrios; el tentáculo reutiliza `tentacle_front`. Guía: `docs/arte/ventanal.md`.
 - [ ] Membrana de carne y tentáculo vertical del final del espacio.
 - [ ] Explosión de cambio de tier: anillo, fuego y destello (7 segmentos).
 - [ ] Luz de apertura y haz de salida del tier 3, con venas y motas.
 
 ## Efectos del jugador (P4)
-- [ ] Escudo ovalado.
-- [ ] Efecto de reparación.
-- [ ] Efecto de dash (hoy no tiene).
-- [ ] Efecto de reaparición.
+- [x] Escudo ovalado: `player_shield` (54×74; `loop` y `pop`).
+- [x] Efecto de reparación: `player_repair` (32×40; cruz, chispas y crucecitas) + shader de barrido cian sobre el cuerpo (código).
+- [x] Efecto de dash: sin arte, rastro de "fantasmas" por código.
+- [x] Efecto de reaparición: `player_respawn` (32×56; `vanish` en el lugar viejo y `respawn` en el nuevo).
+- [x] Fuga del traje a 1 golpe: reutiliza el gas con recolor y dirección al azar (código).
+- Editables en `assets/aseprite/fx/`, hojas en `assets/sprites/fx/`. Guía: `docs/arte/efectos.md`.
 
 ## UI (P5)
-- [ ] Barra de combustible.
-- [ ] Progreso, con marcas de récord y de tiers.
-- [ ] Marcador del tentáculo en el progreso.
-- [ ] Corazones (hoy provisorios).
-- [ ] Ícono del contador de monedas.
-- [ ] Barrita de enfriamiento del dash.
-- [ ] Título: logo "Rise or Die" (hoy solo texto).
-- [ ] Botón JUGAR y fondo del menú.
-- [ ] Mercado: solapas, nodos y líneas.
-- [ ] Mercado: un ícono por mejora.
-- [ ] Tipografía (`assets/fonts` vacía).
+- [x] Barra de combustible.
+- [x] Progreso, con marcas de récord y de tiers.
+- [x] Marcador del tentáculo en el progreso (relleno rojo + calavera).
+- [x] Vida: celdas de integridad del traje + escudo.
+- [x] Ícono del contador de monedas.
+- [x] Barrita de enfriamiento del dash. (HUD completo: `docs/arte/hud.md`)
+- [x] Pantalla de inicio: logo animado `title_logo` (RISE cian, DIE rojo, OR en placa, tentáculos del juego) sobre el hub oscurecido, "TOCÁ PARA EMPEZAR" y versión. Guía `docs/arte/titulo.md`.
+- [x] Hub: puertas a Ajustes (izquierda) y Mercado (derecha), en perspectiva dentro de la pared, con cartel e iluminación desde Godot. `assets/aseprite/environment/hub_doors/`, guía `docs/arte/hub.md`.
+- [x] Hub: sala iluminada de una pantalla, ascensor con propulsores en su muelle (plataforma, mordazas, rieles) y lámparas. `assets/aseprite/environment/hub/`, guía `docs/arte/hub.md`.
+- [x] Ajustes y créditos: pantallas de UI con piezas del mercado + `settings_ui` (barra deslizante, interruptor, botón de peligro, flechas, íconos). Guía `docs/arte/ajustes.md`.
+- [x] Mercado: puesto con ambiente animado (`market_booth`), vendedor-pantalla con 6 animaciones (`market_face`) y UI en piezas 9-slice (`market_ui`: solapas, filas por estado, botones, scrollbar). Guía: `docs/arte/mercado.md`.
+- [x] Mercado: un ícono por rama (`mk_branch_{dash,speed,tank,life,repair,coins}`); se decidió uno por rama + nivel en vez de uno por mejora.
+- [x] Tipografía: Tiny5 (OFL) en `assets/fonts/` para HUD, mercado y menús; 16 px mínimo, siempre múltiplos de 8. El logo del título está dibujado (ver `docs/arte/titulo.md`).
+- [x] Pantalla de derrota: viñetas `death_captured_a` y `death_electrocuted_a` (`assets/aseprite/ui/death/`), armado y comportamiento en `docs/arte/derrota.md`.
+- [ ] Pantallas de derrota de los tiers 2 y 3, y pantalla de victoria (depende del jefe).
 
 ## Fuera de esta lista
 - Audio: `assets/audio/sfx` y `assets/audio/music` están vacías.
