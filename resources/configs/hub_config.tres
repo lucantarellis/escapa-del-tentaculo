@@ -4,7 +4,9 @@
 
 [resource]
 script = ExtResource("1_cfg")
-window_glass_alpha = 0.0
+elevator_arm_time = 0.5
+elevator_ride_distance = 400.0
+window_glass_alpha = 0.2
 space_drift_speed = 20.0
 space_drift_turn = 0.5
 space_rotation_speed = 1.0

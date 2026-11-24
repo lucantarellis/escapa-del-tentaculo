@@ -1,22 +1,21 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bhba1lir7meed"]
 
-[ext_resource type="Script" path="res://scripts/player/player.gd" id="1_player"]
-[ext_resource type="Resource" path="res://resources/configs/player_config.tres" id="2_config"]
-[ext_resource type="Script" path="res://scripts/player/dash_cooldown_bar.gd" id="3_dashbar"]
-[ext_resource type="SpriteFrames" path="res://assets/sprites/player/astronaut/cuerpo.res" id="4_body"]
-[ext_resource type="SpriteFrames" path="res://assets/sprites/player/astronaut/visor_reflejo.res" id="5_visor"]
-[ext_resource type="SpriteFrames" path="res://assets/sprites/player/astronaut/astronaut_flame.res" id="6_flame"]
+[ext_resource type="Script" uid="uid://dmulcougkxryn" path="res://scripts/player/player.gd" id="1_player"]
+[ext_resource type="Resource" uid="uid://bxktljxc855gc" path="res://resources/configs/player_config.tres" id="2_config"]
+[ext_resource type="Script" uid="uid://bmbpye32jafxw" path="res://scripts/player/dash_cooldown_bar.gd" id="3_dashbar"]
+[ext_resource type="SpriteFrames" uid="uid://d588rnqrog7h" path="res://assets/sprites/player/astronaut/cuerpo.res" id="4_body"]
+[ext_resource type="SpriteFrames" uid="uid://did3qisdvjdhp" path="res://assets/sprites/player/astronaut/visor_reflejo.res" id="5_visor"]
+[ext_resource type="SpriteFrames" uid="uid://y4tg4ofaway3" path="res://assets/sprites/player/astronaut/astronaut_flame.res" id="6_flame"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(16, 24)
 
-[node name="Player" type="CharacterBody2D" groups=["player"]]
+[node name="Player" type="CharacterBody2D" unique_id=1933078083 groups=["player"]]
 collision_layer = 2
-collision_mask = 1
 script = ExtResource("1_player")
 config = ExtResource("2_config")
 
-[node name="Flame" type="AnimatedSprite2D" parent="."]
+[node name="Flame" type="AnimatedSprite2D" parent="." unique_id=733372838]
 visible = false
 texture_filter = 1
 position = Vector2(-8, 12)
@@ -24,27 +23,27 @@ sprite_frames = ExtResource("6_flame")
 animation = &"flame"
 autoplay = "flame"
 
-[node name="Body" type="Node2D" parent="."]
+[node name="Body" type="Node2D" parent="." unique_id=635151798]
 
-[node name="Sprite" type="AnimatedSprite2D" parent="Body"]
+[node name="Sprite" type="AnimatedSprite2D" parent="Body" unique_id=829318859]
 texture_filter = 1
 position = Vector2(0, -8)
 sprite_frames = ExtResource("4_body")
 animation = &"idle"
 
-[node name="Visor" type="AnimatedSprite2D" parent="Body"]
+[node name="Visor" type="AnimatedSprite2D" parent="Body" unique_id=1048358301]
 texture_filter = 1
 position = Vector2(0, -8)
 sprite_frames = ExtResource("5_visor")
 animation = &"idle"
 
-[node name="GasVent" type="Marker2D" parent="."]
+[node name="GasVent" type="Marker2D" parent="." unique_id=1877417653]
 position = Vector2(-2, 1)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=416779193]
 shape = SubResource("RectangleShape2D_body")
 
-[node name="DashCooldownBar" type="Node2D" parent="."]
+[node name="DashCooldownBar" type="Node2D" parent="." unique_id=344674141]
 visible = false
 position = Vector2(0, -23)
 script = ExtResource("3_dashbar")
