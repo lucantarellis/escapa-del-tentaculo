@@ -21,8 +21,6 @@ extends Resource
 @export_group("Puertas")
 ## Ancho del área delante de la puerta que la abre (px).
 @export var door_trigger_width: float = 48.0
-## Tiempo caminando contra la pared con la puerta abierta para entrar. Unidad: s.
-@export var door_enter_push_time: float = 0.15
 ## Luz de cada puerta abierta: energía máxima, alcance (px) y titileo (fracción, ±).
 @export var door_light_energy: float = 0.9
 @export var door_light_range: float = 110.0
@@ -30,10 +28,10 @@ extends Resource
 ## Haz visible: alfa en la puerta, largo hacia la sala y alto en el hueco (px).
 @export var door_beam_alpha: float = 0.35
 @export var door_beam_length: float = 80.0
-@export var door_beam_height: float = 70.0
+@export var door_beam_height: float = 67.0
 ## Fundido a negro al entrar o salir de Ajustes / Mercado. Unidad: s.
 @export var door_fade_time: float = 0.25
-## Cuánto camina el astronauta hasta perderse en el hueco al entrar, y hasta salir al volver. Unidad: s.
+## Cuánto camina el astronauta al salir de la puerta (del hueco al piso). Unidad: s.
 @export var door_walk_time: float = 0.6
 
 @export_group("Ascensor")

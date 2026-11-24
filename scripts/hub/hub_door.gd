@@ -3,8 +3,11 @@ extends Node2D
 ## Puerta del hub (Ajustes o Mercado) metida en la pared lateral, en perspectiva 2,5D.
 ##
 ## Se abre sola cuando el jugador entra en el área de [member HubConfig.door_trigger_width] px
-## delante de ella y se cierra al salir. Con la puerta abierta, si el jugador sigue caminando
-## contra la pared [member HubConfig.door_enter_push_time] s, emite [signal entered]. Al abrirse
+## delante de ella y se cierra al salir. La pared no tiene el hueco pintado (el [Hub] no pone
+## paredes ahí): un bloqueo (`Blocker`) tapa el hueco mientras la puerta no está abierta del todo y
+## se quita con la puerta abierta, así el jugador camina hacia adentro con su propio control. Al
+## pasar el borde de la pared se va desvaneciendo ([signal progress_changed]) y al llegar al centro
+## del hueco emite [signal entered]. Al abrirse
 ## ilumina la sala con su color: `PointLight2D` con un cono horizontal y un haz visible aditivo,
 ## con la intensidad atada a la animación (`closed` 0, `opening` sube, `open` titila, `closing`
 ## baja). El origen del nodo es la esquina superior izquierda del sprite (25×125).
@@ -24,13 +27,20 @@ const CONE_TEXTURE_SIZE: int = 128
 const CONE_ANGLE_DEG: float = 70.0
 ## Cuánto se corre la luz hacia la sala desde el centro del hueco (px). Solo visual.
 const LIGHT_INSET: float = 10.0
+## Alto del hueco de la pared, en filas del sprite: de HOLE_TOP a HOLE_BOTTOM (coincide con las filas
+## de pared que el [Hub] deja sin pintar). Estructural.
+const HOLE_TOP: float = 78.0
+const HOLE_BOTTOM: float = 126.0
 ## Altura del centro del hueco sobre el borde de atrás del piso (px). Solo visual.
 const GAP_CENTER_HEIGHT: float = 36.0
 ## Velocidad del titileo de la luz abierta (rad/s). Solo visual.
 const FLICKER_SPEED: float = 2.3
 
-## Se pidió entrar (el jugador empujó contra la pared con la puerta abierta).
+## El jugador llegó al centro del hueco: entró.
 signal entered
+## Cuánto entró el jugador en el hueco: 0 (en el borde de la pared) a 1 (en el centro). Se emite al
+## cambiar.
+signal progress_changed(progress: float)
 
 ## `settings` o `market`: elige el arte, el color de la luz y en qué pared va.
 @export var kind: StringName = &"settings"
@@ -43,7 +53,9 @@ var _beam: Sprite2D
 var _area: Area2D
 var _player: Player
 var _player_inside: bool = false
-var _push_time: float = 0.0
+var _progress: float = 0.0
+var _entered_latch: bool = false
+var _blocker_shape: CollisionShape2D
 var _level: float = 0.0
 var _level_tween: Tween
 var _time: float = 0.0
@@ -72,6 +84,7 @@ func _ready() -> void:
 	_sprite.play(&"closed", true)
 	_setup_light()
 	_setup_area()
+	_setup_blocker()
 
 
 ## Jugador que abre la puerta y puede entrar. Lo asigna el [Hub].
@@ -79,15 +92,19 @@ func set_player(player: Player) -> void:
 	_player = player
 
 
+## Mientras el jugador va a empezar otra cosa (por ejemplo un fundido) no se vuelve a pedir entrar.
+func is_entry_latched() -> bool:
+	return _entered_latch
+
+
 ## Activa o desactiva la puerta (mientras está desactivada no se abre ni deja entrar).
 func set_enabled(enabled: bool) -> void:
 	_enabled = enabled
 	if not enabled:
-		_push_time = 0.0
 		_held = false
 		_set_open(false)
-	elif _player_inside:
-		_set_open(true)
+	else:
+		_entered_latch = false
 
 
 ## Mantiene la puerta abierta aunque el jugador salga del área (mientras entra o sale caminando).
@@ -141,23 +158,35 @@ func _process(delta: float) -> void:
 	_light.visible = _level > 0.001
 	_beam.modulate.a = config.door_beam_alpha * _level * flicker
 	_beam.visible = _level > 0.001
-	_update_push(delta)
+	_update_entry()
 
 
-# Entrar: con la puerta abierta, el jugador en el área, en el piso, contra la pared y empujando.
-func _update_push(delta: float) -> void:
-	if not _enabled or _player == null or not _player_inside or not is_open():
-		_push_time = 0.0
-		return
-	var axis: float = Input.get_axis("move_left", "move_right")
-	var toward_wall: bool = signf(axis) == -_inward() and absf(axis) > 0.2
-	if toward_wall and _player.is_on_floor() and _player.is_on_wall():
-		_push_time += delta
-		if _push_time >= config.door_enter_push_time:
-			_push_time = 0.0
-			entered.emit()
-	else:
-		_push_time = 0.0
+# Cuánto entró el jugador: 0 en el borde de la pared, 1 en el centro del hueco (solo a la altura
+# del hueco).
+func _entry_progress() -> float:
+	if _player == null:
+		return 0.0
+	var local: Vector2 = _player.global_position - global_position
+	if local.y < HOLE_TOP or local.y > HOLE_BOTTOM:
+		return 0.0
+	var depth: float = (_gap_x() + _inward() * WALL_WIDTH * 0.5 - _player.global_position.x) * _inward()
+	return clampf(depth / (WALL_WIDTH * 0.5), 0.0, 1.0)
+
+
+# Abre o cierra según dónde está el jugador, quita o pone el bloqueo del hueco y avisa cuánto entró.
+func _update_entry() -> void:
+	var progress: float = _entry_progress() if _enabled else 0.0
+	var want_open: bool = _enabled and (_player_inside or _held or progress > 0.0)
+	_set_open(want_open)
+	_blocker_shape.set_deferred("disabled", want_open and is_open())
+	if not is_equal_approx(progress, _progress):
+		_progress = progress
+		progress_changed.emit(progress)
+	if progress < 0.3:
+		_entered_latch = false
+	elif progress >= 1.0 and not _entered_latch:
+		_entered_latch = true
+		entered.emit()
 
 
 # +1 si la sala queda a la derecha de la puerta (Ajustes, pared izquierda); −1 al revés.
@@ -224,15 +253,26 @@ func _setup_area() -> void:
 func _on_body_entered(body: Node) -> void:
 	if body is Player:
 		_player_inside = true
-		if _enabled:
-			_set_open(true)
 
 
 func _on_body_exited(body: Node) -> void:
 	if body is Player:
 		_player_inside = false
-		if not _held:
-			_set_open(false)
+
+
+# Tapa el hueco de la pared mientras la puerta no esté abierta del todo. Misma capa que las paredes.
+func _setup_blocker() -> void:
+	var blocker: StaticBody2D = StaticBody2D.new()
+	blocker.name = "Blocker"
+	blocker.collision_layer = 1
+	blocker.collision_mask = 0
+	_blocker_shape = CollisionShape2D.new()
+	var rect: RectangleShape2D = RectangleShape2D.new()
+	rect.size = Vector2(WALL_WIDTH, HOLE_BOTTOM - HOLE_TOP)
+	_blocker_shape.shape = rect
+	_blocker_shape.position = Vector2(_gap_x() - global_position.x, (HOLE_TOP + HOLE_BOTTOM) * 0.5)
+	blocker.add_child(_blocker_shape)
+	add_child(blocker)
 
 
 func _set_open(open: bool) -> void:
@@ -292,8 +332,9 @@ func _make_beam_texture(inward: float) -> Texture2D:
 	var image: Image = Image.create(w, h, false, Image.FORMAT_RGBA8)
 	for x: int in w:
 		var t: float = float(x) / float(maxi(w - 1, 1))
-		# El borde de arriba baja hacia la sala; el de abajo queda en el piso.
-		var top: float = lerpf(float(h) * 0.15, float(h) * 0.55, t)
+		# El borde de arriba arranca en la esquina de arriba del hueco y baja hacia la sala; el de
+		# abajo queda en el piso.
+		var top: float = lerpf(0.0, float(h) * 0.55, t)
 		for y: int in h:
 			var v: float = 0.0
 			if float(y) >= top:

@@ -11,8 +11,8 @@ Entrar al juego caminando por la nave **intacta e iluminada** (contraste con la 
 
 - **Sala fija de 360×640**: fondo animado `hub_bg`, espacio por los dos ventanales (shader: se repite, deriva ~3 px/s en una dirección que cambia despacio y rota ~0,25°/s cambiando de sentido cada 20–45 s), reflejo de las lámparas en el vidrio (`LIGHT_ONLY`), paredes de 24 px y techo con el hueco del ascensor pintados por código con el terreno de la nave (sin daño), piso `floor_ship` (fila 0 en y 596), lámparas con su `PointLight2D` y `CanvasModulate` claro (`ambient_color`).
 - **Combustible infinito:** el hub recarga el tanque en cada cuadro.
-- **Puertas (`HubDoor`):** se abren solas al entrar en el área de 48 px delante y se cierran al salir. Con la puerta abierta, caminar contra la pared 0,15 s entra. Al abrirse iluminan la sala (cian en Ajustes, ámbar en Mercado) con una luz en cono y un haz aditivo, con la intensidad atada a la animación y un titileo leve.
-  - **Mercado:** el jugador camina hasta el hueco con la puerta abierta y se pierde en él (se desvanece, `door_walk_time` 0,6 s); recién ahí funde a negro y se abre el `Market`. Al cerrarlo hay un solo fundido (la pantalla sigue a la vista hasta que está en negro y recién ahí se oculta), el jugador sale caminando del hueco y se funde de vuelta a la vista.
+- **Puertas (`HubDoor`):** se abren solas al entrar en el área de 48 px delante y se cierran al salir. El hueco de la pared no tiene tiles ni colisión (`DOOR_HOLE_ROWS`, filas 47–50): un `Blocker` de la puerta lo tapa mientras no esté abierta del todo, así con la puerta abierta el jugador camina hacia adentro con su propio control. Pasado el borde de la pared se va desvaneciendo (`progress_changed`) y al llegar al centro del hueco entra (`entered`). Al abrirse iluminan la sala (cian en Ajustes, ámbar en Mercado) con una luz en cono y un haz aditivo, con la intensidad atada a la animación y un titileo leve.
+  - **Mercado:** el jugador camina hasta el centro del hueco y se pierde en él; recién ahí funde a negro y se abre el `Market`. Al cerrarlo hay un solo fundido (la pantalla sigue a la vista hasta que está en negro y recién ahí se oculta), el jugador sale caminando del hueco y se funde de vuelta a la vista.
   - **Ajustes:** igual, con la pantalla de Ajustes y créditos (`SettingsScreen`, ver `ajustes.md`).
 - **Ascensor (`HubElevator`):** plataforma a media pantalla (a ~280 px del piso: no se arranca sin querer) y dos mordazas con baliza. Parado encima 1 s → `arming` (ámbar); si se baja antes vuelve a `idle` (roja, late con el giro). Al completarse: `launched`, las mordazas se sueltan (`open`, verde) y se separan 6 px en 0,24 s; recién entonces se prenden las 4 llamas y la plataforma sube acelerando hasta 400 px/s con el jugador pegado (sin física ni input). La cámara la sigue por el hueco, y ambiente y lámparas se interpolan hacia la oscuridad de la partida. A los 560 px, fundido a negro y `launch_finished`.
 
@@ -31,11 +31,10 @@ Entrar al juego caminando por la nave **intacta e iluminada** (contraste con la 
 | Ambiente | `wall_light_*` | `#C8E7EA`, 0,5, 90 | color, energía, px | Apliques de pared |
 | Ambiente | `fill_light_energy` / `fill_light_radius` | 0,35 / 260 | energía, px | Luz suave general desde abajo |
 | Puertas | `door_trigger_width` | 48 | px | Área delante de la puerta que la abre |
-| Puertas | `door_enter_push_time` | 0,15 | s | Empuje contra la pared para entrar |
 | Puertas | `door_light_energy` / `door_light_range` / `door_light_flicker` | 0,9 / 110 / 0,05 | energía, px, fracción | Luz al abrirse |
-| Puertas | `door_beam_alpha` / `door_beam_length` / `door_beam_height` | 0,35 / 80 / 70 | alfa, px, px | Haz visible |
+| Puertas | `door_beam_alpha` / `door_beam_length` / `door_beam_height` | 0,35 / 80 / 67 | alfa, px, px | Haz visible |
 | Puertas | `door_fade_time` | 0,25 | s | Fundido al entrar y salir |
-| Puertas | `door_walk_time` | 0,6 | s | Lo que camina el jugador hasta perderse en el hueco al entrar, y hasta salir al volver |
+| Puertas | `door_walk_time` | 0,6 | s | Lo que camina el jugador al salir de la puerta (del hueco al piso) |
 | Ascensor | `elevator_arm_time` | 1,0 | s | Tiempo parado encima para armarlo |
 | Ascensor | `clamp_open_offset` / `clamp_open_time` | 6 / 0,24 | px, s | Apertura de las mordazas |
 | Ascensor | `elevator_max_speed` / `elevator_accel_time` | 400 / 1,2 | px/s, s | Subida |
@@ -48,7 +47,7 @@ Entrar al juego caminando por la nave **intacta e iluminada** (contraste con la 
 ## Cómo probarlo
 
 1. F5: aparece el hub iluminado, con el fondo y el espacio moviéndose por los ventanales.
-2. Caminar hacia la derecha: la puerta del mercado se abre y tiñe la sala de ámbar. Seguir contra la pared: camina hacia el hueco y se pierde; fundido y mercado. Volver: un solo fundido y el jugador sale de la puerta.
+2. Caminar hacia la derecha: la puerta del mercado se abre y tiñe la sala de ámbar. Seguir caminando hacia el hueco: se desvanece al pasar la pared; al llegar al centro, fundido y mercado. Volver: un solo fundido y el jugador sale de la puerta.
 3. A la izquierda, la puerta de Ajustes se abre (cian) y lleva a Ajustes.
 4. Volar hasta la plataforma: tras 1 s parado se arma (ámbar); bajarse la desarma. Quedarse: se sueltan las mordazas, se prenden las llamas, sube con la cámara y arranca la intro de la escotilla.
 5. Perder y Escape: vuelve al hub.

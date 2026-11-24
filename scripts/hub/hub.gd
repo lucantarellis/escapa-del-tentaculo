@@ -25,6 +25,9 @@ const SCREEN_SIZE: Vector2 = Vector2(360.0, 640.0)
 ## hueco del ascensor, x 132–227) y filas del techo (y 0–35). Estructural.
 const TILE: float = 12.0
 const WALL_COLUMNS: Array[int] = [0, 1, 28, 29]
+## Filas de pared que se dejan sin pintar en los costados: el hueco de las puertas (y 564–612).
+## Cada [HubDoor] lo tapa con su bloqueo mientras está cerrada. Estructural.
+const DOOR_HOLE_ROWS: Vector2i = Vector2i(47, 50)
 const CEILING_COLUMNS: Array[Vector2i] = [Vector2i(2, 10), Vector2i(19, 27)]
 const CEILING_ROWS: int = 3
 ## Última fila de pared (pasa por detrás del piso). Estructural.
@@ -50,8 +53,6 @@ const SETTINGS_DOOR_POSITION: Vector2 = Vector2(0.0, 486.0)
 const MARKET_DOOR_POSITION: Vector2 = Vector2(335.0, 486.0)
 ## Donde aparece el jugador al llegar al hub (global). Estructural.
 const PLAYER_SPAWN: Vector2 = Vector2(180.0, 591.0)
-## Mitad del alto del jugador: del origen a los pies (px). Estructural.
-const PLAYER_HALF_HEIGHT: float = 12.0
 
 ## Terminó la subida del ascensor y la pantalla quedó en negro: ya se puede arrancar la partida.
 signal launch_finished
@@ -238,8 +239,9 @@ func _build_walls() -> void:
 	var top_row: int = -int(ceilf((config.elevator_ride_distance + SCREEN_SIZE.y * 0.5) / TILE)) - 2
 	var cells: Array[Vector2i] = []
 	for row: int in range(top_row, WALL_LAST_ROW + 1):
-		for column: int in WALL_COLUMNS:
-			cells.append(Vector2i(column, row))
+		if row < DOOR_HOLE_ROWS.x or row > DOOR_HOLE_ROWS.y:
+			for column: int in WALL_COLUMNS:
+				cells.append(Vector2i(column, row))
 		if row < CEILING_ROWS:
 			for span: Vector2i in CEILING_COLUMNS:
 				for column: int in range(span.x, span.y + 1):
@@ -327,6 +329,7 @@ func _build_doors() -> void:
 		add_child(door)
 		door.set_player(_player)
 		door.entered.connect(_on_door_entered.bind(kind))
+		door.progress_changed.connect(_on_door_progress)
 		_doors[kind] = door
 	# Sin progreso no hay mercado.
 	(_doors[&"market"] as HubDoor).set_enabled(PlayerProgress.is_enabled())
@@ -344,8 +347,14 @@ func _build_elevator() -> void:
 
 # --- puertas --------------------------------------------------------------------------------
 
-# Entrar: el jugador camina hasta el hueco de la puerta (que sigue abierta) y se pierde en él; recién
-# ahí se funde a negro y se abre Ajustes o el Mercado.
+# Mientras el jugador camina hacia el hueco se va desvaneciendo.
+func _on_door_progress(progress: float) -> void:
+	if not _busy:
+		_player.set_body_alpha(1.0 - progress)
+
+
+# Entrar: el jugador camina por su cuenta hacia el hueco (la puerta no tiene pared) y al llegar al
+# centro se funde a negro y se abre Ajustes o el Mercado.
 func _on_door_entered(kind: StringName) -> void:
 	if _busy or _riding:
 		return
@@ -357,11 +366,7 @@ func _on_door_entered(kind: StringName) -> void:
 			other.set_enabled(false)
 	door.set_held_open(true)
 	_player.set_scripted(true, door.get_enter_direction())
-	var gap: Vector2 = door.get_gap_point()
-	var walk: Tween = create_tween().set_parallel(true)
-	walk.tween_property(_player, "global_position:x", gap.x, config.door_walk_time)
-	walk.tween_method(_player.set_body_alpha, 1.0, 0.0, config.door_walk_time * 0.6).set_delay(config.door_walk_time * 0.4)
-	await walk.finished
+	_player.set_body_alpha(0.0)
 	await _fade_to(1.0, config.door_fade_time)
 	_player.set_scripted(false)
 	_player.set_frozen(true)
@@ -388,7 +393,8 @@ func _on_room_closed(kind: StringName) -> void:
 	_player.set_frozen(false)
 	_player.set_scripted(true, door.get_exit_direction())
 	_player.set_body_alpha(0.0)
-	_player.global_position = gap - Vector2(0.0, PLAYER_HALF_HEIGHT)
+	_player.global_position = Vector2(gap.x, PLAYER_SPAWN.y)
+	door.set_enabled(true)
 	door.set_held_open(true)
 	await _fade_to(0.0, config.door_fade_time)
 	var walk: Tween = create_tween().set_parallel(true)
