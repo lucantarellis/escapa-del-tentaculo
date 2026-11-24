@@ -76,6 +76,7 @@ var _space_flip_left: float = 30.0
 var _lamp_lights: Array[PointLight2D] = []
 var _lamp_energies: PackedFloat32Array = PackedFloat32Array()
 var _doors: Dictionary = {}
+var _floor_columns: PackedInt32Array = PackedInt32Array()
 var _elevator: HubElevator
 var _riding: bool = false
 var _ride_offset: Vector2 = Vector2.ZERO
@@ -323,6 +324,8 @@ func _build_floor() -> void:
 	floor_visual.position.y = FLOOR_EXTRA_DEPTH
 	body.add_child(floor_visual)
 	add_child(body)
+	# Las puertas copian este piso en su base.
+	_floor_columns = floor_visual.get_columns()
 
 
 func _build_doors() -> void:
@@ -331,6 +334,7 @@ func _build_doors() -> void:
 		door.name = "Door" + String(kind).capitalize()
 		door.kind = kind
 		door.config = config
+		door.floor_columns = _floor_columns
 		door.position = SETTINGS_DOOR_POSITION if kind == &"settings" else MARKET_DOOR_POSITION
 		add_child(door)
 		door.set_player(_player)

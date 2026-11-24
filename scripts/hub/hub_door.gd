@@ -38,13 +38,14 @@ const RETURN_DISTANCE: float = 32.0
 const BEAM_BOTTOM_ROW: float = 124.0
 ## Altura (fila del sprite) de la luz de la base, que alumbra el triángulo del marco. Solo visual.
 ## Partes del marco que dan a la sala y que el cono y el haz no alcanzan, leídas del frame `BASE_FRAME`
-## de la hoja (el primero de `open`): el borde interior de 2 px (máscara aditiva, filas `LIP_ROWS`) y
-## el triángulo de la base (se pinta con el color de la puerta, filas `FILL_ROWS`, para que el vidrio
-## llegue recto hasta el piso). `FILL_X` = columnas del vidrio en esas filas (Ajustes; Mercado es el
-## espejo). Estructural.
+## de la hoja (el primero de `open`): el borde interior de 2 px (máscara aditiva, filas `LIP_ROWS`).
+## La base del vidrio (triángulo y diagonal del arte, filas `FILL_ROWS`, columnas `FILL_X`; Mercado es
+## el espejo) se tapa con el piso real mientras la puerta está abierta, y `POOL_ROWS` recibe la luz
+## de la puerta igual que el haz. Estructural.
 const LIP_ROWS: Vector2i = Vector2i(48, 110)
 const FILL_ROWS: Vector2i = Vector2i(111, 120)
-const FILL_X: Vector2i = Vector2i(6, 23)
+const FILL_X: Vector2i = Vector2i(4, 23)
+const POOL_ROWS: Vector2i = Vector2i(111, 124)
 const BASE_FRAME: int = 8
 const BASE_COLOR: Color = Color("324370")
 const BEAM_TOP_DROP: float = 37.0
@@ -71,6 +72,10 @@ var _sprite: SheetSprite
 var _light: PointLight2D
 var _base_mask: Sprite2D
 var _base_fill: Sprite2D
+var _floor_pool: Sprite2D
+## Columnas de módulos del piso del hub (`ShipFloor.get_columns()`): la base de la puerta abierta
+## copia ese piso. Las pone el hub antes de agregar la puerta.
+var floor_columns: PackedInt32Array = PackedInt32Array()
 var _beam: Sprite2D
 var _area: Area2D
 var _player: Player
@@ -183,6 +188,8 @@ func _process(delta: float) -> void:
 	_base_mask.visible = _level > 0.001
 	_base_fill.modulate.a = _level
 	_base_fill.visible = _level > 0.001
+	_floor_pool.modulate.a = config.door_beam_alpha * _level * flicker
+	_floor_pool.visible = _level > 0.001
 	_beam.modulate.a = config.door_beam_alpha * _level * flicker
 	_beam.visible = _level > 0.001
 	_opening_time = _opening_time + delta if _sprite.get_tag() == &"opening" else 0.0
@@ -264,19 +271,28 @@ func _setup_light() -> void:
 	_base_mask.self_modulate = color
 	_base_mask.modulate.a = 0.0
 	add_child(_base_mask)
-	# El triángulo de la base se pinta (sin mezcla aditiva) con el color del vidrio, al nivel de la
-	# puerta: así el vidrio sigue recto hasta el piso y no queda la diagonal.
+	# La base del vidrio (el triángulo y la diagonal del arte) se tapa con el piso real, al nivel de la
+	# puerta, así el vidrio baja recto hasta el piso. Va iluminado como el piso de al lado.
 	_base_fill = Sprite2D.new()
 	_base_fill.name = "BaseFill"
 	_base_fill.texture = _make_base_fill()
 	_base_fill.centered = false
 	_base_fill.position = Vector2(0.0, FILL_ROWS.x)
-	var fill_material: CanvasItemMaterial = CanvasItemMaterial.new()
-	fill_material.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
-	_base_fill.material = fill_material
-	_base_fill.self_modulate = color
 	_base_fill.modulate.a = 0.0
 	add_child(_base_fill)
+	# Y esa franja de piso recibe la luz de la puerta con la misma fuerza que el arranque del haz.
+	_floor_pool = Sprite2D.new()
+	_floor_pool.name = "FloorPool"
+	_floor_pool.texture = _make_floor_pool()
+	_floor_pool.centered = false
+	_floor_pool.position = Vector2(0.0, POOL_ROWS.x)
+	var pool_material: CanvasItemMaterial = CanvasItemMaterial.new()
+	pool_material.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	pool_material.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	_floor_pool.material = pool_material
+	_floor_pool.self_modulate = color
+	_floor_pool.modulate.a = 0.0
+	add_child(_floor_pool)
 	_beam = Sprite2D.new()
 	_beam.name = "Beam"
 	_beam.texture = _make_beam_texture(inward)
@@ -406,23 +422,35 @@ func _make_base_mask() -> Texture2D:
 	return ImageTexture.create_from_image(mask)
 
 
-# Máscara blanca con los píxeles de la base del vidrio que hoy son del triángulo del marco o huecos
-# de la diagonal (transparentes o del color del marco), dentro de las columnas del vidrio.
+# Copia del piso del hub detrás de la base del vidrio (filas `FILL_ROWS`, columnas `FILL_X`). La fila
+# `FLOOR_ROW` de la puerta es la primera de la cara superior del piso. Sin columnas, queda vacía.
 func _make_base_fill() -> Texture2D:
 	var width: int = int(FRAME_SIZE.x)
 	var fill: Image = Image.create(width, FILL_ROWS.y - FILL_ROWS.x + 1, false, Image.FORMAT_RGBA8)
-	var source: Image = _load_sheet_image()
-	if source == null:
+	var sheet: Texture2D = load(ShipFloor.SHEET)
+	if floor_columns.is_empty() or sheet == null:
 		return ImageTexture.create_from_image(fill)
-	var offset_x: int = BASE_FRAME * width
+	var floor_image: Image = sheet.get_image()
+	var module_width: int = int(ShipFloor.MODULE_SIZE.x)
 	var inner: bool = _inward() > 0.0
 	for y: int in range(FILL_ROWS.x, FILL_ROWS.y + 1):
 		for x: int in range(FILL_X.x, FILL_X.y + 1):
 			var column: int = x if inner else width - 1 - x
-			var pixel: Color = source.get_pixel(offset_x + column, y)
-			if pixel.a < 0.5 or pixel.is_equal_approx(BASE_COLOR):
-				fill.set_pixel(column, y - FILL_ROWS.x, Color.WHITE)
+			var floor_x: int = int(global_position.x) + column
+			var module: int = clampi(floori(float(floor_x) / module_width), 0, floor_columns.size() - 1)
+			var source_x: int = floor_columns[module] * module_width + floor_x % module_width
+			fill.set_pixel(column, y - FILL_ROWS.x, floor_image.get_pixel(source_x, y - int(FLOOR_ROW)))
 	return ImageTexture.create_from_image(fill)
+
+
+# Máscara blanca de la franja de piso que está bajo el vidrio (filas `POOL_ROWS`, columnas `FILL_X`).
+func _make_floor_pool() -> Texture2D:
+	var width: int = int(FRAME_SIZE.x)
+	var pool: Image = Image.create(width, POOL_ROWS.y - POOL_ROWS.x + 1, false, Image.FORMAT_RGBA8)
+	for y: int in range(POOL_ROWS.x, POOL_ROWS.y + 1):
+		for x: int in range(FILL_X.x, FILL_X.y + 1):
+			pool.set_pixel(x if _inward() > 0.0 else width - 1 - x, y - POOL_ROWS.x, Color.WHITE)
+	return ImageTexture.create_from_image(pool)
 
 
 func _load_sheet_image() -> Image:
