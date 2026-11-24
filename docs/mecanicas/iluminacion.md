@@ -11,7 +11,7 @@
 
 | Luz | Dónde | Comportamiento |
 |---|---|---|
-| Astronauta | hija del `Player` | Fija; es la principal. Tiene altura propia (`player_height`, 150) y curva más plana (`player_core`, 0,8) para llegar lejos; con `player_self_lit = false` el astronauta se dibuja sin sombreado, así su luz no lo quema |
+| Astronauta | hija del `Player` | Fija; es la principal. Tiene altura propia (`player_height`, 150) y curva más plana (`player_core`, 0,8) para llegar lejos; con `player_self_lit = false` el astronauta se dibuja sin sombreado, así su luz no lo quema. Para que igual lo afecte el entorno, cada frame se tiñe (`Player._update_environment_tint`) con todas las luces del grupo `env_lights` (las de `make_light`, menos la suya): se acerca a su color según energía × textura de la luz en su posición × `player_light_tint` (0,6) |
 | Grietas | `WallLights`, una por grieta (celdas vecinas de la fuente 1 de `Dano`) | Naranja, titila; el radio crece con el tamaño de la grieta |
 | Alarmas | `WallLights`, una por tile de alarma (fuente 1 de la pared, (0,2)–(0,5)) | Roja (las rotas más tenues). Se prende y apaga con el cuadro del tile: los tiles de alarma (0,2)–(0,5) de `walls_tileset_ship` y su versión emisiva corren en modo sincronizado (todas las alarmas en el mismo cuadro) y la luz calcula el cuadro con el autoload `AlarmClock`, el mismo reloj que usa Godot para animar los tiles. Encendida en los cuadros 2–5 (sanas) y 0, 3 y 6 (rotas); `WallLights.ALARM_ON_FRAMES` |
 | Temporizada | hija de la `Platform` | Encendida fija, aviso que parpadea, apagada nada |

@@ -42,6 +42,9 @@ const EMPTY_FUEL_TINT: Color = Color(1.0, 0.6, 0.6)
 const BLINK_ALPHA: float = 0.3
 ## Velocidad del parpadeo tras un golpe. Unidad: cambios por segundo. Solo visual.
 const BLINK_RATE: float = 12.0
+## Cuánto se aviva el color de una luz al teñir al astronauta (una luz blanca lo aclara un poco).
+## Solo visual.
+const LIGHT_TINT_GAIN: float = 1.15
 ## Múltiplos de `respawn_height` donde se busca un lugar libre al reaparecer. Estructural.
 const RESPAWN_SEARCH_SCALES: Array[float] = [1.0, 0.75, 0.5, 1.25, 1.5, 0.25]
 ## Máximo de plataformas rompibles que un mismo paso del dash puede romper en fila. Estructural.
@@ -192,6 +195,8 @@ var _repair_material: ShaderMaterial
 var _repair_tween: Tween
 ## Material que tenía `Body/Sprite` antes del destello de reparación (se restaura al terminar).
 var _sprite_material: Material
+var _tint_base: Color = Color.WHITE
+static var _light_images: Dictionary = {}
 ## Fundido del astronauta al reaparecer: mientras dura, el parpadeo de invulnerabilidad espera.
 var _respawn_fade_tween: Tween
 var _respawn_fading: bool = false
@@ -242,6 +247,46 @@ func _process(_delta: float) -> void:
 	# El visor copia animación y cuadro del cuerpo (mismos tags y duraciones) para no desfasarse.
 	_visor.animation = _sprite.animation
 	_visor.frame = _sprite.frame
+	_update_environment_tint()
+
+
+# El astronauta se dibuja sin sombreado, así que ninguna luz lo cambia por sí sola: se le aplica el
+# tono base y, por cada luz activa del entorno que lo alcanza, se lo acerca a su color según cuánta
+# luz le llega (energía × textura de la luz en su posición × `player_light_tint`). La suya no cuenta.
+func _update_environment_tint() -> void:
+	var cfg: LightingConfig = LevelLighting.get_config()
+	var tint: Color = _tint_base
+	if not cfg.player_self_lit and cfg.player_light_tint > 0.0:
+		for node: Node in get_tree().get_nodes_in_group(LevelLighting.LIGHT_GROUP):
+			var light: PointLight2D = node as PointLight2D
+			if light == null or not light.is_visible_in_tree() or not light.enabled or light.energy <= 0.001 or is_ancestor_of(light):
+				continue
+			var strength: float = light.energy * _sample_light(light, global_position) * cfg.player_light_tint
+			if strength > 0.001:
+				tint = tint.lerp(light.color * LIGHT_TINT_GAIN, clampf(strength, 0.0, 1.0))
+	_sprite.self_modulate = tint
+	_visor.self_modulate = tint
+
+
+# Cuánto da [param light] en [param point] (0–1): el alfa de su textura en ese punto, con su escala,
+# posición y desplazamiento. Fuera de la textura es 0. Las texturas radiales de `make_light` se leen
+# del degradé (sin bajar la imagen de la GPU); las demás (el cono de las puertas) de su imagen.
+static func _sample_light(light: PointLight2D, point: Vector2) -> float:
+	var texture: Texture2D = light.texture
+	if texture == null:
+		return 0.0
+	var size: Vector2 = texture.get_size()
+	var local: Vector2 = light.global_transform.affine_inverse() * point / light.texture_scale + size * 0.5 - light.offset
+	if local.x < 0.0 or local.y < 0.0 or local.x >= size.x or local.y >= size.y:
+		return 0.0
+	var gradient_texture: GradientTexture2D = texture as GradientTexture2D
+	if gradient_texture != null and gradient_texture.fill == GradientTexture2D.FILL_RADIAL:
+		var t: float = clampf(local.distance_to(size * 0.5) / (size.x * 0.5), 0.0, 1.0)
+		return gradient_texture.gradient.sample(t).a
+	if not _light_images.has(texture):
+		_light_images[texture] = texture.get_image()
+	var image: Image = _light_images[texture]
+	return image.get_pixelv(local).a if image != null else 0.0
 
 
 func _physics_process(delta: float) -> void:
@@ -1117,12 +1162,11 @@ func set_scripted(active: bool, direction: float = 0.0) -> void:
 	_update_visuals(Vector2.ZERO)
 
 
-## Tono con el que se dibuja el astronauta (multiplica sus sprites; blanco = su color). Como no se
-## sombrea (ver `LightingConfig.player_self_lit`), el [Hub] lo usa para que lo afecte la luz del
-## entorno, p. ej. la de una puerta abierta.
+## Tono base con el que se dibuja el astronauta (multiplica sus sprites; blanco = su color). Como no
+## se sombrea (ver `LightingConfig.player_self_lit`), el [Hub] lo usa para el tono de la sala y la
+## luz de las puertas; encima se suman las luces del entorno ([method _update_environment_tint]).
 func set_environment_tint(tint: Color) -> void:
-	_sprite.self_modulate = tint
-	_visor.self_modulate = tint
+	_tint_base = tint
 
 
 ## Opacidad del cuerpo (0–1). La usa el [Hub] para que el astronauta se pierda en el hueco de la

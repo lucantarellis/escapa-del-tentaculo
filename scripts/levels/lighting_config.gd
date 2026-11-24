@@ -31,6 +31,10 @@ extends Resource
 ## su color. Así se puede subir `player_energy` para ver más lejos sin que el jugador se queme a
 ## blanco. Si es true, recibe luz y oscuridad como el resto.
 @export var player_self_lit: bool = false
+## Con `player_self_lit = false`: cuánto lo tiñe cada luz del entorno (alarmas, lámparas, recogibles,
+## propulsores, luz del ascensor, etc.; no la suya). 0 = no lo afectan; 1 = a pleno de una luz fuerte
+## toma su color. Se calcula con la textura de cada luz en el punto del astronauta.
+@export_range(0.0, 1.0, 0.05) var player_light_tint: float = 0.6
 
 @export_group("Grietas de las paredes")
 @export var crack_color: Color = Color(1.0, 0.45, 0.15)

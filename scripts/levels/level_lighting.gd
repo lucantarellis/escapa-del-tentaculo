@@ -14,6 +14,8 @@ const LIGHT_TEXTURE_SIZE: int = 128
 static var _config: LightingConfig
 ## Luz que queda a mitad del radio en las luces comunes. Estructural.
 const DEFAULT_CORE: float = 0.45
+## Grupo de todas las luces hechas con [method make_light]: el astronauta las recorre para teñirse.
+const LIGHT_GROUP: StringName = &"env_lights"
 
 static var _light_textures: Dictionary = {}
 
@@ -56,6 +58,7 @@ static func make_light(light_color: Color, energy: float, radius: float, height:
 	light.color = light_color
 	light.energy = energy
 	light.height = get_config().light_height if height < 0.0 else height
+	light.add_to_group(LIGHT_GROUP)
 	return light
 
 
