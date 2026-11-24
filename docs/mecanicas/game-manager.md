@@ -59,7 +59,7 @@ Al iniciar (`_ready`):
 
 Al cambiar el estado:
 - `WON`: `Player.win()`, detiene el scroll y muestra "ESCAPASTE — pulsá R para reiniciar".
-- `LOST`: detiene el scroll y muestra el texto según la causa (constante `DEATH_TEXTS`: tentáculo/caída → "CAPTURADO", obstáculo/trampa → "GOLPEADO", otra → "PERDISTE"; todos terminan en "— pulsá R para reiniciar").
+- `LOST`: detiene el scroll. Si la causa tiene pantalla de derrota (`DeathScreenConfig`: tentáculo, caída, pulso, letal) la abre (ver `pantalla-derrota.md`); si no, muestra el texto según la causa (constante `DEATH_TEXTS`: tentáculo/caída → "CAPTURADO", obstáculo/trampa → "GOLPEADO", otra → "PERDISTE"; todos terminan en "— pulsá R para reiniciar").
 
 Como el manager sobrevive a la escena, el controlador suelta su conexión a `state_changed` en `_exit_tree` para no dejar conexiones a nodos ya liberados.
 

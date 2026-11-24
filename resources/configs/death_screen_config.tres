@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="DeathScreenConfig" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/death_screen_config.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/ui/death_screen_entry.gd" id="2"]
+
+[sub_resource type="Resource" id="captured"]
+script = ExtResource("2")
+causes = Array[StringName]([&"tentacle", &"fell"])
+title = "CAPTURADO"
+vignettes = Array[String](["death_captured_a"])
+lines = Array[String](["Tentáculo 1 · Vos 0", "Seguro sabés jugar"])
+
+[sub_resource type="Resource" id="electrocuted"]
+script = ExtResource("2")
+causes = Array[StringName]([&"pulse", &"lethal"])
+title = "ELECTROCUTADO"
+vignettes = Array[String](["death_electrocuted_a"])
+lines = Array[String](["Era de 220."])
+
+[resource]
+script = ExtResource("1")
+entries = Array[ExtResource("2")]([SubResource("captured"), SubResource("electrocuted")])
+fade_in_time = 0.3
+reveal_time = 0.2

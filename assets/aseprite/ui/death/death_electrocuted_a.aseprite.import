@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://bx8pss3447s3"
+path="res://.godot/imported/death_electrocuted_a.aseprite-d732ce50045836522dfaf23c7595a2ca.res"
+
+[deps]
+
+source_file="res://assets/aseprite/ui/death/death_electrocuted_a.aseprite"
+dest_files=["res://.godot/imported/death_electrocuted_a.aseprite-d732ce50045836522dfaf23c7595a2ca.res"]
+
+[params]
+

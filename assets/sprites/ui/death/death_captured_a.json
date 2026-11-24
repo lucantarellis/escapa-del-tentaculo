@@ -1,0 +1,303 @@
+{ "frames": [
+   {
+    "filename": "death_captured_a 0.aseprite",
+    "frame": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 90
+   },
+   {
+    "filename": "death_captured_a 1.aseprite",
+    "frame": { "x": 172, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 90
+   },
+   {
+    "filename": "death_captured_a 2.aseprite",
+    "frame": { "x": 344, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 90
+   },
+   {
+    "filename": "death_captured_a 3.aseprite",
+    "frame": { "x": 516, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 90
+   },
+   {
+    "filename": "death_captured_a 4.aseprite",
+    "frame": { "x": 688, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 90
+   },
+   {
+    "filename": "death_captured_a 5.aseprite",
+    "frame": { "x": 860, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 90
+   },
+   {
+    "filename": "death_captured_a 6.aseprite",
+    "frame": { "x": 1032, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 90
+   },
+   {
+    "filename": "death_captured_a 7.aseprite",
+    "frame": { "x": 1204, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 90
+   },
+   {
+    "filename": "death_captured_a 8.aseprite",
+    "frame": { "x": 1376, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 90
+   },
+   {
+    "filename": "death_captured_a 9.aseprite",
+    "frame": { "x": 1548, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 90
+   },
+   {
+    "filename": "death_captured_a 10.aseprite",
+    "frame": { "x": 1720, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 90
+   },
+   {
+    "filename": "death_captured_a 11.aseprite",
+    "frame": { "x": 1892, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 90
+   },
+   {
+    "filename": "death_captured_a 12.aseprite",
+    "frame": { "x": 2064, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 90
+   },
+   {
+    "filename": "death_captured_a 13.aseprite",
+    "frame": { "x": 2236, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 90
+   },
+   {
+    "filename": "death_captured_a 14.aseprite",
+    "frame": { "x": 2408, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 90
+   },
+   {
+    "filename": "death_captured_a 15.aseprite",
+    "frame": { "x": 2580, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 90
+   },
+   {
+    "filename": "death_captured_a 16.aseprite",
+    "frame": { "x": 2752, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 90
+   },
+   {
+    "filename": "death_captured_a 17.aseprite",
+    "frame": { "x": 2924, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 90
+   },
+   {
+    "filename": "death_captured_a 18.aseprite",
+    "frame": { "x": 3096, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 90
+   },
+   {
+    "filename": "death_captured_a 19.aseprite",
+    "frame": { "x": 3268, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 90
+   },
+   {
+    "filename": "death_captured_a 20.aseprite",
+    "frame": { "x": 3440, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 90
+   },
+   {
+    "filename": "death_captured_a 21.aseprite",
+    "frame": { "x": 3612, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 90
+   },
+   {
+    "filename": "death_captured_a 22.aseprite",
+    "frame": { "x": 3784, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 90
+   },
+   {
+    "filename": "death_captured_a 23.aseprite",
+    "frame": { "x": 3956, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 90
+   },
+   {
+    "filename": "death_captured_a 24.aseprite",
+    "frame": { "x": 4128, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 120
+   },
+   {
+    "filename": "death_captured_a 25.aseprite",
+    "frame": { "x": 4300, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 120
+   },
+   {
+    "filename": "death_captured_a 26.aseprite",
+    "frame": { "x": 4472, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 120
+   },
+   {
+    "filename": "death_captured_a 27.aseprite",
+    "frame": { "x": 4644, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 120
+   },
+   {
+    "filename": "death_captured_a 28.aseprite",
+    "frame": { "x": 4816, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 120
+   },
+   {
+    "filename": "death_captured_a 29.aseprite",
+    "frame": { "x": 4988, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 120
+   },
+   {
+    "filename": "death_captured_a 30.aseprite",
+    "frame": { "x": 5160, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 120
+   },
+   {
+    "filename": "death_captured_a 31.aseprite",
+    "frame": { "x": 5332, "y": 0, "w": 172, "h": 98 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 172, "h": 98 },
+    "sourceSize": { "w": 172, "h": 98 },
+    "duration": 120
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.3.18.6-x64",
+  "image": "death_captured_a.png",
+  "format": "RGBA8888",
+  "size": { "w": 5504, "h": 98 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "play", "from": 0, "to": 23, "direction": "forward", "color": "#000000ff" },
+   { "name": "end", "from": 24, "to": 31, "direction": "forward", "color": "#000000ff" }
+  ]
+ }
+}

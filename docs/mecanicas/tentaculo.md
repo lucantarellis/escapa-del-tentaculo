@@ -78,7 +78,7 @@ Con `TentacleConfig.sea` asignado (`tentacle_sea_config.tres`, hoy en `tentacle_
 
 ## Manejo de la derrota
 
-El tentáculo llama a `Player.die(cause)`. `Player.died(cause)` llega a `LevelController`, que la pasa a `GameManager.notify_player_died`; el manager pasa a `LOST` y el controlador detiene el scroll y muestra "CAPTURADO — pulsá R para reiniciar" para `&"tentacle"` y `&"fell"` (mapa `DEATH_TEXTS`). R (acción `restart`) la maneja el `GameManager` y recarga la escena, lo que deja combustible, cámara y tentáculo en su estado inicial. Ver `game-manager.md`.
+El tentáculo llama a `Player.die(cause)`. `Player.died(cause)` llega a `LevelController`, que la pasa a `GameManager.notify_player_died`; el manager pasa a `LOST` y el controlador detiene el scroll y abre la pantalla de derrota CAPTURADO para `&"tentacle"` y `&"fell"` (ver `pantalla-derrota.md`). R (acción `restart`) la maneja el `GameManager` y recarga la escena, lo que deja combustible, cámara y tentáculo en su estado inicial. Ver `game-manager.md`.
 
 ## Cómo probarlo
 

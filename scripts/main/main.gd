@@ -7,7 +7,8 @@ extends Node
 ## hub, instancia el nivel con [member LevelController.autostart] en `false`, llama a
 ## [method LevelController.play_intro] (intro de la escotilla: al romperse, el nivel empieza solo) y
 ## aclara la pantalla. Con R ([signal GameManager.restart_requested]) reconstruye solo el nivel y
-## repite la intro. Con Escape (`ui_cancel`), solo después de ganar o perder, vuelve al hub.
+## repite la intro. Con Escape (`ui_cancel`), solo después de ganar o perder, vuelve al hub (igual
+## que el botón VOLVER AL HUB de la pantalla de derrota, [signal LevelController.hub_requested]).
 ## Durante la partida Escape no hace nada: no hay pausa. Ver `docs/mecanicas/hub.md`.
 
 ## Escena del nivel jugable. Estructural.
@@ -42,6 +43,11 @@ func _unhandled_input(event: InputEvent) -> void:
 	if state != GameManager.State.WON and state != GameManager.State.LOST:
 		return
 	get_viewport().set_input_as_handled()
+	_go_to_hub()
+
+
+# Vuelve al hub después de ganar o perder (Escape o VOLVER AL HUB de la pantalla de derrota).
+func _go_to_hub() -> void:
 	_going_to_hub = true
 	GameManager.restart()
 
@@ -68,6 +74,7 @@ func _spawn_level(autostart: bool) -> LevelController:
 	var level: LevelController = LEVEL_SCENE.instantiate() as LevelController
 	level.autostart = autostart
 	level.show_menu_hint = true
+	level.hub_requested.connect(_go_to_hub)
 	_level_holder.add_child(level)
 	return level
 

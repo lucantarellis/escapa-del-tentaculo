@@ -16,12 +16,18 @@ extends Node2D
 ## Se emite cuando el jugador cruza el borde inferior de un tier (ver [SegmentTier]).
 ## [param tier_index] es el índice en `LevelConfig.tiers`.
 signal tier_entered(tier_index: int)
+## Se pidió volver al hub desde la pantalla de derrota (botón VOLVER AL HUB). Lo escucha [Main]; si
+## nadie lo escucha (nivel solo, F6) se reinicia la partida.
+signal hub_requested
+
+## Escena de la pantalla de derrota ([DeathScreen]). Estructural.
+const DEATH_SCREEN_SCENE: PackedScene = preload("res://scenes/ui/DeathScreen.tscn")
 
 ## Texto que se agrega al mensaje de fin cuando la partida supera el récord. Solo visual.
 const NEW_RECORD_TEXT: String = "NUEVO RÉCORD"
 
-## Texto de derrota por causa de muerte. Solo visual. Las causas no listadas usan
-## [constant DEFAULT_DEATH_TEXT].
+## Texto de derrota por causa de muerte, para las causas que todavía no tienen pantalla de derrota
+## ([DeathScreenConfig]). Solo visual. Las causas no listadas usan [constant DEFAULT_DEATH_TEXT].
 const DEATH_TEXTS: Dictionary = {
 	&"tentacle": "CAPTURADO — pulsá R para reiniciar",
 	&"fell": "CAPTURADO — pulsá R para reiniciar",
@@ -95,6 +101,7 @@ var _background_preapplied: Dictionary = {}
 # Aviso de fase completada (se arma por código en la capa de mensajes).
 var _notice_label: Label
 var _notice_tween: Tween
+var _death_screen: DeathScreen
 
 
 func _ready() -> void:
@@ -303,7 +310,33 @@ func _on_state_changed(new_state: GameManager.State, _old_state: GameManager.Sta
 			_camera.set_scrolling(false)
 			_tentacle.set_rising(false)
 			var progress: float = _hud.get_progress() if _hud != null else 0.0
-			_show_message(DEATH_TEXTS.get(GameManager.get_last_death_cause(), DEFAULT_DEATH_TEXT) + _record_suffix(progress) + _menu_hint())
+			var cause: StringName = GameManager.get_last_death_cause()
+			var screen: DeathScreen = DEATH_SCREEN_SCENE.instantiate() as DeathScreen
+			if DeathScreen.has_screen(screen.config, cause):
+				_open_death_screen(screen, cause, progress)
+			else:
+				screen.free()
+				_show_message(DEATH_TEXTS.get(cause, DEFAULT_DEATH_TEXT) + _record_suffix(progress) + _menu_hint())
+
+
+# Muestra la pantalla de derrota (encima del HUD, en la capa de mensajes) con los datos de la
+# partida. Registra el récord igual que el mensaje de texto.
+func _open_death_screen(screen: DeathScreen, cause: StringName, progress: float) -> void:
+	_death_screen = screen
+	var new_record: bool = RunRecords.submit_progress(progress)
+	if new_record and _hud != null:
+		_hud.set_record(progress)
+	_notice_label.visible = false
+	_message_label.get_parent().add_child(screen)
+	screen.hub_requested.connect(_on_death_hub_requested)
+	screen.open(cause, progress, RunRecords.get_best_progress(), new_record, PlayerProgress.get_run_coins())
+
+
+func _on_death_hub_requested() -> void:
+	if hub_requested.get_connections().is_empty():
+		GameManager.restart()
+	else:
+		hub_requested.emit()
 
 
 # Arma el aviso de fase completada: un Label centrado arriba, escondido hasta que haga falta.

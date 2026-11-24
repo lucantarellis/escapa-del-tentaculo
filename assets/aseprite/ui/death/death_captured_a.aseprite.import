@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://coo3ybce1yapc"
+path="res://.godot/imported/death_captured_a.aseprite-88f021a5a56490c73d188d38a61baedb.res"
+
+[deps]
+
+source_file="res://assets/aseprite/ui/death/death_captured_a.aseprite"
+dest_files=["res://.godot/imported/death_captured_a.aseprite-88f021a5a56490c73d188d38a61baedb.res"]
+
+[params]
+

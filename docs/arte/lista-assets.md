@@ -94,7 +94,7 @@ Marcar con `[x]` a medida que se termina. Última actualización: 23/11/2026 (br
 - [x] Mercado: puesto con ambiente animado (`market_booth`), vendedor-pantalla con 6 animaciones (`market_face`) y UI en piezas 9-slice (`market_ui`: solapas, filas por estado, botones, scrollbar). Guía: `docs/arte/mercado.md`.
 - [x] Mercado: un ícono por rama (`mk_branch_{dash,speed,tank,life,repair,coins}`); se decidió uno por rama + nivel en vez de uno por mejora.
 - [x] Tipografía: Tiny5 (OFL) en `assets/fonts/` para HUD, mercado y menús; 16 px mínimo, siempre múltiplos de 8. El logo del título está dibujado (ver `docs/arte/titulo.md`).
-- [x] Pantalla de derrota: viñetas `death_captured_a` y `death_electrocuted_a` (`assets/aseprite/ui/death/`), armado y comportamiento en `docs/arte/derrota.md`.
+- [x] Pantalla de derrota: viñetas `death_captured_a` y `death_electrocuted_a` (`assets/aseprite/ui/death/`), armado y comportamiento en `docs/arte/derrota.md`. Integrada en el juego (brief 09; ver `docs/mecanicas/pantalla-derrota.md`).
 - [ ] Pantallas de derrota de los tiers 2 y 3, y pantalla de victoria (depende del jefe).
 
 ## Fuera de esta lista
