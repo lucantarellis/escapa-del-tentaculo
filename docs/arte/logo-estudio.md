@@ -8,4 +8,5 @@ Pantalla en negro antes de la pantalla de inicio. Una tele vieja de tubo en pers
 
 - Solo colores de la paleta. Sin capas `normal` ni `emissive` (no usa iluminación).
 - El bebé está dibujado sobre el plano de la pantalla, en la misma perspectiva que la tele.
-- Se generó por código (Python) y se cargó a Aseprite. Hay una opción B en isométrica en revisión.
+- Se generó por código (Python) y se cargó a Aseprite.
+- **Opción B (alternativa, no se usa en el juego):** `assets/aseprite/ui/logo/studio_logo_b.aseprite`, la misma tele en isométrica (120° a cada lado, bordes redondeados también atrás), 104×104, mismos tags y tiempos. Para usarla, exportarla sobre `studio_logo.png` + `.json`.
