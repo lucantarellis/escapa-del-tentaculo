@@ -27,6 +27,9 @@ const CABLE: int = 7
 ## Semiancho del marco de la escotilla: los módulos de peligro van justo a sus lados. Estructural.
 ## Unidad: px.
 const HATCH_HALF_WIDTH: float = 64.0
+## Fila de la hoja (0 = arriba) que se estira para alargar el frente del piso: es la franja oscura
+## lisa, debajo de todos los detalles (juntas, caño). Estructural.
+const STRETCH_ROW: int = 24
 
 ## Ancho del piso. Unidad: px.
 @export var width: float = 360.0:
@@ -38,6 +41,12 @@ const HATCH_HALF_WIDTH: float = 64.0
 @export var hatch_x: float = 180.0:
 	set(value):
 		hatch_x = value
+		_rebuild()
+## Px extra de alto del frente del piso, hacia abajo (la cara superior no cambia). Sirve para que
+## el piso llegue hasta el borde de la pantalla sin repetir módulos. Unidad: px.
+@export_range(0.0, 200.0, 1.0) var extra_depth: float = 0.0:
+	set(value):
+		extra_depth = value
 		_rebuild()
 ## Semilla de la elección de módulos: cambiarla re-sortea el piso de este segmento.
 @export var floor_seed: int = 1:
@@ -131,9 +140,19 @@ func _draw_emissive() -> void:
 
 
 func _draw_modules(canvas: CanvasItem, texture: Texture2D) -> void:
+	var top: float = -MODULE_SIZE.y - extra_depth
+	var stretch_end: float = STRETCH_ROW + 1.0
 	for i: int in _columns.size():
-		var region: Rect2 = Rect2(_columns[i] * MODULE_SIZE.x, 0.0, MODULE_SIZE.x, MODULE_SIZE.y)
-		canvas.draw_texture_rect_region(texture, Rect2(Vector2(i * MODULE_SIZE.x, -MODULE_SIZE.y), MODULE_SIZE), region)
+		var x: float = i * MODULE_SIZE.x
+		var column_x: float = _columns[i] * MODULE_SIZE.x
+		# Del borde superior hasta la fila de estiramiento (incluida).
+		canvas.draw_texture_rect_region(texture, Rect2(x, top, MODULE_SIZE.x, stretch_end), Rect2(column_x, 0.0, MODULE_SIZE.x, stretch_end))
+		# Franja estirada: la fila de estiramiento repetida `extra_depth` px.
+		if extra_depth > 0.0:
+			canvas.draw_texture_rect_region(texture, Rect2(x, top + stretch_end, MODULE_SIZE.x, extra_depth), Rect2(column_x, STRETCH_ROW, MODULE_SIZE.x, 1.0))
+		# Resto del módulo (la última fila negra incluida).
+		var rest: float = MODULE_SIZE.y - stretch_end
+		canvas.draw_texture_rect_region(texture, Rect2(x, top + stretch_end + extra_depth, MODULE_SIZE.x, rest), Rect2(column_x, stretch_end, MODULE_SIZE.x, rest))
 
 
 static func _get_texture() -> CanvasTexture:

@@ -25,10 +25,8 @@ extends Resource
 @export var door_light_energy: float = 0.9
 @export var door_light_range: float = 110.0
 @export var door_light_flicker: float = 0.05
-## Luz chica en la base de la puerta (alumbra el triángulo del marco, que queda fuera del cono): energía
-## respecto de `door_light_energy` (0–1) y alcance (px).
-@export_range(0.0, 1.0, 0.05) var door_base_light_ratio: float = 0.6
-@export var door_base_light_range: float = 44.0
+## Máscara aditiva del triángulo de la base del marco: alfa en la puerta abierta.
+@export_range(0.0, 1.0, 0.05) var door_base_mask_alpha: float = 0.4
 ## Haz visible: alfa en la puerta, largo hacia la sala y alto en el hueco (px).
 @export var door_beam_alpha: float = 0.35
 @export var door_beam_length: float = 80.0
