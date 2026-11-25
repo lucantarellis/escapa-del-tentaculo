@@ -20,7 +20,8 @@ Hay dos niveles jugables. `scenes/levels/Level.tscn` (nivel por segmentos, el pr
 Level (Node2D)                        script: level_controller.gd
 ├── Lighting (CanvasModulate)         script: level_lighting.gd; oscuridad de los tiers con dark_ambient (la nave)
 ├── Background (CanvasLayer, capa −10) script: level_background.gd (fondo por tier)
-│   └── ShipBackground (Node2D)       scenes/levels/ShipBackground.tscn; pozo de la nave en parallax (tier con background_ship)
+│   ├── ShipBackground (Node2D)       scenes/levels/ShipBackground.tscn; pozo de la nave en parallax (tier con background_ship)
+│   └── SpaceBackground (Node2D)      scenes/levels/SpaceBackground.tscn; cielo del espacio en capas (tier con background_stars); rocas del frente en una capa propia (5)
 ├── LevelBuilder (Node2D)             script: level_builder.gd, config = level_config.tres
 │   └── SegmentStartNN, Segment.., SegmentFinal01 (LevelSegment)   escenas de scenes/levels/segments/, agregadas al iniciar
 │       └── Walls (TileMapLayer)       nave e inicio: scenes/levels/WallsShip.tscn (Emissive, Detalle, Dano, Lights); espacio, alien y final: scenes/levels/Walls.tscn (ver mecanicas/paredes.md)
@@ -81,7 +82,7 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 | `SpeedBoost` | `scripts/pickups/speed_boost.gd` (+ `speed_boost_config.gd`) | Recogible de impulso de velocidad (tier 2) |
 | `HullDebris` | `scripts/levels/hull_debris.gd` | Fragmento letal despedido por un `TierEvent` (causa `&"debris"`) |
 | `SpaceProjectile` | `scripts/hazards/space_projectile.gd` | Meteoro o cometa del tier 2: avisa, cruza la pantalla y mata (causas `&"meteor"`, `&"comet"`). Ver `docs/mecanicas/obstaculos-espacio.md` |
-| `LevelBackground` | `scripts/levels/level_background.gd` | Fondo del nivel (color, pozo de la nave y estrellas con parallax) por tier; nodo `Background` de `Level.tscn` |
+| `LevelBackground` | `scripts/levels/level_background.gd` | Fondo del nivel (color, pozo de la nave y cielo del espacio) por tier; nodo `Background` de `Level.tscn` |
 
 ### Arte de la nave (brief 07)
 
@@ -94,6 +95,7 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 | `PlatformSkin` | `scripts/platforms/platform_skin.gd` | Módulos de sprites de las plataformas de la nave, animación por estado y propulsores |
 | `PickupSkin` | `scripts/pickups/pickup_skin.gd` | Aura, ítem y emisivo de los recogibles; `idle` y `collect` |
 | `ShipBackground` | `scripts/levels/ship_background.gd` (+ `ship_background_config.gd`, `shaders/background_layer.gdshader`) | Fondo en parallax de la nave. Ver `docs/arte/fondo-nave.md` |
+| `SpaceBackground` | `scripts/levels/space_background.gd` (+ `space_decor_config.gd`, `shaders/background_layer.gdshader`) | Cielo del espacio en capas con paralaje y desenfoque. Ver `docs/arte/fondo-espacio.md` |
 | `ShipFloor` | `scripts/levels/ship_floor.gd` | Piso 3/4 de los segmentos de inicio |
 | `SheetSprite` | `scripts/visual/sheet_sprite.gd` | Sprite que reproduce tags de una hoja de Aseprite con duración por cuadro (escotilla, ventanal) |
 | `LevelLighting` | `scripts/levels/level_lighting.gd` (+ `lighting_config.gd`) | Oscuridad por tier y fábrica de luces. Ver `docs/mecanicas/iluminacion.md` |

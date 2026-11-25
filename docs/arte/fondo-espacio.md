@@ -25,3 +25,7 @@ Todo el arte es **nítido**. El desenfoque, la luz y los destellos los pone Godo
 ## Giro
 
 Ninguna pieza de este fondo gira. Girar pixel art en el motor a ángulos que no son múltiplos de 90° rompe los contornos (filtro nearest) o mezcla colores fuera de paleta (filtro suave). Lo que tenga que girar (los asteroides del juego) se dibuja con cuadros pre-renderizados por ángulo: ver `docs/arte/asteroides.md`.
+
+## Conectado en Godot
+
+Lo dibuja `SpaceBackground` (`scripts/levels/space_background.gd`), hijo de `LevelBackground`. Cómo se arma, los valores y los parámetros de `SpaceDecorConfig`: `docs/mecanicas/tier-espacio.md`, sección "Decorado de fondo". Si cambia el arte, alcanza con volver a exportar los PNG y JSON con los mismos nombres (las rocas del frente se leen de los slices `rock_01`–`rock_50` del JSON).

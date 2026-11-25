@@ -1,6 +1,6 @@
 # Tier 2: el espacio
 
-**Archivos:** segmentos en `scenes/levels/segments/space/` (`SegmentSpace01`–`10` y las entradas `SegmentSpaceEntry01`–`03`) y salidas de la nave en `scenes/levels/segments/ship/` (`SegmentShipExit01`–`03`); scripts `scripts/levels/window_breach.gd` (`WindowBreach`), `tier_event.gd` (`TierEvent`), `hull_debris.gd` (`HullDebris`) y `level_background.gd` (`LevelBackground`); config del fuego `resources/configs/tentacle_config_fire.tres`; tileset de roca `resources/tilesets/walls_tileset_space.tres` (imagen `assets/sprites/environment/placeholders/walls_placeholder_space.png`). Todo se asigna en `resources/configs/level_config.tres`.
+**Archivos:** segmentos en `scenes/levels/segments/space/` (`SegmentSpace01`–`10` y las entradas `SegmentSpaceEntry01`–`03`) y salidas de la nave en `scenes/levels/segments/ship/` (`SegmentShipExit01`–`03`); scripts `scripts/levels/window_breach.gd` (`WindowBreach`), `tier_event.gd` (`TierEvent`), `hull_debris.gd` (`HullDebris`), `level_background.gd` (`LevelBackground`) y `space_background.gd` (`SpaceBackground`); config del fuego `resources/configs/tentacle_config_fire.tres`; tileset de roca `resources/tilesets/walls_tileset_space.tres` (imagen `assets/sprites/environment/placeholders/walls_placeholder_space.png`). Todo se asigna en `resources/configs/level_config.tres`.
 
 ## Historia
 
@@ -49,15 +49,31 @@ Todos los valores son de prueba: el "se siente bien" es de LT.
 
 ## Decorado de fondo
 
-Dibujado por `LevelBackground` (con las estrellas del tier) y parametrizado en `SpaceDecorConfig` (se asigna en la propiedad `decor` del nodo `Background`; vacío = valores por defecto). Es solo visual, sin colisión.
+Dibujado por `SpaceBackground` (`scripts/levels/space_background.gd`, escena `scenes/levels/SpaceBackground.tscn`), hijo de `LevelBackground`, que lo muestra con fundido cuando el tier pide estrellas (`background_stars`). Es el mismo cielo de los ventanales del hub, con arte en `assets/sprites/environment/background_space/` (guía: `docs/arte/fondo-espacio.md`). Se parametriza en `SpaceDecorConfig` (propiedad `decor` del nodo `Background`; vacío = valores por defecto). Es solo visual, sin colisión. Las capas se mueven a mano con la Y de la cámara (la capa de pantalla −10 no sigue al mundo) y el desenfoque lo pone `shaders/background_layer.gdshader` (el de la nave).
 
-| Capa | Parallax | Descripción |
+| Capa | Paralaje | Desenfoque | Animación |
+|---|---|---|---|
+| Nebulosa lejana (`space_far_nebula`, 360×1200, se repite) | 0,06 | 1,2 px | — |
+| Estrellas lejanas y sol (`space_far_stars`, alineada con la nebulosa) | 0,06 | no | — |
+| Planeta del anillo (`space_planet_ringed`, 168×168) | 0,15 | 0,6 px | `rotate`, 24 cuadros de 150 ms |
+| Estrellas cercanas (`space_stars_near`, 360×640, se repite) | 0,3 | no | `twinkle`, 8 cuadros de 150 ms |
+| Estrella fugaz | — | no | Por código, cada 6–10 s, en los costados y muy tenue |
+| Rocas del frente (`space_front_rocks`, 50 piezas), capa 5 delante del jugador | 1,4 | 3,5 px | — |
+
+- **Planeta:** una vez por tramo de `planet_loop` (1600 px), con la esquina superior izquierda en `planet_origin` (220, 250): queda cortado por el borde derecho.
+- **Rocas del frente:** reparto con semilla (`foreground_seed`): una cada `foreground_gap_min`–`max` (140–280 px), alternando izquierda y derecha, con el centro entre `foreground_edge_min` y `max` (−10 a 40 px) del borde, sin repetir la pieza de la anterior. El reparto se repite cada `foreground_loop` (4000 px). Se espejan al azar y nunca giran. Se apagan hacia el centro desde `foreground_clear_radius` (90 px) para no tapar el juego. Cada pieza se recorta del atlas en su propia textura con 8 px de borde transparente, así el desenfoque no toma píxeles de las vecinas.
+- **Filtro:** las capas desenfocadas usan filtro lineal (el desenfoque toma medios píxeles, como en la nave); las nítidas (estrellas), nearest.
+
+| Propiedad de `SpaceDecorConfig` | Defecto | Descripción |
 |---|---|---|
-| Nebulosa | 0,05 | 3 manchas suaves de poca opacidad |
-| Planeta lejano | 0,10 | Planeta con anillo; reaparece cada `planet_loop` px |
-| Estrellas lejanas / cercanas | 0,08 / 0,25 | Las cercanas titilan |
-| Estrella fugaz | — | Cada 6–10 s, en los costados y muy tenue |
-| Frente desenfocado | 1,4 | Rocas y chatarra borrosas (capa 5, delante del jugador); solo se ven hacia los costados y se apagan hacia el centro (`foreground_clear_radius`) para no tapar el juego |
+| `far_parallax` / `planet_parallax` / `near_parallax` / `foreground_parallax` | 0,06 / 0,15 / 0,3 / 1,4 | Paralaje de cada capa |
+| `nebula_blur` / `planet_blur` / `foreground_blur` | 1,2 / 0,6 / 3,5 | Radio del desenfoque. Unidad: px |
+| `planet_origin` / `planet_loop` | (220, 250) / 1600 | Posición en el tramo y largo del tramo. Unidad: px |
+| `foreground_loop` | 4000 | Ciclo del reparto de rocas (0 = sin rocas). Unidad: px |
+| `foreground_gap_min` / `foreground_gap_max` | 140 / 280 | Separación entre rocas. Unidad: px |
+| `foreground_edge_min` / `foreground_edge_max` | −10 / 40 | Cuánto entra el centro de la roca desde el borde. Unidad: px |
+| `foreground_clear_radius` / `foreground_alpha` / `foreground_seed` | 90 / 1,0 / 1234 | Zona libre del centro, opacidad y semilla |
+| `shooting_min_interval` / `shooting_max_interval` | 6 / 10 | Segundos entre estrellas fugaces (0 en el máximo = ninguna) |
 
 ## Salida del tier: el tentáculo del alien (`SegmentSpaceExit01`)
 

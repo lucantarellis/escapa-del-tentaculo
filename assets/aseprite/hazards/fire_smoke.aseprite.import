@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://c8ruha7egrvvr"
+path="res://.godot/imported/fire_smoke.aseprite-0c40c8af0731a6409fb2fb062cb8331a.res"
+
+[deps]
+
+source_file="res://assets/aseprite/hazards/fire_smoke.aseprite"
+dest_files=["res://.godot/imported/fire_smoke.aseprite-0c40c8af0731a6409fb2fb062cb8331a.res"]
+
+[params]
+

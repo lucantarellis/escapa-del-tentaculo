@@ -1,6 +1,7 @@
 shader_type canvas_item;
-// Capa del fondo de la nave: desenfoque (gaussiano 5×5) y niebla hacia un color oscuro.
-// Ver scripts/levels/ship_background.gd y docs/arte/fondo-nave.md.
+// Capa de fondo de la nave y del espacio: desenfoque (gaussiano 5×5) y niebla hacia un color oscuro.
+// Ver scripts/levels/ship_background.gd, scripts/levels/space_background.gd, docs/arte/fondo-nave.md
+// y docs/arte/fondo-espacio.md.
 
 // Radio del desenfoque. 0 = nítida. Unidad: px de la textura.
 uniform float blur_radius = 0.0;

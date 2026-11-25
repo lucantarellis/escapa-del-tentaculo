@@ -1,56 +1,51 @@
 class_name SpaceDecorConfig
 extends Resource
-## Parámetros del decorado del espacio (capas de fondo y objetos desenfocados del frente) que dibuja
-## [LevelBackground]. Todo es solo visual: sin colisiones ni efecto en el juego. Placeholder hasta
-## el arte final.
+## Parámetros del decorado del espacio ([SpaceBackground]): capas de fondo con paralaje, desenfoque
+## por capa y rocas desenfocadas del frente. Todo es solo visual: sin colisiones ni efecto en el
+## juego. Ver `docs/arte/fondo-espacio.md`.
 
-@export_group("Estrellas")
-## Estrellas del plano lejano (chicas y tenues). Solo visual.
-@export var far_star_count: int = 70
-## Parallax del plano lejano (0 = fijas, 1 = con el mundo).
-@export_range(0.0, 1.0, 0.01) var far_parallax: float = 0.08
-## Estrellas del plano cercano (algunas titilan).
-@export var near_star_count: int = 35
-## Parallax del plano cercano.
-@export_range(0.0, 1.0, 0.01) var near_parallax: float = 0.25
-## Velocidad del titilar. Unidad: rad/s.
-@export var twinkle_speed: float = 1.6
+@export_group("Paralaje")
+## Paralaje de la nebulosa y de las estrellas lejanas (0 = fijas, 1 = con el mundo).
+@export_range(0.0, 1.0, 0.01) var far_parallax: float = 0.06
+## Paralaje del planeta del anillo.
+@export_range(0.0, 1.0, 0.01) var planet_parallax: float = 0.15
+## Paralaje de las estrellas cercanas (las que titilan).
+@export_range(0.0, 1.0, 0.01) var near_parallax: float = 0.3
+## Paralaje de las rocas del frente (mayor que 1: se ven más cerca de la cámara que el mundo).
+@export_range(0.0, 2.0, 0.01) var foreground_parallax: float = 1.4
 
-@export_group("Nebulosa")
-## Manchas de nebulosa.
-@export var nebula_count: int = 3
-## Opacidad de cada mancha (muy baja para no competir con el juego).
-@export_range(0.0, 0.3, 0.005) var nebula_alpha: float = 0.09
-## Parallax de la nebulosa.
-@export_range(0.0, 1.0, 0.01) var nebula_parallax: float = 0.05
-## Colores de las manchas (se reparten en orden).
-@export var nebula_colors: PackedColorArray = PackedColorArray([Color("6A4FB0"), Color("2E6FB0"), Color("8A3F8F")])
+@export_group("Desenfoque")
+## Radio del desenfoque de la nebulosa lejana. 0 = nítida. Unidad: px.
+@export_range(0.0, 6.0, 0.1) var nebula_blur: float = 1.2
+## Radio del desenfoque del planeta. Unidad: px.
+@export_range(0.0, 6.0, 0.1) var planet_blur: float = 0.6
+## Radio del desenfoque de las rocas del frente. Unidad: px.
+@export_range(0.0, 6.0, 0.1) var foreground_blur: float = 3.5
 
 @export_group("Planeta")
-## Radio del planeta lejano. Unidad: px.
-@export var planet_radius: float = 64.0
-## Parallax del planeta.
-@export_range(0.0, 1.0, 0.01) var planet_parallax: float = 0.1
-## Largo del ciclo vertical del planeta: tras esta distancia (px de pantalla) reaparece. Unidad: px.
-@export var planet_loop: float = 1500.0
-## Color del planeta.
-@export var planet_color: Color = Color("3B4A6B")
-## Color del anillo.
-@export var planet_ring_color: Color = Color("6B7A9B")
+## Esquina superior izquierda del planeta dentro de su tramo de `planet_loop`. Unidad: px.
+@export var planet_origin: Vector2 = Vector2(220.0, 250.0)
+## Largo del tramo del planeta: tras esta distancia (px de capa) vuelve a aparecer. Unidad: px.
+@export var planet_loop: float = 1600.0
 
 @export_group("Frente desenfocado")
-## Objetos grandes y borrosos delante del jugador (roca y chatarra). 0 = ninguno.
-@export var foreground_count: int = 5
-## Parallax del frente (mayor que el mundo: se ven más cerca de la cámara).
-@export_range(0.0, 2.0, 0.01) var foreground_parallax: float = 1.4
-## Opacidad máxima del frente.
-@export_range(0.0, 0.6, 0.01) var foreground_alpha: float = 0.22
-## Distancia al centro de la pantalla desde la que el frente empieza a verse. Unidad: px.
+## Largo del ciclo vertical del frente (el reparto se repite). 0 = sin rocas del frente. Unidad: px.
+@export var foreground_loop: float = 4000.0
+## Separación mínima entre una roca y la siguiente, que va del otro lado. Unidad: px.
+@export var foreground_gap_min: float = 140.0
+## Separación máxima entre una roca y la siguiente. Unidad: px.
+@export var foreground_gap_max: float = 280.0
+## Cuánto entra el centro de cada roca desde el borde de la pantalla: mínimo (negativo = afuera).
+## Unidad: px.
+@export var foreground_edge_min: float = -10.0
+## Cuánto entra el centro de cada roca desde el borde de la pantalla: máximo. Unidad: px.
+@export var foreground_edge_max: float = 40.0
+## Distancia al centro de la pantalla desde la que las rocas empiezan a verse. Unidad: px.
 @export var foreground_clear_radius: float = 90.0
-## Largo del ciclo vertical del frente. Unidad: px.
-@export var foreground_loop: float = 1300.0
-## Color base del frente.
-@export var foreground_color: Color = Color("4A5468")
+## Opacidad de las rocas del frente.
+@export_range(0.0, 1.0, 0.01) var foreground_alpha: float = 1.0
+## Semilla del reparto de las rocas (mismo número, mismo reparto).
+@export var foreground_seed: int = 1234
 
 @export_group("Estrella fugaz")
 ## Segundos mínimos entre estrellas fugaces. 0 en el máximo = ninguna.
