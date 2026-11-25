@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://hiqscpg2qv3v"
+path="res://.godot/imported/asteroid_large_07.aseprite-45f017763d323e10518f5fee52df477b.res"
+
+[deps]
+
+source_file="res://assets/aseprite/environment/asteroids/asteroid_large_07.aseprite"
+dest_files=["res://.godot/imported/asteroid_large_07.aseprite-45f017763d323e10518f5fee52df477b.res"]
+
+[params]
+

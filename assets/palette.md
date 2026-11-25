@@ -2,7 +2,7 @@
 
 Hay dos juegos de colores y no se mezclan: la **paleta de arte** (para dibujar sprites) y los **colores de placeholder** (los `Polygon2D` del código, que no cambian con el arte final).
 
-## Paleta de arte (52 colores)
+## Paleta de arte (53 colores)
 
 Consolidada el 18/11/2026 a partir de cuatro referencias:
 - `assets/sprites/environment/fire_platform/`: 20 PNG de pixel art real con 24 colores exactos. Es la referencia de la línea nueva y manda sobre las demás.
@@ -85,6 +85,14 @@ Archivos para cargar en Aseprite: `assets/palette.gpl` y `assets/palette.hex`. L
 | `oxido` | `#8E3E28` | fuego, astronauta |
 | `vino` | `#71373C` | fuego |
 | `vino_oscuro` | `#48151C` | astronauta, tileset |
+
+### Roca del espacio
+
+Agregado el 24/11/2026 para los asteroides del tier 2: la cara iluminada de la roca, un marrón con menos amarillo que `oxido`. La rampa de los asteroides es `piedra_1` (sombra), `vino_oscuro`, `vino` y `roca_luz`.
+
+| Nombre | Hex | Uso |
+|---|---|---|
+| `roca_luz` | `#8A5550` | caras iluminadas de los asteroides |
 
 ### Tentáculo (carne del perseguidor de la nave)
 

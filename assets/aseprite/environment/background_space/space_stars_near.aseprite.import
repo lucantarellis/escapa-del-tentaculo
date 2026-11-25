@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://3baap7qe6f1y"
+path="res://.godot/imported/space_stars_near.aseprite-8afe7f935305e92727f07a1bf538e1fe.res"
+
+[deps]
+
+source_file="res://assets/aseprite/environment/background_space/space_stars_near.aseprite"
+dest_files=["res://.godot/imported/space_stars_near.aseprite-8afe7f935305e92727f07a1bf538e1fe.res"]
+
+[params]
+

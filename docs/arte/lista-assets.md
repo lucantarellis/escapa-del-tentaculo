@@ -25,17 +25,19 @@ Marcar con `[x]` a medida que se termina. Última actualización: 23/11/2026 (br
 
 ## Entorno base (P2)
 - [x] Paredes de la nave: tilesets en `assets/aseprite/environment/ship_walls/` → `assets/sprites/environment/ship_walls/` (pared con 47 combinaciones + diagonales, variantes y tiles animados; capas de rotura, grieta incandescente, bilis, parche remachado y cañerías; cada uno con relieve y emisivo). Detalle y armado: `docs/arte/paredes-nave.md`. TileSets en `resources/tilesets/walls_tileset_ship.tres` y `ship_walls_overlay.tres` (+ emisivos). Conectado en el brief 07: los 34 segmentos de la nave y de inicio usan `WallsShip.tscn` con capas `Detalle`/`Dano` y emisivas; luces de grietas y alarmas en `WallLights`. Pintar daño y detalle a mano (LT).
-- [ ] Paredes del espacio: ídem (los 13 asteroides las reutilizan).
+- [x] Asteroides del espacio: 40 sprites (10 por tamaño), roca tallada con normal map; chicos y medianos con 72 ángulos pre-renderizados. `assets/aseprite/environment/asteroids/`, guía `docs/arte/asteroides.md`.
+- [ ] Paredes laterales del espacio: hoy los segmentos del espacio no tienen paredes pintadas (el nodo `Walls` está vacío); solo hacen falta si se agregan.
 - [ ] Paredes del alien: ídem.
 - [x] Plataforma estática: `assets/aseprite/environment/platforms/platform_static.aseprite`. Ver `docs/arte/plataformas-nave.md`.
 - [x] Plataforma de un solo sentido: `platform_oneway.aseprite`.
 - [x] Plataforma rompible: `platform_breakable.aseprite` (`idle`, `shake`, `break_fall`, `break_hit`, `respawn`).
 - [x] Plataforma temporizada: `platform_timed.aseprite` (`on`, `warning`, `turn_off`, `off`, `turn_on`).
 - [x] Plataforma de pulso: `platform_pulse.aseprite` (`off`, `warn`, `on`). Propulsores de móviles: `platform_thruster.aseprite`. Todas conectadas en el brief 07 (`PlatformSkin`).
+- [x] Restos a la deriva del espacio: `platform_debris` (chapa arrancada con brasas; `idle`, `shake`, `break_fall`, `break_hit`; no reaparecen). Ver `docs/arte/plataformas-nave.md`.
 - [ ] Plataforma proyectil (16 px): pospuesta, se redefine con los segmentos nuevos.
 - [ ] Plataforma letal con fuego: aplicar `fire_skin` en las plataformas letales de los segmentos (la escena de prueba `FirePlatformTest.tscn` se borró).
 - [x] Fondo de la nave: 3 capas × 3 tramos en `assets/aseprite/environment/background_ship/`. Ver `docs/arte/fondo-nave.md`.
-- [ ] Fondo del espacio, con estrellas y decoración.
+- [x] Fondo del espacio: el cielo del hub en capas (nebulosa y estrellas lejanas, planeta del anillo que rota, estrellas que titilan y 50 rocas de primer plano). `assets/aseprite/environment/background_space/`, guía `docs/arte/fondo-espacio.md`.
 - [ ] Fondo del alien.
 - [x] Piso del segmento de inicio (10 segmentos): 3/4, módulos de 20×27 + piezas 2D para paredes laterales. `floor_ship`. Guía: `docs/arte/piso-y-escotilla.md`.
 
@@ -49,12 +51,12 @@ Marcar con `[x]` a medida que se termina. Última actualización: 23/11/2026 (br
 - Editables en `assets/aseprite/pickups/`, hojas en `assets/sprites/pickups/`. Guía: `docs/arte/recogibles.md`.
 
 ## Peligros del espacio (P3)
-- [ ] Meteoro (16 px, estela de 90) y su marca de aviso.
-- [ ] Cometa y su línea punteada de recorrido.
-- [ ] Satélite láser: cuerpo, línea de apuntado y haz letal de 700×14.
-- [ ] Campo de escombros: fragmentos de 18 px y anillo de órbita de 70 px.
+- [x] Meteoro: `meteor_head` (16 direcciones, cara incandescente) + partículas `particle_ember`. Guía `docs/arte/peligros-espacio.md`.
+- [x] Cometa: `comet_head` (núcleo de hielo) + partículas `particle_ice`.
+- [x] Tentáculo láser (reemplaza al satélite): `laser_tentacle`, tallo con ojo, 13 ángulos con `aim`, `lock` y `fire` + `emerge`. El haz lo dibuja Godot.
+- [x] Campo de escombros: `debris_fragment` (6 fragmentos × 36 ángulos).
 - [ ] Fragmentos del casco, que salen de la explosión.
-- [ ] Perseguidor: fuego.
+- [x] Perseguidor: fuego: `fire_explosion` (4 explosiones de bocanadas para el frente + 3 para el relleno, capa `emissive`) y `fire_smoke` (banda de humo violeta detrás del frente). Ensamblado en `docs/arte/peligros-espacio.md`.
 
 ## Peligros del alien (P3)
 - [ ] Anticuerpo (11 px de radio), con sus estados de patrulla, fijado y ataque.

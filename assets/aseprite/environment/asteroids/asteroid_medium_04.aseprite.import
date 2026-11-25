@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://b43mjeqfq7x5x"
+path="res://.godot/imported/asteroid_medium_04.aseprite-0c1f76b3da5925a714b5837acf2bbae9.res"
+
+[deps]
+
+source_file="res://assets/aseprite/environment/asteroids/asteroid_medium_04.aseprite"
+dest_files=["res://.godot/imported/asteroid_medium_04.aseprite-0c1f76b3da5925a714b5837acf2bbae9.res"]
+
+[params]
+

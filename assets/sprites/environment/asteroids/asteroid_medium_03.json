@@ -1,0 +1,667 @@
+{ "frames": [
+   {
+    "filename": "asteroid_medium_03 0.aseprite",
+    "frame": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 1.aseprite",
+    "frame": { "x": 110, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 2.aseprite",
+    "frame": { "x": 220, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 3.aseprite",
+    "frame": { "x": 330, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 4.aseprite",
+    "frame": { "x": 440, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 5.aseprite",
+    "frame": { "x": 550, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 6.aseprite",
+    "frame": { "x": 660, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 7.aseprite",
+    "frame": { "x": 770, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 8.aseprite",
+    "frame": { "x": 880, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 9.aseprite",
+    "frame": { "x": 990, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 10.aseprite",
+    "frame": { "x": 1100, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 11.aseprite",
+    "frame": { "x": 1210, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 12.aseprite",
+    "frame": { "x": 1320, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 13.aseprite",
+    "frame": { "x": 1430, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 14.aseprite",
+    "frame": { "x": 1540, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 15.aseprite",
+    "frame": { "x": 1650, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 16.aseprite",
+    "frame": { "x": 1760, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 17.aseprite",
+    "frame": { "x": 1870, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 18.aseprite",
+    "frame": { "x": 1980, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 19.aseprite",
+    "frame": { "x": 2090, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 20.aseprite",
+    "frame": { "x": 2200, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 21.aseprite",
+    "frame": { "x": 2310, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 22.aseprite",
+    "frame": { "x": 2420, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 23.aseprite",
+    "frame": { "x": 2530, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 24.aseprite",
+    "frame": { "x": 2640, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 25.aseprite",
+    "frame": { "x": 2750, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 26.aseprite",
+    "frame": { "x": 2860, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 27.aseprite",
+    "frame": { "x": 2970, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 28.aseprite",
+    "frame": { "x": 3080, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 29.aseprite",
+    "frame": { "x": 3190, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 30.aseprite",
+    "frame": { "x": 3300, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 31.aseprite",
+    "frame": { "x": 3410, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 32.aseprite",
+    "frame": { "x": 3520, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 33.aseprite",
+    "frame": { "x": 3630, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 34.aseprite",
+    "frame": { "x": 3740, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 35.aseprite",
+    "frame": { "x": 3850, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 36.aseprite",
+    "frame": { "x": 3960, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 37.aseprite",
+    "frame": { "x": 4070, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 38.aseprite",
+    "frame": { "x": 4180, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 39.aseprite",
+    "frame": { "x": 4290, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 40.aseprite",
+    "frame": { "x": 4400, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 41.aseprite",
+    "frame": { "x": 4510, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 42.aseprite",
+    "frame": { "x": 4620, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 43.aseprite",
+    "frame": { "x": 4730, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 44.aseprite",
+    "frame": { "x": 4840, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 45.aseprite",
+    "frame": { "x": 4950, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 46.aseprite",
+    "frame": { "x": 5060, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 47.aseprite",
+    "frame": { "x": 5170, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 48.aseprite",
+    "frame": { "x": 5280, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 49.aseprite",
+    "frame": { "x": 5390, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 50.aseprite",
+    "frame": { "x": 5500, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 51.aseprite",
+    "frame": { "x": 5610, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 52.aseprite",
+    "frame": { "x": 5720, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 53.aseprite",
+    "frame": { "x": 5830, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 54.aseprite",
+    "frame": { "x": 5940, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 55.aseprite",
+    "frame": { "x": 6050, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 56.aseprite",
+    "frame": { "x": 6160, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 57.aseprite",
+    "frame": { "x": 6270, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 58.aseprite",
+    "frame": { "x": 6380, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 59.aseprite",
+    "frame": { "x": 6490, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 60.aseprite",
+    "frame": { "x": 6600, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 61.aseprite",
+    "frame": { "x": 6710, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 62.aseprite",
+    "frame": { "x": 6820, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 63.aseprite",
+    "frame": { "x": 6930, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 64.aseprite",
+    "frame": { "x": 7040, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 65.aseprite",
+    "frame": { "x": 7150, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 66.aseprite",
+    "frame": { "x": 7260, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 67.aseprite",
+    "frame": { "x": 7370, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 68.aseprite",
+    "frame": { "x": 7480, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 69.aseprite",
+    "frame": { "x": 7590, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 70.aseprite",
+    "frame": { "x": 7700, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   },
+   {
+    "filename": "asteroid_medium_03 71.aseprite",
+    "frame": { "x": 7810, "y": 0, "w": 110, "h": 110 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 110, "h": 110 },
+    "sourceSize": { "w": 110, "h": 110 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.3.18.6-x64",
+  "image": "asteroid_medium_03.png",
+  "format": "RGBA8888",
+  "size": { "w": 7920, "h": 110 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "spin", "from": 0, "to": 71, "direction": "forward", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "color", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

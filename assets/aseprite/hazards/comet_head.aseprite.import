@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://1ca2h67fa0l0"
+path="res://.godot/imported/comet_head.aseprite-02a7cc16ff451369d8941f6ef2032490.res"
+
+[deps]
+
+source_file="res://assets/aseprite/hazards/comet_head.aseprite"
+dest_files=["res://.godot/imported/comet_head.aseprite-02a7cc16ff451369d8941f6ef2032490.res"]
+
+[params]
+

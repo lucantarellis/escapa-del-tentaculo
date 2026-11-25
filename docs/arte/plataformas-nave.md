@@ -40,3 +40,21 @@ Lo dibuja `PlatformSkin` (`scripts/platforms/platform_skin.gd`), hijo `Skin` de 
 ## Fuera de esta tanda
 
 Letales sin fuego (guardias, barredoras, bloques chicos móviles, losas de 300×30) y el proyectil: se redefinen junto con los segmentos nuevos. Para lo letal permanente, la idea es reutilizar el rayo de la de pulso siempre prendido o la piel de fuego.
+
+## Restos a la deriva del espacio (`platform_debris`)
+
+Agregado el 24/11/2026 para el tier 2. Chapa del casco arrancada: mismo acero que las plataformas de la nave, borde superior casi recto (el piso), borde inferior desgarrado con brasas que titilan, quemaduras. Editable `assets/aseprite/environment/platforms/platform_debris.aseprite` (capas `color`, `normal`, `emissive`); hojas `platform_debris.png`, `_normal.png`, `_emissive.png` y `.json` en `assets/sprites/environment/platforms/`; entrada en `platforms_layout.json`.
+
+- **Mismo armado que la rompible:** módulos de 10 px (`L`, `C0`–`C3`, `R`; columna = módulo, fila = cuadro), cuadros de **30 px de alto** con la chapa en las **filas 9–20** (deja lugar a los trozos que se separan hacia arriba y hacia abajo): desplazar el sprite **−9 px en Y** respecto del borde superior de la colisión. Cada módulo se rompe dentro de su propia columna, así se puede seguir cortando por módulo.
+- Centros: `C0` rejilla, `C1` franja de peligro arrancada, `C2` agujero de impacto, `C3` junta remachada.
+
+| Tag | Cuadros | Uso |
+|---|---|---|
+| `idle` | 4 × 150 ms, bucle | Quieta; solo titilan las brasas (capa emisiva). |
+| `shake` | 3 × 50 ms | El jugador se para encima (empieza `break_delay`). |
+| `break_fall` | 8 × 70 ms | Se rompe por el tiempo: cada módulo se parte en dos trozos que se separan sin caer (no hay gravedad), girando, y se desarman. |
+| `break_hit` | 6 × 60 ms | La rompe un dash: destello de un cuadro y los trozos salen más rápido. |
+
+- **Sin `respawn`:** en el tier 2 los restos **no reaparecen** (decisión de LT, solo para este objeto). Al terminar la rotura el sprite queda oculto y la colisión apagada para siempre en esa partida.
+- **Sin propulsores:** en el tier 2 las plataformas móviles no llevan `platform_thruster` (son restos a la deriva).
+- El tinte gris del tier (`platform_tint`) ya no hace falta con este arte.

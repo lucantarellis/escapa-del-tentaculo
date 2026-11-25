@@ -139,5 +139,36 @@
    ]
   },
   "frames": 4
+ },
+ "platform_debris": {
+  "module_width": 10,
+  "frame_height": 30,
+  "modules": [
+   "L",
+   "C0",
+   "C1",
+   "C2",
+   "C3",
+   "R"
+  ],
+  "tags": {
+   "idle": [
+    0,
+    3
+   ],
+   "shake": [
+    4,
+    6
+   ],
+   "break_fall": [
+    7,
+    14
+   ],
+   "break_hit": [
+    15,
+    20
+   ]
+  },
+  "frames": 21
  }
 }
