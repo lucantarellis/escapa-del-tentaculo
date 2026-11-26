@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/pickups/SpeedBoost.tscn" id="boost"]
 [ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
 [ext_resource type="PackedScene" path="res://scenes/levels/Asteroid.tscn" id="asteroid_scene"]
-[ext_resource type="PackedScene" path="res://scenes/hazards/SatelliteLaser.tscn" id="laser"]
+[ext_resource type="PackedScene" path="res://scenes/hazards/LaserTentacle.tscn" id="laser"]
 
 [node name="SegmentSpace09" type="Node2D"]
 script = ExtResource("seg")
@@ -57,12 +57,12 @@ moves = true
 travel = Vector2(140, 0)
 
 [node name="Laser1" parent="." instance=ExtResource("laser")]
-position = Vector2(344, -200)
+position = Vector2(360, -200)
 angle_from = 155.0
 angle_to = 205.0
 
 [node name="Laser2" parent="." instance=ExtResource("laser")]
-position = Vector2(16, -350)
+position = Vector2(0, -350)
 angle_from = -30.0
 angle_to = 25.0
 initial_delay = 2.0

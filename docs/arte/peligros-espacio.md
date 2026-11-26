@@ -1,6 +1,6 @@
 # Peligros del espacio (tier 2)
 
-Arte cerrado el 24/11/2026. Reemplaza los placeholders dibujados por código de `SpaceProjectile` (meteoro, cometa), `DebrisField` y `SatelliteLaser`. Editables en `assets/aseprite/hazards/`; PNG y JSON en `assets/sprites/hazards/`. Arte nítido: brillos, haces y estelas los pone Godot (aditivos, partículas, `PointLight2D`).
+Arte cerrado el 24/11/2026. Reemplaza los placeholders dibujados por código de `SpaceProjectile` (meteoro, cometa), `DebrisField` y `SatelliteLaser` (hoy `LaserTentacle`). Editables en `assets/aseprite/hazards/`; PNG y JSON en `assets/sprites/hazards/`. Arte nítido: brillos, haces y estelas los pone Godot (aditivos, partículas, `PointLight2D`).
 
 ## Tentáculo láser (reemplaza al satélite) — `laser_tentacle`
 
@@ -10,7 +10,7 @@ Decisión de LT: en lugar de satélites, **puntas de tentáculo del alien que as
 - **Dibujado entrando desde el borde derecho**: la base está en **(149, 85)** del lienzo (pegada al borde de la pantalla). Para el borde izquierdo, espejar en horizontal (`flip_h`) y usar el ángulo espejado (180° − ángulo).
 - Ángulos con la convención del código (0 = derecha, 90 = abajo): de **150° a 210° cada 5°** (13 ángulos). Mostrar el tag del ángulo más cercano al barrido actual.
 
-| Tag | Cuadros | Uso (estado de `SatelliteLaser`) |
+| Tag | Cuadros | Uso (estado de `LaserTentacle`) |
 |---|---|---|
 | `emerge` | 8 × 80 ms | Al entrar en la vista: asoma con el ojo cerrado y lo abre (en 180°). Al irse, reproducir al revés. |
 | `aim_150` … `aim_210` | 8 × 100 ms, bucle | AIM: ojo bien abierto, la onda recorre el tallo. Cambiar de tag según el ángulo del barrido, manteniendo el número de cuadro para que la onda no salte. |
@@ -21,6 +21,7 @@ Decisión de LT: en lugar de satélites, **puntas de tentáculo del alien que as
 - **Origen del haz:** `laser_tentacle_muzzle.json` tiene, por cuadro, la posición del ojo relativa a la base (`muzzle_per_frame[i]`, en px). El haz (núcleo `#FFE0D6`, borde rojo, resplandor) y el brillo de carga los dibuja Godot como hoy, desde ese punto.
 - La línea de apuntado punteada sigue por código.
 - El emisivo tiene solo el iris y el brillo del ojo.
+- **Implementado (brief 10, paso 4a):** `LaserTentacle` (`scripts/hazards/laser_tentacle.gd`, `scenes/hazards/LaserTentacle.tscn`) con la hoja cargada por `HazardSheet`. La base del tentáculo va en el nodo, que se coloca en el borde de la pantalla (x = 0 o 360); el ojo de `muzzle_per_frame` es el origen del haz y del brillo de carga (aditivos, sin sombrear). El emisivo va en un `Sprite2D` sin sombrear.
 
 ## Meteoro — `meteor_head`
 

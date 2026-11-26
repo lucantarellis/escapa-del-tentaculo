@@ -23,7 +23,7 @@ Cada parte se ajusta con los `@export` de `WindowBreach` y de `TierEvent` en cad
 | Restos a la deriva | Chapas de la nave que se mueven despacio y se pueden pisar | `Platform` STATIC con `moves`, que el `LevelBuilder` vuelve `BREAKABLE` (`force_breakable`) y dibuja con la hoja `platform_debris` (`debris_platforms` del tier): chapas arrancadas con brasas, sin propulsores. Se sacuden al pisarlas, se parten en trozos que se separan sin caer y, una vez rotas, **no vuelven** en toda la partida. El dash las revienta con un destello. Ver `plataformas.md` |
 | Meteoros y cometas | Cruzan la pantalla avisando antes (marca en el borde; el cometa, además, la línea de su recorrido); tocarlos mata. El meteoro se rompe contra los asteroides | `SpaceProjectile` (`Meteor.tscn`, `Comet.tscn`). Ver `obstaculos-espacio.md` |
 | Campo de escombros | Trozos que orbitan un punto; tocarlos mata | `DebrisField`. Ver `obstaculos-espacio.md` |
-| Satélite láser | Apunta, fija y dispara un haz; solo mata al disparar | `SatelliteLaser`. Ver `obstaculos-espacio.md` |
+| Tentáculo láser | Un tentáculo con un ojo asoma por un costado, apunta, fija y dispara un haz; solo mata al disparar | `LaserTentacle` (antes `SatelliteLaser`). Ver `obstaculos-espacio.md` |
 | Tanques | Cápsulas de la nave flotando sobre los asteroides | `FuelTank` |
 
 PULSE, TIMED y BREAKABLE no aparecen en el espacio (son mecanismos de la nave).
