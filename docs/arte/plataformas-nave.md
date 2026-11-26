@@ -57,4 +57,5 @@ Agregado el 24/11/2026 para el tier 2. Chapa del casco arrancada: mismo acero qu
 
 - **Sin `respawn`:** en el tier 2 los restos **no reaparecen** (decisión de LT, solo para este objeto). Al terminar la rotura el sprite queda oculto y la colisión apagada para siempre en esa partida.
 - **Sin propulsores:** en el tier 2 las plataformas móviles no llevan `platform_thruster` (son restos a la deriva).
-- El tinte gris del tier (`platform_tint`) ya no hace falta con este arte.
+- El tinte gris del tier (`platform_tint`) ya no hace falta con este arte: el tier 2 lo tiene en blanco y usa `SegmentTier.debris_platforms`.
+- **Implementado (brief 10, paso 3):** `Platform.set_debris_style(true)` (lo llama `LevelBuilder` con `debris_platforms`) elige esta hoja para las STATIC / ONE_WAY / BREAKABLE, con `Platform.DEBRIS_BEAM_TOP` = 9. La capa emisiva va sin sombrear como en la nave.

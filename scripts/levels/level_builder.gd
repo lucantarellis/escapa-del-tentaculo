@@ -105,6 +105,7 @@ func build(seed_override: int = 0) -> int:
 			if entry != null:
 				_apply_tier_tileset(entry, tier)
 				_apply_tier_tints(entry, tier)
+				_apply_debris_style(entry, tier)
 				bottom_y -= entry.height
 		for index: int in _draw_tier(tier):
 			_sequence.append(index)
@@ -112,6 +113,7 @@ func build(seed_override: int = 0) -> int:
 			var tier_segment: LevelSegment = _place(tier.segments[index], bottom_y)
 			if tier_segment != null:
 				_coin_segments.append(tier_segment)
+				_apply_debris_style(tier_segment, tier)
 				if tier.force_breakable:
 					_force_breakable(tier_segment)
 				_apply_tier_tileset(tier_segment, tier)
@@ -123,6 +125,7 @@ func build(seed_override: int = 0) -> int:
 			if exit != null:
 				_apply_tier_tileset(exit, tier)
 				_apply_tier_tints(exit, tier)
+				_apply_debris_style(exit, tier)
 				bottom_y -= exit.height
 
 	_end_index = _pick_from(config.end_segments)
@@ -365,6 +368,16 @@ func _force_breakable(segment: LevelSegment) -> void:
 		match platform.platform_type:
 			Platform.PlatformType.STATIC, Platform.PlatformType.ONE_WAY, Platform.PlatformType.TIMED:
 				platform.platform_type = Platform.PlatformType.BREAKABLE
+
+
+# Pone el estilo "restos a la deriva" a las plataformas del segmento (ver `SegmentTier.debris_platforms`).
+func _apply_debris_style(segment: LevelSegment, tier: SegmentTier) -> void:
+	if not tier.debris_platforms:
+		return
+	for child: Node in segment.get_children():
+		var platform: Platform = child as Platform
+		if platform != null:
+			platform.set_debris_style(true)
 
 
 func _apply_tier_tints(segment: LevelSegment, tier: SegmentTier) -> void:

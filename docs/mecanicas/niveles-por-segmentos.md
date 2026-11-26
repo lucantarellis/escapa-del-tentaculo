@@ -82,7 +82,8 @@ Los inicios tienen tres tanques (por su altura) y los finales uno.
 | Tier → Escenario | `display_name` | "La nave" / "El espacio" / "Dentro del alien" | — | Nombre del tier (depuración y docs) |
 | Tier → Escenario | `entry_segments` | vacío | — | Segmentos de entrada (transición): se sortea uno y va antes de los segmentos del tier. Conservan su propio tileset. Vacío = sin transición |
 | Tier → Escenario | `exit_segments` | tier 1: `SegmentShipExit01`–`03` | — | Segmentos de salida: se sortea uno y va después de los segmentos del tier |
-| Tier → Escenario | `platform_tint` / `hazard_tint` | espacio: gris metálico / naranja | — | Color de las plataformas sólidas y de las letales del tier (alfa 0 = colores de cada tipo). Ver `Platform.set_tint()` |
+| Tier → Escenario | `platform_tint` / `hazard_tint` | espacio: sin tinte / naranja | — | Color de las plataformas sólidas y de las letales del tier (alfa 0 = colores de cada tipo). Ver `Platform.set_tint()` |
+| Tier → Escenario | `debris_platforms` | espacio: encendido | — | Las plataformas STATIC / ONE_WAY / BREAKABLE del tier (entrada y salida incluidas) se dibujan con la hoja `platform_debris`, sin propulsores y sin reaparecer al romperse. Ver `Platform.set_debris_style()` |
 | Tier → Escenario | `walls_tileset` | vacío | — | TileSet de las paredes del tier (mismas coordenadas de atlas que `walls_tileset.tres`). Vacío = el de cada segmento |
 | Tier → Fondo | `background_color` | nave `#10141F`, espacio `#05060A` | — | Color de fondo del tier (alfa 0 = no cambia) |
 | Tier → Fondo | `background_stars` | espacio: sí | — | Estrellas con parallax |
@@ -158,4 +159,4 @@ Una capa de tiles del segmento (hija directa) que esté en el grupo `keep_tilese
 
 ## Plataformas rompibles por tier
 
-`SegmentTier.force_breakable` (por defecto apagado; encendido en el tier 2, el espacio) hace que el `LevelBuilder` vuelva `BREAKABLE` las plataformas sólidas (`STATIC`, `ONE_WAY`, `TIMED`) de los segmentos intermedios de ese tier. No toca la entrada ni la salida del tier. Ver `plataformas.md`.
+`SegmentTier.force_breakable` (por defecto apagado; encendido en el tier 2, el espacio) hace que el `LevelBuilder` vuelva `BREAKABLE` las plataformas sólidas (`STATIC`, `ONE_WAY`, `TIMED`) de los segmentos intermedios de ese tier. No toca la entrada ni la salida del tier. Con `debris_platforms` (también encendido en el espacio) esas plataformas se dibujan como restos a la deriva: hoja `platform_debris`, sin propulsores y sin volver tras romperse. Ver `plataformas.md`.

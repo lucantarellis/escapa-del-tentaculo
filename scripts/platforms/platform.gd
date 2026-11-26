@@ -119,6 +119,15 @@ const SKIN_SHEETS: Dictionary = {
 ## Filas transparentes arriba de la viga en la hoja (la rompible deja lugar a los pedazos que
 ## caen). Estructural. Unidad: px.
 const SKIN_BEAM_TOP: Dictionary = {PlatformType.BREAKABLE: 2.0}
+## Hoja de los restos a la deriva del tier 2 (chapas arrancadas con brasas). Reemplaza a la hoja
+## de los tipos de DEBRIS_TYPES cuando el tier pide el estilo "restos" (ver [method set_debris_style]).
+## Estructural.
+const DEBRIS_SHEET: String = "platform_debris"
+## Filas transparentes arriba de la chapa en la hoja de restos (dejan lugar a los trozos que se
+## separan). Estructural. Unidad: px.
+const DEBRIS_BEAM_TOP: float = 9.0
+## Tipos que se dibujan con la hoja de restos en el estilo "restos". Estructural.
+const DEBRIS_TYPES: Array[PlatformType] = [PlatformType.STATIC, PlatformType.ONE_WAY, PlatformType.BREAKABLE]
 ## Alto de la viga dibujada = alto de la colisión de las plataformas con sprites. Estructural.
 ## Unidad: px.
 const SKIN_HEIGHT: float = 12.0
@@ -221,6 +230,8 @@ var _timed_elapsed: float = 0.0
 var _timed_on: bool = true
 ## Color que reemplaza al del tipo (ver [method set_tint]). Alfa 0 = el color del tipo.
 var _tint: Color = Color(0.0, 0.0, 0.0, 0.0)
+## true si el tier pide el estilo "restos a la deriva" (ver [method set_debris_style]).
+var _debris_style: bool = false
 var _pulse_state: PulseState = PulseState.OFF
 var _pulse_elapsed: float = 0.0
 var _origin: Vector2 = Vector2.ZERO
@@ -308,6 +319,17 @@ func set_tint(color: Color) -> void:
 		_apply_type()
 	elif platform_type != PlatformType.PULSE:
 		_body.color = _tint if _tint.a > 0.0 else COLOR_BY_TYPE.get(platform_type, COLOR_BY_TYPE[PlatformType.STATIC])
+
+
+## Activa el estilo "restos a la deriva" del tier 2 (lo llama [LevelBuilder] con
+## `SegmentTier.debris_platforms`): las STATIC, ONE_WAY y BREAKABLE se dibujan con la hoja de
+## restos en lugar de la de la nave, sin propulsores aunque se muevan, y una rompible rota no
+## vuelve a aparecer hasta el fin de la partida. Se puede llamar antes o después de cambiar el tipo.
+func set_debris_style(enabled: bool) -> void:
+	if _debris_style == enabled:
+		return
+	_debris_style = enabled
+	_rebuild_skin()
 
 
 ## Vuelve al estado inicial: sólida (salvo LETHAL/PULSE en ON), sin romper, en el origen. Un
@@ -422,6 +444,8 @@ func _apply_type() -> void:
 
 func _process_breakable(delta: float) -> void:
 	if _broken:
+		if _debris_style:
+			return # Los restos rotos no vuelven.
 		_respawn_left -= delta
 		if _respawn_left <= 0.0:
 			_broken = false
@@ -1022,6 +1046,11 @@ func _snap_skin_size(value: Vector2) -> Vector2:
 	return Vector2(width, SKIN_HEIGHT)
 
 
+# true si la plataforma se dibuja con la hoja de restos (estilo "restos" del tier y tipo sólido).
+func _uses_debris_sheet() -> bool:
+	return _debris_style and DEBRIS_TYPES.has(platform_type)
+
+
 # Crea, rearma o quita los sprites según el tipo, el tamaño, `moves` y el color de tier.
 func _rebuild_skin() -> void:
 	if not is_node_ready():
@@ -1039,8 +1068,11 @@ func _rebuild_skin() -> void:
 		add_child(_skin)
 		_skin.finished.connect(_on_skin_finished)
 	_body.visible = false
-	var beam_top: float = SKIN_BEAM_TOP.get(platform_type, 0.0)
-	_skin.setup(SKIN_SHEETS[platform_type], size.x, size.y, beam_top, hash([String(name), position]), moves)
+	var debris: bool = _uses_debris_sheet()
+	var sheet_name: String = DEBRIS_SHEET if debris else SKIN_SHEETS[platform_type]
+	var beam_top: float = DEBRIS_BEAM_TOP if debris else SKIN_BEAM_TOP.get(platform_type, 0.0)
+	# Los restos a la deriva no llevan propulsores.
+	_skin.setup(sheet_name, size.x, size.y, beam_top, hash([String(name), position]), moves and not _debris_style)
 	_rebuild_lights()
 
 
@@ -1061,7 +1093,7 @@ func _rebuild_lights() -> void:
 		_light = LevelLighting.make_light(cfg.pulse_color, 0.0, cfg.pulse_radius)
 	if _light != null:
 		add_child(_light)
-	if moves:
+	if moves and not _debris_style:
 		_thruster_light = LevelLighting.make_light(cfg.thruster_color, cfg.thruster_energy, cfg.thruster_radius)
 		_thruster_light.name = "ThrusterLight"
 		_thruster_light.position = Vector2(0.0, size.y * 0.5 + 6.0)

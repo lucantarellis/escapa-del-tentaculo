@@ -32,6 +32,11 @@ extends Resource
 ## vuelven BREAKABLE al armar el nivel. No afecta a la entrada ni a la salida del tier, ni a las
 ## letales, de pulso o proyectiles, ni a los asteroides (tiles).
 @export var force_breakable: bool = false
+## Si es true, las plataformas sólidas (STATIC, ONE_WAY y BREAKABLE) del tier, incluidas las de
+## la entrada y la salida, se dibujan como restos a la deriva (hoja `platform_debris`): sin
+## propulsores aunque se muevan, y las rompibles que se rompen no vuelven en toda la partida. Va
+## con `force_breakable` en el espacio y reemplaza al `platform_tint` gris.
+@export var debris_platforms: bool = false
 ## Color de lo letal del tier (LETHAL, PROJECTILE). Alfa 0 = rojo. Debe seguir leyéndose como
 ## peligro (rojo o naranja).
 @export var hazard_tint: Color = Color(0.0, 0.0, 0.0, 0.0)
