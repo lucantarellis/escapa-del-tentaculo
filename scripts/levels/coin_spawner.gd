@@ -112,6 +112,9 @@ func _get_blocked_rects(segment: LevelSegment) -> Array[Rect2]:
 		elif child is Door:
 			var door: Door = child as Door
 			result.append(Rect2(door.position - door.size * 0.5, door.size))
+		elif child is Asteroid:
+			# Con el giro y el vaivén incluidos.
+			result.append((child as Asteroid).get_reserved_rect())
 		elif child is StaticBody2D:
 			var body_rect: Rect2 = _get_polygon_rect(child as StaticBody2D)
 			if body_rect.size != Vector2.ZERO:

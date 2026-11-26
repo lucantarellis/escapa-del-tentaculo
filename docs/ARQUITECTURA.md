@@ -77,7 +77,7 @@ Regla: señales hacia arriba, llamadas hacia abajo.
 | `RunRecords` | `scripts/managers/run_records.gd` | Récords guardados en `user://records.cfg` (mejor progreso). Funciones estáticas. Ver `docs/mecanicas/hud.md` |
 | `TierEvent` | `scripts/levels/tier_event.gd` | Momento de historia al entrar a un tier (sacudida, destello, silueta del alien), en los segmentos de entrada. Ver `docs/mecanicas/tier-espacio.md` |
 | `WindowBreach` | `scripts/levels/window_breach.gd` | Ventanal que rompe el alien en la salida de la nave; descompresión que saca al jugador. Ver `docs/mecanicas/tier-espacio.md` |
-| `Asteroid` | `scripts/levels/asteroid.gd` | Asteroide del espacio: capa de tiles propia que flota y gira (cuerpos cinemáticos) |
+| `Asteroid` | `scripts/levels/asteroid.gd` (escena `scenes/levels/Asteroid.tscn`) | Asteroide del espacio: cuerpo cinemático con sprite por cuadros (gira sin rotar el sprite) y colisión del contorno. Ver `docs/mecanicas/tier-espacio.md` |
 | `Repairer` | `scripts/pickups/repairer.gd`, `scenes/pickups/Repairer.tscn` (+ `scripts/levels/repairer_spawner.gd`) | Reparador: llave (cura 1), venda (cura 2) y botiquín (cura todo + escudo) |
 | `SpeedBoost` | `scripts/pickups/speed_boost.gd` (+ `speed_boost_config.gd`) | Recogible de impulso de velocidad (tier 2) |
 | `HullDebris` | `scripts/levels/hull_debris.gd` | Fragmento letal despedido por un `TierEvent` (causa `&"debris"`) |

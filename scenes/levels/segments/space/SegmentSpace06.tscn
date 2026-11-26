@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
 [ext_resource type="PackedScene" path="res://scenes/pickups/SpeedBoost.tscn" id="boost"]
 [ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
-[ext_resource type="Script" path="res://scripts/levels/asteroid.gd" id="asteroid"]
+[ext_resource type="PackedScene" path="res://scenes/levels/Asteroid.tscn" id="asteroid_scene"]
 [ext_resource type="PackedScene" path="res://scenes/hazards/Meteor.tscn" id="meteor"]
 [ext_resource type="PackedScene" path="res://scenes/hazards/SatelliteLaser.tscn" id="laser"]
 
@@ -13,32 +13,28 @@ script = ExtResource("seg")
 
 [node name="Walls" parent="." instance=ExtResource("walls")]
 
-[node name="Asteroid1" parent="." instance=ExtResource("walls")]
+[node name="Asteroid1" parent="." instance=ExtResource("asteroid_scene")]
 position = Vector2(60, -204)
-tile_map_data = PackedByteArray("AAD8//7/AAABAAAAAQD8////AAAAAAAAAAD8/wAAAAAAAAAAAAD9//7/AAAAAAAAAAD9////AAAAAAAAAAD9/wAAAAAAAAAAAAD9/wEAAAABAAAAAwD+//7/AAAAAAAAAAD+////AAAAAAAAAAD+/wAAAAAAAAAAAAD+/wEAAAAAAAAAAAD///7/AAAAAAAAAAD/////AAAAAAAAAAD//wAAAAAAAAAAAAD//wEAAAAAAAAAAAAAAP7/AAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAP7/AAAAAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAABAAEAAAAAAAAAAAACAP7/AAABAAAAAAACAP//AAAAAAAAAAACAAAAAAAAAAAAAAACAAEAAAAAAAAAAAADAP//AAAAAAAAAAADAAAAAAAAAAAAAAADAAEAAAABAAAAAgA=")
-script = ExtResource("asteroid")
+size = 1
+variant = 7
 drift = Vector2(-0.8, -8.5)
 drift_period = 5
 drift_offset = 2
-spin_speed = 0
 
-[node name="Asteroid2" parent="." instance=ExtResource("walls")]
+[node name="Asteroid2" parent="." instance=ExtResource("asteroid_scene")]
 position = Vector2(288, -276)
-tile_map_data = PackedByteArray("AAD+//7/AAABAAAAAQD+////AAAAAAAAAAD+/wAAAAAAAAAAAAD+/wEAAAABAAAAAwD///7/AAAAAAAAAAD/////AAAAAAAAAAD//wAAAAAAAAAAAAD//wEAAAAAAAAAAAAAAP7/AAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAP7/AAABAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAABAAEAAAABAAAAAgA=")
-script = ExtResource("asteroid")
+variant = 10
 drift = Vector2(8.5, 9.5)
 drift_period = 3.5
 drift_offset = 2.7
-spin_speed = 0
 
-[node name="Asteroid3" parent="." instance=ExtResource("walls")]
+[node name="Asteroid3" parent="." instance=ExtResource("asteroid_scene")]
 position = Vector2(120, -444)
-tile_map_data = PackedByteArray("AAD7//7/AAABAAAAAQD7////AAAAAAAAAAD7/wAAAAAAAAAAAAD7/wEAAAABAAAAAwD8//3/AAABAAAAAQD8//7/AAAAAAAAAAD8////AAAAAAAAAAD8/wAAAAAAAAAAAAD8/wEAAAAAAAAAAAD8/wIAAAABAAAAAwD9//3/AAAAAAAAAAD9//7/AAAAAAAAAAD9////AAAAAAAAAAD9/wAAAAAAAAAAAAD9/wEAAAAAAAAAAAD9/wIAAAAAAAAAAAD+//3/AAAAAAAAAAD+//7/AAAAAAAAAAD+////AAAAAAAAAAD+/wAAAAAAAAAAAAD+/wEAAAAAAAAAAAD+/wIAAAAAAAAAAAD///3/AAAAAAAAAAD///7/AAAAAAAAAAD/////AAAAAAAAAAD//wAAAAAAAAAAAAD//wEAAAAAAAAAAAD//wIAAAAAAAAAAAAAAP3/AAAAAAAAAAAAAP7/AAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAABAP3/AAAAAAAAAAABAP7/AAAAAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAABAAEAAAAAAAAAAAABAAIAAAAAAAAAAAACAP3/AAAAAAAAAAACAP7/AAAAAAAAAAACAP//AAAAAAAAAAACAAAAAAAAAAAAAAACAAEAAAAAAAAAAAACAAIAAAAAAAAAAAADAP3/AAABAAAAAAADAP7/AAAAAAAAAAADAP//AAAAAAAAAAADAAAAAAAAAAAAAAADAAEAAAAAAAAAAAADAAIAAAABAAAAAgAEAP7/AAABAAAAAAAEAP//AAAAAAAAAAAEAAAAAAAAAAAAAAAEAAEAAAABAAAAAgA=")
-script = ExtResource("asteroid")
+size = 2
+variant = 6
 drift = Vector2(-4.6, -6.8)
 drift_period = 5.3
 drift_offset = 1.2
-spin_speed = 0
 
 [node name="Meteor1" parent="." instance=ExtResource("meteor")]
 position = Vector2(384, -380)

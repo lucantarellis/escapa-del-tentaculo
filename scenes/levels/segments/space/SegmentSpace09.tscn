@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
 [ext_resource type="PackedScene" path="res://scenes/pickups/SpeedBoost.tscn" id="boost"]
 [ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
-[ext_resource type="Script" path="res://scripts/levels/asteroid.gd" id="asteroid"]
+[ext_resource type="PackedScene" path="res://scenes/levels/Asteroid.tscn" id="asteroid_scene"]
 [ext_resource type="PackedScene" path="res://scenes/hazards/SatelliteLaser.tscn" id="laser"]
 
 [node name="SegmentSpace09" type="Node2D"]
@@ -13,28 +13,23 @@ script = ExtResource("seg")
 
 [node name="Walls" parent="." instance=ExtResource("walls")]
 
-[node name="Asteroid1" parent="." instance=ExtResource("walls")]
+[node name="Asteroid1" parent="." instance=ExtResource("asteroid_scene")]
 position = Vector2(300, -96)
-tile_map_data = PackedByteArray("AAD+//7/AAABAAAAAQD+////AAAAAAAAAAD+/wAAAAAAAAAAAAD+/wEAAAABAAAAAwD///7/AAAAAAAAAAD/////AAAAAAAAAAD//wAAAAAAAAAAAAD//wEAAAAAAAAAAAAAAP7/AAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAP7/AAABAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAABAAEAAAABAAAAAgA=")
-script = ExtResource("asteroid")
+variant = 6
 drift = Vector2(-7.6, -8.1)
 drift_period = 4.9
 drift_offset = 0.7
-spin_speed = 0
 
-[node name="Asteroid2" parent="." instance=ExtResource("walls")]
+[node name="Asteroid2" parent="." instance=ExtResource("asteroid_scene")]
 position = Vector2(36, -432)
-tile_map_data = PackedByteArray("AAD+//7/AAABAAAAAQD+////AAAAAAAAAAD+/wAAAAAAAAAAAAD+/wEAAAABAAAAAwD///7/AAAAAAAAAAD/////AAAAAAAAAAD//wAAAAAAAAAAAAD//wEAAAAAAAAAAAAAAP7/AAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAP7/AAABAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAABAAEAAAABAAAAAgA=")
-script = ExtResource("asteroid")
+variant = 3
 drift = Vector2(5.5, 9.7)
 drift_period = 5.9
 drift_offset = 0.2
-spin_speed = 0
 
-[node name="Asteroid3" parent="." instance=ExtResource("walls")]
+[node name="Asteroid3" parent="." instance=ExtResource("asteroid_scene")]
 position = Vector2(300, -528)
-tile_map_data = PackedByteArray("AAD+//7/AAABAAAAAQD+////AAAAAAAAAAD+/wAAAAAAAAAAAAD+/wEAAAABAAAAAwD///7/AAAAAAAAAAD/////AAAAAAAAAAD//wAAAAAAAAAAAAD//wEAAAAAAAAAAAAAAP7/AAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAP7/AAABAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAABAAEAAAABAAAAAgA=")
-script = ExtResource("asteroid")
+variant = 9
 drift = Vector2(-6.8, 9.4)
 drift_period = 4.5
 drift_offset = 1.6

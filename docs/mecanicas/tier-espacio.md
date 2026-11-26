@@ -1,6 +1,6 @@
 # Tier 2: el espacio
 
-**Archivos:** segmentos en `scenes/levels/segments/space/` (`SegmentSpace01`–`10` y las entradas `SegmentSpaceEntry01`–`03`) y salidas de la nave en `scenes/levels/segments/ship/` (`SegmentShipExit01`–`03`); scripts `scripts/levels/window_breach.gd` (`WindowBreach`), `tier_event.gd` (`TierEvent`), `hull_debris.gd` (`HullDebris`), `level_background.gd` (`LevelBackground`) y `space_background.gd` (`SpaceBackground`); config del fuego `resources/configs/tentacle_config_fire.tres`; tileset de roca `resources/tilesets/walls_tileset_space.tres` (imagen `assets/sprites/environment/placeholders/walls_placeholder_space.png`). Todo se asigna en `resources/configs/level_config.tres`.
+**Archivos:** segmentos en `scenes/levels/segments/space/` (`SegmentSpace01`–`10` y las entradas `SegmentSpaceEntry01`–`03`) y salidas de la nave en `scenes/levels/segments/ship/` (`SegmentShipExit01`–`03`); scripts `scripts/levels/window_breach.gd` (`WindowBreach`), `tier_event.gd` (`TierEvent`), `hull_debris.gd` (`HullDebris`), `level_background.gd` (`LevelBackground`) y `space_background.gd` (`SpaceBackground`); config del fuego `resources/configs/tentacle_config_fire.tres`; asteroides `scenes/levels/Asteroid.tscn` (`scripts/levels/asteroid.gd`). Todo se asigna en `resources/configs/level_config.tres`.
 
 ## Historia
 
@@ -18,7 +18,7 @@ Cada parte se ajusta con los `@export` de `WindowBreach` y de `TierEvent` en cad
 
 | Elemento | Qué es | Cómo está hecho |
 |---|---|---|
-| Superficies | **Asteroides** de roca de 4 tamaños (chico 48 × 48 px, mediano 96 × 48, grande 120 × 72 y gigante 144 × 96, este último solo en `SegmentSpace05`) y formas irregulares; flotan (van y vienen) y algunos giran; donde parar y recargar. Cada segmento mezcla tamaños (`SegmentSpace04` y `09` tienen solo chicos: su espacio libre es justo) | Nodos `Asteroid` (`scripts/levels/asteroid.gd`): una capa de tiles por asteroide con `drift` (vaivén, 8–18 px), `drift_period` (3–6 s) y `spin_speed` (°/s; 0 en los grandes y en ~40 % de los chicos, si no 6–14 °/s). Usan cuerpos cinemáticos, así que te llevan si estás parado encima. Tileset de roca `#7A6A5A` |
+| Superficies | **Asteroides** de roca de 4 tamaños (chico 48 × 48 px, mediano 96 × 48, grande 120 × 72 y gigante 144 × 96, este último solo en `SegmentSpace05`), 10 variantes de cada uno; flotan (van y vienen) y los chicos y medianos pueden girar; donde parar y recargar. Cada segmento mezcla tamaños (`SegmentSpace04` y `09` tienen solo chicos: su espacio libre es justo) | Instancias de `Asteroid.tscn` (ver "Asteroides" más abajo) con `drift` (vaivén, 8–18 px), `drift_period` (3–6 s) y `spin_speed` (°/s; 0 en los grandes y gigantes y en ~40 % de los chicos, si no 6–14 °/s). Son cuerpos cinemáticos, así que te llevan si estás parado encima |
 | Impulsos | Flechas cian: al tocarlas, 1 s de propulsión y velocidad máxima ×1,8; en el espacio casi no se frena, así que la velocidad ganada se conserva | `SpeedBoost` (`scenes/pickups/SpeedBoost.tscn`, config `speed_boost_config.tres`: `duration`, `multiplier`, `fuel_amount`). 2 por segmento del espacio y por entrada |
 | Restos a la deriva | Chapas de la nave que se mueven despacio y se pueden pisar | `Platform` STATIC con `moves`, teñidas de gris metálico (`platform_tint` del tier) |
 | Meteoros y cometas | Cruzan la pantalla avisando antes (marca en el borde; el cometa, además, la línea de su recorrido); tocarlos mata. El meteoro se rompe contra los asteroides | `SpaceProjectile` (`Meteor.tscn`, `Comet.tscn`). Ver `obstaculos-espacio.md` |
@@ -27,6 +27,25 @@ Cada parte se ajusta con los `@export` de `WindowBreach` y de `TierEvent` en cad
 | Tanques | Cápsulas de la nave flotando sobre los asteroides | `FuelTank` |
 
 PULSE, TIMED y BREAKABLE no aparecen en el espacio (son mecanismos de la nave).
+
+## Asteroides (`Asteroid`)
+
+Escena `scenes/levels/Asteroid.tscn` (raíz `AnimatableBody2D`, script `scripts/levels/asteroid.gd`); arte en `assets/sprites/environment/asteroids/` (guía: `docs/arte/asteroides.md`). Cada asteroide arma por código su `Sprite2D` (`CanvasTexture` con color y normal map, filtro nearest) y su `CollisionPolygon2D` (de `asteroid_shapes.json`). Es sólido (capa 1 `world`): el jugador se para encima y el asteroide lo lleva; el meteoro y los restos de la explosión se rompen contra él. Se dibuja detrás del jugador (`z_index` −1, como las paredes). El origen del nodo es el centro del asteroide y el eje de giro.
+
+- **Giro por cuadros:** el sprite nunca se rota. Los chicos y medianos tienen 72 cuadros (uno cada 5°, con el normal map ya girado). El código acumula el ángulo con `spin_speed` y rota **solo el cuerpo** (la colisión) en pasos de 5°; el sprite se contrarrota y muestra el cuadro de la rotación que el cuerpo tiene al dibujar (con `sync_to_physics` la rotación nueva se aplica en el paso de física siguiente: así el dibujo y la colisión coinciden siempre). El jugador parado encima avanza con cada paso (un salto de ~2–4 px cada vez que cambia el cuadro, igual que el dibujo).
+- **Grandes y gigantes:** un solo cuadro; no giran aunque tengan `spin_speed`.
+- **Monedas:** `CoinSpawner` reserva el área que el asteroide puede ocupar con el giro y el vaivén (`get_reserved_rect()`).
+- En el editor se ve quieto, en el cuadro 0, con su colisión.
+
+| Propiedad | Defecto | Descripción |
+|---|---|---|
+| `size` | Chico | Chico, mediano, grande o gigante |
+| `variant` | 0 | Variante 1–10; 0 = una al azar, estable para el mismo nombre y posición |
+| `drift` | (0, 10) | Vaivén máximo respecto de su posición. Unidad: px |
+| `drift_period` / `drift_offset` | 4 / 0 | Duración de un vaivén y desfase. Unidad: s |
+| `spin_speed` | 0 | Giro (positivo = horario). Solo chicos y medianos. Unidad: °/s |
+
+**Colocación (25/11, brief 10):** cada asteroide de tiles se reemplazó por la variante del tamaño más parecido (sin repetir variante dentro del segmento), conservando su lugar y su movimiento. Los de 84 × 48 de las entradas pasaron a medianos; los de 108 × 72, a grandes (con el centro corrido 6 px para que el dibujo quede donde estaban los tiles). Pasaron a `spin_speed` 0 los grandes y gigantes que giraban: `SegmentSpace03` `Asteroid3`, `SegmentSpace05` `Asteroid4` y `SegmentSpace08` `Asteroid3`. El dibujo es más irregular que el bloque de tiles: la superficie útil es un poco menor.
 
 ## Física y perseguidor
 

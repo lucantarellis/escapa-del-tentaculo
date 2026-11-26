@@ -1,6 +1,6 @@
 # Asteroides (tier 2)
 
-Arte cerrado el 24/11/2026. Reemplazan a los asteroides de tiles (`Asteroid`, una `TileMapLayer` con el tileset provisorio `walls_placeholder_space`). Editables en `assets/aseprite/environment/asteroids/`; PNG y JSON en `assets/sprites/environment/asteroids/`.
+Arte cerrado el 24/11/2026. Reemplazaron a los asteroides de tiles (el tileset provisorio `walls_placeholder_space` se borró). Editables en `assets/aseprite/environment/asteroids/`; PNG y JSON en `assets/sprites/environment/asteroids/`.
 
 ## Estilo
 
@@ -26,3 +26,7 @@ Roca partida y gastada, tallada en caras planas, con el mismo lenguaje que las p
 ## En los segmentos
 
 Hoy cada asteroide es una capa de tiles pintada a mano. Hay que reemplazar cada uno por la variante del tamaño más parecido (chico, mediano, grande o gigante), elegida al azar con semilla estable por segmento, conservando su posición, `drift`, `drift_period`, `drift_offset` y `spin_speed`. Los grandes y gigantes no giran: si alguno tiene `spin_speed` distinto de 0, pasarlo a 0.
+
+## Conectado en Godot
+
+Lo dibuja `Asteroid` (`scenes/levels/Asteroid.tscn`, `scripts/levels/asteroid.gd`): propiedades `size` y `variant` en cada instancia de los segmentos. Cómo gira y qué variante tiene cada asteroide de cada segmento: `docs/mecanicas/tier-espacio.md`, sección "Asteroides". Si cambia el arte, alcanza con volver a exportar los PNG, los JSON y `asteroid_shapes.json` con los mismos nombres.

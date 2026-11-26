@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/asteroid.gd" id="1_ast"]
+
+[node name="Asteroid" type="AnimatableBody2D"]
+script = ExtResource("1_ast")

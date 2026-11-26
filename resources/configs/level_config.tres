@@ -57,7 +57,6 @@
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpaceEntry02.tscn" id="space_entry_02"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpaceEntry03.tscn" id="space_entry_03"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/space/SegmentSpaceExit01.tscn" id="space_exit_01"]
-[ext_resource type="TileSet" uid="uid://cisa4ldmh1sti" path="res://resources/tilesets/walls_tileset_space.tres" id="space_tiles"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart01.tscn" id="start_01"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart02.tscn" id="start_02"]
 [ext_resource type="PackedScene" path="res://scenes/levels/segments/start/SegmentStart03.tscn" id="start_03"]
@@ -89,7 +88,6 @@ exit_segments = Array[PackedScene]([ExtResource("space_exit_01")])
 platform_tint = Color(0.5412, 0.5882, 0.6588, 1)
 force_breakable = true
 hazard_tint = Color(1, 0.3529, 0.1569, 1)
-walls_tileset = ExtResource("space_tiles")
 background_color = Color(0.0196, 0.0235, 0.0392, 1)
 background_stars = true
 pursuer_config = ExtResource("fire_cfg")

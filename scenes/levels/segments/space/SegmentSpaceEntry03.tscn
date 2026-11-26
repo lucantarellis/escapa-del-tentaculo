@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" path="res://scenes/pickups/FuelTank.tscn" id="tank"]
 [ext_resource type="PackedScene" path="res://scenes/pickups/SpeedBoost.tscn" id="boost"]
 [ext_resource type="PackedScene" path="res://scenes/levels/Walls.tscn" id="walls"]
-[ext_resource type="Script" path="res://scripts/levels/asteroid.gd" id="asteroid"]
+[ext_resource type="PackedScene" path="res://scenes/levels/Asteroid.tscn" id="asteroid_scene"]
 [ext_resource type="Script" path="res://scripts/levels/tier_event.gd" id="event"]
 
 [node name="SegmentSpaceEntry03" type="Node2D"]
@@ -13,19 +13,19 @@ script = ExtResource("seg")
 
 [node name="Walls" parent="." instance=ExtResource("walls")]
 
-[node name="Asteroid1" parent="." instance=ExtResource("walls")]
-position = Vector2(48, -216)
-tile_map_data = PackedByteArray("AAD9////AAABAAAAAQD9/wAAAAABAAAAAwD+//7/AAABAAAAAQD+////AAAAAAAAAAD+/wAAAAAAAAAAAAD+/wEAAAABAAAAAwD///7/AAAAAAAAAAD/////AAAAAAAAAAD//wAAAAAAAAAAAAD//wEAAAAAAAAAAAAAAP7/AAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAP7/AAAAAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAABAAEAAAAAAAAAAAACAP7/AAABAAAAAAACAP//AAAAAAAAAAACAAAAAAAAAAAAAAACAAEAAAABAAAAAgADAP//AAABAAAAAAADAAAAAAABAAAAAgA=")
-script = ExtResource("asteroid")
+[node name="Asteroid1" parent="." instance=ExtResource("asteroid_scene")]
+position = Vector2(54, -216)
+size = 1
+variant = 10
 drift = Vector2(9.1, 3)
 drift_period = 4
 drift_offset = 0
 spin_speed = -9.3
 
-[node name="Asteroid2" parent="." instance=ExtResource("walls")]
-position = Vector2(300, -432)
-tile_map_data = PackedByteArray("AAD9////AAABAAAAAQD9/wAAAAABAAAAAwD+//7/AAABAAAAAQD+////AAAAAAAAAAD+/wAAAAAAAAAAAAD+/wEAAAABAAAAAwD///7/AAAAAAAAAAD/////AAAAAAAAAAD//wAAAAAAAAAAAAD//wEAAAAAAAAAAAAAAP7/AAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAP7/AAAAAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAABAAEAAAAAAAAAAAACAP7/AAABAAAAAAACAP//AAAAAAAAAAACAAAAAAAAAAAAAAACAAEAAAABAAAAAgADAP//AAABAAAAAAADAAAAAAABAAAAAgA=")
-script = ExtResource("asteroid")
+[node name="Asteroid2" parent="." instance=ExtResource("asteroid_scene")]
+position = Vector2(306, -432)
+size = 1
+variant = 3
 drift = Vector2(9.8, -3.1)
 drift_period = 5.3
 drift_offset = 0.4
