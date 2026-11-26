@@ -79,6 +79,41 @@ extends Resource
 ## Unidad: px.
 @export var red_min_height: float = 1000.0
 
+@export_group("Lavado")
+## El fuego (frente, humo del frente y relleno) se lava hacia el rojo plano con un degradado suave
+## (smoothstep): sin lavar a esta distancia bajo el borde y lavado del todo a la otra. Unidad: px.
+@export var wash_start: float = 14.0
+@export var wash_end: float = 184.0
+
+@export_group("Glow")
+## Fuerza del brillo aditivo de la capa emisiva (0 = sin glow).
+@export_range(0.0, 3.0, 0.05) var glow_intensity: float = 0.35
+## Cuánto brilla el relleno respecto del frente (además se apaga con el lavado). Se suman muchas
+## explosiones encimadas: con 1 el relleno se quema y deja de verse lavado. Unidad: 0–1.
+@export_range(0.0, 1.0, 0.05) var glow_fill_factor: float = 0.25
+## Radio del desenfoque del brillo (más de 3 se corta en el borde de cada cuadro). Unidad: px.
+@export_range(0.0, 3.0, 0.1) var glow_blur: float = 3.0
+## Escala del brillo alrededor del pivote de cada explosión: más de 1 lo hace salir del dibujo como
+## un halo.
+@export_range(1.0, 3.0, 0.05) var glow_scale: float = 1.5
+## Color con el que se tiñe el brillo.
+@export var glow_color: Color = Color(1.0, 0.55, 0.2, 1.0)
+
+@export_group("Luz")
+## Luces puntuales a lo largo del frente (iluminan asteroides y plataformas con relieve y tiñen al
+## astronauta). 0 = sin luz.
+@export_range(0, 8) var light_count: int = 3
+## Color, fuerza y radio de cada luz. Unidad del radio: px.
+@export var light_color: Color = Color(1.0, 0.5, 0.2, 1.0)
+@export var light_energy: float = 1.2
+@export var light_radius: float = 190.0
+## Altura de las luces respecto del borde (negativo = arriba). Unidad: px.
+@export var light_y: float = -6.0
+## Cuánto titila la fuerza de la luz (0 = fija; 0,25 = ±25 %). Unidad: 0–1.
+@export_range(0.0, 1.0, 0.01) var light_flicker: float = 0.25
+## Velocidad del titileo. Unidad: Hz.
+@export var light_flicker_speed: float = 6.0
+
 @export_group("Ahorro")
 ## Con el borde más de esto debajo del fondo de la pantalla se pausan los emisores. Unidad: px.
 @export var pause_margin: float = 100.0

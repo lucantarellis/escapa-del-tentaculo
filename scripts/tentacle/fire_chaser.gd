@@ -8,8 +8,10 @@ extends Node2D
 ##
 ## Capas, de atrás hacia adelante: humo violeta (`fire_smoke`); en la capa del fuego, rojo plano,
 ## los cuadros de humo de las explosiones del frente, el relleno (`*_fill`, las nuevas detrás) y
-## los cuadros calientes del frente (las nuevas encima). Todo se dibuja con `_draw` desde listas
-## de bocanadas que se reciclan (pool); los sprites se espejan al azar y nunca se giran.
+## los cuadros calientes del frente (las nuevas encima); el lavado (rojo con alfa en degradado que
+## funde el fuego en el rojo plano hacia abajo) y el glow (capa emisiva desenfocada y sumada).
+## Además, luces puntuales a lo largo del frente. Todo se dibuja con `_draw` desde listas de
+## bocanadas que se reciclan (pool); los sprites se espejan al azar y nunca se giran.
 ## Solo visual: la zona letal es la del [Tentacle]. Parámetros en [FireChaserConfig]. Ver
 ## `docs/arte/peligros-espacio.md`.
 
@@ -35,6 +37,10 @@ const TELEPORT_DISTANCE: float = 160.0
 ## Lo que más sube el dibujo por encima del borde (explosiones altas y humo). Solo visual.
 ## Unidad: px.
 const TOP_OVERHANG: float = 90.0
+## Franjas con las que se dibuja el degradado del lavado. Solo visual.
+const WASH_STRIPS: int = 24
+## Shader del glow (emisivo desenfocado y sumado). Estructural.
+const GLOW_SHADER: Shader = preload("res://shaders/fire_glow.gdshader")
 
 
 ## Una explosión o un humo vivo. Se reciclan desde el pool.
@@ -79,6 +85,12 @@ var _paused: bool = true
 ## Capas de dibujo (hijos): humo violeta detrás, fuego delante.
 var _smoke_layer: Node2D
 var _fire_layer: Node2D
+var _wash_layer: Node2D
+var _glow_layer: Node2D
+var _glow_material: ShaderMaterial
+var _lights: Array[PointLight2D] = []
+var _light_phases: PackedFloat32Array = PackedFloat32Array()
+var _light_time: float = 0.0
 
 
 func _ready() -> void:
@@ -96,6 +108,20 @@ func _ready() -> void:
 	_fire_layer.material = unshaded
 	_fire_layer.draw.connect(_draw_fire)
 	add_child(_fire_layer)
+	_wash_layer = Node2D.new()
+	_wash_layer.name = "Wash"
+	_wash_layer.material = unshaded
+	_wash_layer.draw.connect(_draw_wash)
+	add_child(_wash_layer)
+	_glow_layer = Node2D.new()
+	_glow_layer.name = "Glow"
+	_glow_material = ShaderMaterial.new()
+	_glow_material.shader = GLOW_SHADER
+	_glow_layer.material = _glow_material
+	# El halo se agranda: filtro lineal para que no se vea en escalones.
+	_glow_layer.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	_glow_layer.draw.connect(_draw_glow)
+	add_child(_glow_layer)
 
 
 ## Prepara el fuego con [param config] para una pantalla de [param width] px de ancho. Vacía lo
@@ -105,6 +131,11 @@ func setup(config: FireChaserConfig, width: float) -> void:
 	_width = width
 	_explosions = HazardSheet.get_sheet(EXPLOSION_SHEET)
 	_smoke_sheet = HazardSheet.get_sheet(SMOKE_SHEET)
+	_glow_material.set_shader_parameter(&"glow_color", config.glow_color)
+	_glow_material.set_shader_parameter(&"intensity", config.glow_intensity)
+	_glow_material.set_shader_parameter(&"blur_radius", config.glow_blur)
+	_glow_layer.visible = config.glow_intensity > 0.0
+	_build_lights()
 	reset_animation()
 
 
@@ -119,6 +150,7 @@ func reset_animation() -> void:
 	_tick_left = 0.0
 	_has_last_edge = false
 	_paused = true
+	_update_lights(0.0)
 	_redraw()
 
 
@@ -159,6 +191,7 @@ func step(delta: float, bottom_distance: float) -> void:
 		_paused = false
 		_prewarm()
 	_advance(delta, rise)
+	_update_lights(delta)
 	_redraw()
 
 
@@ -319,6 +352,46 @@ func _redraw() -> void:
 	if _smoke_layer != null:
 		_smoke_layer.queue_redraw()
 		_fire_layer.queue_redraw()
+		_wash_layer.queue_redraw()
+		_glow_layer.queue_redraw()
+
+
+# Crea las luces del frente, repartidas a lo ancho (o las quita si `light_count` es 0).
+func _build_lights() -> void:
+	for light: PointLight2D in _lights:
+		light.queue_free()
+	_lights.clear()
+	_light_phases.clear()
+	for k: int in _config.light_count:
+		var light: PointLight2D = LevelLighting.make_light(_config.light_color, _config.light_energy, _config.light_radius)
+		light.name = "FireLight%d" % k
+		light.position = Vector2(_width * (float(k) + 0.5) / float(_config.light_count), _config.light_y)
+		add_child(light)
+		_lights.append(light)
+		_light_phases.append(_rng.randf() * TAU)
+
+
+# Titileo de las luces; apagadas mientras el fuego está en pausa.
+func _update_lights(delta: float) -> void:
+	_light_time += delta
+	for k: int in _lights.size():
+		var light: PointLight2D = _lights[k]
+		light.enabled = not _paused
+		var wave: float = sin(_light_time * TAU * _config.light_flicker_speed + _light_phases[k]) * 0.6 \
+				+ sin(_light_time * TAU * _config.light_flicker_speed * 2.3 + _light_phases[k] * 1.7) * 0.4
+		light.energy = _config.light_energy * (1.0 + wave * _config.light_flicker)
+
+
+# Cuánto está lavado el fuego a [param y] px bajo el borde (0 = nada, 1 = todo rojo plano).
+func _wash_at(y: float) -> float:
+	if _config.wash_end <= _config.wash_start:
+		return 1.0 if y >= _config.wash_start else 0.0
+	return smoothstep(_config.wash_start, _config.wash_end, y)
+
+
+# Alto del rojo plano: siempre llega hasta pasado el fondo de la pantalla.
+func _red_height() -> float:
+	return maxf(_config.red_min_height, _bottom_distance + 200.0)
 
 
 # ---------------------------------------------------------------------------------------------
@@ -336,8 +409,7 @@ func _draw_fire() -> void:
 	if _paused or _config == null:
 		return
 	# Rojo plano: desde un poco debajo del borde hasta pasado el fondo de la pantalla.
-	var red_height: float = maxf(_config.red_min_height, _bottom_distance + 200.0)
-	_fire_layer.draw_rect(Rect2(-_config.fill_x_margin, _config.red_offset, _width + _config.fill_x_margin * 2.0, red_height), RED)
+	_fire_layer.draw_rect(Rect2(-_config.fill_x_margin, _config.red_offset, _width + _config.fill_x_margin * 2.0, _red_height()), RED)
 	# Humo marrón del frente (cuadros que ya no son calientes), detrás del relleno.
 	for puff: Puff in _front:
 		if puff.frame >= puff.hot:
@@ -351,12 +423,53 @@ func _draw_fire() -> void:
 			_draw_puff(_fire_layer, _explosions, puff, EXPLOSION_PIVOT)
 
 
+# Lavado: rojo con alfa en degradado encima del fuego. Desde `red_offset` bajo el borde todo es
+# opaco (rojo plano debajo), así que mezclar con este rojo es lo mismo que teñir solo el fuego.
+func _draw_wash() -> void:
+	if _paused or _config == null:
+		return
+	var left: float = -_config.fill_x_margin
+	var right: float = _width + _config.fill_x_margin
+	var start: float = maxf(_config.wash_start, _config.red_offset)
+	var end: float = maxf(_config.wash_end, start)
+	if end > start:
+		for k: int in WASH_STRIPS:
+			var y0: float = lerpf(start, end, float(k) / float(WASH_STRIPS))
+			var y1: float = lerpf(start, end, float(k + 1) / float(WASH_STRIPS))
+			var c0: Color = Color(RED, _wash_at(y0))
+			var c1: Color = Color(RED, _wash_at(y1))
+			_wash_layer.draw_polygon(PackedVector2Array([Vector2(left, y0), Vector2(right, y0), Vector2(right, y1), Vector2(left, y1)]), PackedColorArray([c0, c0, c1, c1]))
+	var bottom: float = _config.red_offset + _red_height()
+	if bottom > end:
+		_wash_layer.draw_rect(Rect2(left, end, right - left, bottom - end), RED)
+
+
+# Glow: el emisivo de cada explosión con el shader de desenfoque aditivo, agrandado como halo. El
+# frente brilla de lleno; el relleno, con `glow_fill_factor` y más tenue cuanto más lavado está.
+func _draw_glow() -> void:
+	if _paused or _config == null or _explosions.emissive == null:
+		return
+	for k: int in range(_fill.size() - 1, -1, -1):
+		_draw_glow_puff(_fill[k], _config.glow_fill_factor)
+	for puff: Puff in _front:
+		_draw_glow_puff(puff, 1.0)
+
+
+func _draw_glow_puff(puff: Puff, factor: float) -> void:
+	var strength: float = (1.0 - _wash_at(puff.y)) * factor
+	if strength <= 0.02:
+		return
+	_draw_puff(_glow_layer, _explosions, puff, EXPLOSION_PIVOT, _explosions.emissive, Color(1.0, 1.0, 1.0, strength), _config.glow_scale)
+
+
 # Dibuja una bocanada con su pivote en (x, y), espejada si corresponde, en píxeles enteros.
-func _draw_puff(layer: Node2D, sheet: HazardSheet, puff: Puff, pivot: Vector2) -> void:
-	var size: Vector2 = sheet.frame_size
-	var pivot_x: float = (size.x - 1.0 - pivot.x) if puff.mirrored else pivot.x
-	var top_left: Vector2 = Vector2(roundf(puff.x - pivot_x), roundf(puff.y - pivot.y))
+# [param texture] reemplaza a la textura de color de la hoja (para el emisivo).
+# [param scale] agranda el dibujo alrededor del pivote (el halo del glow).
+func _draw_puff(layer: Node2D, sheet: HazardSheet, puff: Puff, pivot: Vector2, texture: Texture2D = null, modulate_color: Color = Color.WHITE, scale: float = 1.0) -> void:
+	var size: Vector2 = sheet.frame_size * scale
+	var pivot_x: float = ((sheet.frame_size.x - 1.0 - pivot.x) if puff.mirrored else pivot.x) * scale
+	var top_left: Vector2 = Vector2(roundf(puff.x - pivot_x), roundf(puff.y - pivot.y * scale))
 	var rect: Rect2 = Rect2(top_left, size)
 	if puff.mirrored:
 		rect = Rect2(top_left + Vector2(size.x, 0.0), Vector2(-size.x, size.y))
-	layer.draw_texture_rect_region(sheet.texture, rect, sheet.region(puff.first + puff.frame))
+	layer.draw_texture_rect_region(texture if texture != null else sheet.texture, rect, sheet.region(puff.first + puff.frame), modulate_color)

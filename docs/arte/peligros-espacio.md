@@ -72,6 +72,8 @@ Arte cerrado el 25/11/2026. El fuego de la nave que explota y sube persiguiendo 
 
 **Implementado (brief 10, paso 5a):** `FireChaser` (`scripts/tentacle/fire_chaser.gd`, hijo `Fire` de `Tentacle.tscn`) con `FireChaserConfig` (`resources/configs/fire_chaser_config.tres`): capas 1, 2, 3, 7 y 8. El relleno se hunde a 0,67–0,92 de la velocidad del perseguidor (los 80–110 px/s de la maqueta con el fuego a 120 px/s), no ±15%: así queda tan tupido como en la maqueta. Ver `docs/mecanicas/tentaculo.md`.
 
+**Implementado (brief 10, paso 5b):** capas 4 (lavado, smoothstep 14→184 px) y 5 (glow: emisivo desenfocado por `shaders/fire_glow.gdshader`, agrandado ×1,5 como halo, intensidad 0,35 en el frente y ×0,25 en el relleno; y 3 `PointLight2D` titilantes en el frente). Valores en `FireChaserConfig` (grupos Lavado, Glow y Luz).
+
 ## Pantallas de derrota
 
 El fuego necesita causa propia `fire` (CALCINADO; hoy mata con `tentacle`). Las causas `laser`, `meteor`, `comet` y `debris_field` todavía muestran el texto viejo; sus viñetas van con las pantallas de derrota del tier 2.
