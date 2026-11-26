@@ -68,13 +68,13 @@ La **primera vez** que se completa una fase se gana una compra gratis (una por f
 "Vida" en el árbol significa **punto de golpe**: cuántos golpes aguanta el jugador. Sin compras tiene 1 punto (el primer golpe letal mata, como siempre); con 1 vida tiene 2 y con 2 vidas tiene 3 (`hit_points` es el total). Se implementa en `Player.die(cause)`:
 
 1. Primero rige la invulnerabilidad del dash (si está activa).
-2. Las causas de `instakill_causes` (`&"tentacle"` y `&"fell"`: los perseguidores y la caída bajo la pantalla) matan siempre, sin importar los puntos ni la invulnerabilidad tras un golpe.
+2. Las causas de `instakill_causes` (`&"tentacle"`, `&"fire"` y `&"fell"`: los perseguidores y la caída bajo la pantalla) matan siempre, sin importar los puntos ni la invulnerabilidad tras un golpe.
 3. Cualquier otra causa (obstáculo, trampa, escombros, láser, mini tentáculo, etc.) resta 1 punto si hay más de 1 y el jugador sobrevive. Tras el golpe queda `hit_invulnerable_time` (1,5 s) sin poder perder otro punto, parpadeando.
 4. Con la mejora Reaparecer y sin usarla en la partida, en lugar de morir (con cualquier causa, salvo los perseguidores: `no_respawn_causes`, ahí morís de verdad) el jugador reaparece `respawn_height` px más arriba (160; se busca un lugar libre en 6 alturas cercanas), con `respawn_hit_points` (1) y la invulnerabilidad de un golpe. Es una sola vez por partida: `Player.reset()` (R o partida nueva) la devuelve. No se emite `died`, así que el juego no termina.
 
 Los puntos se ven como corazones provisorios bajo las monedas (solo con más de 1 punto). El astronauta muestra el daño con sus animaciones `_dano_1` (1 golpe) y `_dano_2` (2 o más); ver "Sprites del astronauta" en `jugador.md`.
 
-Parámetros (`ProgressConfig`, grupo "Golpes y reaparición"): `hit_invulnerable_time` 1,5 s, `instakill_causes` [tentacle, fell], `respawn_height` 160 px, `respawn_hit_points` 1.
+Parámetros (`ProgressConfig`, grupo "Golpes y reaparición"): `hit_invulnerable_time` 1,5 s, `instakill_causes` [tentacle, fire, fell], `respawn_height` 160 px, `respawn_hit_points` 1.
 
 ## Rompe plataformas
 
@@ -98,7 +98,7 @@ La invulnerabilidad arranca en `dash_invulnerable_start` (0 s: apenas empieza el
 | Dash invulnerable | `dash_invulnerable_percent` | 67 | % | Cuánto dura, como porcentaje de `dash_duration` |
 | Dash invulnerable | `dash_invulnerable_long_percent` | 82 | % | Lo mismo, con la mejora "Invulnerable largo" (reemplaza al anterior) |
 | Golpes y reaparición | `hit_invulnerable_time` | 1,5 | s | Invulnerabilidad tras un golpe que no mata |
-| Golpes y reaparición | `instakill_causes` | tentacle, fell | — | Causas que matan siempre |
+| Golpes y reaparición | `instakill_causes` | tentacle, fire, fell | — | Causas que matan siempre |
 | Golpes y reaparición | `respawn_height` | 160 | px | Cuánto más arriba reaparece |
 | Golpes y reaparición | `respawn_hit_points` | 1 | puntos | Puntos con los que reaparece |
 | Monedas | `coins_per_segment_min` / `max` | 2 / 4 | monedas | Cuántas por segmento intermedio |

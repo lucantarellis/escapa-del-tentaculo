@@ -178,6 +178,7 @@ El pool plano (`segment_pool` y `segment_count`) se conserva como respaldo: solo
 | fase 2 rompible | 2026-10-28 | `level_config.tres` → tier 2 `force_breakable` (nuevo) | — (apagado) | encendido | Simulación en 40 seeds: 39/39 plataformas sólidas de los segmentos del espacio son BREAKABLE (antes 0/39); entrada y salida: 0 rompibles forzadas; fases 1 y 3 sin cambios (177 rompibles propias en ambos casos) | Pendiente de probar jugando |
 | perseguidores | 2026-10-28 | `progress_config` → `no_respawn_causes` (nuevo) | — (Reaparecer salvaba del perseguidor) | `[tentacle]`: Reaparecer no salva | Sim: con 3 vidas y Reaparecer, `die(tentacle)` mata; `die(fell)` sí reaparece; obstáculo quita 1 vida | Pendiente de probar jugando |
 | tentaculitos | 2026-10-28 | `progress_config` → `dash_unblockable_causes` | `[tentacle, fell, minor_tentacle]` | `[tentacle, fell]` | Sim: el dash invulnerable ahora frena a `minor_tentacle` | Pendiente de probar jugando |
+| fuego causa propia | 2026-11-26 | `progress_config` → `dash_unblockable_causes`, `instakill_causes`, `no_respawn_causes` | sin `fire` (el fuego mataba con `tentacle`) | con `fire` | Sim `fire_cause.gd`: el fuego mata con `fire` y las tres listas lo incluyen | Mismo comportamiento que el tentáculo (decisión de LT); solo cambia la pantalla de derrota |
 
 ## Iteración en `main-g`: frente de tentáculos vivos (fase 1)
 

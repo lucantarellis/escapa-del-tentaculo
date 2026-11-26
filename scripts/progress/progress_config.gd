@@ -38,8 +38,9 @@ extends Resource
 ## Con la mejora "Invulnerable largo": cuánto dura la invulnerabilidad, como porcentaje de la
 ## duración del dash. Reemplaza a `dash_invulnerable_percent`. Unidad: %.
 @export_range(0.0, 100.0, 1.0) var dash_invulnerable_long_percent: float = 82.0
-## Causas de muerte que la invulnerabilidad NO frena (la caída y el tentáculo).
-@export var dash_unblockable_causes: Array[StringName] = [&"tentacle", &"fell"]
+## Causas de muerte que la invulnerabilidad NO frena (la caída y los perseguidores: tentáculo y
+## fuego).
+@export var dash_unblockable_causes: Array[StringName] = [&"tentacle", &"fire", &"fell"]
 
 @export_group("Golpes y reaparición")
 ## Tras recibir un golpe que no mata (con puntos de golpe de más), el jugador no puede perder
@@ -48,10 +49,10 @@ extends Resource
 @export var hit_invulnerable_time: float = 1.5
 ## Causas de muerte que matan siempre, sin importar los puntos de golpe ni la invulnerabilidad
 ## tras un golpe: los perseguidores y la caída bajo la pantalla.
-@export var instakill_causes: Array[StringName] = [&"tentacle", &"fell"]
+@export var instakill_causes: Array[StringName] = [&"tentacle", &"fire", &"fell"]
 ## Causas de muerte de las que Reaparecer NO salva: morís de verdad (los perseguidores: tentáculo,
 ## fuego y ácido). La caída bajo la pantalla (`fell`) sí se puede reaparecer.
-@export var no_respawn_causes: Array[StringName] = [&"tentacle"]
+@export var no_respawn_causes: Array[StringName] = [&"tentacle", &"fire"]
 ## Con la mejora Reaparecer: cuánto más arriba que donde murió reaparece el jugador (se busca un
 ## lugar libre desde ahí hacia arriba). Unidad: px.
 @export var respawn_height: float = 160.0

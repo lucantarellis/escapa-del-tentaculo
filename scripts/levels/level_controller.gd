@@ -31,6 +31,7 @@ const NEW_RECORD_TEXT: String = "NUEVO RÉCORD"
 const DEATH_TEXTS: Dictionary = {
 	&"tentacle": "CAPTURADO — pulsá R para reiniciar",
 	&"fell": "CAPTURADO — pulsá R para reiniciar",
+	&"fire": "CALCINADO — pulsá R para reiniciar",
 	&"obstacle": "GOLPEADO — pulsá R para reiniciar",
 	&"pulse": "GOLPEADO — pulsá R para reiniciar",
 	&"lethal": "GOLPEADO — pulsá R para reiniciar",

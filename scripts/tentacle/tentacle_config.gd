@@ -44,6 +44,10 @@ extends Resource
 ## Cuánto por debajo del borde inferior (medido desde el centro del jugador) cuenta como
 ## caída. Unidad: px.
 @export var screen_bottom_margin: float = 24.0
+## Causa de muerte al tocar el perseguidor (la de la caída sigue siendo `fell`). Elige la pantalla
+## de derrota y las reglas de [ProgressConfig] (`instakill_causes`, `no_respawn_causes`,
+## `dash_unblockable_causes`). Ej.: `tentacle` en la nave, `fire` en el espacio.
+@export var kill_cause: StringName = &"tentacle"
 
 @export_group("Animación")
 ## Amplitud de la ondulación del borde superior (0 = sin ondulación). Unidad: px.

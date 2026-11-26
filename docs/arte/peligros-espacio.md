@@ -76,4 +76,4 @@ Arte cerrado el 25/11/2026. El fuego de la nave que explota y sube persiguiendo 
 
 ## Pantallas de derrota
 
-El fuego necesita causa propia `fire` (CALCINADO; hoy mata con `tentacle`). Las causas `laser`, `meteor`, `comet` y `debris_field` todavía muestran el texto viejo; sus viñetas van con las pantallas de derrota del tier 2.
+El fuego ya tiene causa propia `fire` (brief 10, paso 5c); mientras falte su viñeta CALCINADO muestra el texto provisorio "CALCINADO — pulsá R para reiniciar". Las causas `laser`, `meteor`, `comet` y `debris_field` todavía muestran el texto viejo; sus viñetas van con las pantallas de derrota del tier 2.
