@@ -27,6 +27,7 @@ Decisión de LT: en lugar de satélites, **puntas de tentáculo del alien que as
 
 Roca chica del mismo marrón que los asteroides con la cara delantera incandescente. 24×24, capas `color` y `emissive`, tag `dir` con **16 cuadros = 16 direcciones** (cuadro k = dirección k × 22,5°, 0 = derecha, sentido horario en pantalla). Elegir el cuadro según la dirección de `travel`; no girar el sprite.
 
+- **Implementado (brief 10, paso 4b):** `SpaceProjectile` con el grupo `Arte` (`head_sheet`, `directional_head`, `particle_sheet`, `glow_color`); el sprite de la cabeza no gira con el nodo.
 - **Estela:** `CPUParticles2D` en espacio global, partículas de `particle_ember` (3×3, 4 cuadros = edad: amarillo → naranja → rojo → oscuro; `CanvasItemMaterial` con animación de partícula), soltadas detrás de la cabeza con algo de dispersión; más un resplandor aditivo naranja en la cabeza. Largo similar a `trail_length` (90 px).
 
 ## Cometa — `comet_head`
@@ -37,7 +38,7 @@ Núcleo de hielo azul y blanco. 24×24, capas `color` y `emissive`, tag `twinkle
 
 ## Campo de escombros — `debris_fragment`
 
-Fragmentos de las mismas chapas que los restos a la deriva. 28×28, 6 diseños: tags `frag1` … `frag6`, cada uno con **36 cuadros = un giro completo cada 10°**. Cada trozo que orbita usa un diseño al azar y avanza de cuadro según su giro (no rotar el sprite).
+Fragmentos de las mismas chapas que los restos a la deriva. 28×28, 6 diseños: tags `frag1` … `frag6`, cada uno con **36 cuadros = un giro completo cada 10°**. Cada trozo que orbita usa un diseño al azar y avanza de cuadro según su giro (no rotar el sprite). Los cuadros giran en sentido antihorario. **Implementado (brief 10, paso 4c):** `DebrisField` con un `Sprite2D` por trozo.
 
 ## Perseguidor de fuego — `fire_explosion`
 

@@ -10,13 +10,12 @@ extends Area2D
 ## atraviesa todo.
 ##
 ## El origen del nodo es el punto de partida (normalmente fuera de la pantalla); `travel` es el
-## vector hasta el final del recorrido. Placeholders con polígonos. Ver
-## `docs/mecanicas/obstaculos-espacio.md`.
+## vector hasta el final del recorrido. La cabeza es un sprite (`meteor_head` con 16 direcciones,
+## `comet_head` con `twinkle`) y la estela son partículas pixeladas en espacio global. Ver
+## `docs/arte/peligros-espacio.md` y `docs/mecanicas/obstaculos-espacio.md`.
 
-## Rojo letal de la paleta (cabeza). Solo visual.
+## Color de los pedazos cuando el meteoro se rompe contra algo. Solo visual.
 const HEAD_COLOR: Color = Color("D83232")
-## Naranja de la estela. Solo visual.
-const TRAIL_COLOR: Color = Color("FF6B32")
 ## Color del aviso (un rojo más claro que el de lo letal, para que se vea sobre el fondo oscuro). Solo visual.
 const WARNING_COLOR: Color = Color("FF5040")
 ## Color del trazo de la trayectoria en el editor. Solo visual.
@@ -27,8 +26,22 @@ const BLINK_RATE: float = 2.5
 const ARROW_SHAFT: float = 70.0
 ## Largo de la punta de flecha del aviso. Solo visual. Unidad: px.
 const ARROW_HEAD: float = 22.0
-## Color del núcleo caliente de la cabeza. Solo visual.
-const CORE_COLOR: Color = Color("FFB199")
+## Direcciones que dibuja la cabeza del meteoro (cuadro k = k × 360 / 16 grados, 0 = derecha, sentido
+## horario en pantalla). Estructural.
+const HEAD_DIRECTIONS: int = 16
+## Partículas de estela por segundo de vida de la estela. Solo visual.
+const TRAIL_DENSITY: float = 90.0
+## Apertura de la estela. Solo visual. Unidad: °.
+const TRAIL_SPREAD: float = 12.0
+## Velocidad con que se separan las partículas de la estela, respecto del mundo. Solo visual.
+## Unidad: px/s.
+const TRAIL_DRIFT_MIN: float = 3.0
+const TRAIL_DRIFT_MAX: float = 20.0
+## Cuadros que dibuja una partícula a lo largo de su vida (amarillo → naranja → rojo → oscuro o
+## blanco → cian → azul). Estructural.
+const PARTICLE_FRAMES: int = 4
+## Tamaño del resplandor aditivo de la cabeza, en múltiplos de `size`. Solo visual.
+const GLOW_SCALE: float = 3.0
 
 enum State { WAITING, WARNING, FLYING, COOLDOWN, GONE }
 
@@ -52,6 +65,17 @@ enum State { WAITING, WARNING, FLYING, COOLDOWN, GONE }
 ## Si es true, se rompe al chocar contra algo sólido del mundo (el meteoro).
 @export var breaks_on_solid: bool = true
 
+@export_group("Arte")
+## Hoja de la cabeza (`assets/sprites/hazards/<nombre>.png`): `meteor_head` o `comet_head`.
+@export var head_sheet: String = "meteor_head"
+## Si es true, el cuadro de la cabeza sale de la dirección del vuelo (16 direcciones: el meteoro);
+## si no, la cabeza anima el tag `twinkle` (el cometa).
+@export var directional_head: bool = true
+## Hoja de las partículas de la estela: `particle_ember` (meteoro) o `particle_ice` (cometa).
+@export var particle_sheet: String = "particle_ember"
+## Color del resplandor aditivo de la cabeza. Solo visual.
+@export var glow_color: Color = Color(1.0, 0.42, 0.2, 0.55)
+
 @export_group("Aviso")
 ## Tiempo entre el aviso y el paso del proyectil. Unidad: s.
 @export var warning_time: float = 1.0
@@ -68,15 +92,20 @@ enum State { WAITING, WARNING, FLYING, COOLDOWN, GONE }
 ## Causa que se pasa a [method Player.die].
 @export var cause: StringName = &"meteor"
 
+static var _glow_cache: GradientTexture2D = null
+
 var _state: State = State.WAITING
 var _home_local: Vector2 = Vector2.ZERO
 var _t: float = 0.0
 var _delay_left: float = 0.0
 var _dist: float = 0.0
-var _head: Polygon2D
-var _trail: Polygon2D
+var _head: Node2D
+var _head_sheet: HazardSheet
+var _head_sprite: Sprite2D
+var _head_emissive: Sprite2D
+var _head_time: float = 0.0
+var _trail: CPUParticles2D
 var _telegraph: Node2D
-var _spin: float = 3.0
 
 
 func _ready() -> void:
@@ -158,6 +187,9 @@ func _tick_warning(delta: float) -> void:
 		_dist = 0.0
 		global_position = _start_global()
 		rotation = travel.angle()
+		_head.rotation = -rotation
+		_head_time = 0.0
+		_update_head_frame()
 		_set_flying(true)
 		_telegraph.queue_redraw()
 
@@ -167,8 +199,8 @@ func _tick_flying(delta: float) -> void:
 	var step: float = speed * delta
 	global_position += travel.normalized() * step
 	_dist += step
-	if _head != null:
-		_head.rotation += _spin * delta
+	_head_time += delta
+	_update_head_frame()
 	for body: Node2D in get_overlapping_bodies():
 		var player: Player = body as Player
 		if player != null:
@@ -227,7 +259,8 @@ func _set_flying(flying: bool) -> void:
 	if _head != null:
 		_head.visible = flying
 	if _trail != null:
-		_trail.visible = flying
+		# Las partículas que ya salieron terminan su vida aunque el proyectil se apague.
+		_trail.emitting = flying
 	set_deferred("monitoring", flying)
 
 
@@ -301,38 +334,60 @@ func _draw_telegraph() -> void:
 	_telegraph.draw_colored_polygon(PackedVector2Array([tip, base + side * 9.0, base - side * 9.0]), color)
 
 
-# Copia de [param points] escalada respecto del origen.
-func _scaled(points: PackedVector2Array, factor: float) -> PackedVector2Array:
-	var out: PackedVector2Array = PackedVector2Array()
-	for point: Vector2 in points:
-		out.append(point * factor)
-	return out
+# Muestra el cuadro de la cabeza: según la dirección del vuelo (meteoro) o el `twinkle` (cometa).
+func _update_head_frame() -> void:
+	if _head_sprite == null:
+		return
+	var frame: int
+	if directional_head:
+		var step: float = TAU / float(HEAD_DIRECTIONS)
+		frame = posmod(roundi(travel.angle() / step), HEAD_DIRECTIONS)
+	else:
+		var tag: StringName = &"twinkle"
+		var first: int = _head_sheet.tag_first(tag)
+		var count: int = _head_sheet.tag_length(tag)
+		frame = first + int(_head_time / _head_sheet.durations[first]) % count
+	var rect: Rect2 = _head_sheet.region(frame)
+	_head_sprite.region_rect = rect
+	if _head_emissive != null:
+		_head_emissive.region_rect = rect
 
 
-# Cabeza irregular (con halo y núcleo), estela con degradado y forma de colisión.
+# Cabeza con sprite (color + emisivo sin sombrear) y resplandor aditivo, estela de partículas y
+# forma de colisión. La cabeza no gira con el nodo: el sprite ya trae la dirección.
 func _build_visuals() -> void:
-	var points: PackedVector2Array = PackedVector2Array()
-	for i: int in 7:
-		var a: float = TAU * float(i) / 7.0 + randf_range(-0.25, 0.25)
-		points.append(Vector2(cos(a), sin(a)) * size * randf_range(0.42, 0.55))
-	_trail = Polygon2D.new()
-	_trail.polygon = PackedVector2Array([Vector2(0.0, -size * 0.45), Vector2(-trail_length, 0.0), Vector2(0.0, size * 0.45)])
-	_trail.vertex_colors = PackedColorArray([Color(TRAIL_COLOR, 0.95), Color(TRAIL_COLOR, 0.0), Color(TRAIL_COLOR, 0.95)])
+	_head_sheet = HazardSheet.get_sheet(head_sheet)
+	_trail = _make_trail()
 	add_child(_trail)
-	_head = Polygon2D.new()
-	_head.color = HEAD_COLOR
-	_head.polygon = points
+	_head = Node2D.new()
+	_head.name = "Head"
+	_head.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	add_child(_head)
-	var halo: Polygon2D = Polygon2D.new()
-	halo.color = Color(TRAIL_COLOR, 0.28)
-	halo.polygon = _scaled(points, 1.7)
-	_head.add_child(halo)
-	halo.show_behind_parent = true
-	var core: Polygon2D = Polygon2D.new()
-	core.color = CORE_COLOR
-	core.polygon = _scaled(points, 0.45)
-	_head.add_child(core)
-	_spin = randf_range(-5.0, 5.0)
+	var glow: Sprite2D = Sprite2D.new()
+	glow.name = "Glow"
+	glow.texture = _glow_texture()
+	glow.scale = Vector2.ONE * (size * GLOW_SCALE / 64.0)
+	glow.modulate = glow_color
+	var additive: CanvasItemMaterial = CanvasItemMaterial.new()
+	additive.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	additive.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	glow.material = additive
+	_head.add_child(glow)
+	_head_sprite = Sprite2D.new()
+	_head_sprite.name = "Sprite"
+	_head_sprite.texture = _head_sheet.texture
+	_head_sprite.region_enabled = true
+	_head.add_child(_head_sprite)
+	if _head_sheet.emissive != null:
+		_head_emissive = Sprite2D.new()
+		_head_emissive.name = "Emissive"
+		_head_emissive.texture = _head_sheet.emissive
+		_head_emissive.region_enabled = true
+		var unshaded: CanvasItemMaterial = CanvasItemMaterial.new()
+		unshaded.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+		_head_emissive.material = unshaded
+		_head.add_child(_head_emissive)
+	_update_head_frame()
 	var shape: CollisionShape2D = CollisionShape2D.new()
 	if trail_lethal:
 		var rect: RectangleShape2D = RectangleShape2D.new()
@@ -344,3 +399,50 @@ func _build_visuals() -> void:
 		circle.radius = size * 0.5
 		shape.shape = circle
 	add_child(shape)
+
+
+# Estela: partículas en espacio global soltadas detrás de la cabeza. Cada una recorre los 4 cuadros
+# de la hoja a lo largo de su vida; el largo de la estela es la velocidad por la vida.
+func _make_trail() -> CPUParticles2D:
+	var sheet: HazardSheet = HazardSheet.get_sheet(particle_sheet)
+	var life: float = maxf(trail_length / maxf(speed, 1.0), 0.05)
+	var particles: CPUParticles2D = CPUParticles2D.new()
+	particles.name = "Trail"
+	particles.texture = sheet.texture
+	particles.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	particles.local_coords = false
+	particles.emitting = false
+	particles.lifetime = life
+	particles.amount = maxi(8, roundi(TRAIL_DENSITY * life))
+	particles.direction = Vector2(-1.0, 0.0)
+	particles.spread = TRAIL_SPREAD
+	particles.gravity = Vector2.ZERO
+	particles.initial_velocity_min = TRAIL_DRIFT_MIN
+	particles.initial_velocity_max = TRAIL_DRIFT_MAX
+	particles.emission_shape = CPUParticles2D.EMISSION_SHAPE_SPHERE
+	particles.emission_sphere_radius = size * 0.25
+	particles.anim_speed_min = 1.0
+	particles.anim_speed_max = 1.0
+	var material_anim: CanvasItemMaterial = CanvasItemMaterial.new()
+	material_anim.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	material_anim.particles_animation = true
+	material_anim.particles_anim_h_frames = PARTICLE_FRAMES
+	material_anim.particles_anim_v_frames = 1
+	material_anim.particles_anim_loop = false
+	particles.material = material_anim
+	return particles
+
+
+# Textura del resplandor: círculo que se desvanece hacia el borde (compartida).
+static func _glow_texture() -> GradientTexture2D:
+	if _glow_cache == null:
+		var gradient: Gradient = Gradient.new()
+		gradient.colors = PackedColorArray([Color(1.0, 1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0, 0.0)])
+		_glow_cache = GradientTexture2D.new()
+		_glow_cache.gradient = gradient
+		_glow_cache.fill = GradientTexture2D.FILL_RADIAL
+		_glow_cache.fill_from = Vector2(0.5, 0.5)
+		_glow_cache.fill_to = Vector2(1.0, 0.5)
+		_glow_cache.width = 64
+		_glow_cache.height = 64
+	return _glow_cache

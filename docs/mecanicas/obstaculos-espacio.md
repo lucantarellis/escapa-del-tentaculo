@@ -2,7 +2,6 @@
 
 **Archivos:** `scripts/hazards/space_projectile.gd` (`SpaceProjectile`), escenas `scenes/hazards/Meteor.tscn` y `Comet.tscn`; se colocan en los segmentos `SegmentSpace01`–`10`.
 **Depende de:** `ScrollCamera.get_visible_rect()` (ver `scroll-camara.md`), `Player.die()` (ver `jugador.md`).
-**Pendiente (ronda A, paso 3c):** campo de escombros y tentáculo láser; se agregan a esta página.
 
 ## Propósito
 
@@ -12,8 +11,9 @@ El tier 2 no repite los obstáculos de la nave (compuertas, trampas, plataformas
 
 Un solo script con dos escenas preconfiguradas.
 
-- **Meteoro** (`Meteor.tscn`): roca rápida con halo, núcleo caliente y estela de 90 px (solo visual). **Se rompe** contra lo sólido (asteroides, paredes): un asteroide sirve de escudo.
-- **Cometa** (`Comet.tscn`): cabeza grande y estela larga (150 px) que **también mata**; atraviesa todo.
+- **Meteoro** (`Meteor.tscn`): roca ardiente (sprite `meteor_head`, 16 direcciones según el rumbo) con resplandor aditivo naranja y estela de 90 px de partículas `particle_ember` (solo visual). **Se rompe** contra lo sólido (asteroides, paredes): un asteroide sirve de escudo.
+- **Cometa** (`Comet.tscn`): núcleo de hielo (sprite `comet_head`, destellos `twinkle`) con resplandor cian y cola larga (150 px) de partículas `particle_ice` que **también mata** (la colisión de la cola es la de siempre); atraviesa todo.
+- El arte se elige con el grupo `Arte` del script: `head_sheet`, `directional_head`, `particle_sheet` y `glow_color`. La estela son `CPUParticles2D` en espacio global (4 cuadros por vida de la partícula): se estira en cualquier dirección y deja un rastro que se apaga solo al terminar el vuelo.
 
 Ciclo:
 
@@ -67,7 +67,7 @@ Se quitaron de todos los segmentos del espacio las plataformas letales "en llama
 
 ## Campo de escombros (`DebrisField`)
 
-Trozos rojos que orbitan un punto fijo; tocar uno mata (`debris_field`). El anillo de la órbita se dibuja tenue para que se lea el peligro.
+Trozos de chapa (sprite `debris_fragment`: 6 diseños al azar, que giran mostrando un cuadro cada 10°) que orbitan un punto fijo; tocar uno mata (`debris_field`). La colisión sigue siendo un círculo de `chunk_size` × 0,45 de radio, más chico que el dibujo. El anillo de la órbita se dibuja tenue para que se lea el peligro.
 
 | Propiedad | Defecto | Descripción |
 |---|---|---|
