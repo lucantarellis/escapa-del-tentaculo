@@ -60,6 +60,10 @@ El tier 2 usa **5 segmentos por partida** (`count_per_run`, igual que los otros 
 
 Todos los valores son de prueba: el "se siente bien" es de LT.
 
+## Estado del arte (brief 10, 26/11/2026)
+
+Implementado: fondo en capas, asteroides, restos a la deriva, peligros (tentáculo láser, meteoro, cometa, escombros) y fuego perseguidor (`fire`). Pendiente: §5 ventanal y explosión de salida con fragmentos del casco, §8 pantallas de derrota del espacio (hoy `fire` muestra un texto provisorio) y §9. Las pruebas en Godot de todo lo hecho están en `docs/TUNING_LOG.md` y el checklist del cierre del brief.
+
 ## Cómo probarlo
 
 1. F5 → JUGAR y subir hasta la salida de la nave: el alien rompe el ventanal, la descompresión te saca, la nave explota abajo, aparecen los restos y, un poco después, el fuego.

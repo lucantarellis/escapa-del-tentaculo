@@ -1,7 +1,7 @@
 # Roadmap — Escapa del Tentáculo
 
-**Última actualización:** 2026-11-24
-**Estado global:** v0 publicada. En curso: balance del MVP por rondas de tuning (brief 06, rama `feature/tuning-mvp`; ver `docs/TUNING_LOG.md`). Mecánicas base (pasos 0 a 3) mergeadas a `main` (brief 01, PR #1). Obstáculos y tanques (pasos 4 y 4b) mergeados a `main` (brief 02, PR #2). Puerta, game manager y niveles por segmentos (pasos 5, 6 y 7) mergeados a `main` (brief 03, PR #3). Pantalla de título (paso 8) y HUD mínimo (paso 8b) hechos, probados por LT y mergeados a `main` (brief 04, PR #4). Intro de la escotilla (pasos 8d y 8e, brief 05, rama `feature/intro-escotilla`) hecha y probada por LT, pendiente de PR y merge. Arte nuevo del brief 08 (escotilla, tentáculo, HUD, mercado, hub con ajustes y créditos, pantalla de inicio, efectos del jugador y alarmas sincronizadas) integrado en `main-l`, pendiente de revisión de LT. Pantalla de derrota (brief 09) integrada en `main-l`, pendiente de revisión de LT. Siguiente: balance del MVP y audio (paso 9). Los controles táctiles (paso 8c) quedan para el final, después del arte y el balance.
+**Última actualización:** 2026-11-26
+**Estado global:** v0 publicada. En curso: balance del MVP por rondas de tuning (brief 06, rama `feature/tuning-mvp`; ver `docs/TUNING_LOG.md`). Mecánicas base (pasos 0 a 3) mergeadas a `main` (brief 01, PR #1). Obstáculos y tanques (pasos 4 y 4b) mergeados a `main` (brief 02, PR #2). Puerta, game manager y niveles por segmentos (pasos 5, 6 y 7) mergeados a `main` (brief 03, PR #3). Pantalla de título (paso 8) y HUD mínimo (paso 8b) hechos, probados por LT y mergeados a `main` (brief 04, PR #4). Intro de la escotilla (pasos 8d y 8e, brief 05, rama `feature/intro-escotilla`) hecha y probada por LT, pendiente de PR y merge. Arte nuevo del brief 08 (escotilla, tentáculo, HUD, mercado, hub con ajustes y créditos, pantalla de inicio, efectos del jugador y alarmas sincronizadas) integrado en `main-l`, pendiente de revisión de LT. Pantalla de derrota (brief 09) integrada en `main-l`, pendiente de revisión de LT. Arte del espacio (brief 10: fondo, asteroides, restos a la deriva, peligros y fuego) integrado en `main-l`, pendiente de prueba de LT en Godot. Siguiente: balance del MVP y audio (paso 9). Los controles táctiles (paso 8c) quedan para el final, después del arte y el balance.
 **Cómo usar este documento:** es la fuente de verdad del plan. Cada brief para Cowork se genera desde `docs/briefs/BRIEF_TEMPLATE.md` y, al cerrarse, actualiza la tabla de estado (sección 4) y el registro de decisiones (sección 2).
 
 ---
@@ -10,7 +10,7 @@
 
 Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantalla sube a velocidad constante, el tentáculo permanece al borde inferior y el jugador usa un jetpack con combustible limitado para esquivar obstáculos y llegar a una puerta antes de ser atrapado.
 
-**Etapa actual:** arte final de la fase de la nave integrado (brief 07: astronauta, mar de tentáculos, paredes, plataformas, fondo, recogibles, piso, escotilla, ventanal e iluminación). El espacio y el alien siguen con placeholders (`Polygon2D` y tiles de color).
+**Etapa actual:** arte final de la fase de la nave integrado (brief 07: astronauta, mar de tentáculos, paredes, plataformas, fondo, recogibles, piso, escotilla, ventanal e iluminación). El espacio tiene arte final (brief 10, a falta de paredes, ventanal/explosión de salida y pantallas de derrota); el alien sigue con placeholders (`Polygon2D` y tiles de color).
 
 ## 2. Decisiones de diseño
 
@@ -41,7 +41,7 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | Cámara sigue al jugador | La cámara sube y baja con el jugador (lo muestra a 60 % de la altura, suavizado 6, sin bajar de su posición inicial). El tentáculo sube por su cuenta (`rise_speed`, `rise_acceleration`, `max_rise_speed`), puede quedar fuera de pantalla y todo lo que esté bajo su borde superior es letal. `follow_player` apagado devuelve el modo anterior. Valores iniciales de prueba, sin balancear | Socio (Guido, iteración en `main-g`), pendiente de validar jugando |
 | Tiers de segmentos | Los segmentos intermedios se agrupan en tiers (`SegmentTier` dentro de `LevelConfig.tiers`). Cada partida recorre los tiers en orden y usa `count_per_run` segmentos de cada uno (previsto: 3 tiers, 30 candidatos y 10 por partida). Más adelante: segmento de boss y tentáculo distinto entre tiers (no incluido). Doc: `docs/mecanicas/niveles-por-segmentos.md` | Socio (Guido, iteración en `main-g`), pendiente de validar jugando |
 | Compras gratis por fase | La primera vez que se completa una fase (cruzar al espacio, cruzar al alien, llegar a la puerta) se gana 1 compra gratis para el mercado, una por fase y acumulables. Reset all las devuelve todas. Doc: `docs/mecanicas/progreso-mercado.md` | Socio (Guido, iteración en `main-g`), pendiente de validar jugando |
-| Causas de muerte | `&"tentacle"`, `&"fell"`, `&"obstacle"`, `&"trap"`, `&"debris"` (restos del casco), `&"meteor"` y `&"comet"` (obstáculos del espacio). La muerte es siempre `Player.die(cause)` y el controlador escucha `Player.died(cause)` | Propuesta de Claude (brief 02) |
+| Causas de muerte | `&"tentacle"`, `&"fell"`, `&"obstacle"`, `&"trap"`, `&"debris"` (restos del casco), `&"meteor"`, `&"comet"`, `&"laser"` y `&"debris_field"` (obstáculos del espacio) y `&"fire"` (el fuego del tier 2, se comporta igual que `tentacle`). Sin viñeta propia en la pantalla de derrota: `fire`, `laser`, `meteor`, `comet`, `debris_field` y `debris` (texto provisorio). La muerte es siempre `Player.die(cause)` y el controlador escucha `Player.died(cause)` | Propuesta de Claude (brief 02) |
 | Fin de partida (MVP) | Al llegar a la puerta el jugador gana y el juego termina; se reinicia con R. Puntaje u otra progresión: a definir más adelante (no implementado, pero el estado queda desacoplado) | LT (brief 03) |
 | Niveles por segmentos | Cada partida ensambla segmentos escritos a mano (escenas de 360 px de ancho) elegidos al azar con una seed reproducible. Resuelve la decisión abierta de niveles fijos vs. por segmentos | LT (brief 03) |
 | `GameManager` | Autoload que lleva el estado de la partida (`READY`, `PLAYING`, `WON`, `LOST`) y avisa con señales; no conoce nodos de la escena | Propuesta de Claude, validada por LT (brief 03) |
@@ -109,7 +109,8 @@ Un astronauta escapa de un tentáculo alienígena dentro de una nave. La pantall
 | 9a | Arte de la nave: astronauta, mar de tentáculos, paredes con daño y emisivo, plataformas, fondo en parallax, recogibles, piso, escotilla, ventanal e iluminación | Hecho en la rama `feature/arte-nave`, pendiente de prueba de Guido | brief-07 |
 | 9b | Integración del arte del brief 08: escotilla con desgarro, mar de tentáculos (47 cuadros), HUD con barras de textura, gas con bocanadas, efectos del jugador (escudo, reparación, reaparición, rastro del dash, fuga del traje), mercado con solapas y vendedor animado, hub como menú (puertas a Ajustes y Mercado, ascensor), ajustes y créditos, pantalla de inicio (reemplaza al `TitleMenu`) y luces de alarma sincronizadas con el tile | Hecho en la rama `main-l`, pendiente de revisión de LT | brief-08 |
 | 9c | Pantalla de derrota: CAPTURADO y ELECTROCUTADO con viñeta animada, datos de la partida y botones; causas `pulse`/`lethal`; letales de la nave como rayo fijo; sin proyectil en los segmentos | Hecho en la rama `main-l`, pendiente de revisión de LT | brief-09 |
-| 9 | Arte final del espacio y del alien, audio y pulido | Pendiente | — |
+| 9d | Arte del espacio (brief 10): fondo en capas, asteroides con giro por cuadros, restos a la deriva, tentáculo láser, meteoro/cometa con estela, escombros y fuego perseguidor (capas, glow, luces, causa `fire`). Quedan fuera §5 (ventanal y transición), §8 (derrotas) y §9 (resto) | Hecho en la rama `main-l`, pendiente de prueba de LT en Godot | brief-10 |
+| 9 | Arte final del alien, audio y pulido (y lo que falte del espacio) | Pendiente | — |
 
 Estados posibles: Pendiente, En brief, En curso, Hecho.
 
@@ -171,7 +172,7 @@ Tras el tercer golpe la escotilla se rompe, el jugador sale disparado hacia arri
 Joystick o zonas táctiles que emitan las mismas acciones del Input Map, para la versión móvil. Se hace después del arte y el balance.
 
 ### Paso 9 — Arte y audio
-Fase de la nave hecha en el brief 07 (paso 9a; detalle en `docs/arte/*.md`, `docs/mecanicas/iluminacion.md` y las mecánicas de cada pieza). Falta: arte del espacio y del alien (paredes, peligros, perseguidores fuego y ácido, fondos), puerta, gas de la escotilla, efectos del jugador, letales sin fuego y proyectil, audio y pulido. Lista en `docs/arte/lista-assets.md`.
+Fase de la nave hecha en el brief 07 (paso 9a; detalle en `docs/arte/*.md`, `docs/mecanicas/iluminacion.md` y las mecánicas de cada pieza). Arte del espacio hecho en el brief 10 (paso 9d: fondo, asteroides, restos, peligros y fuego; guías en `docs/arte/`). Falta: paredes del espacio, ventanal/explosión de salida y derrotas del espacio (brief 10 §5, §8, §9); arte del alien (paredes, peligros, perseguidor ácido, fondos), puerta, gas de la escotilla, efectos del jugador, letales sin fuego y proyectil, audio y pulido. Lista en `docs/arte/lista-assets.md`.
 
 ## 6. Riesgos y decisiones abiertas
 

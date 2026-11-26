@@ -2,7 +2,7 @@
 
 Relevamiento del 15/11/2026 sobre `main-g` (997e813). La referencia de la línea nueva es la plataforma letal con fuego (`assets/sprites/environment/fire_platform/`). Los tamaños salen de colisiones y variables exportadas, no del arte. Entre paréntesis, en cuántos segmentos aparece (de 72).
 
-Marcar con `[x]` a medida que se termina. Última actualización: 23/11/2026 (brief 08: escotilla, tentáculo, HUD, mercado, gas y efectos).
+Marcar con `[x]` a medida que se termina. Última actualización: 26/11/2026 (brief 10: fondo, asteroides, restos, peligros y fuego del espacio).
 
 # Prioridad de ataque
 
@@ -55,7 +55,7 @@ Marcar con `[x]` a medida que se termina. Última actualización: 23/11/2026 (br
 - [x] Cometa: `comet_head` (núcleo de hielo) + partículas `particle_ice`.
 - [x] Tentáculo láser (reemplaza al satélite): `laser_tentacle`, tallo con ojo, 13 ángulos con `aim`, `lock` y `fire` + `emerge`. El haz lo dibuja Godot.
 - [x] Campo de escombros: `debris_fragment` (6 fragmentos × 36 ángulos).
-- [ ] Fragmentos del casco, que salen de la explosión.
+- [ ] Fragmentos del casco, que salen de la explosión (brief 10 §5, pendiente).
 - [x] Perseguidor: fuego: `fire_explosion` (4 explosiones de bocanadas para el frente + 3 para el relleno, capa `emissive`) y `fire_smoke` (banda de humo violeta detrás del frente). Ensamblado en `docs/arte/peligros-espacio.md`.
 
 ## Peligros del alien (P3)
@@ -98,7 +98,7 @@ Marcar con `[x]` a medida que se termina. Última actualización: 23/11/2026 (br
 - [x] Tipografía: Tiny5 (OFL) en `assets/fonts/` para HUD, mercado y menús; 16 px mínimo, siempre múltiplos de 8. El logo del título está dibujado (ver `docs/arte/titulo.md`).
 - [x] Pantalla de derrota: viñetas `death_captured_a` y `death_electrocuted_a` (`assets/aseprite/ui/death/`), armado y comportamiento en `docs/arte/derrota.md`. Integrada en el juego (brief 09; ver `docs/mecanicas/pantalla-derrota.md`).
 - [x] Logo del estudio: tele con el bebé, `studio_logo` (`assets/aseprite/ui/logo/`); ver `docs/arte/logo-estudio.md`. Opción B isométrica guardada aparte (`studio_logo_b.aseprite`), sin usar.
-- [ ] Pantallas de derrota de los tiers 2 y 3, y pantalla de victoria (depende del jefe).
+- [ ] Pantallas de derrota de los tiers 2 y 3, y pantalla de victoria (depende del jefe). Sin viñeta propia hoy: `fire` (texto provisorio "CALCINADO"), `laser`, `meteor`, `comet`, `debris_field` y `debris` (brief 10 §8).
 
 ## Fuera de esta lista
 - Audio: `assets/audio/sfx` y `assets/audio/music` están vacías.

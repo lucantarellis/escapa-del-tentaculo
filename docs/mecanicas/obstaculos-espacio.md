@@ -92,6 +92,10 @@ Antes era un satélite (`SatelliteLaser`); desde el brief 10 es la punta de un t
 | `aim_time` / `lock_time` / `fire_time` / `cooldown_time` | 1,4 / 0,4 / 0,5 / 2,0 | Tiempos (la animación de `lock` y `fire` se estira a estos tiempos). Unidad: s |
 | `initial_delay` | 0 | Desfase desde que terminó de asomar. Unidad: s |
 
+## Causas de muerte
+
+`meteor`, `comet`, `laser`, `debris_field` y `debris` (restos del casco), más `fire` del perseguidor. Ninguna tiene viñeta propia en la pantalla de derrota todavía (brief 10 §8): muestran el texto provisorio de `LevelController.DEATH_TEXTS`.
+
 ## Cómo probarlo
 
 1. Abrir un `SegmentSpaceNN` con F6: el obstáculo avisa cuando su recorrido entra en la vista.
