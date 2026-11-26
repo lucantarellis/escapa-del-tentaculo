@@ -5,11 +5,17 @@ extends Area2D
 ## del nodo. Hay que cruzar el anillo en el hueco entre dos fragmentos, o rodearlo. Un anillo
 ## tenue marca la órbita, así el patrón es visible y predecible (no hay aviso: no hace falta).
 ## Los fragmentos atraviesan todo (asteroides incluidos). Colocarlo alrededor de un tanque lo
-## convierte en un premio con riesgo. Placeholders con polígonos. Ver
-## `docs/mecanicas/obstaculos-espacio.md`.
+## convierte en un premio con riesgo. Cada fragmento es un sprite (`debris_fragment`, 6 diseños de
+## 36 cuadros: un giro completo cada 10°) que avanza de cuadro con su giro; el sprite no se rota.
+## Ver `docs/arte/peligros-espacio.md` y `docs/mecanicas/obstaculos-espacio.md`.
 
-## Rojo letal de la paleta (fragmentos). Solo visual.
-const CHUNK_COLOR: Color = Color("D83232")
+## Hoja de los fragmentos (ver [HazardSheet]). Estructural.
+const SHEET_NAME: String = "debris_fragment"
+## Diseños de fragmento de la hoja (tags `frag1` a `frag6`). Estructural.
+const DESIGNS: int = 6
+## Cuadros de un giro completo de un fragmento (un cuadro cada 10°, en sentido antihorario).
+## Estructural.
+const SPIN_FRAMES: int = 36
 ## Color del anillo de la órbita. Solo visual.
 const ORBIT_COLOR: Color = Color(1.0, 0.31, 0.25, 0.14)
 
@@ -40,7 +46,10 @@ const ORBIT_COLOR: Color = Color(1.0, 0.31, 0.25, 0.14)
 @export var cause: StringName = &"debris_field"
 
 var _angle: float = 0.0
-var _chunks: Array[Polygon2D] = []
+var _chunks: Array[Sprite2D] = []
+## Primer cuadro del diseño de cada fragmento en la hoja.
+var _first_frames: PackedInt32Array = PackedInt32Array()
+var _sheet: HazardSheet = null
 var _shapes: Array[CollisionShape2D] = []
 
 
@@ -52,15 +61,14 @@ func _ready() -> void:
 	collision_mask = 2
 	monitoring = true
 	_angle = start_angle
+	_sheet = HazardSheet.get_sheet(SHEET_NAME)
+	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	for i: int in chunk_count:
-		var points: PackedVector2Array = PackedVector2Array()
-		for k: int in 6:
-			var a: float = TAU * float(k) / 6.0 + randf_range(-0.3, 0.3)
-			points.append(Vector2(cos(a), sin(a)) * chunk_size * randf_range(0.38, 0.55))
-		var chunk: Polygon2D = Polygon2D.new()
-		chunk.color = CHUNK_COLOR
-		chunk.polygon = points
+		var chunk: Sprite2D = Sprite2D.new()
+		chunk.texture = _sheet.texture
+		chunk.region_enabled = true
 		add_child(chunk)
+		_first_frames.append(_sheet.tag_first(StringName("frag%d" % (1 + randi() % DESIGNS))))
 		_chunks.append(chunk)
 		var shape: CollisionShape2D = CollisionShape2D.new()
 		var circle: CircleShape2D = CircleShape2D.new()
@@ -94,5 +102,11 @@ func _place_chunks() -> void:
 		var a: float = deg_to_rad(_angle + 360.0 * float(i) / float(_chunks.size()))
 		var at: Vector2 = Vector2(cos(a), sin(a)) * orbit_radius
 		_chunks[i].position = at
-		_chunks[i].rotation = a * 2.0
+		_chunks[i].region_rect = _sheet.region(_first_frames[i] + _spin_frame(a * 2.0))
 		_shapes[i].position = at
+
+
+# Cuadro (0 a 35) que muestra el giro `radians` del fragmento. Los cuadros avanzan en sentido
+# antihorario y el ángulo de Godot crece en sentido horario, por eso se invierte.
+func _spin_frame(radians: float) -> int:
+	return posmod(-roundi(rad_to_deg(radians) / (360.0 / float(SPIN_FRAMES))), SPIN_FRAMES)
