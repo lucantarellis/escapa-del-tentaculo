@@ -70,6 +70,8 @@ Arte cerrado el 25/11/2026. El fuego de la nave que explota y sube persiguiendo 
 7. **Humo violeta:** cada 50 ms, con 75% de probabilidad, nace un `fire_smoke` (`a`/`b`/`c` al azar) en 9 franjas de 40 px barajadas, con el pivote 2–22 px **arriba** del borde. Sube 6–16 px/s respecto del borde (se mueve con el perseguidor). Va **detrás de todo** el fuego (humo marrón, relleno y frente) y no lleva lavado.
 8. Con el borde fuera de la pantalla por abajo (más de ~100 px), se pueden pausar los emisores para ahorrar; al volver a acercarse, precargar ~1 s para que el muro aparezca lleno.
 
+**Implementado (brief 10, paso 5a):** `FireChaser` (`scripts/tentacle/fire_chaser.gd`, hijo `Fire` de `Tentacle.tscn`) con `FireChaserConfig` (`resources/configs/fire_chaser_config.tres`): capas 1, 2, 3, 7 y 8. El relleno se hunde a 0,67–0,92 de la velocidad del perseguidor (los 80–110 px/s de la maqueta con el fuego a 120 px/s), no ±15%: así queda tan tupido como en la maqueta. Ver `docs/mecanicas/tentaculo.md`.
+
 ## Pantallas de derrota
 
 El fuego necesita causa propia `fire` (CALCINADO; hoy mata con `tentacle`). Las causas `laser`, `meteor`, `comet` y `debris_field` todavía muestran el texto viejo; sus viñetas van con las pantallas de derrota del tier 2.

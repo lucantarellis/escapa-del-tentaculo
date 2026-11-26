@@ -54,7 +54,7 @@ Escena `scenes/levels/Asteroid.tscn` (raíz `AnimatableBody2D`, script `scripts/
 | Gravedad | `gravity_scale` 0,16 (≈ 40 px/s²) | Tier 2 → Jugador |
 | Frenado en el aire | `air_drag_scale` 0,05 (≈ 4,5 px/s²): casi no se frena solo (de 200 px/s queda 195 tras 1 s) | Tier 2 → Jugador |
 | Frenar propulsando | `counter_thrust_scale` 0,45: frenar de 250 px/s a 0 tarda 0,88 s y gasta el doble de combustible que en la nave (0,40 s) | Tier 2 → Jugador |
-| Fuego | Arranca 150 px bajo la pantalla a 60 px/s y acelera 25 px/s² hasta 280 px/s (cada vez más rápido: los impulsos permiten sacarle ventaja); aparece 1,5 s después de entrar | `tentacle_config_fire.tres`, `pursuer_delay` |
+| Fuego | Arranca 150 px bajo la pantalla a 60 px/s y acelera 25 px/s² hasta 280 px/s (cada vez más rápido: los impulsos permiten sacarle ventaja); aparece 1,5 s después de entrar | `tentacle_config_fire.tres`, `pursuer_delay`. Se dibuja como un muro de explosiones con humo violeta y relleno sobre rojo (`FireChaser`, ver `tentaculo.md`) |
 
 El tier 2 usa **5 segmentos por partida** (`count_per_run`, igual que los otros tiers; se probó con 8 y LT lo dejó en 5).
 

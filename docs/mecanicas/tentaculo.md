@@ -68,7 +68,7 @@ Tentacle (Node2D)          origen = borde superior (sin ondular), esquina izquie
 
 ## Mar de tentáculos (nave)
 
-Con `TentacleConfig.sea` asignado (`tentacle_sea_config.tres`, hoy en `tentacle_config.tres`), el hijo `Sea` (`scripts/tentacle/tentacle_sea.gd`, `TentacleSea`) dibuja el mar de tentáculos de la nave y el `BodyPolygon` se oculta. Fuego y ácido (`tentacle_config_fire/acid.tres`, sin `sea`) siguen con el bloque de color. Arte: `assets/sprites/tentacle/ship/` (`tentacle_front_01..04`, `tentacle_fill_01..05`, `tentacle_flesh`, `tentacle_flesh_deep`, importados con Aseprite Wizard).
+Con `TentacleConfig.sea` asignado (`tentacle_sea_config.tres`, hoy en `tentacle_config.tres`), el hijo `Sea` (`scripts/tentacle/tentacle_sea.gd`, `TentacleSea`) dibuja el mar de tentáculos de la nave y el `BodyPolygon` se oculta. El ácido (`tentacle_config_acid.tres`) sigue con el bloque de color; el fuego usa su propio dibujo (ver abajo). Arte: `assets/sprites/tentacle/ship/` (`tentacle_front_01..04`, `tentacle_fill_01..05`, `tentacle_flesh`, `tentacle_flesh_deep`, importados con Aseprite Wizard).
 
 - **Capas**, de atrás hacia adelante: relleno (`fill`, ~12 cada 34 px, más oscuros), adelante (`front`, ~8 cada 52 px, mirando a lados alternados), masa de carne (`flesh`) y carne profunda (`flesh_deep`, repetida hacia abajo según la profundidad). Cuadro inicial y `speed_scale` al azar (0,85–1,15) para que ninguno se mueva igual al de al lado.
 - **Secuencia de los de adelante:** `idle_a`/`idle_b` y, cada `reach_interval` s (como mucho `max_reaching` a la vez, o cuando el jugador está a menos de `grab_distance` de las puntas), `reach` → `grab` → `retract` → idle.
@@ -76,6 +76,17 @@ Con `TentacleConfig.sea` asignado (`tentacle_sea_config.tres`, hoy en `tentacle_
 - **Dibujo:** con el mar, el tentáculo va con `z_index` 10, delante de todo el nivel (el jugador queda tapado cuando lo agarra). La entrada (`enter`) arranca con lo más alto del mar bajo el borde de la pantalla, así las puntas no aparecen de golpe.
 - **Ajustes:** `TentacleSeaConfig`: densidad (`front_count/spacing`, `fill_count/spacing`), ubicación (`tip_overhang`, `front/fill_base_depth`, `base_jitter`), variedad (`speed_scale`, `fill_brightness`) y agarre (`reach_interval`, `grab_distance`, `max_reaching`).
 
+
+## Fuego del espacio (tier 2)
+
+Con `TentacleConfig.fire` asignado (`fire_chaser_config.tres`, hoy en `tentacle_config_fire.tres`), el hijo `Fire` (`scripts/tentacle/fire_chaser.gd`, `FireChaser`) dibuja el fuego que persigue al astronauta en el espacio; el `BodyPolygon` y el mar se ocultan y el nodo va con `z_index` 10, como el mar. `fire` tiene prioridad sobre `sea`. Solo visual: la zona letal es la de siempre.
+
+- Todo se mide desde el **borde superior** del perseguidor (el origen del nodo), no desde la pantalla. El `Tentacle` le pasa en cada cuadro la distancia del borde al fondo de la pantalla (`FireChaser.step`).
+- Capas, de atrás hacia adelante: humo violeta (`fire_smoke`, sube despacio sobre el borde); en la capa del fuego (sin sombrear), rojo plano `#CD1417` desde 12 px bajo el borde hasta pasado el fondo de la pantalla, los cuadros de humo de las explosiones del frente, el relleno (`a_fill`/`b_fill`/`c_fill`, las nuevas detrás, se quedan atrás al subir y sostienen su último cuadro) y los cuadros calientes del frente (`a`/`b`/`c`/`d`, en franjas barajadas, las nuevas encima).
+- Se dibuja con `_draw` desde listas de bocanadas recicladas (pool con topes en la config). Medido: ~150–260 explosiones y ~25 humos vivos según la velocidad (más con el fuego lento, porque el relleno tarda más en hundirse); el paso cuesta ~0,2–0,3 ms.
+- Con el borde más de `pause_margin` (100 px) debajo de la pantalla se pausa y se vacía; al volver a acercarse se simula `prewarm_time` (1 s) para que el muro aparezca lleno. También se vacía al reactivarse o reubicarse.
+- Parámetros: `FireChaserConfig` (ritmo, frente, relleno, humo violeta, rojo plano, ahorro). Valores de la maqueta `art_src/fuego_perseguidor/v3/mock5.py`.
+- Pendiente (brief 10, 5b y 5c): lavado en degradado hasta el rojo, glow aditivo y luz del frente, y causa de muerte `fire`.
 ## Manejo de la derrota
 
 El tentáculo llama a `Player.die(cause)`. `Player.died(cause)` llega a `LevelController`, que la pasa a `GameManager.notify_player_died`; el manager pasa a `LOST` y el controlador detiene el scroll y abre la pantalla de derrota CAPTURADO para `&"tentacle"` y `&"fell"` (ver `pantalla-derrota.md`). R (acción `restart`) la maneja el `GameManager` y recarga la escena, lo que deja combustible, cámara y tentáculo en su estado inicial. Ver `game-manager.md`.

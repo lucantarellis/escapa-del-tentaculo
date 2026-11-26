@@ -24,7 +24,8 @@ const BODY_PADDING: float = 96.0
 const FREE_RISE_KILL_DEPTH: float = 8000.0
 ## Orden de dibujo del tentáculo con el mar de la nave: adelante de todo lo del nivel (jugador,
 ## plataformas, paredes, efectos), salvo los avisos de peligro que van más arriba. Con el bloque
-## de color o el frente anterior queda en 0, como siempre. Solo visual.
+## de color o el frente anterior queda en 0, como siempre. El fuego del espacio usa el mismo. Solo
+## visual.
 const SEA_Z_INDEX: int = 10
 
 ## Parámetros de gameplay. Si queda vacío se usan los valores por defecto de
@@ -35,6 +36,7 @@ const SEA_Z_INDEX: int = 10
 
 @onready var _body: Polygon2D = $BodyPolygon
 @onready var _sea: TentacleSea = $Sea
+@onready var _fire: FireChaser = $Fire
 @onready var _kill_zone: Area2D = $KillZone
 @onready var _kill_shape: CollisionShape2D = $KillZone/CollisionShape2D
 
@@ -100,6 +102,8 @@ func _process(delta: float) -> void:
 	_update_body_polygon()
 	if _sea.visible:
 		_sea.set_depth(_get_depth())
+	if _fire.visible:
+		_fire.step(delta, camera.get_bottom_y() - global_position.y)
 
 
 ## Cambia el perseguidor al entrar a un tier (ver [SegmentTier]): color placeholder [param color]
@@ -115,6 +119,7 @@ func apply_pursuer(new_config: TentacleConfig, color: Color, reset_position: boo
 		return
 	if reset_position and camera != null:
 		_reset_free_rise()
+		_fire.reset_animation()
 	else:
 		_rise_speed = config.rise_speed
 	if camera != null and _active:
@@ -143,6 +148,7 @@ func set_active(active: bool) -> void:
 	set_process(active)
 	if active:
 		_reset_free_rise()
+		_fire.reset_animation()
 		_follow_camera()
 		_update_kill_zone()
 		_update_body_polygon()
@@ -194,19 +200,24 @@ func reset() -> void:
 	_follow_camera()
 	if config.sea != null:
 		_sea.reset_animation()
+	_fire.reset_animation()
 
 
-# Elige cómo se dibuja según la config: el mar de tentáculos de la nave (`sea`, sin bloque de color)
-# o el bloque de color. Solo visual: no toca la zona letal.
+# Elige cómo se dibuja según la config: el fuego del espacio (`fire`), el mar de tentáculos de la
+# nave (`sea`) o el bloque de color. Solo visual: no toca la zona letal.
 func _apply_front() -> void:
 	if camera == null:
 		return
-	var use_sea: bool = config.sea != null
+	var use_fire: bool = config.fire != null
+	var use_sea: bool = config.sea != null and not use_fire
 	_sea.visible = use_sea
 	_sea.set_process(use_sea)
-	z_index = SEA_Z_INDEX if use_sea else 0
-	_body.visible = not use_sea
+	_fire.visible = use_fire
+	z_index = SEA_Z_INDEX if use_sea or use_fire else 0
+	_body.visible = not use_sea and not use_fire
 	var width: float = camera.get_visible_rect().size.x
+	if use_fire:
+		_fire.setup(config.fire, width)
 	if use_sea:
 		# El mar se ubica respecto del borde de la zona letal (sus puntas asoman `sea.tip_overhang`).
 		_sea.setup(config.sea, config.kill_zone_inset, width)
@@ -228,6 +239,8 @@ func _follow_camera() -> void:
 
 # Cuánto sube lo que se dibuja por encima del origen: las puntas del mar o la onda del bloque.
 func _get_visual_overhang() -> float:
+	if config.fire != null and _fire != null:
+		return _fire.get_top_overhang()
 	if config.sea != null and _sea != null:
 		return _sea.get_top_overhang()
 	return config.wobble_amplitude

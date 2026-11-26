@@ -58,3 +58,9 @@ extends Resource
 ## del bloque de color. Cuánto asoman sus puntas sobre la zona letal se define en esa config
 ## (`tip_overhang`). Solo visual: la zona letal no cambia.
 @export var sea: TentacleSeaConfig
+
+@export_group("Fuego (espacio)")
+## Si se asigna, el perseguidor se dibuja como el fuego del espacio ([FireChaser]: muro de
+## explosiones, humo y relleno) en vez del bloque de color. Tiene prioridad sobre `sea`. Solo
+## visual: la zona letal no cambia.
+@export var fire: FireChaserConfig
