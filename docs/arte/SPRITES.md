@@ -5,7 +5,7 @@ Guía para los chats de sprites (Claude con el MCP de Aseprite). Leer completa a
 ## Antes de empezar
 
 1. Leer este archivo, `docs/arte/lista-assets.md` (qué falta y de qué tamaño) y `assets/palette.md`.
-2. Referencia de estilo: `assets/sprites/environment/fire_platform/` y el arte de la nave (`assets/sprites/environment/`, `player/astronaut/`, `tentacle/ship/`).
+2. Referencia de estilo: el arte de la nave (`assets/sprites/environment/`, `player/astronaut/`, `tentacle/ship/`).
 3. Un chat por categoría de la lista (entorno base, recogibles, peligros del espacio, peligros del alien, meta e intro, UI; astronauta y tentáculo aparte). Si el chat toca otra categoría, avisar antes.
 
 ## Rutas
@@ -18,7 +18,7 @@ Guía para los chats de sprites (Claude con el MCP de Aseprite). Leer completa a
 
 - `<ruta>` y `<nombre>` son idénticos en `assets/aseprite/` y `assets/sprites/`.
 - Aseprite Wizard (addon de Godot) importa los `.aseprite` con sus tags como `SpriteFrames`. Requiere el addon en `addons/` y la ruta del ejecutable de Aseprite configurada en cada PC.
-- Frames temporales, zips y borradores van en `art_src/` y se borran al cerrar el asset. Ejemplo: `environment/fire_platform/centro_a_v1_idle`.
+- Frames temporales, zips y borradores van en `art_src/` y se borran al cerrar el asset. Ejemplo: `art_src/hull_debris/`.
 - El MCP trabaja con rutas absolutas de Windows; crear la subcarpeta de `<ruta>` si no existe.
 - Nombres en `snake_case`, sin acentos ni mayúsculas.
 - No se mueven ni se renombran assets existentes. El astronauta vive en `player/astronaut/` (la carpeta vieja `Astronaut/` se borró).
@@ -29,7 +29,7 @@ Guía para los chats de sprites (Claude con el MCP de Aseprite). Leer completa a
 - Fondo transparente, modo RGBA, sin antialiasing ni semitransparencias, salvo efectos que lo pidan.
 - Tamaño del asset: el de `lista-assets.md` (sale de colisiones y variables exportadas). Tiles de 12 px; segmentos de 360×640.
 - Solo colores de `assets/palette.gpl`. Al terminar, revisar que no haya colores fuera de la paleta.
-- Animaciones: tira horizontal, frames del mismo tamaño y sin separación, como los de `fire_platform`.
+- Animaciones: tira horizontal, frames del mismo tamaño y sin separación, como `particle_ember` o `hull_chips`.
 
 ## Flujo por asset
 

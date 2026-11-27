@@ -1,6 +1,6 @@
 # Lista de assets a pasar a la línea de arte nueva
 
-Relevamiento del 15/11/2026 sobre `main-g` (997e813). La referencia de la línea nueva es la plataforma letal con fuego (`assets/sprites/environment/fire_platform/`). Los tamaños salen de colisiones y variables exportadas, no del arte. Entre paréntesis, en cuántos segmentos aparece (de 72).
+Relevamiento del 15/11/2026 sobre `main-g` (997e813). La referencia de la línea nueva era la plataforma letal con fuego (`fire_skin`, borrada de `main-l` el 27/11/2026; sigue en `main-g`). Los tamaños salen de colisiones y variables exportadas, no del arte. Entre paréntesis, en cuántos segmentos aparece (de 72).
 
 Marcar con `[x]` a medida que se termina. Última actualización: 26/11/2026 (brief 10: fondo, asteroides, restos, peligros y fuego del espacio; alcance cerrado en tier 1, tier 2 y jefe; bocetos de derrotas del tier 2 y del overlay del hub). 26/11: fragmentos del casco.
 
@@ -37,7 +37,7 @@ Marcar con `[x]` a medida que se termina. Última actualización: 26/11/2026 (br
 - [x] Plataforma de pulso: `platform_pulse.aseprite` (`off`, `warn`, `on`). Propulsores de móviles: `platform_thruster.aseprite`. Todas conectadas en el brief 07 (`PlatformSkin`).
 - [x] Restos a la deriva del espacio: `platform_debris` (chapa arrancada con brasas; `idle`, `shake`, `break_fall`, `break_hit`; no reaparecen). Ver `docs/arte/plataformas-nave.md`.
 - [ ] Plataforma proyectil (16 px): pospuesta, se redefine con los segmentos nuevos.
-- [ ] Plataforma letal con fuego: aplicar `fire_skin` en las plataformas letales de los segmentos (la escena de prueba `FirePlatformTest.tscn` se borró).
+- [ ] Plataforma letal con fuego: `fire_skin` se borró de `main-l` el 27/11/2026 (no la usaba ningún segmento); la versión de Guido está en `main-g` (`01b2e9d`).
 - [x] Fondo de la nave: 3 capas × 3 tramos en `assets/aseprite/environment/background_ship/`. Ver `docs/arte/fondo-nave.md`.
 - [x] Fondo del espacio: el cielo del hub en capas (nebulosa y estrellas lejanas, planeta del anillo que rota, estrellas que titilan y 50 rocas de primer plano). `assets/aseprite/environment/background_space/`, guía `docs/arte/fondo-espacio.md`.
 - [ ] Fondo del alien. (Descartado por ahora: tier 3.)

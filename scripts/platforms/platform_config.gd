@@ -78,11 +78,3 @@ extends Resource
 @export var explosion_radius: float = 48.0
 ## Cuánto dura la zona letal de la explosión antes de desaparecer. Unidad: s.
 @export var explosion_duration: float = 0.3
-
-@export_group("Fuego (fire_skin)")
-## Velocidad base de las animaciones de fuego. Unidad: cuadros/s.
-@export var fire_fps: float = 8.0
-## Velocidad mínima de cada módulo, como multiplicador de `fire_fps` (desfasa los módulos). Unidad: x.
-@export var fire_speed_min: float = 0.8
-## Velocidad máxima de cada módulo, como multiplicador de `fire_fps`. Unidad: x.
-@export var fire_speed_max: float = 1.2
