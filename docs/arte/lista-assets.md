@@ -57,7 +57,7 @@ Marcar con `[x]` a medida que se termina. Última actualización: 26/11/2026 (br
 - [x] Cometa: `comet_head` (núcleo de hielo) + partículas `particle_ice`.
 - [x] Tentáculo láser (reemplaza al satélite): `laser_tentacle`, tallo con ojo, 13 ángulos con `aim`, `lock` y `fire` + `emerge`. El haz lo dibuja Godot.
 - [x] Campo de escombros: `debris_fragment` (6 fragmentos × 36 ángulos).
-- [x] Fragmentos del casco que salen de la explosión (`HullDebris`): `hull_debris` (4 diseños × 36 giros, 28×28, capas `color` y `emissive`) y `hull_chips` (astillas de 6×6 para cuando se rompen). Ver `docs/arte/peligros-espacio.md`. Falta cargarlos en el código (brief 12).
+- [x] Fragmentos del casco que salen de la explosión (`HullDebris`): `hull_debris` (4 diseños × 36 giros, 28×28, capas `color` y `emissive`) y `hull_chips` (astillas de 6×6 para cuando se rompen). Ver `docs/arte/peligros-espacio.md`. Integrado en el brief 12 (`HullDebris`: giro por cuadros, emisivo, estela de brasas, resplandor y astillas).
 - [x] Perseguidor: fuego: `fire_explosion` (4 explosiones de bocanadas para el frente + 3 para el relleno, capa `emissive`) y `fire_smoke` (banda de humo violeta detrás del frente). Ensamblado en `docs/arte/peligros-espacio.md`.
 
 ## Peligros del alien (P3) — descartado por ahora (tier 3)
