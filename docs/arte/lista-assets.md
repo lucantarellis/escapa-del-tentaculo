@@ -2,7 +2,9 @@
 
 Relevamiento del 15/11/2026 sobre `main-g` (997e813). La referencia de la línea nueva es la plataforma letal con fuego (`assets/sprites/environment/fire_platform/`). Los tamaños salen de colisiones y variables exportadas, no del arte. Entre paréntesis, en cuántos segmentos aparece (de 72).
 
-Marcar con `[x]` a medida que se termina. Última actualización: 26/11/2026 (brief 10: fondo, asteroides, restos, peligros y fuego del espacio).
+Marcar con `[x]` a medida que se termina. Última actualización: 26/11/2026 (brief 10: fondo, asteroides, restos, peligros y fuego del espacio; alcance cerrado en tier 1, tier 2 y jefe; bocetos de derrotas del tier 2 y del overlay del hub).
+
+**Alcance del juego (26/11/2026):** tier 1 (la nave), tier 2 (el espacio) y la pelea con el jefe (la prepara Guido); ahí termina la run. El **tier 3 (dentro del alien) queda descartado por ahora**: lo marcado así abajo no se hace ni se borra hasta cerrar el juego; cuando esté terminado se decide qué sacar.
 
 # Prioridad de ataque
 
@@ -27,7 +29,7 @@ Marcar con `[x]` a medida que se termina. Última actualización: 26/11/2026 (br
 - [x] Paredes de la nave: tilesets en `assets/aseprite/environment/ship_walls/` → `assets/sprites/environment/ship_walls/` (pared con 47 combinaciones + diagonales, variantes y tiles animados; capas de rotura, grieta incandescente, bilis, parche remachado y cañerías; cada uno con relieve y emisivo). Detalle y armado: `docs/arte/paredes-nave.md`. TileSets en `resources/tilesets/walls_tileset_ship.tres` y `ship_walls_overlay.tres` (+ emisivos). Conectado en el brief 07: los 34 segmentos de la nave y de inicio usan `WallsShip.tscn` con capas `Detalle`/`Dano` y emisivas; luces de grietas y alarmas en `WallLights`. Pintar daño y detalle a mano (LT).
 - [x] Asteroides del espacio: 40 sprites (10 por tamaño), roca tallada con normal map; chicos y medianos con 72 ángulos pre-renderizados. `assets/aseprite/environment/asteroids/`, guía `docs/arte/asteroides.md`.
 - [ ] Paredes laterales del espacio: hoy los segmentos del espacio no tienen paredes pintadas (el nodo `Walls` está vacío); solo hacen falta si se agregan.
-- [ ] Paredes del alien: ídem.
+- [ ] Paredes del alien: ídem. (Descartado por ahora: tier 3.)
 - [x] Plataforma estática: `assets/aseprite/environment/platforms/platform_static.aseprite`. Ver `docs/arte/plataformas-nave.md`.
 - [x] Plataforma de un solo sentido: `platform_oneway.aseprite`.
 - [x] Plataforma rompible: `platform_breakable.aseprite` (`idle`, `shake`, `break_fall`, `break_hit`, `respawn`).
@@ -38,7 +40,7 @@ Marcar con `[x]` a medida que se termina. Última actualización: 26/11/2026 (br
 - [ ] Plataforma letal con fuego: aplicar `fire_skin` en las plataformas letales de los segmentos (la escena de prueba `FirePlatformTest.tscn` se borró).
 - [x] Fondo de la nave: 3 capas × 3 tramos en `assets/aseprite/environment/background_ship/`. Ver `docs/arte/fondo-nave.md`.
 - [x] Fondo del espacio: el cielo del hub en capas (nebulosa y estrellas lejanas, planeta del anillo que rota, estrellas que titilan y 50 rocas de primer plano). `assets/aseprite/environment/background_space/`, guía `docs/arte/fondo-espacio.md`.
-- [ ] Fondo del alien.
+- [ ] Fondo del alien. (Descartado por ahora: tier 3.)
 - [x] Piso del segmento de inicio (10 segmentos): 3/4, módulos de 20×27 + piezas 2D para paredes laterales. `floor_ship`. Guía: `docs/arte/piso-y-escotilla.md`.
 
 ## Recogibles (P2 y P3)
@@ -58,7 +60,7 @@ Marcar con `[x]` a medida que se termina. Última actualización: 26/11/2026 (br
 - [ ] Fragmentos del casco, que salen de la explosión (brief 10 §5, pendiente).
 - [x] Perseguidor: fuego: `fire_explosion` (4 explosiones de bocanadas para el frente + 3 para el relleno, capa `emissive`) y `fire_smoke` (banda de humo violeta detrás del frente). Ensamblado en `docs/arte/peligros-espacio.md`.
 
-## Peligros del alien (P3)
+## Peligros del alien (P3) — descartado por ahora (tier 3)
 - [ ] Anticuerpo (11 px de radio), con sus estados de patrulla, fijado y ataque.
 - [ ] Pared de bilis: orificio, bulto de aviso y proyectil de 14 px.
 - [ ] Tentáculo menor, de 150 px de largo y 14 de base.
@@ -70,9 +72,9 @@ Marcar con `[x]` a medida que se termina. Última actualización: 26/11/2026 (br
 - [x] Escotilla de la intro: 3/4, cuadros de 144×96 con golpes, ruptura y rota; abolladura en domo con desgarro en V; capas color, relieve y emisiva (la capa `glow` se eliminó: la luz es de Godot); fragmentos aparte. `assets/sprites/intro/`. Ver brief 08.
 - [x] Gas de la escotilla: 3 formas de bocanada de 14×14, 4 cuadros c/u (`gas_puff_a/b/c`). También se reutiliza para la fuga del traje a 1 golpe. `assets/aseprite/fx/gas_puff.aseprite`, guía `docs/arte/efectos.md`.
 - [x] Ventanal de la nave con vidrios (3 segmentos): 2D, `window_breach` + succión + vidrios; el tentáculo reutiliza `tentacle_front`. Guía: `docs/arte/ventanal.md`.
-- [ ] Membrana de carne y tentáculo vertical del final del espacio.
+- [ ] Membrana de carne y tentáculo vertical del final del espacio. (Descartado por ahora: tier 3. Con el jefe como cierre, la salida del espacio hay que redefinirla.)
 - [ ] Explosión de cambio de tier: anillo, fuego y destello (7 segmentos).
-- [ ] Luz de apertura y haz de salida del tier 3, con venas y motas.
+- [ ] Luz de apertura y haz de salida del tier 3, con venas y motas. (Descartado por ahora: tier 3.)
 
 ## Efectos del jugador (P4)
 - [x] Escudo ovalado: `player_shield` (54×74; `loop` y `pop`).
@@ -98,7 +100,9 @@ Marcar con `[x]` a medida que se termina. Última actualización: 26/11/2026 (br
 - [x] Tipografía: Tiny5 (OFL) en `assets/fonts/` para HUD, mercado y menús; 16 px mínimo, siempre múltiplos de 8. El logo del título está dibujado (ver `docs/arte/titulo.md`).
 - [x] Pantalla de derrota: viñetas `death_captured_a` y `death_electrocuted_a` (`assets/aseprite/ui/death/`), armado y comportamiento en `docs/arte/derrota.md`. Integrada en el juego (brief 09; ver `docs/mecanicas/pantalla-derrota.md`).
 - [x] Logo del estudio: tele con el bebé, `studio_logo` (`assets/aseprite/ui/logo/`); ver `docs/arte/logo-estudio.md`. Opción B isométrica guardada aparte (`studio_logo_b.aseprite`), sin usar.
-- [ ] Pantallas de derrota de los tiers 2 y 3, y pantalla de victoria (depende del jefe). Sin viñeta propia hoy: `fire` (texto provisorio "CALCINADO"), `laser`, `meteor`, `comet`, `debris_field` y `debris` (brief 10 §8).
+- [x] Pantallas de derrota del tier 2 (brief 10 §8), animadas el 26/11 (172×98, tags `play` una vez y `end` en loop; el primer cuadro de `end` continúa el movimiento del último de `play` (no se repite ningún cuadro, así las partículas no se frenan en el empalme); `.aseprite` en `assets/aseprite/ui/death/`, hoja y JSON en `assets/sprites/ui/death/`): `death_scorched_a` CALCINADO (`fire`; play 1–22 @90 ms, end 23–30 @120 ms), `death_vaporized_a` VAPORIZADO (`laser`; play 1–20, end 21–28), `death_impacted_a` IMPACTADO (`meteor`; play 1–18, end 19–26), `death_frozen_a` CONGELADO (`comet`; play 1–20, end 21–28; astronauta congelado con espinas de hielo, sin bloque), `death_crushed_a` APLASTADO (`debris_field`/`debris`; play 1–16, end 17–24; provisoria, LT la cambia). Falta integrarlas en `death_screen_config.tres` (brief 11). Generadores en `art_src/muertes_tier2/`. Las muertes del tier 3 (`antibody`, `bile`, `minor_tentacle`) quedan descartadas por ahora.
+- [ ] Pantalla de victoria (depende del jefe).
+- [x] Arte del overlay de primera vez en el hub (26/11): todo en blanco `#E7EFF2` (detalles `#6689B7`, apagado `#B0BBCE`, relleno de tecla pulsada `#324370`) sobre un velo oscuro translúcido, estilo del logo del estudio. En `assets/aseprite/ui/hub_hints/` (hoja y JSON en `assets/sprites/ui/hub_hints/`): `hub_hint_keys` (24×24, 6 cuadros de 500 ms; tags `left` 1–2, `right` 3–4, `up` 5–6; el primero de cada par es la tecla en reposo y el segundo la pulsada), `hub_hint_arrow_down` (9×13, 4 cuadros de 150 ms, tag `bob`), `hub_hint_arrow_side` (36×9, 4 cuadros, apunta a la derecha; la izquierda se obtiene con flip horizontal) y `hub_hint_chevrons` (9×30, 3 cuadros de 200 ms, tag `flow`: tres chevrones con la luz subiendo). El recuadro punteado (4 px de trazo, 3 de hueco, con avance de 1 px por cuadro) y los textos (Tiny5 16 px con sombra de 1 px `#050609`) los dibuja el motor. Pasos: caminar (← →), volar (↑), plataforma del ascensor ("SUBÍ ACÁ Y ESPERÁ 1 s") y, desde la segunda visita con monedas, "GASTÁ TUS MONEDAS" con las dos puertas destapadas. Las puertas van cubiertas por el velo en todos menos en el último. Sin dash. Falta el brief 11 (integración, textos editables en un Resource). Versión táctil cuando estén los controles de celular. Generadores en `art_src/overlay_hub/`.
 
 ## Fuera de esta lista
 - Audio: `assets/audio/sfx` y `assets/audio/music` están vacías.

@@ -11,7 +11,7 @@ Una viñeta por causa de muerte, en un `.aseprite` por variante: `assets/aseprit
 | `death_captured_a` | Tentáculo o caída | `play` 1–24 (90 ms, una vez) · `end` 25–32 (120 ms, bucle) |
 | `death_electrocuted_a` | Plataforma de pulso o letal fija | `play` 1–22 (90 ms, una vez) · `end` 23–30 (120 ms, bucle) |
 
-- `play`: la muerte, con la cámara en movimiento (paralaje, temblor, destellos). `end`: la imagen final de la muerte, con la cámara quieta y movimiento mínimo. El último cuadro de `play` es idéntico al primero de `end`, así que el paso no se nota.
+- `play`: la muerte, con la cámara en movimiento (paralaje, temblor, destellos). `end`: la imagen final de la muerte, con la cámara quieta y movimiento mínimo. El primer cuadro de `end` continúa el movimiento del último de `play` (no se repite ningún cuadro), así que el paso no se nota ni frena las partículas.
 - **CAPTURADO:** el tentáculo lo agarra de las piernas, lo golpea dos veces contra la pared (el visor se raja), lo enrolla, lo aprieta y lo levanta. En `end` queda colgando del tentáculo, flojo, con el visor roto; el tentáculo se balancea y se escapa gas.
 - **ELECTROCUTADO:** sube hacia el rayo, recibe la descarga (destellos y esqueleto en negativo) y le revienta el casco. En `end` queda quemado flotando frente a la plataforma, humeando; la plataforma chisporrotea cada tanto.
 - **Variantes:** para sumar otra animación a una muerte, agregar `death_<muerte>_b` con los mismos tags. El código elige una variante al azar.
