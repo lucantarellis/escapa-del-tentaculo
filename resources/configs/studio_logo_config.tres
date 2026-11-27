@@ -1,6 +1,8 @@
-[gd_resource type="Resource" script_class="StudioLogoConfig" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="StudioLogoConfig" format=3 uid="uid://bscueuhfjlym7"]
 
-[ext_resource type="Script" path="res://scripts/ui/studio_logo_config.gd" id="1"]
+[ext_resource type="Script" uid="uid://drsavhhptxqw3" path="res://scripts/ui/studio_logo_config.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
+studio_name = "WOODENBOX"
+studio_label = ""

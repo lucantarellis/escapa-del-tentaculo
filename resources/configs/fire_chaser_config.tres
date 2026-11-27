@@ -1,6 +1,8 @@
-[gd_resource type="Resource" script_class="FireChaserConfig" format=3]
+[gd_resource type="Resource" script_class="FireChaserConfig" format=3 uid="uid://cwhmqowuajr4m"]
 
-[ext_resource type="Script" path="res://scripts/tentacle/fire_chaser_config.gd" id="1_cfg"]
+[ext_resource type="Script" uid="uid://b8g5ns0je7lgh" path="res://scripts/tentacle/fire_chaser_config.gd" id="1_cfg"]
 
 [resource]
 script = ExtResource("1_cfg")
+front_weights = null
+fill_weights = null

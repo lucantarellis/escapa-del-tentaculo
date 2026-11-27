@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://bv1rcxqc3efs3"]
 
-[ext_resource type="Script" path="res://scripts/ui/studio_logo.gd" id="1"]
-[ext_resource type="Resource" path="res://resources/configs/studio_logo_config.tres" id="2"]
+[ext_resource type="Script" uid="uid://cpebisphun6if" path="res://scripts/ui/studio_logo.gd" id="1"]
+[ext_resource type="Resource" uid="uid://bscueuhfjlym7" path="res://resources/configs/studio_logo_config.tres" id="2"]
 
-[node name="StudioLogo" type="Control"]
+[node name="StudioLogo" type="Control" unique_id=315884529]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 360.0
