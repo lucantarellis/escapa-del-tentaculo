@@ -4,7 +4,7 @@ Brief 09. Arte y armado en `docs/arte/derrota.md`.
 
 ## Qué hace
 
-Al perder (`GameManager` pasa a `LOST`), `LevelController` busca la causa (`GameManager.get_last_death_cause()`) en `DeathScreenConfig`. Si tiene entrada, abre la pantalla de derrota (`scenes/ui/DeathScreen.tscn`, `scripts/ui/death_screen.gd`) en la capa de mensajes (`CaughtLayer`, capa 90, encima del HUD). Si no tiene, sigue mostrando el texto de siempre (`DEATH_TEXTS`). No hay pantalla genérica: las causas de los tiers 2 y 3 siguen con texto hasta tener su pantalla. La victoria no cambia.
+Al perder (`GameManager` pasa a `LOST`), `LevelController` busca la causa (`GameManager.get_last_death_cause()`) en `DeathScreenConfig`. Si tiene entrada, abre la pantalla de derrota (`scenes/ui/DeathScreen.tscn`, `scripts/ui/death_screen.gd`) en la capa de mensajes (`CaughtLayer`, capa 90, encima del HUD). Si no tiene, sigue mostrando el texto de siempre (`DEATH_TEXTS`, que queda como respaldo). No hay pantalla genérica: las causas sin entrada (`obstacle`, `trap` y las del tier 3, descartado por ahora: `antibody`, `bile`, `minor_tentacle`) siguen con texto. La victoria no cambia.
 
 - Título (CAPTURADO, ELECTROCUTADO…), viñeta animada a 2× en un marco `mk_panel_list` con el rótulo "● REPETICIÓN", línea de humor, panel de datos (`mk_panel_detail`) y botones.
 - **Viñeta:** `SheetSprite` con `assets/sprites/ui/death/<nombre>.png` + `.json`. Reproduce `play` una vez y después `end` en bucle (tiempos de cada cuadro del JSON). Tocar o hacer clic en la viñeta durante `play` la salta a `end`.
@@ -40,10 +40,21 @@ Valores iniciales:
 |---|---|---|---|
 | `tentacle`, `fell` | CAPTURADO | `death_captured_a` | "Tentáculo 1 · Vos 0", "Seguro sabés jugar" |
 | `pulse`, `lethal` | ELECTROCUTADO | `death_electrocuted_a` | "Era de 220." |
+| `fire` | CALCINADO | `death_scorched_a` | "Bien cocido." |
+| `laser` | VAPORIZADO | `death_vaporized_a` | "Quedaron las botas." |
+| `meteor` | IMPACTADO | `death_impacted_a` | "Mirá para arriba la próxima." |
+| `comet` | CONGELADO | `death_frozen_a` | "Se te enfrió el asunto." |
+| `debris_field`, `debris` | APLASTADO | `death_crushed_a` (provisoria) | "Pesaba más de lo que parecía." |
+
+Las líneas del tier 2 son provisorias: se cambian editando `lines` en el Resource.
 
 ## Causas
 
 `Platform` avisa `pulse` (PULSE en ON) y `lethal` (LETHAL), salvo que la instancia tenga otra `cause` distinta de `obstacle` (ver `plataformas.md`). Ninguna de las dos está en `dash_unblockable_causes`, `instakill_causes` ni `no_respawn_causes`: se comportan como un golpe común.
+
+**Tier 2 (espacio):** este brief solo les suma pantalla; las reglas de `ProgressConfig` no cambian. `laser`, `meteor`, `comet`, `debris_field` y `debris` siguen siendo golpes comunes (no están en ninguna de las tres listas). `fire` sigue en las tres de siempre (`dash_unblockable_causes`, `instakill_causes` y `no_respawn_causes`).
+
+**Caída en el espacio = `fire`.** `TentacleConfig.fall_cause` es la causa al caer bajo el borde inferior de la pantalla: `fell` por defecto (nave, tier 1: CAPTURADO) y `fire` en `tentacle_config_fire.tres` (tier 2: CALCINADO). Sin comparar el nombre del tier en el código. Consecuencia, aceptada por LT: en el espacio la caída cuenta como el fuego y entra en `no_respawn_causes`, así que Reaparecer no la evita (en la nave sí).
 
 ## Para sumar contenido
 

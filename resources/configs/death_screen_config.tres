@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="DeathScreenConfig" load_steps=5 format=3]
+[gd_resource type="Resource" script_class="DeathScreenConfig" format=3 uid="uid://hee47rj1p8w8"]
 
-[ext_resource type="Script" path="res://scripts/ui/death_screen_config.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/ui/death_screen_entry.gd" id="2"]
+[ext_resource type="Script" uid="uid://dcd8tik4k2xnl" path="res://scripts/ui/death_screen_config.gd" id="1"]
+[ext_resource type="Script" uid="uid://do8rmesdyh74o" path="res://scripts/ui/death_screen_entry.gd" id="2"]
 
 [sub_resource type="Resource" id="captured"]
 script = ExtResource("2")
@@ -17,8 +17,41 @@ title = "ELECTROCUTADO"
 vignettes = Array[String](["death_electrocuted_a"])
 lines = Array[String](["Era de 220."])
 
+[sub_resource type="Resource" id="scorched"]
+script = ExtResource("2")
+causes = Array[StringName]([&"fire"])
+title = "CALCINADO"
+vignettes = Array[String](["death_scorched_a"])
+lines = Array[String](["Bien cocido."])
+
+[sub_resource type="Resource" id="vaporized"]
+script = ExtResource("2")
+causes = Array[StringName]([&"laser"])
+title = "VAPORIZADO"
+vignettes = Array[String](["death_vaporized_a"])
+lines = Array[String](["Quedaron las botas."])
+
+[sub_resource type="Resource" id="impacted"]
+script = ExtResource("2")
+causes = Array[StringName]([&"meteor"])
+title = "IMPACTADO"
+vignettes = Array[String](["death_impacted_a"])
+lines = Array[String](["Mirá para arriba la próxima."])
+
+[sub_resource type="Resource" id="frozen"]
+script = ExtResource("2")
+causes = Array[StringName]([&"comet"])
+title = "CONGELADO"
+vignettes = Array[String](["death_frozen_a"])
+lines = Array[String](["Se te enfrió el asunto."])
+
+[sub_resource type="Resource" id="crushed"]
+script = ExtResource("2")
+causes = Array[StringName]([&"debris_field", &"debris"])
+title = "APLASTADO"
+vignettes = Array[String](["death_crushed_a"])
+lines = Array[String](["Pesaba más de lo que parecía."])
+
 [resource]
 script = ExtResource("1")
-entries = Array[ExtResource("2")]([SubResource("captured"), SubResource("electrocuted")])
-fade_in_time = 0.3
-reveal_time = 0.2
+entries = Array[ExtResource("2")]([SubResource("captured"), SubResource("electrocuted"), SubResource("scorched"), SubResource("vaporized"), SubResource("impacted"), SubResource("frozen"), SubResource("crushed")])

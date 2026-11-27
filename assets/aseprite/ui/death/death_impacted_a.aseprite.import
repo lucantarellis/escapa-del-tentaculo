@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://bydt12vkxxoa2"
+path="res://.godot/imported/death_impacted_a.aseprite-d0b9c0ec582acc2174e8e4510495b8e8.res"
+
+[deps]
+
+source_file="res://assets/aseprite/ui/death/death_impacted_a.aseprite"
+dest_files=["res://.godot/imported/death_impacted_a.aseprite-d0b9c0ec582acc2174e8e4510495b8e8.res"]
+
+[params]
+

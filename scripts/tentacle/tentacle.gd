@@ -9,8 +9,8 @@ extends Node2D
 ## la pantalla. Ver `docs/mecanicas/tentaculo.md`.
 
 ## Se emite cuando el tentáculo atrapa al jugador. [param cause] es `TentacleConfig.kill_cause`
-## (contacto: `&"tentacle"`, o `&"fire"` con el fuego del espacio) o `&"fell"` (cayó bajo el borde
-## inferior de la pantalla).
+## (contacto: `&"tentacle"`, o `&"fire"` con el fuego del espacio) o `TentacleConfig.fall_cause`
+## (cayó bajo el borde inferior de la pantalla: `&"fell"`, o `&"fire"` en el espacio).
 signal player_caught(cause: StringName)
 
 ## Rojo de la paleta. Solo visual.
@@ -281,7 +281,7 @@ func _check_fell() -> void:
 	if player == null or not player.is_alive():
 		return
 	if player.global_position.y > camera.get_bottom_y() + config.screen_bottom_margin:
-		_catch(player, &"fell")
+		_catch(player, config.fall_cause)
 
 
 func _on_kill_zone_body_entered(body: Node2D) -> void:

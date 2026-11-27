@@ -49,6 +49,11 @@ Las líneas de humor van en código: una lista por muerte, y se elige una al aza
 |---|---|---|---|
 | `tentacle`, `fell` | CAPTURADO | `death_captured_*` | "Tentáculo 1 · Vos 0", "Seguro sabés jugar" |
 | `pulse`, `lethal` | ELECTROCUTADO | `death_electrocuted_*` | "Era de 220." |
+| `fire` | CALCINADO | `death_scorched_*` | "Bien cocido." |
+| `laser` | VAPORIZADO | `death_vaporized_*` | "Quedaron las botas." |
+| `meteor` | IMPACTADO | `death_impacted_*` | "Mirá para arriba la próxima." |
+| `comet` | CONGELADO | `death_frozen_*` | "Se te enfrió el asunto." |
+| `debris_field`, `debris` | APLASTADO | `death_crushed_*` (provisoria) | "Pesaba más de lo que parecía." |
 
 - No hay pantalla genérica. Las causas de los tiers 2 y 3 todavía no tienen pantalla; hasta que la tengan, mantener el texto actual.
 - La victoria queda pendiente: depende de la pelea con el jefe.

@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://bw0akjte1c8su"
+path="res://.godot/imported/death_vaporized_a.aseprite-16b946971f90e25807974d4450ac6a66.res"
+
+[deps]
+
+source_file="res://assets/aseprite/ui/death/death_vaporized_a.aseprite"
+dest_files=["res://.godot/imported/death_vaporized_a.aseprite-16b946971f90e25807974d4450ac6a66.res"]
+
+[params]
+

@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://dk2b1oc4tr167"
+path="res://.godot/imported/death_frozen_a.aseprite-4929ef10055a223ddb5085e6327b72db.res"
+
+[deps]
+
+source_file="res://assets/aseprite/ui/death/death_frozen_a.aseprite"
+dest_files=["res://.godot/imported/death_frozen_a.aseprite-4929ef10055a223ddb5085e6327b72db.res"]
+
+[params]
+
