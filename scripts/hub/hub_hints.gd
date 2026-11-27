@@ -9,6 +9,12 @@ extends CanvasLayer
 ## Tiny5 con sombra y, en la plataforma, un recuadro punteado que avanza y un agujero en el velo.
 ## Textos, tiempos y posiciones salen de [HubHintsConfig]. Las teclas que se muestran salen de un
 ## único punto ([method _glyphs_for_input]) para poder sumar la versión táctil.
+##
+## Secuencia ([method play_sequence]): caminar → volar → plataforma. Cada pista se va cuando el
+## jugador hace la acción (o al llegar a su tope de tiempo) y, tras `step_pause`, aparece la
+## siguiente. Si el jugador se adelanta (vuela antes de caminar), las pistas anteriores se dan por
+## cumplidas; si se sube a la plataforma, el overlay se cierra. No toca los flags: el [Hub] marca
+## `hub_hints_seen` al lanzar la partida.
 ## Ver `docs/mecanicas/overlay-hub.md`.
 
 ## Capa del overlay: encima del mundo del hub (0) y debajo de su UI (`Ui`, 90). Estructural.
@@ -45,6 +51,17 @@ var _hole_open: float = 0.0
 var _key_time: float = 0.0
 var _key_phase: int = 0
 var _dash_time: float = 0.0
+var _player: Player
+var _elevator: HubElevator
+## Secuencia en curso, pausada (hay una pantalla abierta), pistas ya cumplidas, propulsor
+## acumulado (s), x del jugador al aparecer la pista de caminar y tiempo de la pista actual (s).
+var _running: bool = false
+var _suspended: bool = false
+var _walk_done: bool = false
+var _fly_done: bool = false
+var _fly_accum: float = 0.0
+var _walk_origin: float = 0.0
+var _step_time: float = 0.0
 
 
 func _ready() -> void:
@@ -66,6 +83,13 @@ func _ready() -> void:
 	_build_platform()
 	_root.visible = false
 	set_process(false)
+	set_physics_process(false)
+
+
+## Jugador y ascensor del hub, para detectar las acciones. Lo llama [Hub] al armarse.
+func setup(player: Player, elevator: HubElevator) -> void:
+	_player = player
+	_elevator = elevator
 
 
 ## Devuelve la pista en pantalla (`NONE` si no hay ninguna).
@@ -100,7 +124,7 @@ func show_step(step: Step) -> void:
 			_root.visible = false
 			set_process(false)
 		return
-	_root.visible = true
+	_root.visible = not _suspended
 	set_process(true)
 	_holes = _holes_for(step)
 	_hole_open = 0.0
@@ -119,7 +143,40 @@ func start() -> void:
 	if config.debug_preview_step >= Step.WALK and config.debug_preview_step <= Step.PLATFORM:
 		show_step(config.debug_preview_step as Step)
 	elif not PlayerProgress.is_hub_hints_seen():
-		show_step(Step.WALK)
+		play_sequence()
+
+
+## Corre las pistas 1 a 3 desde el principio, sin mirar ni tocar los flags (también lo usa "Ver
+## controles" de Ajustes).
+func play_sequence() -> void:
+	if _player == null or _elevator == null:
+		push_warning("HubHints: falta setup(player, elevator).")
+		return
+	_running = true
+	_walk_done = false
+	_fly_done = false
+	_fly_accum = 0.0
+	set_physics_process(true)
+	_advance()
+
+
+## Corta la secuencia y saca el overlay con fundido (lo llama [Hub] al lanzarse el ascensor).
+func stop() -> void:
+	_running = false
+	set_physics_process(false)
+	show_step(Step.NONE)
+
+
+## Devuelve true mientras corre la secuencia de pistas.
+func is_running() -> bool:
+	return _running
+
+
+## Con [param suspended] `true` oculta el overlay y pausa la detección (hay una pantalla abierta:
+## Ajustes o Mercado); con `false` lo vuelve a mostrar donde estaba.
+func set_suspended(suspended: bool) -> void:
+	_suspended = suspended
+	_root.visible = not suspended and _step != Step.NONE
 
 
 ## Saca todo con fundido (atajo de `show_step(NONE)`).
@@ -138,6 +195,58 @@ func _process(delta: float) -> void:
 	for frame: Control in _frames.values():
 		if frame.is_visible_in_tree():
 			frame.queue_redraw()
+
+
+# Detección de las acciones de la secuencia. Solo cuenta lo que hace el jugador con el control:
+# mientras está congelado, guiado por una puerta o montado en el ascensor, la pista de caminar
+# vuelve a medir desde donde quedó.
+func _physics_process(delta: float) -> void:
+	if not _running or _suspended:
+		return
+	if not _player.is_physics_processing() or _player.is_control_locked() or not _player.is_alive():
+		_walk_origin = _player.global_position.x
+		return
+	# Subirse a la plataforma (o que el ascensor ya se esté armando) cierra el overlay.
+	if _elevator.is_player_on() or _elevator.get_phase() != HubElevator.Phase.IDLE:
+		_running = false
+		set_physics_process(false)
+		show_step(Step.NONE)
+		return
+	_step_time += delta
+	if _player.is_thrusting():
+		_fly_accum += delta
+	# Volar cumple también caminar (se adelantó).
+	if _fly_accum >= config.fly_time:
+		_fly_done = true
+		_walk_done = true
+	match _step:
+		Step.WALK:
+			if absf(_player.global_position.x - _walk_origin) >= config.walk_distance or _timed_out(config.walk_max_time):
+				_walk_done = true
+		Step.FLY:
+			if _timed_out(config.fly_max_time):
+				_fly_done = true
+		Step.PLATFORM:
+			pass
+	_advance()
+
+
+# true si [param max_time] es mayor que 0 y la pista actual ya lleva ese tiempo.
+func _timed_out(max_time: float) -> bool:
+	return max_time > 0.0 and _step_time >= max_time
+
+
+# Muestra la primera pista no cumplida (si no es la que ya está).
+func _advance() -> void:
+	var next: Step = Step.WALK
+	if _walk_done:
+		next = Step.FLY if not _fly_done else Step.PLATFORM
+	if next == _step:
+		return
+	_step_time = 0.0
+	if next == Step.WALK:
+		_walk_origin = _player.global_position.x
+	show_step(next)
 
 
 # --- teclas ---------------------------------------------------------------------------------

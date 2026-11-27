@@ -430,6 +430,7 @@ func _on_door_entered(kind: StringName) -> void:
 	_player.set_scripted(true, door.get_enter_direction())
 	_player.set_body_alpha(0.0)
 	await _fade_to(1.0, config.door_fade_time)
+	_hints.set_suspended(true)
 	_player.set_scripted(false)
 	_player.set_frozen(true)
 	_set_doors_enabled(false)
@@ -447,6 +448,7 @@ func _on_room_closed(kind: StringName) -> void:
 		return
 	_in_room = &""
 	await _fade_to(1.0, config.door_fade_time)
+	_hints.set_suspended(false)
 	_market.visible = false
 	_settings.visible = false
 	var door: HubDoor = _doors[kind]
@@ -467,6 +469,9 @@ func _on_room_closed(kind: StringName) -> void:
 	door.set_held_open(false)
 	_set_doors_enabled(true)
 	_busy = false
+	# Si se borró el progreso en Ajustes, el overlay de ayuda vuelve a arrancar al salir.
+	if kind == &"settings" and not _hints.is_running():
+		_hints.start()
 
 
 func _set_doors_enabled(enabled: bool) -> void:
@@ -476,8 +481,12 @@ func _set_doors_enabled(enabled: bool) -> void:
 
 # --- ascensor -------------------------------------------------------------------------------
 
-# El jugador queda pegado a la plataforma (sin física ni input) mientras sube.
+# El jugador queda pegado a la plataforma (sin física ni input) mientras sube. Marca que ya lanzó
+# su primera partida y saca el overlay de ayuda.
 func _on_launch_started() -> void:
+	# Primera partida lanzada: el overlay de ayuda no vuelve a aparecer solo.
+	PlayerProgress.set_hub_hints_seen(true)
+	_hints.stop()
 	_riding = true
 	_set_doors_enabled(false)
 	_player.velocity = Vector2.ZERO
@@ -555,6 +564,7 @@ func _build_hints() -> void:
 	_hints.name = "Hints"
 	_hints.config = hints_config
 	add_child(_hints)
+	_hints.setup(_player, _elevator)
 
 
 # Destello rojo de la alarma: rectángulo aditivo a pantalla completa debajo del fundido.
