@@ -56,6 +56,9 @@ extends Resource
 @export var text_shadow: Color = Color("050609")
 ## Cada cuánto alterna la tecla entre reposo y pulsada. Solo visual. Unidad: s.
 @export_range(0.05, 2.0, 0.05) var key_toggle_time: float = 0.5
+## Teclas de caminar: true = se pulsan una por vez (izquierda, derecha, izquierda…); false =
+## parpadean juntas. Solo visual.
+@export var walk_keys_alternate: bool = true
 ## Recuadro punteado: largo del trazo y del hueco (px) y velocidad con la que avanza (px/s). Solo
 ## visual.
 @export var dash_on: int = 4
@@ -103,3 +106,8 @@ extends Resource
 ## Flechas laterales (la de Ajustes es la misma con `flip_h`). Solo visual.
 @export var market_arrow_position: Vector2 = Vector2(296.0, 472.0)
 @export var settings_arrow_position: Vector2 = Vector2(28.0, 472.0)
+
+@export_group("Depuración")
+## Solo para probar el arte: 1 (caminar), 2 (volar) o 3 (plataforma) muestra esa pista fija cada vez
+## que el jugador toma el control en el hub, sin mirar ni tocar los flags. 0 = apagado.
+@export_range(0, 3) var debug_preview_step: int = 0

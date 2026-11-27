@@ -5,10 +5,12 @@
 [ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="3_player"]
 [ext_resource type="PackedScene" path="res://scenes/ui/Market.tscn" id="4_market"]
 [ext_resource type="PackedScene" path="res://scenes/ui/Settings.tscn" id="5_settings"]
+[ext_resource type="Resource" path="res://resources/configs/hub_hints_config.tres" id="6_hints"]
 
 [node name="Hub" type="Node2D"]
 script = ExtResource("1_hub")
 config = ExtResource("2_cfg")
+hints_config = ExtResource("6_hints")
 
 [node name="Player" parent="." instance=ExtResource("3_player")]
 

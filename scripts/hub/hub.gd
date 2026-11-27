@@ -62,6 +62,8 @@ const PLAYER_SPAWN: Vector2 = Vector2(180.0, 591.0)
 signal launch_finished
 
 @export var config: HubConfig
+## Textos, tiempos y posiciones del overlay de ayuda ([HubHints]).
+@export var hints_config: HubHintsConfig
 ## Si es true, el hub arranca con la pantalla de inicio encima ([StartScreen]) y el jugador sin
 ## control hasta tocar. [Main] la pide solo al abrir el juego.
 @export var show_start_screen: bool = false
@@ -95,6 +97,7 @@ var _ride_offset: Vector2 = Vector2.ZERO
 var _busy: bool = false
 ## Habitación abierta (`settings` o `market`); vacío si no hay ninguna.
 var _in_room: StringName = &""
+var _hints: HubHints
 
 @onready var _player: Player = $Player
 @onready var _camera: Camera2D = $Camera
@@ -126,9 +129,13 @@ func _ready() -> void:
 	_settings.closed.connect(_on_room_closed.bind(&"settings"))
 	_fade.color = Color(0.0, 0.0, 0.0, 0.0)
 	_build_alarm()
+	_build_hints()
 	_flip_rotation_timer()
 	if show_start_screen:
 		_show_start_screen()
+	else:
+		# Al volver de una partida el jugador ya tiene el control.
+		_on_control_taken.call_deferred()
 
 
 # Pantalla de inicio encima del hub en vivo; el jugador no está en escena hasta tocar: entonces
@@ -153,6 +160,12 @@ func _on_start_screen_starting() -> void:
 func _on_start_screen_started(start: StartScreen) -> void:
 	start.queue_free()
 	_busy = false
+	_on_control_taken()
+
+
+# El jugador acaba de tomar el control del hub: arranca el overlay de ayuda (si corresponde).
+func _on_control_taken() -> void:
+	_hints.start()
 
 
 func _physics_process(_delta: float) -> void:
@@ -203,6 +216,11 @@ func get_door(kind: StringName) -> HubDoor:
 ## Devuelve la pantalla de inicio si se está mostrando (null si no). Sirve para pruebas.
 func get_start_screen() -> StartScreen:
 	return get_node_or_null("Ui/StartScreen") as StartScreen
+
+
+## Devuelve el overlay de ayuda. Sirve para pruebas.
+func get_hints() -> HubHints:
+	return _hints
 
 
 ## Devuelve el ascensor. Sirve para pruebas.
@@ -529,6 +547,14 @@ func _update_alien_event(delta: float) -> void:
 		var emissive: Sprite2D = _lamp_emissives[index] if index < _lamp_emissives.size() else null
 		if emissive != null:
 			emissive.modulate = Color(Color.WHITE.lerp(config.alien_alarm_color, config.alien_lamp_red * pulse), level)
+
+
+# Overlay de ayuda en su propia capa (encima del hub, debajo de `Ui`).
+func _build_hints() -> void:
+	_hints = HubHints.new()
+	_hints.name = "Hints"
+	_hints.config = hints_config
+	add_child(_hints)
 
 
 # Destello rojo de la alarma: rectángulo aditivo a pantalla completa debajo del fundido.

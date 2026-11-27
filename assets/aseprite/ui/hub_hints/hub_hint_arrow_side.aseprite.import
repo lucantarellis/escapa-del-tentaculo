@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://cv4y70xv0mwv5"
+path="res://.godot/imported/hub_hint_arrow_side.aseprite-b7ff9bd7939f0d95e18853b758ca0193.res"
+
+[deps]
+
+source_file="res://assets/aseprite/ui/hub_hints/hub_hint_arrow_side.aseprite"
+dest_files=["res://.godot/imported/hub_hint_arrow_side.aseprite-b7ff9bd7939f0d95e18853b758ca0193.res"]
+
+[params]
+
