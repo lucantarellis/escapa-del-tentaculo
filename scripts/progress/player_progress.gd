@@ -36,6 +36,10 @@ const KEY_COINS: String = "coins"
 const SECTION_UPGRADES: String = "upgrades"
 const SECTION_META: String = "meta"
 const KEY_TREE_VERSION: String = "tree_version"
+## Claves de [constant SECTION_META] del overlay de ayuda del hub: ya lanzó su primera partida, y ya
+## usó (o se le pasó) la pista del mercado. Un guardado sin ellas se lee como `false`.
+const KEY_HUB_HINTS_SEEN: String = "hub_hints_seen"
+const KEY_MARKET_HINT_DONE: String = "market_hint_done"
 ## Sección del guardado con las compras gratis: fases ya completadas y cuántas compras gratis se usaron.
 const SECTION_FREE: String = "free_buys"
 const KEY_PHASES: String = "phases"
@@ -57,6 +61,9 @@ var _owned: Dictionary = {}
 var _phases_done: Array[int] = []
 # Compras gratis que se gastaron desde el último Reset all. Disponibles = fases completadas - usadas.
 var _free_used: int = 0
+# Overlay de ayuda del hub: el jugador ya lanzó su primera partida / ya vio la pista del mercado.
+var _hub_hints_seen: bool = false
+var _market_hint_done: bool = false
 
 
 func _ready() -> void:
@@ -87,6 +94,34 @@ func _notification(what: int) -> void:
 	# Al cerrar el juego en medio de una partida, las monedas juntadas no se pierden.
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		bank_run()
+
+
+## Devuelve true si el jugador ya lanzó su primera partida (el overlay de ayuda del hub no vuelve a
+## aparecer solo). Con un guardado nuevo o sin la clave vale false.
+func is_hub_hints_seen() -> bool:
+	return _hub_hints_seen
+
+
+## Marca (o desmarca) que el jugador ya lanzó su primera partida, y guarda. No emite señales.
+func set_hub_hints_seen(seen: bool) -> void:
+	if _hub_hints_seen == seen:
+		return
+	_hub_hints_seen = seen
+	_save()
+
+
+## Devuelve true si la pista del mercado del hub ya se cumplió o se pasó. Con un guardado nuevo o sin
+## la clave vale false.
+func is_market_hint_done() -> bool:
+	return _market_hint_done
+
+
+## Marca (o desmarca) la pista del mercado como hecha, y guarda. No emite señales.
+func set_market_hint_done(done: bool) -> void:
+	if _market_hint_done == done:
+		return
+	_market_hint_done = done
+	_save()
 
 
 ## Devuelve true si el progreso está activo (`ProgressConfig.enabled`).
@@ -220,7 +255,7 @@ func buy(id: StringName) -> bool:
 	return true
 
 
-## Borra monedas y compras, y guarda. NO borra las fases completadas: las compras gratis ganadas
+## Borra monedas y compras, baja los flags del overlay de ayuda del hub (vuelve a aparecer) y guarda. NO borra las fases completadas: las compras gratis ganadas
 ## se devuelven todas, incluso las que ya se habían gastado.
 func reset_all() -> void:
 	_coins = 0
@@ -228,6 +263,8 @@ func reset_all() -> void:
 	_run_banked = true
 	_owned.clear()
 	_free_used = 0
+	_hub_hints_seen = false
+	_market_hint_done = false
 	_save()
 	coins_changed.emit(_coins)
 	free_buys_changed.emit(get_free_buys())
@@ -387,6 +424,8 @@ func _load() -> void:
 		_save()
 		return
 	_coins = maxi(int(file.get_value(SECTION_WALLET, KEY_COINS, 0)), 0)
+	_hub_hints_seen = bool(file.get_value(SECTION_META, KEY_HUB_HINTS_SEEN, false))
+	_market_hint_done = bool(file.get_value(SECTION_META, KEY_MARKET_HINT_DONE, false))
 	if file.has_section(SECTION_UPGRADES):
 		for key: String in file.get_section_keys(SECTION_UPGRADES):
 			if int(file.get_value(SECTION_UPGRADES, key, 0)) > 0:
@@ -401,6 +440,8 @@ func _load() -> void:
 func _save() -> void:
 	var file: ConfigFile = ConfigFile.new()
 	file.set_value(SECTION_META, KEY_TREE_VERSION, TREE_VERSION)
+	file.set_value(SECTION_META, KEY_HUB_HINTS_SEEN, _hub_hints_seen)
+	file.set_value(SECTION_META, KEY_MARKET_HINT_DONE, _market_hint_done)
 	file.set_value(SECTION_WALLET, KEY_COINS, _coins)
 	file.set_value(SECTION_FREE, KEY_PHASES, _phases_done)
 	file.set_value(SECTION_FREE, KEY_USED, _free_used)
