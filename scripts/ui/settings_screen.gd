@@ -146,16 +146,6 @@ func close() -> void:
 	closed.emit()
 
 
-## Devuelve true si se ve la pantalla de créditos. Sirve para pruebas.
-func is_showing_credits() -> bool:
-	return visible and _credits_page.visible
-
-
-## Devuelve true si se ve la confirmación de borrar progreso. Sirve para pruebas.
-func is_confirming() -> bool:
-	return visible and _confirm.visible
-
-
 ## Fila (botón) por nombre: `music`, `sfx`, `vibration`, `language`, `credits`, `controls`, `erase`.
 ## Sirve para pruebas.
 func get_row(row_name: StringName) -> Button:

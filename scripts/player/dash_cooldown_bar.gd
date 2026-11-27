@@ -46,7 +46,3 @@ func set_ratio(ratio: float) -> void:
 	_ratio = clamped
 	queue_redraw()
 
-
-## Devuelve el avance actual de la barra (0..1).
-func get_ratio() -> float:
-	return _ratio

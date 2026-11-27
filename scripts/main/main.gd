@@ -80,16 +80,6 @@ func _exit_tree() -> void:
 		GameManager.restart_requested.disconnect(_on_restart_requested)
 
 
-## Devuelve el hub si se está mostrando (null durante la partida). Sirve para pruebas.
-func get_hub() -> Hub:
-	return _hub
-
-
-## Devuelve el nivel en curso (null en el hub). Sirve para pruebas.
-func get_level() -> LevelController:
-	return _level
-
-
 ## Instancia el nivel en [code]LevelHolder[/code]. [param autostart] indica si la partida
 ## empieza sola. Se asigna antes de [method Node.add_child], porque el nivel lo lee en `_ready`.
 func _spawn_level(autostart: bool) -> LevelController:

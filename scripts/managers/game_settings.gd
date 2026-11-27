@@ -44,11 +44,6 @@ func is_vibration_enabled() -> bool:
 	return _vibration
 
 
-## Código del idioma actual (por ejemplo `es`).
-func get_language() -> String:
-	return _language
-
-
 ## Nombre del idioma actual (por ejemplo "Español").
 func get_language_name() -> String:
 	return LANGUAGES[_language_index()]["name"]

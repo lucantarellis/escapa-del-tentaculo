@@ -243,11 +243,6 @@ func get_end_segment() -> LevelSegment:
 	return _end_segment
 
 
-## Devuelve cuántas monedas se repartieron en el nivel armado (0 con el progreso apagado).
-func get_coin_count() -> int:
-	return _coin_count
-
-
 ## Devuelve la puerta del segmento final (null si no hay).
 func get_goal_door() -> Door:
 	return _door

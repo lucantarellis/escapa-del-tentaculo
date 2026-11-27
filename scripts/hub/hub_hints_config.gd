@@ -46,8 +46,6 @@ extends Resource
 ## Segundos que dura cada pista como máximo antes de irse sola (0 = sin tope). Unidad: s.
 @export var walk_max_time: float = 12.0
 @export var fly_max_time: float = 12.0
-## La pista de la plataforma es la más importante: con 0 no se va hasta que el jugador se sube.
-@export var platform_max_time: float = 0.0
 @export var market_max_time: float = 15.0
 
 @export_group("Visual")

@@ -55,11 +55,6 @@ func region(frame: int) -> Rect2:
 	return Rect2(Vector2(float(index % columns), float(floori(float(index) / float(columns)))) * frame_size, frame_size)
 
 
-## true si la hoja tiene el tag.
-func has_tag(tag: StringName) -> bool:
-	return tags.has(tag)
-
-
 ## Primer cuadro del tag (global en la hoja).
 func tag_first(tag: StringName) -> int:
 	return (tags[tag] as Vector2i).x

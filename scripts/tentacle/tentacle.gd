@@ -13,8 +13,6 @@ extends Node2D
 ## (cayó bajo el borde inferior de la pantalla: `&"fell"`, o `&"fire"` en el espacio).
 signal player_caught(cause: StringName)
 
-## Rojo de la paleta. Solo visual.
-const COLOR_BODY: Color = Color("#D83232")
 ## Desfase de la onda entre puntos contiguos del borde superior. Solo visual. Unidad: rad.
 const WOBBLE_PHASE_PER_SEGMENT: float = 0.8
 ## Cuánto se extiende el cuerpo y la zona letal por debajo del borde inferior de la

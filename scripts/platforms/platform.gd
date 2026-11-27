@@ -667,13 +667,6 @@ func _try_hit(body: Node2D) -> void:
 	# Un PROJECTILE que ya explotó o desapareció no golpea por el cuerpo: lo hace la explosión.
 	if platform_type == PlatformType.PROJECTILE and (_proj_state == ProjectileState.EXPLODING or _proj_state == ProjectileState.GONE):
 		return
-	# Diagnóstico temporal (brief 06, ronda 2): LT reportó muertes sin nada visible tocándolo.
-	# Con esto, la consola de salida de Godot (al correr con F5/F6 desde el editor) dice
-	# exactamente qué plataforma fue, su tipo y dónde, en vez de tener que adivinar mirando
-	# la captura de pantalla. Sacar cuando se confirme que no hace falta más.
-	print("[Platform] '%s' (%s) golpeó al jugador en %s (jugador en %s)" % [
-		name, PlatformType.keys()[platform_type], str(global_position), str(player.global_position),
-	])
 	var death_cause: StringName = _death_cause()
 	player_hit.emit(death_cause)
 	player.die(death_cause)

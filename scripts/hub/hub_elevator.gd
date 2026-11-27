@@ -121,16 +121,6 @@ func get_phase() -> Phase:
 	return _phase
 
 
-## Cuánto subió la plataforma desde el reposo (px).
-func get_risen() -> float:
-	return _risen
-
-
-## Proporción de la subida recorrida (0..1).
-func get_ride_ratio() -> float:
-	return clampf(_risen / maxf(config.elevator_ride_distance, 1.0), 0.0, 1.0)
-
-
 ## Posición global de la esquina superior izquierda de la plataforma.
 func get_car_position() -> Vector2:
 	return _car.global_position

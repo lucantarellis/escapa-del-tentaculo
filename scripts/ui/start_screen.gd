@@ -99,11 +99,6 @@ func _input(event: InputEvent) -> void:
 	_handle_press(event)
 
 
-## Devuelve true cuando terminó la entrada y espera el toque. Sirve para pruebas.
-func is_waiting() -> bool:
-	return _ready_to_start and not _starting
-
-
 ## Saltea la entrada (si sigue) o empieza (si ya terminó). Lo mismo que tocar.
 func press() -> void:
 	if _starting:

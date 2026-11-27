@@ -68,11 +68,6 @@ func _free_if_done() -> void:
 		queue_free()
 
 
-## Devuelve true mientras la secuencia está en curso.
-func is_playing() -> bool:
-	return _playing
-
-
 func _run() -> void:
 	if not await _wait(config.first_hit_delay):
 		return

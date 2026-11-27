@@ -159,11 +159,6 @@ func get_top_overhang() -> float:
 	return TOP_OVERHANG
 
 
-## Cantidad de explosiones (frente + relleno) y de humos vivos, para medir el rendimiento.
-func get_live_counts() -> Vector2i:
-	return Vector2i(_front.size() + _fill.size(), _smoke.size())
-
-
 ## Avanza la animación [param delta] s. [param bottom_distance]: distancia del borde al fondo de la
 ## pantalla (positiva = el borde está a la vista o por encima; negativa = debajo). La llama el
 ## [Tentacle] en cada cuadro.

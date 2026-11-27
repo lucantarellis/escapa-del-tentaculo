@@ -16,7 +16,6 @@ extends Node2D
 
 ## Carpetas del arte. Estructural.
 const HUB_DIR: String = "res://assets/sprites/environment/hub/"
-const DOORS_DIR: String = "res://assets/sprites/environment/hub_doors/"
 const WALLS_SCENE: PackedScene = preload("res://scenes/levels/WallsShip.tscn")
 const SPACE_SHADER: Shader = preload("res://shaders/hub_space.gdshader")
 const START_SCREEN_SCRIPT: Script = preload("res://scripts/ui/start_screen.gd")
@@ -214,11 +213,6 @@ func get_player() -> Player:
 ## Devuelve la puerta `settings` o `market`. Sirve para pruebas.
 func get_door(kind: StringName) -> HubDoor:
 	return _doors.get(kind) as HubDoor
-
-
-## Devuelve la pantalla de inicio si se está mostrando (null si no). Sirve para pruebas.
-func get_start_screen() -> StartScreen:
-	return get_node_or_null("Ui/StartScreen") as StartScreen
 
 
 ## Devuelve el overlay de ayuda. Sirve para pruebas.

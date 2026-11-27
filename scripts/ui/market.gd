@@ -229,43 +229,6 @@ func get_node_button(id: StringName) -> Button:
 	return _row_buttons.get(id) as Button
 
 
-## Devuelve la primera rama de la solapa actual.
-func get_current_branch() -> StringName:
-	if _tabs.is_empty() or (_tabs[_current_tab]["branches"] as Array).is_empty():
-		return &""
-	return (_tabs[_current_tab]["branches"] as Array)[0]
-
-
-## Devuelve el índice de la solapa actual (0 = Movimiento).
-func get_current_tab() -> int:
-	return _current_tab
-
-
-## Devuelve el id del nodo seleccionado (vacío si no hay).
-func get_selected_id() -> StringName:
-	return _selected_id
-
-
-## Devuelve el tag que muestra la cara del vendedor. Sirve para pruebas.
-func get_face_tag() -> StringName:
-	return _face_tag
-
-
-## Intenta comprar el nodo seleccionado (lo mismo que COMPRAR). Devuelve true si lo compró.
-func buy_selected() -> bool:
-	return _try_buy()
-
-
-## Devuelve true si RESET está esperando la confirmación. Sirve para pruebas.
-func is_reset_pending() -> bool:
-	return _reset_pending
-
-
-## Devuelve el botón RESET. Sirve para pruebas.
-func get_reset_button() -> Button:
-	return _reset_button
-
-
 # --- armado ---------------------------------------------------------------------------------
 
 func _group_upgrades() -> void:

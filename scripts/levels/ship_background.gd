@@ -19,8 +19,6 @@ const LIGHTS_FILE: String = DIR + "bg_ship_lights.json"
 const LAYER_SHADER: String = "res://shaders/background_layer.gdshader"
 ## Tamaño de un tramo. Estructural. Unidad: px.
 const TILE_SIZE: Vector2 = Vector2(360.0, 320.0)
-## Alto de la pantalla lógica. Estructural. Unidad: px.
-const VIEW_HEIGHT: float = 640.0
 ## Tramos visibles a la vez por capa (dos pantallas de 320 + uno que entra). Estructural.
 const SLOTS: int = 3
 ## Capas, de atrás hacia adelante. Estructural.

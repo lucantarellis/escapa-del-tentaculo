@@ -9,7 +9,6 @@ extends Resource
 ## Ver `docs/mecanicas/progreso-mercado.md`.
 
 ## Efectos que ya tienen implementación (ver `PlayerProgress`). Estructural.
-const EFFECT_NONE: StringName = &"none"
 const EFFECT_DASH_DISTANCE: StringName = &"dash_distance"
 const EFFECT_DASH_INVULN: StringName = &"dash_invuln"
 const EFFECT_DASH_INVULN_LONG: StringName = &"dash_invuln_long"

@@ -120,11 +120,6 @@ func set_player(player: Player) -> void:
 	_player = player
 
 
-## Mientras el jugador va a empezar otra cosa (por ejemplo un fundido) no se vuelve a pedir entrar.
-func is_entry_latched() -> bool:
-	return _entered_latch
-
-
 ## Activa o desactiva la puerta (mientras está desactivada no se abre ni deja entrar).
 func set_enabled(enabled: bool) -> void:
 	_enabled = enabled

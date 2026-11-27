@@ -12,7 +12,7 @@ Oscurece el hub con un velo translúcido y muestra una pista por vez. Va en su p
 |---|---|---|
 | 1 Caminar (← →, "CAMINAR") | `hub_hints_seen == false` | se movió `walk_distance` px en horizontal desde que apareció, o a los `walk_max_time` |
 | 2 Volar (↑, "MANTENÉ PARA VOLAR") | tras la 1 | acumuló `fly_time` s de propulsor, o a los `fly_max_time` |
-| 3 Plataforma ("SUBÍ ACÁ Y ESPERÁ 1 s", plataforma destacada) | tras la 2 | el jugador se sube (o el ascensor se arma): cierra todo. Sin tope (`platform_max_time` = 0) |
+| 3 Plataforma ("SUBÍ ACÁ Y ESPERÁ 1 s", plataforma destacada) | tras la 2 | el jugador se sube (o el ascensor se arma): cierra todo. Sin tope |
 | 4 Mercado ("GASTÁ TUS MONEDAS" / "AJUSTES Y CRÉDITOS", puertas destapadas) | `hub_hints_seen`, no `market_hint_done` y monedas > 0 (desde la segunda visita con monedas) | entra por la puerta del mercado, o a los `market_max_time` |
 
 - **Saltos:** volar antes de caminar cumple caminar; subirse a la plataforma en cualquier momento cierra el overlay.
@@ -41,7 +41,7 @@ Todo editable en `resources/configs/hub_hints_config.tres`. Las posiciones está
 | Textos | `walk_label` "CAMINAR"; `fly_line_1/2` "MANTENÉ" / "PARA VOLAR"; `platform_line_1/2` "SUBÍ ACÁ" / "Y ESPERÁ 1 s"; `market_line_1/2` "GASTÁ TUS" / "MONEDAS"; `settings_line_1/2` "AJUSTES Y" / "CRÉDITOS"; `controls_button` "VER CONTROLES" |
 | Velo | `veil_color` `#050609`; `veil_alpha` 0,64; `veil_alpha_market` 0,5; `veil_fade` 0,25 s |
 | Detección | `walk_distance` 24 px; `fly_time` 0,4 s; `step_pause` 0,3 s |
-| Topes (0 = sin tope) | `walk_max_time` 12 s; `fly_max_time` 12 s; `platform_max_time` 0; `market_max_time` 15 s |
+| Topes (0 = sin tope) | `walk_max_time` 12 s; `fly_max_time` 12 s; `market_max_time` 15 s |
 | Visual | `text_color` `#E7EFF2`; `text_shadow` `#050609`; `key_toggle_time` 0,5 s; `walk_keys_alternate` true; `dash_on` 4; `dash_off` 3; `dash_speed` 7 px/s |
 | Posiciones | teclas, chevrones, textos, flechas, agujeros del velo y recuadros de cada pista (ver el `.tres` o el script) |
 | Depuración | `debug_preview_step`: 1 a 4 muestra esa pista fija al tomar el control, sin flags; 0 = apagado (dejarlo en 0) |
