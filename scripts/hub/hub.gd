@@ -98,6 +98,8 @@ var _busy: bool = false
 ## Habitación abierta (`settings` o `market`); vacío si no hay ninguna.
 var _in_room: StringName = &""
 var _hints: HubHints
+## Se pulsó VER CONTROLES en Ajustes: al salir se repiten las pistas 1 a 3 sin tocar los flags.
+var _replay_hints: bool = false
 
 @onready var _player: Player = $Player
 @onready var _camera: Camera2D = $Camera
@@ -127,6 +129,7 @@ func _ready() -> void:
 	_camera.make_current()
 	_market.closed.connect(_on_room_closed.bind(&"market"))
 	_settings.closed.connect(_on_room_closed.bind(&"settings"))
+	_settings.controls_requested.connect(_on_controls_requested)
 	_fade.color = Color(0.0, 0.0, 0.0, 0.0)
 	_build_alarm()
 	_build_hints()
@@ -422,6 +425,9 @@ func _on_door_entered(kind: StringName) -> void:
 		return
 	_busy = true
 	_in_room = kind
+	# La pista del mercado se cumple al entrar por su puerta.
+	if kind == &"market":
+		_hints.market_entered()
 	var door: HubDoor = _doors[kind]
 	for other: HubDoor in _doors.values():
 		if other != door:
@@ -469,9 +475,14 @@ func _on_room_closed(kind: StringName) -> void:
 	door.set_held_open(false)
 	_set_doors_enabled(true)
 	_busy = false
-	# Si se borró el progreso en Ajustes, el overlay de ayuda vuelve a arrancar al salir.
-	if kind == &"settings" and not _hints.is_running():
-		_hints.start()
+	if kind == &"settings":
+		if _replay_hints:
+			# VER CONTROLES: repite las pistas 1 a 3 sin mirar ni tocar los flags.
+			_replay_hints = false
+			_hints.play_sequence()
+		elif not _hints.is_running():
+			# Si se borró el progreso en Ajustes, el overlay de ayuda vuelve a arrancar al salir.
+			_hints.start()
 
 
 func _set_doors_enabled(enabled: bool) -> void:
@@ -556,6 +567,10 @@ func _update_alien_event(delta: float) -> void:
 		var emissive: Sprite2D = _lamp_emissives[index] if index < _lamp_emissives.size() else null
 		if emissive != null:
 			emissive.modulate = Color(Color.WHITE.lerp(config.alien_alarm_color, config.alien_lamp_red * pulse), level)
+
+
+func _on_controls_requested() -> void:
+	_replay_hints = true
 
 
 # Overlay de ayuda en su propia capa (encima del hub, debajo de `Ui`).

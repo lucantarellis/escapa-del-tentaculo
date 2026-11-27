@@ -1,7 +1,8 @@
 class_name HubHints
 extends CanvasLayer
 ## Overlay de ayuda del hub para jugadores nuevos: oscurece el hub con un velo translúcido y muestra
-## una pista por vez (caminar, volar, plataforma del ascensor). Va en una capa propia, encima del
+## una pista por vez (caminar, volar, plataforma del ascensor) y, desde la segunda visita con monedas,
+## la del mercado. Va en una capa propia, encima del
 ## mundo del hub y debajo de su UI (pantalla de inicio, Ajustes, Mercado y fundido), y no bloquea el
 ## input: el jugador se mueve con total libertad mientras está visible.
 ##
@@ -15,6 +16,11 @@ extends CanvasLayer
 ## siguiente. Si el jugador se adelanta (vuela antes de caminar), las pistas anteriores se dan por
 ## cumplidas; si se sube a la plataforma, el overlay se cierra. No toca los flags: el [Hub] marca
 ## `hub_hints_seen` al lanzar la partida.
+##
+## Pista del mercado ([method play_market_hint]): velo más claro con las dos puertas destapadas y
+## recuadradas, "GASTÁ TUS MONEDAS" del lado del mercado y "AJUSTES Y CRÉDITOS" del otro. Se va al
+## entrar por la puerta del mercado ([method market_entered]) o a los `market_max_time`; en los dos
+## casos queda marcada (`market_hint_done`) para no insistir.
 ## Ver `docs/mecanicas/overlay-hub.md`.
 
 ## Capa del overlay: encima del mundo del hub (0) y debajo de su UI (`Ui`, 90). Estructural.
@@ -30,7 +36,7 @@ const FONT_SIZE: int = 16
 const K = preload("res://scripts/ui/ui_kit.gd")
 
 ## Pista en pantalla. `NONE`: ninguna (overlay oculto).
-enum Step { NONE, WALK, FLY, PLATFORM }
+enum Step { NONE, WALK, FLY, PLATFORM, MARKET }
 
 ## Textos, tiempos y posiciones. Si queda vacío se carga [constant CONFIG_PATH].
 @export var config: HubHintsConfig
@@ -56,6 +62,7 @@ var _elevator: HubElevator
 ## Secuencia en curso, pausada (hay una pantalla abierta), pistas ya cumplidas, propulsor
 ## acumulado (s), x del jugador al aparecer la pista de caminar y tiempo de la pista actual (s).
 var _running: bool = false
+var _market_running: bool = false
 var _suspended: bool = false
 var _walk_done: bool = false
 var _fly_done: bool = false
@@ -81,9 +88,16 @@ func _ready() -> void:
 	_build_walk()
 	_build_fly()
 	_build_platform()
+	_build_market()
 	_root.visible = false
 	set_process(false)
 	set_physics_process(false)
+	PlayerProgress.progress_reset.connect(_on_progress_reset)
+
+
+func _exit_tree() -> void:
+	if PlayerProgress.progress_reset.is_connected(_on_progress_reset):
+		PlayerProgress.progress_reset.disconnect(_on_progress_reset)
 
 
 ## Jugador y ascensor del hub, para detectar las acciones. Lo llama [Hub] al armarse.
@@ -131,7 +145,7 @@ func show_step(step: Step) -> void:
 	_key_time = 0.0
 	_key_phase = 0
 	_update_keys()
-	_fade_veil(config.veil_alpha, 1.0 if not _holes.is_empty() else 0.0)
+	_fade_veil(_veil_alpha_for(step), 1.0 if not _holes.is_empty() else 0.0)
 	_fade_group(step, 1.0)
 	await _wait(config.veil_fade)
 
@@ -140,10 +154,55 @@ func show_step(step: Step) -> void:
 ## vuelta de una partida). Con `debug_preview_step` muestra esa pista fija; si el jugador todavía no
 ## lanzó ninguna partida ([method PlayerProgress.is_hub_hints_seen]), arranca por caminar.
 func start() -> void:
-	if config.debug_preview_step >= Step.WALK and config.debug_preview_step <= Step.PLATFORM:
+	if config.debug_preview_step >= Step.WALK and config.debug_preview_step <= Step.MARKET:
 		show_step(config.debug_preview_step as Step)
 	elif not PlayerProgress.is_hub_hints_seen():
 		play_sequence()
+	elif _market_hint_pending():
+		play_market_hint()
+
+
+## Devuelve true si toca la pista del mercado: ya lanzó su primera partida, todavía no la usó (ni se
+## le pasó) y tiene monedas para gastar.
+func _market_hint_pending() -> bool:
+	return PlayerProgress.is_enabled() and PlayerProgress.is_hub_hints_seen() \
+		and not PlayerProgress.is_market_hint_done() and PlayerProgress.get_coins() > 0
+
+
+## Muestra la pista del mercado. Se va sola a los `market_max_time` (0 = sin tope) y queda marcada.
+func play_market_hint() -> void:
+	if _player == null or _elevator == null:
+		push_warning("HubHints: falta setup(player, elevator).")
+		return
+	_running = false
+	_market_running = true
+	_step_time = 0.0
+	set_physics_process(true)
+	show_step(Step.MARKET)
+
+
+## Lo llama [Hub] cuando el jugador entra por la puerta del mercado: si la pista del mercado está en
+## pantalla, se va y queda marcada para siempre (hasta Borrar progreso).
+func market_entered() -> void:
+	if _market_running:
+		_finish_market()
+
+
+# La pista del mercado se cumplió o se pasó: queda marcada y se va con fundido.
+func _finish_market() -> void:
+	_market_running = false
+	set_physics_process(false)
+	PlayerProgress.set_market_hint_done(true)
+	show_step(Step.NONE)
+
+
+# Borrar progreso: los flags vuelven a false, así que una pista del mercado en curso ya no corresponde
+# (se saca sin marcar; el [Hub] arranca la secuencia de primera vez al salir de Ajustes).
+func _on_progress_reset() -> void:
+	if _market_running:
+		_market_running = false
+		set_physics_process(false)
+		show_step(Step.NONE)
 
 
 ## Corre las pistas 1 a 3 desde el principio, sin mirar ni tocar los flags (también lo usa "Ver
@@ -153,9 +212,12 @@ func play_sequence() -> void:
 		push_warning("HubHints: falta setup(player, elevator).")
 		return
 	_running = true
+	_market_running = false
 	_walk_done = false
 	_fly_done = false
 	_fly_accum = 0.0
+	_walk_origin = _player.global_position.x
+	_step_time = 0.0
 	set_physics_process(true)
 	_advance()
 
@@ -163,13 +225,14 @@ func play_sequence() -> void:
 ## Corta la secuencia y saca el overlay con fundido (lo llama [Hub] al lanzarse el ascensor).
 func stop() -> void:
 	_running = false
+	_market_running = false
 	set_physics_process(false)
 	show_step(Step.NONE)
 
 
-## Devuelve true mientras corre la secuencia de pistas.
+## Devuelve true mientras corre la secuencia de pistas o la pista del mercado.
 func is_running() -> bool:
-	return _running
+	return _running or _market_running
 
 
 ## Con [param suspended] `true` oculta el overlay y pausa la detección (hay una pantalla abierta:
@@ -201,7 +264,7 @@ func _process(delta: float) -> void:
 # mientras está congelado, guiado por una puerta o montado en el ascensor, la pista de caminar
 # vuelve a medir desde donde quedó.
 func _physics_process(delta: float) -> void:
-	if not _running or _suspended:
+	if _suspended or not (_running or _market_running):
 		return
 	if not _player.is_physics_processing() or _player.is_control_locked() or not _player.is_alive():
 		_walk_origin = _player.global_position.x
@@ -209,8 +272,15 @@ func _physics_process(delta: float) -> void:
 	# Subirse a la plataforma (o que el ascensor ya se esté armando) cierra el overlay.
 	if _elevator.is_player_on() or _elevator.get_phase() != HubElevator.Phase.IDLE:
 		_running = false
+		_market_running = false
 		set_physics_process(false)
 		show_step(Step.NONE)
+		return
+	# Pista del mercado: solo corre el tope de tiempo.
+	if _market_running:
+		_step_time += delta
+		if _timed_out(config.market_max_time):
+			_finish_market()
 		return
 	_step_time += delta
 	if _player.is_thrusting():
@@ -307,11 +377,32 @@ func _build_platform() -> void:
 	_add_sheet(group, "hub_hint_chevrons", &"flow", config.platform_chevrons_right_position)
 
 
+func _build_market() -> void:
+	var group: Control = _make_group(Step.MARKET)
+	_add_frames(group, Step.MARKET, [config.settings_frame, config.market_frame])
+	var market_right: Vector2 = config.market_text_right
+	_add_text(group, config.market_line_1, market_right, HORIZONTAL_ALIGNMENT_RIGHT)
+	_add_text(group, config.market_line_2, market_right + Vector2(0.0, config.market_line_gap), HORIZONTAL_ALIGNMENT_RIGHT)
+	var settings_left: Vector2 = config.settings_text_left
+	_add_text(group, config.settings_line_1, settings_left, HORIZONTAL_ALIGNMENT_LEFT)
+	_add_text(group, config.settings_line_2, settings_left + Vector2(0.0, config.market_line_gap), HORIZONTAL_ALIGNMENT_LEFT)
+	_add_sheet(group, "hub_hint_arrow_side", &"bob", config.market_arrow_position)
+	_add_sheet(group, "hub_hint_arrow_side", &"bob", config.settings_arrow_position, true)
+
+
 func _holes_for(step: Step) -> Array[Rect2]:
 	var holes: Array[Rect2] = []
 	if step == Step.PLATFORM:
 		holes.append(config.platform_hole)
+	elif step == Step.MARKET:
+		holes.append(config.settings_hole)
+		holes.append(config.market_hole)
 	return holes
+
+
+# Opacidad del velo de una pista: la del mercado es más clara.
+func _veil_alpha_for(step: Step) -> float:
+	return config.veil_alpha_market if step == Step.MARKET else config.veil_alpha
 
 
 func _make_canvas(node_name: String) -> Control:
@@ -343,11 +434,12 @@ func _add_key(group: Control, action: StringName, at: Vector2) -> void:
 	_set_key_frame(sprite, action, false)
 
 
-func _add_sheet(group: Control, sheet: String, tag: StringName, at: Vector2) -> void:
+func _add_sheet(group: Control, sheet: String, tag: StringName, at: Vector2, flip_h: bool = false) -> void:
 	var sprite: SheetSprite = SheetSprite.new()
 	sprite.name = sheet
 	sprite.texture = load(HINTS_DIR + sheet + ".png") as Texture2D
 	sprite.centered = false
+	sprite.flip_h = flip_h
 	sprite.position = at
 	group.add_child(sprite)
 	sprite.load_sheet(HINTS_DIR + sheet + ".json")

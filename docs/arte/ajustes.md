@@ -18,12 +18,12 @@ Editable: `assets/aseprite/ui/settings/settings_ui.aseprite` (atlas con un slice
 
 ## Pantalla de ajustes (360×640)
 - Título: `st_icon_gear` en (12, 12) + "AJUSTES" `#89D9EB` (36, centro y 20).
-- Panel `mk_panel_list` (8, 44, 343×316). Dentro, subencabezados como en el mercado (ícono en x 15, título `#63D6C5` en x 36, línea `#3A9BBF`) y filas `mk_row_buy` de 27 px cada 31 px (x 14–344):
+- Panel `mk_panel_list` (8, 44, 344×348). Dentro, subencabezados como en el mercado (ícono en x 15, título `#63D6C5` en x 36, línea `#3A9BBF`) y filas `mk_row_buy` de 27 px cada 31 px (x 14–344):
   - **SONIDO** (`st_icon_sound`): **Música** y **Efectos**: barra de x 150 a x 300 (alto 7, en y+10), perilla, valor "NN%" alineado a la derecha en x 336.
   - **JUEGO** (`st_icon_game`): **Vibración** (interruptor en x 308, y+7); **Idioma** ("‹ Español ›": flechas en x 220 y x 316, valor centrado en x 270; izquierda/derecha cambian).
-  - **INFO** (`st_icon_info`): **Créditos ›** (abre la pantalla de créditos).
+  - **INFO** (`st_icon_info`): **Créditos ›** (abre la pantalla de créditos) y **VER CONTROLES ›** (misma fila, con la flecha `st_arrow_right`; repite las pistas del hub; brief 11).
   - **DATOS** (`st_icon_data`): **Borrar progreso** (`st_btn_danger`, texto `#F62A19` centrado).
-- **Volver** `mk_btn_secondary` (8, 370, 120×30). Versión del juego abajo a la derecha (`#6689B7`).
+- **Volver** `mk_btn_secondary` (8, 401, 120×30). Versión del juego abajo a la derecha (`#6689B7`).
 - Foco con `mk_focus` (1 px por fuera de la fila). Navegable con teclado/joystick y táctil.
 
 ## Confirmación de borrar progreso

@@ -4,7 +4,7 @@ extends Control
 ## puerta de Ajustes del hub ([Hub]); VOLVER o Escape cierran y emiten [signal closed].
 ##
 ## Ajustes: SONIDO (Música y Efectos, barras deslizantes), JUEGO (Vibración, Idioma), INFO
-## (Créditos ›) y DATOS (Borrar progreso, con confirmación: Cancelar tiene el foco por defecto;
+## (Créditos ›, Ver controles ›: cierra Ajustes y el hub repite las pistas de ayuda) y DATOS (Borrar progreso, con confirmación: Cancelar tiene el foco por defecto;
 ## Borrar reinicia monedas y mejoras con [method PlayerProgress.reset_all]). Los valores los guarda
 ## y aplica [code]GameSettings[/code]. Navegable con teclado/joystick (arriba/abajo recorre,
 ## izquierda/derecha ajusta) y táctil. Ver `docs/mecanicas/ajustes.md` y `docs/arte/ajustes.md`.
@@ -15,7 +15,7 @@ const K = preload("res://scripts/ui/ui_kit.gd")
 const TITLE_ICON_POS: Vector2 = Vector2(12.0, 12.0)
 const TITLE_TEXT_X: float = 36.0
 const TITLE_TEXT_TOP: float = 15.0
-const PANEL_RECT: Rect2 = Rect2(8.0, 44.0, 344.0, 317.0)
+const PANEL_RECT: Rect2 = Rect2(8.0, 44.0, 344.0, 348.0)
 const ROW_X: float = 14.0
 const ROW_WIDTH: float = 331.0
 const ROW_HEIGHT: float = 27.0
@@ -34,7 +34,7 @@ const ARROW_RIGHT_X: float = 302.0
 const LANGUAGE_CENTER_X: float = 256.0
 const LINK_ARROW_X: float = 318.0
 const ARROW_Y: float = 10.0
-const BACK_RECT: Rect2 = Rect2(8.0, 370.0, 120.0, 30.0)
+const BACK_RECT: Rect2 = Rect2(8.0, 401.0, 120.0, 30.0)
 const VERSION_RIGHT: float = 348.0
 const VERSION_TOP: float = 623.0
 const CONFIRM_DIM: Color = Color(0.0196, 0.0235, 0.0353, 0.7)
@@ -73,6 +73,9 @@ const CREDITS: Array = [
 ## Se cerró la pantalla (VOLVER o Escape desde Ajustes). No se oculta sola: la oculta quien la abrió
 ## ([Hub]), cuando la pantalla ya está en negro.
 signal closed
+## Se pulsó VER CONTROLES (justo antes de cerrar con [signal closed]): quien abrió Ajustes ([Hub])
+## repite las pistas de ayuda al salir, sin tocar el progreso.
+signal controls_requested
 
 var _closing: bool = false
 
@@ -85,6 +88,7 @@ var _sfx_row: Button
 var _vibration_row: Button
 var _language_row: Button
 var _credits_row: Button
+var _controls_row: Button
 var _erase_row: Button
 var _back_button: Button
 var _credits_back: Button
@@ -152,10 +156,10 @@ func is_confirming() -> bool:
 	return visible and _confirm.visible
 
 
-## Fila (botón) por nombre: `music`, `sfx`, `vibration`, `language`, `credits`, `erase`. Sirve
-## para pruebas.
+## Fila (botón) por nombre: `music`, `sfx`, `vibration`, `language`, `credits`, `controls`, `erase`.
+## Sirve para pruebas.
 func get_row(row_name: StringName) -> Button:
-	return {&"music": _music_row, &"sfx": _sfx_row, &"vibration": _vibration_row, &"language": _language_row, &"credits": _credits_row, &"erase": _erase_row}.get(row_name) as Button
+	return {&"music": _music_row, &"sfx": _sfx_row, &"vibration": _vibration_row, &"language": _language_row, &"credits": _credits_row, &"controls": _controls_row, &"erase": _erase_row}.get(row_name) as Button
 
 
 # --- armado ---------------------------------------------------------------------------------
@@ -188,6 +192,12 @@ func _build_settings() -> void:
 	_credits_row = _make_row("Créditos", y)
 	_credits_row.add_child(K.icon(K.SETTINGS_DIR + "st_arrow_right.png", Vector2(LINK_ARROW_X, ARROW_Y)))
 	_credits_row.pressed.connect(_show_credits)
+	y += ROW_STEP
+	# El texto del botón es editable en HubHintsConfig (`controls_button`).
+	var hints: HubHintsConfig = load(HubHints.CONFIG_PATH) as HubHintsConfig
+	_controls_row = _make_row((hints if hints != null else HubHintsConfig.new()).controls_button, y)
+	_controls_row.add_child(K.icon(K.SETTINGS_DIR + "st_arrow_right.png", Vector2(LINK_ARROW_X, ARROW_Y)))
+	_controls_row.pressed.connect(_on_controls_pressed)
 	y += ROW_STEP
 	_settings_page.add_child(K.header(K.SETTINGS_DIR + "st_icon_data.png", "DATOS", Vector2(ROW_X, y), ROW_WIDTH - 2.0))
 	y += HEADER_STEP
@@ -408,6 +418,12 @@ func _show_credits() -> void:
 	_settings_page.visible = false
 	_credits_page.visible = true
 	_credits_back.grab_focus()
+
+
+# VER CONTROLES: se pide repetir las pistas y se cierra Ajustes.
+func _on_controls_pressed() -> void:
+	controls_requested.emit()
+	close()
 
 
 func _open_confirm() -> void:

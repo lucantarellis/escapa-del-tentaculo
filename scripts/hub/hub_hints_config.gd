@@ -108,6 +108,6 @@ extends Resource
 @export var settings_arrow_position: Vector2 = Vector2(28.0, 472.0)
 
 @export_group("Depuración")
-## Solo para probar el arte: 1 (caminar), 2 (volar) o 3 (plataforma) muestra esa pista fija cada vez
-## que el jugador toma el control en el hub, sin mirar ni tocar los flags. 0 = apagado.
-@export_range(0, 3) var debug_preview_step: int = 0
+## Solo para probar el arte: 1 (caminar), 2 (volar), 3 (plataforma) o 4 (mercado) muestra esa pista
+## fija cada vez que el jugador toma el control en el hub, sin mirar ni tocar los flags. 0 = apagado.
+@export_range(0, 4) var debug_preview_step: int = 0

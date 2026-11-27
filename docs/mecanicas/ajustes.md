@@ -14,6 +14,7 @@ Por la puerta de Ajustes del hub (izquierda): el jugador se pierde en el hueco, 
 | JUEGO | Vibración | Interruptor. Con la vibración activa, el celular vibra en cada golpe de la escotilla (80 ms), en su ruptura (250 ms), al recibir un golpe (80 ms) y al morir (200 ms). |
 | JUEGO | Idioma | "‹ Español ›": izquierda/derecha (o tocar las flechas) recorren `GameSettings.LANGUAGES` y llaman a `TranslationServer.set_locale`. Hoy hay un solo idioma: queda preparado para sumar traducciones. |
 | INFO | Créditos › | Abre la pantalla de créditos. |
+| INFO | VER CONTROLES › | Cierra Ajustes y, al salir de la puerta, el hub repite las pistas de ayuda 1 a 3 (caminar, volar, plataforma) sin tocar los flags del progreso. El texto del botón es `controls_button` de `HubHintsConfig`. Ver `overlay-hub.md`. |
 | DATOS | Borrar progreso | Pide confirmación (capa oscura; **Cancelar** tiene el foco). **Borrar** llama a `PlayerProgress.reset_all()`: monedas y mejoras a cero (los nodos regalados siguen) y el overlay de ayuda del hub vuelve a aparecer. |
 
 Abajo a la derecha, la versión (`application/config/version`, hoy 0.8). Navegación: arriba/abajo recorre las filas y baja a Volver; izquierda/derecha ajustan la fila con foco.
