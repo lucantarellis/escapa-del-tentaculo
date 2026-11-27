@@ -2,7 +2,7 @@
 
 Relevamiento del 15/11/2026 sobre `main-g` (997e813). La referencia de la línea nueva es la plataforma letal con fuego (`assets/sprites/environment/fire_platform/`). Los tamaños salen de colisiones y variables exportadas, no del arte. Entre paréntesis, en cuántos segmentos aparece (de 72).
 
-Marcar con `[x]` a medida que se termina. Última actualización: 26/11/2026 (brief 10: fondo, asteroides, restos, peligros y fuego del espacio; alcance cerrado en tier 1, tier 2 y jefe; bocetos de derrotas del tier 2 y del overlay del hub).
+Marcar con `[x]` a medida que se termina. Última actualización: 26/11/2026 (brief 10: fondo, asteroides, restos, peligros y fuego del espacio; alcance cerrado en tier 1, tier 2 y jefe; bocetos de derrotas del tier 2 y del overlay del hub). 26/11: fragmentos del casco.
 
 **Alcance del juego (26/11/2026):** tier 1 (la nave), tier 2 (el espacio) y la pelea con el jefe (la prepara Guido); ahí termina la run. El **tier 3 (dentro del alien) queda descartado por ahora**: lo marcado así abajo no se hace ni se borra hasta cerrar el juego; cuando esté terminado se decide qué sacar.
 
@@ -57,7 +57,7 @@ Marcar con `[x]` a medida que se termina. Última actualización: 26/11/2026 (br
 - [x] Cometa: `comet_head` (núcleo de hielo) + partículas `particle_ice`.
 - [x] Tentáculo láser (reemplaza al satélite): `laser_tentacle`, tallo con ojo, 13 ángulos con `aim`, `lock` y `fire` + `emerge`. El haz lo dibuja Godot.
 - [x] Campo de escombros: `debris_fragment` (6 fragmentos × 36 ángulos).
-- [ ] Fragmentos del casco, que salen de la explosión (brief 10 §5, pendiente).
+- [x] Fragmentos del casco que salen de la explosión (`HullDebris`): `hull_debris` (4 diseños × 36 giros, 28×28, capas `color` y `emissive`) y `hull_chips` (astillas de 6×6 para cuando se rompen). Ver `docs/arte/peligros-espacio.md`. Falta cargarlos en el código (brief 12).
 - [x] Perseguidor: fuego: `fire_explosion` (4 explosiones de bocanadas para el frente + 3 para el relleno, capa `emissive`) y `fire_smoke` (banda de humo violeta detrás del frente). Ensamblado en `docs/arte/peligros-espacio.md`.
 
 ## Peligros del alien (P3) — descartado por ahora (tier 3)

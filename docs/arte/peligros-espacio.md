@@ -74,6 +74,18 @@ Arte cerrado el 25/11/2026. El fuego de la nave que explota y sube persiguiendo 
 
 **Implementado (brief 10, paso 5b):** capas 4 (lavado, smoothstep 14→184 px) y 5 (glow: emisivo desenfocado por `shaders/fire_glow.gdshader`, agrandado ×1,5 como halo, intensidad 0,35 en el frente y ×0,25 en el relleno; y 3 `PointLight2D` titilantes en el frente). Valores en `FireChaserConfig` (grupos Lavado, Glow y Luz).
 
+## Fragmentos del casco — `hull_debris` y `hull_chips`
+
+Arte cerrado el 26/11/2026. Son los restos que salen despedidos cuando explota la nave (`HullDebris`, lanzados por `TierEvent`). Chapas, vigas y tapas del casco con el borde desgarrado al rojo vivo: acero de la misma rampa que los restos a la deriva y los escombros, con el borde roto en amarillo → naranja → rojo, quemadura detrás y algunas brasas sueltas. Generador en `art_src/hull_debris/hull.py` (fuera de git).
+
+**`hull_debris`** — editable `assets/aseprite/hazards/hull_debris.aseprite` (capas `color` y `emissive`); hojas `assets/sprites/hazards/hull_debris.png` y `hull_debris_emissive.png` (144 cuadros de 28×28 en una fila) y `hull_debris.json`.
+- 4 diseños: `frag1` chapa torcida, `frag2` viga partida, `frag3` tapa con agujero, `frag4` trozo chico. Cada tag tiene **36 cuadros = un giro completo cada 10°, en sentido antihorario** (igual que `debris_fragment`). Elegir el diseño al azar al crear el fragmento y mostrar el cuadro según el giro acumulado; no rotar el sprite.
+- Pivote: el centro del cuadro (14, 14). La pieza ocupa unos 20×20 px.
+- El emisivo tiene solo lo incandescente (amarillo, naranja y rojo vivo). Va sin sombreado y con un resplandor aditivo naranja.
+- La estela de brasas la pone Godot: `CPUParticles2D` en espacio global con `particle_ember`, como el meteoro.
+
+**`hull_chips`** — `assets/aseprite/hazards/hull_chips.aseprite`, hoja `hull_chips.png` y `.json`: 6 cuadros de 6×6; tag `steel` (1–3, astillas de acero) y `ember` (4–6, brasas). Para las partículas de `_shatter` (un cuadro al azar por partícula).
+
 ## Pantallas de derrota
 
 El fuego ya tiene causa propia `fire` (brief 10, paso 5c); mientras falte su viñeta CALCINADO muestra el texto provisorio "CALCINADO — pulsá R para reiniciar". Las causas `laser`, `meteor`, `comet` y `debris_field` todavía muestran el texto viejo; sus viñetas van con las pantallas de derrota del tier 2.

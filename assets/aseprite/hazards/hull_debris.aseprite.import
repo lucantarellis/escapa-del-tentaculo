@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://bqn38d0sqskog"
+path="res://.godot/imported/hull_debris.aseprite-c933e0154bcb4ba6991ec11048c131df.res"
+
+[deps]
+
+source_file="res://assets/aseprite/hazards/hull_debris.aseprite"
+dest_files=["res://.godot/imported/hull_debris.aseprite-c933e0154bcb4ba6991ec11048c131df.res"]
+
+[params]
+
